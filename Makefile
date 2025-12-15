@@ -15,6 +15,10 @@ CC			= cc
 CFLAGS		= -Wall -Wextra -Werror -I$(INC_DIR) -I$(MLX_DIR)
 LDFLAGS		= -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
 
+GREEN		= \033[0;32m
+RED			= \033[0;31m
+RESET		= \033[0m
+
 INC_DIR		= includes
 SRC_DIR		= src
 OBJ_DIR		= obj
@@ -41,22 +45,26 @@ OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 all: $(NAME)
 
 $(NAME): $(OBJS)
+	@echo "$(GREEN)Linking $(NAME)...$(RESET)"
 	@make -C $(MLX_DIR)
 	@$(CC) $(OBJS) $(LDFLAGS) -o $(NAME)
-	@echo "✓ miniRT compiled successfully"
+	@echo "$(GREEN)✓ miniRT compiled successfully!$(RESET)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
+	@echo "$(GREEN)Compiling $<...$(RESET)"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
+	@echo "$(RED)Cleaning object files...$(RESET)"
 	@rm -rf $(OBJ_DIR)
 	@make -C $(MLX_DIR) clean
-	@echo "✓ Object files cleaned"
+	@echo "$(GREEN)✓ Object files cleaned$(RESET)"
 
 fclean: clean
+	@echo "$(RED)Removing $(NAME)...$(RESET)"
 	@rm -f $(NAME)
-	@echo "✓ Executable removed"
+	@echo "$(GREEN)✓ Executable removed$(RESET)"
 
 re: fclean all
 
