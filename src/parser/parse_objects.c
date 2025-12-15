@@ -15,6 +15,15 @@
 #include "vec3.h"
 #include <stdlib.h>
 
+static char	*skip_to_next_token(char *token)
+{
+	while (*token && *token != ' ')
+		token++;
+	while (*token == ' ')
+		token++;
+	return (token);
+}
+
 int	parse_sphere(char *line, t_scene *scene)
 {
 	char		*token;
@@ -28,17 +37,11 @@ int	parse_sphere(char *line, t_scene *scene)
 		token++;
 	if (!parse_vector(token, &sphere->center))
 		return (print_error("Invalid sphere center"));
-	while (*token && *token != ' ')
-		token++;
-	while (*token == ' ')
-		token++;
+	token = skip_to_next_token(token);
 	sphere->diameter = atof(token);
 	if (sphere->diameter <= 0)
 		return (print_error("Sphere diameter must be positive"));
-	while (*token && *token != ' ')
-		token++;
-	while (*token == ' ')
-		token++;
+	token = skip_to_next_token(token);
 	if (!parse_color(token, &sphere->color))
 		return (0);
 	scene->sphere_count++;
@@ -58,20 +61,25 @@ int	parse_plane(char *line, t_scene *scene)
 		token++;
 	if (!parse_vector(token, &plane->point))
 		return (print_error("Invalid plane point"));
-	while (*token && *token != ' ')
-		token++;
-	while (*token == ' ')
-		token++;
+	token = skip_to_next_token(token);
 	if (!parse_vector(token, &plane->normal))
 		return (print_error("Invalid plane normal"));
 	plane->normal = vec3_normalize(plane->normal);
-	while (*token && *token != ' ')
-		token++;
-	while (*token == ' ')
-		token++;
+	token = skip_to_next_token(token);
 	if (!parse_color(token, &plane->color))
 		return (0);
 	scene->plane_count++;
+	return (1);
+}
+
+static int	parse_cylinder_params(char *token, t_cylinder *cylinder)
+{
+	token = skip_to_next_token(token);
+	cylinder->diameter = atof(token);
+	token = skip_to_next_token(token);
+	cylinder->height = atof(token);
+	if (cylinder->diameter <= 0 || cylinder->height <= 0)
+		return (print_error("Cylinder dimensions must be positive"));
 	return (1);
 }
 
@@ -88,29 +96,13 @@ int	parse_cylinder(char *line, t_scene *scene)
 		token++;
 	if (!parse_vector(token, &cylinder->center))
 		return (print_error("Invalid cylinder center"));
-	while (*token && *token != ' ')
-		token++;
-	while (*token == ' ')
-		token++;
+	token = skip_to_next_token(token);
 	if (!parse_vector(token, &cylinder->axis))
 		return (print_error("Invalid cylinder axis"));
 	cylinder->axis = vec3_normalize(cylinder->axis);
-	while (*token && *token != ' ')
-		token++;
-	while (*token == ' ')
-		token++;
-	cylinder->diameter = atof(token);
-	while (*token && *token != ' ')
-		token++;
-	while (*token == ' ')
-		token++;
-	cylinder->height = atof(token);
-	if (cylinder->diameter <= 0 || cylinder->height <= 0)
-		return (print_error("Cylinder dimensions must be positive"));
-	while (*token && *token != ' ')
-		token++;
-	while (*token == ' ')
-		token++;
+	if (!parse_cylinder_params(token, cylinder))
+		return (0);
+	token = skip_to_next_token(skip_to_next_token(token));
 	if (!parse_color(token, &cylinder->color))
 		return (0);
 	scene->cylinder_count++;

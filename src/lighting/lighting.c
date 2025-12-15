@@ -24,7 +24,8 @@ static int	in_shadow(t_scene *scene, t_vec3 point, t_vec3 light_dir)
 
 	shadow_ray.origin = vec3_add(point, vec3_multiply(light_dir, 0.001));
 	shadow_ray.direction = light_dir;
-	light_distance = vec3_magnitude(vec3_subtract(scene->light.position, point));
+	light_distance = vec3_magnitude(vec3_subtract(scene->light.position, \
+		point));
 	shadow_hit.distance = light_distance;
 	i = 0;
 	while (i < scene->sphere_count)
@@ -51,7 +52,8 @@ t_color	apply_lighting(t_scene *scene, t_hit *hit)
 	double	ambient;
 
 	ambient = scene->ambient.ratio;
-	light_dir = vec3_normalize(vec3_subtract(scene->light.position, hit->point));
+	light_dir = vec3_normalize(vec3_subtract(scene->light.position, \
+		hit->point));
 	diffuse = vec3_dot(hit->normal, light_dir);
 	if (diffuse < 0)
 		diffuse = 0;

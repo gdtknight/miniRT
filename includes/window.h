@@ -28,11 +28,12 @@ int			close_window(void *param);
 int			handle_key(int keycode, void *param);
 
 /* MLX functions */
-void	*mlx_init(void);
-void	*mlx_new_window(void *mlx_ptr, int width, int height, char *title);
-int		mlx_pixel_put(void *mlx_ptr, void *win_ptr, int x, int y, int color);
-int		mlx_loop(void *mlx_ptr);
-int		mlx_hook(void *win_ptr, int event, int mask, int (*f)(), void *param);
-int		mlx_key_hook(void *win_ptr, int (*f)(), void *param);
+void		*mlx_init(void);
+void		*mlx_new_window(void *mlx_ptr, int width, int height,
+				char *title);
+int			mlx_loop(void *mlx_ptr);
+int			mlx_hook(void *win_ptr, int event, int mask,
+				int (*f)(), void *param);
+int			mlx_key_hook(void *win_ptr, int (*f)(), void *param);
 
 #endif
