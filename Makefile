@@ -13,7 +13,6 @@
 NAME		= miniRT
 CC			= cc
 CFLAGS		= -Wall -Wextra -Werror -I$(INC_DIR) -I$(MLX_DIR)
-LDFLAGS		= -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
 
 GREEN		= \033[0;32m
 RED			= \033[0;31m
@@ -22,7 +21,17 @@ RESET		= \033[0m
 INC_DIR		= includes
 SRC_DIR		= src
 OBJ_DIR		= obj
-MLX_DIR		= lib/minilibx-linux
+
+# OS-specific MLX configuration
+UNAME_S		:= $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	MLX_DIR		= lib/minilibx-linux
+	LDFLAGS		= -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
+endif
+ifeq ($(UNAME_S),Darwin)
+	MLX_DIR		= lib/minilibx-macos
+	LDFLAGS		= -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit -lm
+endif
 
 SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/lighting/lighting.c \
