@@ -113,9 +113,8 @@ miniRT_final/
 │
 ├── Makefile                  # 빌드 설정
 ├── README.md                 # 이 파일
-├── RELEASE_NOTES.md          # 릴리스 노트
-├── miniRT_requirements.md    # 프로젝트 요구사항
-└── test_miniRT.sh           # 테스트 자동화 스크립트
+├── test_miniRT.sh           # 테스트 자동화 스크립트
+└── logs/                     # 빌드 및 검사 로그
 ```
 
 ---
@@ -602,8 +601,8 @@ time ./miniRT scenes/test_comprehensive.rt
 | 문서 | 설명 |
 |------|------|
 | **README.md** | 프로젝트 개요 및 사용법 (이 파일) |
-| **RELEASE_NOTES.md** | 릴리스 노트 및 변경 이력 |
-| **miniRT_requirements.md** | 프로젝트 요구사항 및 사용자 스토리 |
+| **[docs/RELEASE_NOTES.md](docs/RELEASE_NOTES.md)** | 릴리스 노트 및 변경 이력 |
+| **[docs/miniRT_requirements.md](docs/miniRT_requirements.md)** | 프로젝트 요구사항 및 사용자 스토리 |
 | **[docs/scene-files-guide-kr.md](docs/scene-files-guide-kr.md)** | 장면 파일 작성 가이드 |
 | **[docs/TESTING_GUIDE.md](docs/TESTING_GUIDE.md)** | 테스트 실행 가이드 |
 
@@ -613,7 +612,9 @@ time ./miniRT scenes/test_comprehensive.rt
 |------|------|
 | **[docs/PROJECT_STATUS.md](docs/PROJECT_STATUS.md)** | 프로젝트 현황 및 완료 상태 |
 | **[docs/project-reports/](docs/project-reports/)** | 개발 과정 상세 보고서 |
-| **IMPLEMENTATION_PLAN.txt** | 구현 계획 |
+| **[docs/IMPLEMENTATION_SUMMARY.md](docs/IMPLEMENTATION_SUMMARY.md)** | 구현 요약 |
+| **[docs/DEPLOYMENT_SUMMARY.md](docs/DEPLOYMENT_SUMMARY.md)** | 배포 요약 |
+| **[docs/verification_report.md](docs/verification_report.md)** | 검증 보고서 |
 
 ### 프로젝트 보고서
 

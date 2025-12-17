@@ -1,0 +1,52 @@
+# Compiled Object files
+*.o
+*.obj
+
+# Executables
+miniRT
+test_vector
+test_parser
+test_intersections
+test_lighting
+
+# Libraries
+*.a
+*.so
+*.dylib
+
+# Build artifacts
+*.out
+*.exe
+*.dSYM/
+
+# Dependency files
+*.d
+
+# MinilibX test programs
+test_mlx
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment files
+.env
+.env.local
+
+# Log files
+*.log
+logs/
+
+# Debugging files
+vgcore.*
+core
+core.*
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
