@@ -543,7 +543,7 @@ diffuse = diffuse * (1.0 - final_shadow);
 **Description**: Create comprehensive Korean documentation
 
 **Files**:
-- `docs/lighting/shadow_system.md` (create)
+- `docs/03-기능/조명/그림자_시스템.md` (create)
 
 **Content**:
 1. 시스템 개요 (System Overview)

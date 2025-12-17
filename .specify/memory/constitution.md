@@ -1,39 +1,46 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version Change: 1.0.0 → 1.1.0
+Version Change: 1.2.0 → 1.2.1
 Updated: 2025-12-17
 
-RATIONALE FOR VERSION 1.1.0:
-- MINOR version bump: New principle added (Principle VI)
-- No backward-incompatible changes to existing principles
-- Extends governance requirements with issue tracking and commit traceability
+RATIONALE FOR VERSION 1.2.1:
+- PATCH version bump: Enhancement to existing Principle VII
+- No new principles added, no principles removed
+- Clarification of documentation structure requirements within Principle VII
+- Adds detailed subdirectory organization standards for docs/
+- Maintains backward compatibility with existing principle framework
 
-PRINCIPLES DEFINED (6 total):
+PRINCIPLES DEFINED (7 total):
 1. 42 Norminette Compliance (NON-NEGOTIABLE)
 2. Readability-First Code
 3. Mandatory Unit Testing (NON-NEGOTIABLE)
 4. Bilingual Documentation
 5. Build Verification Workflow (NON-NEGOTIABLE)
-6. GitHub Issue Tracking (NON-NEGOTIABLE) ← NEW
-
-ADDED SECTIONS:
-- Principle VI: GitHub Issue Tracking
+6. GitHub Issue Tracking (NON-NEGOTIABLE)
+7. File Organization Standards (NON-NEGOTIABLE) ← ENHANCED
 
 MODIFIED PRINCIPLES:
-- None (all existing principles unchanged)
+- Principle VII (File Organization Standards) - Enhanced with detailed documentation structure requirements:
+  * Added numbered category structure (01-시작하기/, 02-개발/, 03-기능/, 04-릴리스/, 05-프로젝트_히스토리/, 06-참고자료/)
+  * Added file naming conventions (Korean with underscores, issue-numbered summaries)
+  * Added navigation requirements (docs/README.md as master guide, per-category READMEs)
+  * Added content organization rules (feature docs, historical reports, active dev docs, user guides)
+  * Added maintenance requirements (document lifecycle management)
 
 TEMPLATES REQUIRING UPDATES:
-✅ plan-template.md - Already references constitution check
-✅ spec-template.md - No changes needed (principle is workflow-focused)
-✅ tasks-template.md - Already compatible with issue-based workflow
-⚠ README.md - Consider documenting issue tracking workflow in contribution guidelines
-⚠ Project workflow docs - May need update to reflect mandatory issue tracking
+✅ plan-template.md - No changes needed (constitution check already references organizational standards)
+✅ spec-template.md - No changes needed (structure requirements are operational, not specification-level)
+✅ tasks-template.md - No changes needed (task organization already compatible)
+✅ README.md - Already compliant (exception granted for root-level placement)
 
 FOLLOW-UP ACTIONS:
-- Update developer workflow documentation to explain issue creation before work
-- Add commit message format examples including issue numbers
-- Consider GitHub Actions or pre-commit hooks to validate issue references
+- Reorganize docs/ directory into numbered category structure
+- Create docs/README.md as master navigation guide in Korean
+- Add category-level README.md files to each subdirectory
+- Migrate existing documentation files to appropriate categories
+- Verify all filenames use Korean with underscores
+- Update cross-references between documentation files
 -->
 
 # 42 miniRT Constitution
@@ -87,11 +94,13 @@ collaboration and local learning.
 - Every function MUST have English Doxygen-style comments in the source code
 - All functions and implementation details MUST be explained in Korean markdown files
 - Korean documentation MUST reside in `docs/` directory at project root
+- All documentation in `docs/` directory MUST be written in Korean (한글)
 - Documentation MUST be kept in sync with code changes
 
 **Rationale**: English documentation enables broader code review and collaboration,
 while Korean explanations ensure local learners can deeply understand the implementation
-without language barriers.
+without language barriers. Consistent Korean documentation in the docs/ directory
+provides centralized learning resources for local developers.
 
 ### V. Build Verification Workflow (NON-NEGOTIABLE)
 
@@ -121,6 +130,56 @@ requests MUST mark the associated issue number in the commit title.
 history, enables traceability between requirements and implementation, and facilitates
 code review by connecting changes to their motivating requirements.
 
+### VII. File Organization Standards (NON-NEGOTIABLE)
+
+All project files MUST follow strict organization rules to maintain a clean, navigable
+project structure.
+
+**Log Files**:
+- All log files (*.log, *.logs) MUST be stored in the `logs/` directory at project root
+- No log files may be scattered throughout the codebase or left at project root
+
+**Documentation Files**:
+- All markdown documentation files (*.md) MUST be stored in the `docs/` directory at project root
+- All documentation in `docs/` directory MUST be written in Korean (한글)
+- Exception: Root-level `README.md` may remain at project root for GitHub display purposes
+- No documentation files should be scattered throughout the codebase
+
+**Documentation Structure** (docs/ directory):
+- MUST use numbered category structure with Korean names:
+  * `01-시작하기/` (Getting Started) - Requirements, build guides, scene file guides
+  * `02-개발/` (Development) - File organization, norminette, testing, CI/CD
+  * `03-기능/` (Features) - Feature-specific docs by subsystem (조명/, 렌더링/, 파싱/, etc.)
+  * `04-릴리스/` (Releases) - Release notes, checklists, guides, verification reports
+  * `05-프로젝트_히스토리/` (Project History) - Implementation summaries (by issue), status reports
+  * `06-참고자료/` (References) - Git summaries, legacy documents, archived material
+- File naming MUST use Korean with underscores: `파일_이름.md`
+- Implementation summaries MUST be named by issue number: `NNN_기능_설명.md`
+- Date-based files SHOULD use YYYY-MM-DD prefix when applicable
+
+**Navigation Requirements**:
+- `docs/README.md` MUST exist as master navigation guide in Korean
+- Each category subdirectory SHOULD have its own README.md explaining contents
+- Cross-references between docs MUST use relative paths
+
+**Content Organization Rules**:
+- Feature documentation goes in `03-기능/[subsystem]/`
+- Historical/legacy reports go in `05-프로젝트_히스토리/`
+- Active development docs go in `02-개발/`
+- User-facing guides go in `01-시작하기/`
+
+**Maintenance Requirements**:
+- When creating new features, documentation goes in `03-기능/`
+- When completing implementations, summaries go in `05-프로젝트_히스토리/구현_요약/`
+- Outdated docs SHOULD be moved to `06-참고자료/` with date prefix
+
+**Rationale**: Structured documentation enables easy navigation, prevents document sprawl,
+maintains Korean consistency, supports project growth, and ensures developers can quickly
+find relevant information. Numbered categories provide intuitive ordering and scalability.
+The systematic organization reduces cognitive load when navigating the codebase and makes
+it easier for new contributors to understand the project layout. Centralizing Korean
+documentation in docs/ provides a single source of truth for learning resources.
+
 ## Documentation Standards
 
 **README.md Requirements**:
@@ -131,8 +190,10 @@ code review by connecting changes to their motivating requirements.
 **Korean Documentation Requirements** (`docs/` directory):
 - MUST contain detailed explanations of all functions in Korean
 - MUST explain design decisions, algorithms, and implementation rationale
-- File organization MUST mirror source structure for easy navigation
+- MUST follow numbered category structure per Principle VII
 - MUST be updated whenever corresponding source code changes
+- All documentation files MUST be written in Korean (한글) per Principle VII
+- MUST maintain docs/README.md as master navigation guide
 
 **Code Comments Requirements**:
 - All C functions MUST have English Doxygen comments including:
@@ -152,9 +213,10 @@ Every code change MUST complete this workflow before being considered done:
 5. **Runtime Verification** - Check for memory leaks, segfaults, and other errors
 6. **Documentation Update** - Update English comments and Korean markdown files
 7. **Norminette Check** - Run `norminette` and fix any violations
+8. **File Organization Check** - Verify log files in `logs/` and documentation in `docs/`
 
 **Checkpoints**:
-- Code review MUST verify all 7 steps completed
+- Code review MUST verify all 8 steps completed
 - Merge MUST be blocked if any step fails
 - CI/CD (if configured) MUST enforce compilation and unit test success
 
@@ -181,4 +243,4 @@ project. All development activity MUST comply with these principles.
 - Between non-negotiable principles, apply judgment favoring project stability and correctness
 - Document conflicts and resolutions in constitution amendments
 
-**Version**: 1.1.0 | **Ratified**: 2025-12-15 | **Last Amended**: 2025-12-17
+**Version**: 1.2.1 | **Ratified**: 2025-12-15 | **Last Amended**: 2025-12-17

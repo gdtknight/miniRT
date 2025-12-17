@@ -333,7 +333,7 @@ cy  0,0,0  0,1,0  5  10  0,255,0    # 수직 녹색 원기둥
 4. **공백**: 요소 간 공백/탭으로 구분
 5. **순서**: 임의 순서 가능 (권장: A, C, L 먼저)
 
-자세한 내용은 **[docs/scene-files-guide-kr.md](docs/scene-files-guide-kr.md)** 참조
+자세한 내용은 **[docs/01-시작하기/씬_파일_가이드.md](docs/01-시작하기/씬_파일_가이드.md)** 참조
 
 ---
 
@@ -590,7 +590,7 @@ time ./miniRT scenes/test_comprehensive.rt
 # sys     0m0.012s
 ```
 
-자세한 테스트 가이드는 **[docs/TESTING_GUIDE.md](docs/TESTING_GUIDE.md)** 참조
+자세한 테스트 가이드는 **[docs/02-개발/테스트_가이드.md](docs/02-개발/테스트_가이드.md)** 참조
 
 ---
 
@@ -601,28 +601,27 @@ time ./miniRT scenes/test_comprehensive.rt
 | 문서 | 설명 |
 |------|------|
 | **README.md** | 프로젝트 개요 및 사용법 (이 파일) |
-| **[docs/RELEASE_NOTES.md](docs/RELEASE_NOTES.md)** | 릴리스 노트 및 변경 이력 |
-| **[docs/miniRT_requirements.md](docs/miniRT_requirements.md)** | 프로젝트 요구사항 및 사용자 스토리 |
-| **[docs/scene-files-guide-kr.md](docs/scene-files-guide-kr.md)** | 장면 파일 작성 가이드 |
-| **[docs/TESTING_GUIDE.md](docs/TESTING_GUIDE.md)** | 테스트 실행 가이드 |
+| **[docs/README.md](docs/README.md)** | 문서 네비게이션 가이드 (한글) |
+| **[docs/04-릴리스/릴리스_노트.md](docs/04-릴리스/릴리스_노트.md)** | 릴리스 노트 및 변경 이력 |
+| **[docs/01-시작하기/miniRT_요구사항.md](docs/01-시작하기/miniRT_요구사항.md)** | 프로젝트 요구사항 및 사용자 스토리 |
+| **[docs/01-시작하기/씬_파일_가이드.md](docs/01-시작하기/씬_파일_가이드.md)** | 장면 파일 작성 가이드 |
+| **[docs/02-개발/테스트_가이드.md](docs/02-개발/테스트_가이드.md)** | 테스트 실행 가이드 |
 
 ### 개발자 문서
 
 | 문서 | 설명 |
 |------|------|
-| **[docs/PROJECT_STATUS.md](docs/PROJECT_STATUS.md)** | 프로젝트 현황 및 완료 상태 |
-| **[docs/project-reports/](docs/project-reports/)** | 개발 과정 상세 보고서 |
-| **[docs/IMPLEMENTATION_SUMMARY.md](docs/IMPLEMENTATION_SUMMARY.md)** | 구현 요약 |
-| **[docs/DEPLOYMENT_SUMMARY.md](docs/DEPLOYMENT_SUMMARY.md)** | 배포 요약 |
-| **[docs/verification_report.md](docs/verification_report.md)** | 검증 보고서 |
+| **[docs/02-개발/파일_구조.md](docs/02-개발/파일_구조.md)** | 프로젝트 파일 구조 |
+| **[docs/02-개발/CI_CD_가이드.md](docs/02-개발/CI_CD_가이드.md)** | CI/CD 파이프라인 가이드 |
+| **[docs/05-프로젝트_히스토리/](docs/05-프로젝트_히스토리/)** | 프로젝트 진행 상태 및 히스토리 |
+| **[docs/05-프로젝트_히스토리/구현_요약/](docs/05-프로젝트_히스토리/구현_요약/)** | 이슈별 구현 요약 |
+| **[docs/04-릴리스/검증_보고서.md](docs/04-릴리스/검증_보고서.md)** | 검증 보고서 |
 
-### 프로젝트 보고서
+### 기능 문서
 
-`docs/project-reports/` 디렉토리에는 개발 과정의 모든 보고서가 포함되어 있습니다:
-
-- **IMPLEMENTATION_STATUS.md**: 구현 진행 상황
-- **GIT_COMMIT_SUMMARY.md**: Git 커밋 전략 및 요약
-- **CLEANUP_REPORT.md**: 코드 정리 보고서
+| 문서 | 설명 |
+|------|------|
+| **[docs/03-기능/조명/그림자_시스템.md](docs/03-기능/조명/그림자_시스템.md)** | 그림자 렌더링 시스템 |
 - **GITHUB_RELEASE_GUIDE.md**: GitHub 릴리스 가이드
 - **RELEASE_STATUS.md**: 릴리스 준비 상태
 - **SUCCESS_REPORT.md**: 프로젝트 완료 보고서

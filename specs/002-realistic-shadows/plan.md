@@ -43,7 +43,7 @@ src/lighting/shadow_config.c        # Configuration management
 includes/shadow.h                    # Shadow system header
 tests/test_shadow_calc.c            # Unit tests for shadow calc
 tests/test_shadow_config.c          # Unit tests for config
-docs/lighting/shadow_system.md      # Korean documentation
+docs/03-기능/조명/그림자_시스템.md  # Korean documentation
 scenes/test_soft_shadows.rt         # Test scene for soft shadows
 scenes/test_shadow_attenuation.rt   # Test scene for attenuation
 ```
@@ -134,7 +134,7 @@ Makefile                            # Add new source files
 **Goal**: Finalize implementation, docs, and testing
 
 **Files**:
-- `docs/lighting/shadow_system.md` (create - Korean)
+- `docs/03-기능/조명/그림자_시스템.md` (create - Korean)
 - `scenes/test_shadow_attenuation.rt` (create)
 - All source files (add English comments)
 

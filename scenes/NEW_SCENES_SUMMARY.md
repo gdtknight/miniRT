@@ -235,7 +235,7 @@ $ ls -1 scenes/*.rt | wc -l
 - 성능 벤치마크
 
 **전체 장면 목록**: `scenes/README.md`  
-**한글 가이드**: `docs/scene-files-guide-kr.md`
+**한글 가이드**: `docs/01-시작하기/씬_파일_가이드.md`
 
 ---
 
