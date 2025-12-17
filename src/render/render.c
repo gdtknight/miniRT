@@ -23,7 +23,7 @@ static void	put_pixel_color(void *mlx, void *win, int xy[2], t_color color)
 	extern int	mlx_pixel_put(void *, void *, int, int, int);
 
 	mlx_pixel_put(mlx, win, xy[0], xy[1], (color.r << 16)
-			| (color.g << 8) | color.b);
+		| (color.g << 8) | color.b);
 }
 
 static void	render_pixel(t_scene *scene, void *mlx_win[2], int x, int y)
