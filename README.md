@@ -44,7 +44,9 @@ miniRT는 광선 추적(Ray Tracing) 기법을 이용하여 3D 장면을 2D 이�
 - **조명 효과**
   - 주변광 (Ambient Lighting)
   - 확산광 (Diffuse Lighting - Lambert)
-  - 하드 그림자 (Hard Shadows)
+  - 소프트 그림자 (Soft Shadows) ⭐ NEW
+  - 적응형 그림자 바이어스 (Adaptive Shadow Bias) ⭐ NEW
+  - 그림자 감쇠 (Shadow Attenuation) ⭐ NEW
 
 - **카메라 시스템**
   - 설정 가능한 시야각 (FOV)
@@ -718,6 +720,34 @@ src/window.c             : 35 lines
 
 ## 📅 개발 히스토리
 
+### v1.2.0 (2025-12-17) - Realistic Shadow Rendering ⭐
+
+#### 주요 기능
+- ✅ 소프트 그림자 (Soft Shadows) - 다중 샘플링으로 부드러운 그림자 경계
+- ✅ 적응형 그림자 바이어스 - 각도 기반 동적 바이어스로 shadow acne 방지
+- ✅ 그림자 감쇠 (Shadow Attenuation) - 거리 기반 그림자 부드러움
+- ✅ 설정 가능한 그림자 품질 (1-16+ 샘플)
+- ✅ 완전한 한글 문서 (shadow_system.md)
+
+#### 구현 세부사항
+- **새 파일**: shadow_calc.c, shadow_config.c, shadow_test.c, shadow.h
+- **수정 파일**: lighting.c, minirt.h, main.c
+- **테스트**: test_shadow_calc.c, test_shadow_config.c
+- **노미네트**: 100% 준수 (모든 파일 통과)
+
+#### 기술적 개선
+- 그림자 시스템 모듈화 및 확장성 향상
+- 함수별 단위 테스트 추가
+- 성능과 품질 간 균형 조절 가능
+- 역호환성 유지 (기존 scene 파일 동작)
+
+### v1.1.0 (2025-12-17) - Constitution & Issue Tracking
+
+#### 프로젝트 거버넌스
+- ✅ Constitution v1.1.0 제정
+- ✅ GitHub Issue 추적 필수화
+- ✅ 커밋 메시지 표준화: `[#issue] message`
+
 ### v1.0.0 (2025-12-15) - Initial Release ✨
 
 #### 주요 기능
@@ -751,7 +781,7 @@ src/window.c             : 35 lines
 - 🔮 반사 (Reflection)
 - 🔮 굴절 (Refraction)
 - 🔮 텍스처 매핑
-- 🔮 소프트 그림자
+- ~~🔮 소프트 그림자~~ ✅ **완료 (v1.2.0)**
 - 🔮 안티앨리어싱
 - 🔮 다중 조명 지원
 - 🔮 추가 객체 (Cone, Torus)
