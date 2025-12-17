@@ -31,6 +31,15 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gcc make xorg libxext-dev libbsd-dev
 
+      - name: Setup MinilibX for Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          if [ ! -f lib/minilibx-linux/Makefile ]; then
+            echo "Cloning minilibx-linux..."
+            rm -rf lib/minilibx-linux
+            git clone https://github.com/42Paris/minilibx-linux.git lib/minilibx-linux
+          fi
+
       - name: Clean build
         run: make fclean || true
 
