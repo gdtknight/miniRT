@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shadow_test.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miniRT team <miniRT@42.fr>                +#+  +:+       +#+        */
+/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/17 00:00:00 by miniRT           #+#    #+#             */
-/*   Updated: 2025/12/17 00:00:00 by miniRT          ###   ########.fr       */
+/*   Created: 2025/12/18 15:19:13 by yoshin            #+#    #+#             */
+/*   Updated: 2025/12/18 15:19:14 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 #include "vec3.h"
 #include "ray.h"
 
+/*
+** Check if shadow ray intersects any sphere in the scene.
+** Returns 1 if intersection found, 0 otherwise.
+*/
 static int	check_sphere_shadow(t_scene *scene, t_ray *ray, t_hit *hit)
 {
 	int	i;
@@ -29,6 +33,10 @@ static int	check_sphere_shadow(t_scene *scene, t_ray *ray, t_hit *hit)
 	return (0);
 }
 
+/*
+** Check if shadow ray intersects any plane in the scene.
+** Returns 1 if intersection found, 0 otherwise.
+*/
 static int	check_plane_shadow(t_scene *scene, t_ray *ray, t_hit *hit)
 {
 	int	i;
@@ -43,15 +51,29 @@ static int	check_plane_shadow(t_scene *scene, t_ray *ray, t_hit *hit)
 	return (0);
 }
 
-/**
- * @brief Test if point is in shadow (single ray)
- * 
- * @param scene Scene data
- * @param point Point to test
- * @param light_pos Light source position
- * @param bias Shadow bias offset
- * @return 1 if in shadow, 0 if lit
- */
+/*
+** Check if shadow ray intersects any cylinder in the scene.
+** Returns 1 if intersection found, 0 otherwise.
+*/
+static int	check_cylinder_shadow(t_scene *scene, t_ray *ray, t_hit *hit)
+{
+	int	i;
+
+	i = 0;
+	while (i < scene->cylinder_count)
+	{
+		if (intersect_cylinder(ray, &scene->cylinders[i], hit))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+/*
+** Test if point is occluded from light source.
+** Casts shadow ray from point toward light.
+** Returns 1 if any object blocks the light, 0 if fully lit.
+*/
 int	is_in_shadow(t_scene *scene, t_vec3 point, t_vec3 light_pos, double bias)
 {
 	t_ray	shadow_ray;
@@ -67,6 +89,8 @@ int	is_in_shadow(t_scene *scene, t_vec3 point, t_vec3 light_pos, double bias)
 	if (check_sphere_shadow(scene, &shadow_ray, &shadow_hit))
 		return (1);
 	if (check_plane_shadow(scene, &shadow_ray, &shadow_hit))
+		return (1);
+	if (check_cylinder_shadow(scene, &shadow_ray, &shadow_hit))
 		return (1);
 	return (0);
 }
