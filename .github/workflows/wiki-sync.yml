@@ -1,0 +1,52 @@
+name: Wiki Sync
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g., v1.0.0)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    name: Synchronize Wiki
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.version || github.ref }}
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Sync Wiki
+        continue-on-error: true
+        run: |
+          VERSION="${{ github.event.inputs.version || github.ref_name }}"
+          echo "Syncing wiki for version: $VERSION"
+          
+          .github/scripts/sync-wiki.sh "$VERSION"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: Report Status
+        if: always()
+        run: |
+          if [ ${{ job.status }} == 'success' ]; then
+            echo "✓ Wiki synchronization completed successfully"
+          else
+            echo "⚠️ Wiki synchronization failed, but this is non-blocking"
+            echo "Check logs for details and manual sync instructions"
+          fi

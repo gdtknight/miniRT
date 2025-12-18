@@ -4,6 +4,10 @@ on:
   pull_request:
     types: [opened, edited, synchronize, reopened]
 
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   validate-commits:
     name: Validate Commit Messages
@@ -132,3 +136,73 @@ jobs:
           else
             echo "✓ No sensitive files detected"
           fi
+
+  memory-leak-check:
+    name: Memory Leak Detection
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc make xorg libxext-dev libbsd-dev
+
+      - name: Setup MinilibX (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          if [ ! -f lib/minilibx-linux/Makefile ]; then
+            echo "Cloning minilibx-linux..."
+            rm -rf lib/minilibx-linux
+            git clone https://github.com/42Paris/minilibx-linux.git lib/minilibx-linux
+          fi
+          cd lib/minilibx-linux
+          make
+
+      - name: Build miniRT
+        run: make
+
+      - name: Install memory leak tools
+        run: .github/scripts/install-valgrind.sh
+
+      - name: Check memory leaks
+        run: |
+          mkdir -p logs
+          echo "Running memory leak checks on test scenes..."
+          
+          LEAK_FOUND=0
+          for scene in scenes/test*.rt; do
+            if [ -f "$scene" ]; then
+              echo ""
+              echo "Testing: $scene"
+              if .github/scripts/check-memory-leaks.sh --timeout 300 "$scene"; then
+                echo "✓ No leaks in $scene"
+              else
+                echo "✗ Leaks detected in $scene"
+                LEAK_FOUND=1
+              fi
+            fi
+          done
+          
+          if [ $LEAK_FOUND -eq 1 ]; then
+            echo ""
+            echo "❌ Memory leaks detected!"
+            echo "See logs for details"
+            exit 1
+          fi
+          
+          echo ""
+          echo "✓ All scenes passed memory leak checks"
+
+      - name: Upload memory leak logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: memory-leak-logs-${{ matrix.os }}
+          path: logs/
+          retention-days: 30
