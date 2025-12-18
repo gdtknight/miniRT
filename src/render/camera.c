@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miniRT team <miniRT@42.fr>                +#+  +:+       +#+        */
+/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/15 00:00:00 by miniRT           #+#    #+#             */
-/*   Updated: 2025/12/15 00:00:00 by miniRT          ###   ########.fr       */
+/*   Created: 2025/12/18 15:19:56 by yoshin            #+#    #+#             */
+/*   Updated: 2025/12/18 15:19:56 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,7 @@
 #include "ray.h"
 #include <math.h>
 
-#ifndef M_PI
-# define M_PI 3.14159265358979323846
-#endif
-
+/* Helper structure for camera ray calculations */
 typedef struct s_cam_calc
 {
 	double	aspect_ratio;
@@ -27,6 +24,11 @@ typedef struct s_cam_calc
 	t_vec3	up;
 }	t_cam_calc;
 
+/*
+** Initialize camera coordinate system (right and up vectors).
+** Creates orthonormal basis from camera direction.
+** Assumes world up is (0, 1, 0) for calculating right vector.
+*/
 static void	init_camera_calc(t_camera *camera, t_cam_calc *calc)
 {
 	calc->aspect_ratio = 800.0 / 600.0;
@@ -36,6 +38,11 @@ static void	init_camera_calc(t_camera *camera, t_cam_calc *calc)
 	calc->up = vec3_normalize(vec3_cross(calc->right, camera->direction));
 }
 
+/*
+** Create camera ray for pixel at normalized coordinates (x, y).
+** x, y in range [-1, 1] where (0,0) is center of screen.
+** Calculates ray direction based on camera FOV and orientation.
+*/
 t_ray	create_camera_ray(t_camera *camera, double x, double y)
 {
 	t_ray		ray;

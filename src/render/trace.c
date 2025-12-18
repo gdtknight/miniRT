@@ -3,17 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   trace.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miniRT team <miniRT@42.fr>                +#+  +:+       +#+        */
+/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/15 00:00:00 by miniRT           #+#    #+#             */
-/*   Updated: 2025/12/15 00:00:00 by miniRT          ###   ########.fr       */
+/*   Created: 2025/12/18 15:20:06 by yoshin            #+#    #+#             */
+/*   Updated: 2025/12/18 15:20:06 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "ray.h"
-#include "vec3.h"
+#include <math.h>
 
+/*
+** Check ray intersection with all spheres in scene.
+** Updates hit info with closest sphere intersection.
+** Returns 1 if any sphere was hit, 0 otherwise.
+*/
 int	check_sphere_intersections(t_scene *scene, t_ray *ray, t_hit *hit)
 {
 	t_hit	temp_hit;
@@ -35,6 +40,11 @@ int	check_sphere_intersections(t_scene *scene, t_ray *ray, t_hit *hit)
 	return (hit_found);
 }
 
+/*
+** Check ray intersection with all planes in scene.
+** Updates hit info with closest plane intersection.
+** Returns 1 if any plane was hit, 0 otherwise.
+*/
 int	check_plane_intersections(t_scene *scene, t_ray *ray, t_hit *hit)
 {
 	t_hit	temp_hit;
@@ -56,6 +66,37 @@ int	check_plane_intersections(t_scene *scene, t_ray *ray, t_hit *hit)
 	return (hit_found);
 }
 
+/*
+** Check ray intersection with all cylinders in scene.
+** Updates hit info with closest cylinder intersection.
+** Returns 1 if any cylinder was hit, 0 otherwise.
+*/
+int	check_cylinder_intersections(t_scene *scene, t_ray *ray, t_hit *hit)
+{
+	t_hit	temp_hit;
+	int		i;
+	int		hit_found;
+
+	hit_found = 0;
+	i = 0;
+	while (i < scene->cylinder_count)
+	{
+		temp_hit.distance = hit->distance;
+		if (intersect_cylinder(ray, &scene->cylinders[i], &temp_hit))
+		{
+			*hit = temp_hit;
+			hit_found = 1;
+		}
+		i++;
+	}
+	return (hit_found);
+}
+
+/*
+** Trace ray through scene and determine pixel color.
+** Tests intersection with all objects and finds closest hit.
+** Returns lit color if object hit, black if no intersection.
+*/
 t_color	trace_ray(t_scene *scene, t_ray *ray)
 {
 	t_hit	hit;
@@ -66,6 +107,8 @@ t_color	trace_ray(t_scene *scene, t_ray *ray)
 	if (check_sphere_intersections(scene, ray, &hit))
 		hit_found = 1;
 	if (check_plane_intersections(scene, ray, &hit))
+		hit_found = 1;
+	if (check_cylinder_intersections(scene, ray, &hit))
 		hit_found = 1;
 	if (hit_found)
 		return (apply_lighting(scene, &hit));

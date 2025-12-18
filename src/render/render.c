@@ -3,21 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miniRT team <miniRT@42.fr>                +#+  +:+       +#+        */
+/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/15 00:00:00 by miniRT           #+#    #+#             */
-/*   Updated: 2025/12/15 00:00:00 by miniRT          ###   ########.fr       */
+/*   Created: 2025/12/18 15:20:00 by yoshin            #+#    #+#             */
+/*   Updated: 2025/12/18 15:20:01 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-#include "vec3.h"
 #include "ray.h"
-#include "window.h"
 
 t_ray		create_camera_ray(t_camera *camera, double x, double y);
 t_color		trace_ray(t_scene *scene, t_ray *ray);
 
+/*
+** Draw colored pixel to MLX window.
+** Converts RGB color to packed integer format (0xRRGGBB).
+*/
 static void	put_pixel_color(void *mlx, void *win, int xy[2], t_color color)
 {
 	extern int	mlx_pixel_put(void *, void *, int, int, int);
@@ -26,6 +28,11 @@ static void	put_pixel_color(void *mlx, void *win, int xy[2], t_color color)
 		(color.g << 8) | color.b);
 }
 
+/*
+** Render single pixel at screen coordinates (x, y).
+** Converts screen space to normalized device coordinates.
+** Creates camera ray, traces it, and draws resulting color.
+*/
 static void	render_pixel(t_scene *scene, void *mlx_win[2], int x, int y)
 {
 	t_ray	ray;
@@ -43,6 +50,11 @@ static void	render_pixel(t_scene *scene, void *mlx_win[2], int x, int y)
 	put_pixel_color(mlx_win[0], mlx_win[1], xy, color);
 }
 
+/*
+** Render entire scene by iterating over all pixels.
+** Resolution hardcoded to 800x600.
+** Each pixel is ray traced independently.
+*/
 void	render_scene(t_scene *scene, void *mlx, void *win)
 {
 	int		x;
