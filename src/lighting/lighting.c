@@ -52,6 +52,25 @@ static double	calculate_specular(t_vec3 light_dir, t_vec3 normal, \
 }
 
 /*
+** Calculate combined lighting factor (diffuse + specular - shadow).
+*/
+static double	calc_lighting_factor(t_scene *scene, t_hit *hit, \
+		t_vec3 light_dir, t_vec3 view_dir)
+{
+	double	diffuse;
+	double	specular;
+	double	shadow_factor;
+
+	diffuse = vec3_dot(hit->normal, light_dir);
+	if (diffuse < 0)
+		diffuse = 0;
+	shadow_factor = calculate_shadow_factor(scene, hit->point, \
+		scene->light.position, &scene->shadow_config);
+	specular = calculate_specular(light_dir, hit->normal, view_dir) * 0.5;
+	return ((diffuse + specular) * (1.0 - shadow_factor));
+}
+
+/*
 ** Apply Phong lighting model to calculate final color at hit point.
 ** Combines ambient light with diffuse reflection and specular highlights.
 ** Takes into account shadow factor to darken occluded areas.
@@ -60,27 +79,20 @@ t_color	apply_lighting(t_scene *scene, t_hit *hit)
 {
 	t_vec3	light_dir;
 	t_vec3	view_dir;
-	double	diffuse;
-	double	specular;
+	double	lighting_factor;
 	t_color	result;
-	double	ambient;
-	double	shadow_factor;
 
-	ambient = scene->ambient.ratio;
 	light_dir = vec3_normalize(vec3_subtract(scene->light.position, \
 		hit->point));
 	view_dir = vec3_normalize(vec3_subtract(scene->camera.position, \
 		hit->point));
-	diffuse = vec3_dot(hit->normal, light_dir);
-	if (diffuse < 0)
-		diffuse = 0;
-	shadow_factor = calculate_shadow_factor(scene, hit->point, \
-		scene->light.position, &scene->shadow_config);
-	specular = calculate_specular(light_dir, hit->normal, view_dir) * 0.5;
-	diffuse = (diffuse + specular) * (1.0 - shadow_factor);
-	result.r = hit->color.r * (ambient + diffuse * scene->light.brightness);
-	result.g = hit->color.g * (ambient + diffuse * scene->light.brightness);
-	result.b = hit->color.b * (ambient + diffuse * scene->light.brightness);
+	lighting_factor = calc_lighting_factor(scene, hit, light_dir, view_dir);
+	result.r = hit->color.r * (scene->ambient.ratio + \
+		lighting_factor * scene->light.brightness);
+	result.g = hit->color.g * (scene->ambient.ratio + \
+		lighting_factor * scene->light.brightness);
+	result.b = hit->color.b * (scene->ambient.ratio + \
+		lighting_factor * scene->light.brightness);
 	clamp_color(&result);
 	return (result);
 }

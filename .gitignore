@@ -50,3 +50,4 @@ core.*
 *.tmp
 *.temp
 *.bak
+build/

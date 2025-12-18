@@ -34,4 +34,12 @@ typedef struct s_hit
 	t_color	color;
 }	t_hit;
 
+/* Function declarations */
+int		intersect_sphere(t_ray *ray, t_sphere *sphere, t_hit *hit);
+int		intersect_plane(t_ray *ray, t_plane *plane, t_hit *hit);
+int		intersect_cylinder(t_ray *ray, t_cylinder *cylinder, t_hit *hit);
+int		intersect_cylinder_body(t_ray *ray, t_cylinder *cyl, t_hit *hit);
+int		intersect_cylinder_cap(t_ray *ray, t_cylinder *cyl, t_hit *hit, \
+		double cap_m);
+
 #endif

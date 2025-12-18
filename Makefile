@@ -36,6 +36,7 @@ endif
 SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/lighting/lighting.c \
 			  $(SRC_DIR)/lighting/shadow_calc.c \
+			  $(SRC_DIR)/lighting/shadow_attenuation.c \
 			  $(SRC_DIR)/lighting/shadow_config.c \
 			  $(SRC_DIR)/lighting/shadow_test.c \
 			  $(SRC_DIR)/math/vector.c \
@@ -45,6 +46,7 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/parser/parse_validation.c \
 			  $(SRC_DIR)/parser/parser.c \
 			  $(SRC_DIR)/ray/intersections.c \
+			  $(SRC_DIR)/ray/intersect_cylinder.c \
 			  $(SRC_DIR)/render/camera.c \
 			  $(SRC_DIR)/render/render.c \
 			  $(SRC_DIR)/render/trace.c \
@@ -60,7 +62,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@echo "$(GREEN)Linking $(NAME)...$(RESET)"
-	@make -C $(MLX_DIR)
+	@if [ -f "$(MLX_DIR)/Makefile" ]; then make -C $(MLX_DIR); fi
 	@$(CC) $(OBJS) $(LDFLAGS) -o $(NAME)
 	@echo "$(GREEN)✓ miniRT compiled successfully!$(RESET)"
 
@@ -72,7 +74,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 clean:
 	@echo "$(RED)Cleaning object files...$(RESET)"
 	@rm -rf $(OBJ_DIR)
-	@make -C $(MLX_DIR) clean
+	@if [ -f "$(MLX_DIR)/Makefile" ]; then make -C $(MLX_DIR) clean; fi
 	@echo "$(GREEN)✓ Object files cleaned$(RESET)"
 
 fclean: clean

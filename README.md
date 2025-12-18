@@ -218,9 +218,13 @@ miniRT_final/
 
 ## 📚 문서 (Wiki)
 
-완전한 한글 문서가 GitHub Wiki에 제공됩니다:
+완전한 한글 문서가 GitHub Wiki와 `docs/` 디렉토리에 제공됩니다:
 
-### 🏠 [Wiki 홈](https://github.com/gdtknight/miniRT_final/wiki)
+### 🏠 로컬 문서
+- **[문서 인덱스](docs/INDEX.md)** - 전체 문서 구조 및 빠른 참조
+- **[문서 가이드](docs/README.md)** - 문서 사용법 및 학습 순서
+
+### 🌐 [GitHub Wiki 홈](https://github.com/gdtknight/miniRT_final/wiki)
 
 ### 기본 정보
 - **[프로그램 개요](https://github.com/gdtknight/miniRT_final/wiki/프로그램-개요)** - 프로젝트 소개, 지원 기능, 실행 방법
@@ -251,7 +255,7 @@ Wiki에는 다음 내용이 포함되어 있습니다:
 
 ```bash
 # 모든 장면 파일 테스트
-./test_miniRT.sh
+./scripts/test_miniRT.sh
 
 # Norminette 검사
 norminette src/ includes/

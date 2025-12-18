@@ -63,6 +63,63 @@ t_vec3	generate_shadow_sample_offset(double radius, int sample_index, \
 }
 
 /*
+** Helper structure for shadow sampling parameters.
+*/
+typedef struct s_shadow_sample
+{
+	t_scene			*scene;
+	t_vec3			point;
+	t_vec3			light_pos;
+	t_shadow_config	*config;
+	double			bias;
+}	t_shadow_sample;
+
+/*
+** Cast single shadow ray with offset.
+*/
+static int	sample_shadow_ray(t_shadow_sample *params, int index)
+{
+	t_vec3	offset;
+	t_vec3	sample_light_pos;
+
+	offset = generate_shadow_sample_offset(params->config->softness * 2.0, \
+		index, params->config->samples);
+	sample_light_pos = vec3_add(params->light_pos, offset);
+	return (is_in_shadow(params->scene, params->point, \
+		sample_light_pos, params->bias));
+}
+
+/*
+** Calculate shadow samples by casting rays to light positions.
+*/
+static double	calc_shadow_samples(t_scene *scene, t_vec3 point, \
+		t_vec3 light_pos, t_shadow_config *config)
+{
+	t_shadow_sample	params;
+	double			shadow_count;
+	t_vec3			normal;
+	t_vec3			light_dir;
+	int				i;
+
+	shadow_count = 0.0;
+	light_dir = vec3_normalize(vec3_subtract(light_pos, point));
+	normal = (t_vec3){0.0, 1.0, 0.0};
+	params.scene = scene;
+	params.point = point;
+	params.light_pos = light_pos;
+	params.config = config;
+	params.bias = calculate_shadow_bias(normal, light_dir, 0.001);
+	i = 0;
+	while (i < config->samples)
+	{
+		if (sample_shadow_ray(&params, i))
+			shadow_count += 1.0;
+		i++;
+	}
+	return (shadow_count);
+}
+
+/*
 ** Calculate shadow factor using multiple shadow rays.
 ** Casts multiple rays to determine partial occlusion.
 ** Returns 0.0 (fully lit) to 1.0 (fully shadowed).
@@ -71,48 +128,7 @@ double	calculate_shadow_factor(t_scene *scene, t_vec3 point, \
 		t_vec3 light_pos, t_shadow_config *config)
 {
 	double	shadow_count;
-	double	bias;
-	t_vec3	normal;
-	t_vec3	light_dir;
-	int		i;
-	t_vec3	offset;
-	t_vec3	sample_light_pos;
 
-	shadow_count = 0.0;
-	light_dir = vec3_normalize(vec3_subtract(light_pos, point));
-	normal = (t_vec3){0.0, 1.0, 0.0};
-	bias = calculate_shadow_bias(normal, light_dir, 0.001);
-	i = 0;
-	while (i < config->samples)
-	{
-		offset = generate_shadow_sample_offset(config->softness * 2.0, i, \
-			config->samples);
-		sample_light_pos = vec3_add(light_pos, offset);
-		if (is_in_shadow(scene, point, sample_light_pos, bias))
-			shadow_count += 1.0;
-		i++;
-	}
+	shadow_count = calc_shadow_samples(scene, point, light_pos, config);
 	return (shadow_count / (double)config->samples);
-}
-
-/*
-** Calculate distance-based shadow attenuation.
-** Softens shadows based on distance from light source.
-** Uses inverse square falloff with configurable softness.
-*/
-double	calculate_shadow_attenuation(double distance, double max_distance, \
-		double softness)
-{
-	double	normalized_dist;
-	double	attenuation;
-
-	if (max_distance <= 0.0)
-		return (1.0);
-	normalized_dist = distance / max_distance;
-	attenuation = 1.0 / (1.0 + normalized_dist * normalized_dist * softness);
-	if (attenuation < 0.0)
-		attenuation = 0.0;
-	if (attenuation > 1.0)
-		attenuation = 1.0;
-	return (attenuation);
 }
