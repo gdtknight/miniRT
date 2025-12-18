@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miniRT team <miniRT@42.fr>                +#+  +:+       +#+        */
+/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/15 00:00:00 by miniRT           #+#    #+#             */
-/*   Updated: 2025/12/15 00:00:00 by miniRT          ###   ########.fr       */
+/*   Created: 2025/12/18 15:19:44 by yoshin            #+#    #+#             */
+/*   Updated: 2025/12/18 15:19:45 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*
+** Read one line from file descriptor.
+** Reads until newline or EOF, returns dynamically allocated string.
+** Returns NULL on EOF or read error.
+*/
 static char	*read_line(int fd)
 {
 	char	*line;
@@ -41,6 +46,11 @@ static char	*read_line(int fd)
 	return (line);
 }
 
+/*
+** Parse single line from scene file.
+** Identifies element type by prefix and calls appropriate parser.
+** Returns 1 on success, 0 on error. Skips empty lines and comments.
+*/
 static int	parse_line(char *line, t_scene *scene)
 {
 	while (*line == ' ' || *line == '\t')
@@ -62,6 +72,11 @@ static int	parse_line(char *line, t_scene *scene)
 	return (print_error("Invalid element identifier"));
 }
 
+/*
+** Parse scene description file and populate scene structure.
+** Opens file, reads line by line, and dispatches to element parsers.
+** Returns 1 on success, 0 on error.
+*/
 int	parse_scene(const char *filename, t_scene *scene)
 {
 	int		fd;
@@ -85,6 +100,10 @@ int	parse_scene(const char *filename, t_scene *scene)
 	return (success);
 }
 
+/*
+** Validate that scene contains all required elements.
+** Checks for ambient light, camera, light source, and at least one object.
+*/
 int	validate_scene(t_scene *scene)
 {
 	if (!scene->has_ambient)

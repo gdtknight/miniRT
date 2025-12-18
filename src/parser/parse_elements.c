@@ -3,18 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   parse_elements.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miniRT team <miniRT@42.fr>                +#+  +:+       +#+        */
+/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/15 00:00:00 by miniRT           #+#    #+#             */
-/*   Updated: 2025/12/15 15:41:24 by yoshin           ###   ########.fr       */
+/*   Created: 2025/12/18 15:19:28 by yoshin            #+#    #+#             */
+/*   Updated: 2025/12/18 15:19:29 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "parser.h"
 #include "vec3.h"
-#include <stdlib.h>
 
+/*
+** Parse ambient lighting element from scene file.
+** Format: A <ratio> <R,G,B>
+** Validates ratio is in range [0.0, 1.0].
+*/
 int	parse_ambient(char *line, t_scene *scene)
 {
 	char	*token;
@@ -25,7 +29,7 @@ int	parse_ambient(char *line, t_scene *scene)
 	token = line + 2;
 	while (*token == ' ')
 		token++;
-	ratio = atof(token);
+	ratio = ft_atof(token);
 	if (!in_range(ratio, 0.0, 1.0))
 		return (print_error("Ambient ratio must be in range [0.0, 1.0]"));
 	scene->ambient.ratio = ratio;
@@ -39,6 +43,11 @@ int	parse_ambient(char *line, t_scene *scene)
 	return (1);
 }
 
+/*
+** Parse camera element from scene file.
+** Format: C <x,y,z> <nx,ny,nz> <fov>
+** Normalizes direction vector and validates FOV range [0, 180].
+*/
 int	parse_camera(char *line, t_scene *scene)
 {
 	char	*token;
@@ -61,13 +70,18 @@ int	parse_camera(char *line, t_scene *scene)
 		token++;
 	while (*token == ' ')
 		token++;
-	scene->camera.fov = atof(token);
+	scene->camera.fov = ft_atof(token);
 	if (!in_range(scene->camera.fov, 0, 180))
 		return (print_error("FOV must be in range [0, 180]"));
 	scene->has_camera = 1;
 	return (1);
 }
 
+/*
+** Parse light source element from scene file.
+** Format: L <x,y,z> <brightness> <R,G,B>
+** Validates brightness is in range [0.0, 1.0].
+*/
 int	parse_light(char *line, t_scene *scene)
 {
 	char	*token;
@@ -83,7 +97,7 @@ int	parse_light(char *line, t_scene *scene)
 		token++;
 	while (*token == ' ')
 		token++;
-	scene->light.brightness = atof(token);
+	scene->light.brightness = ft_atof(token);
 	if (!in_range(scene->light.brightness, 0.0, 1.0))
 		return (print_error("Light brightness must be in range [0.0, 1.0]"));
 	while (*token && *token != ' ')
