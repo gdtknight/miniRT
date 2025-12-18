@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miniRT team <miniRT@42.fr>                +#+  +:+       +#+        */
+/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/15 00:00:00 by miniRT           #+#    #+#             */
-/*   Updated: 2025/12/15 00:00:00 by miniRT          ###   ########.fr       */
+/*   Created: 2025/12/18 15:19:19 by yoshin            #+#    #+#             */
+/*   Updated: 2025/12/18 15:19:20 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vec3.h"
 
+/*
+** Add two 3D vectors component-wise.
+** Returns new vector: (a.x + b.x, a.y + b.y, a.z + b.z)
+*/
 t_vec3	vec3_add(t_vec3 a, t_vec3 b)
 {
 	t_vec3	result;
@@ -22,6 +26,10 @@ t_vec3	vec3_add(t_vec3 a, t_vec3 b)
 	return (result);
 }
 
+/*
+** Subtract vector b from vector a component-wise.
+** Returns new vector: (a.x - b.x, a.y - b.y, a.z - b.z)
+*/
 t_vec3	vec3_subtract(t_vec3 a, t_vec3 b)
 {
 	t_vec3	result;
@@ -32,6 +40,10 @@ t_vec3	vec3_subtract(t_vec3 a, t_vec3 b)
 	return (result);
 }
 
+/*
+** Multiply vector by scalar value.
+** Returns new vector: (v.x * scalar, v.y * scalar, v.z * scalar)
+*/
 t_vec3	vec3_multiply(t_vec3 v, double scalar)
 {
 	t_vec3	result;

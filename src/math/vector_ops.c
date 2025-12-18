@@ -3,21 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   vector_ops.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miniRT team <miniRT@42.fr>                +#+  +:+       +#+        */
+/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/15 00:00:00 by miniRT           #+#    #+#             */
-/*   Updated: 2025/12/15 00:00:00 by miniRT          ###   ########.fr       */
+/*   Created: 2025/12/18 15:19:23 by yoshin            #+#    #+#             */
+/*   Updated: 2025/12/18 15:19:24 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <math.h>
 #include "vec3.h"
 
+/*
+** Calculate dot product of two vectors.
+** Returns scalar: a.x * b.x + a.y * b.y + a.z * b.z
+** Used for projections and angle calculations.
+*/
 double	vec3_dot(t_vec3 a, t_vec3 b)
 {
 	return (a.x * b.x + a.y * b.y + a.z * b.z);
 }
 
+/*
+** Calculate cross product of two vectors.
+** Returns vector perpendicular to both input vectors.
+** Right-hand rule determines direction.
+*/
 t_vec3	vec3_cross(t_vec3 a, t_vec3 b)
 {
 	t_vec3	result;
@@ -28,11 +38,19 @@ t_vec3	vec3_cross(t_vec3 a, t_vec3 b)
 	return (result);
 }
 
+/*
+** Calculate magnitude (length) of vector.
+** Returns sqrt(x² + y² + z²)
+*/
 double	vec3_magnitude(t_vec3 v)
 {
 	return (sqrt(v.x * v.x + v.y * v.y + v.z * v.z));
 }
 
+/*
+** Normalize vector to unit length (magnitude = 1).
+** Returns zero vector if input magnitude is zero.
+*/
 t_vec3	vec3_normalize(t_vec3 v)
 {
 	double	mag;
