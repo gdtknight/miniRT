@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: miniRT team <miniRT@42.fr>                +#+  +:+       +#+         #
+#    By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/12/15 00:00:00 by miniRT           #+#    #+#              #
-#    Updated: 2025/12/15 00:00:00 by miniRT          ###   ########.fr        #
+#    Created: 2025/12/18 15:20:43 by yoshin            #+#    #+#              #
+#    Updated: 2025/12/18 15:20:44 by yoshin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ RESET		= \033[0m
 
 INC_DIR		= includes
 SRC_DIR		= src
-OBJ_DIR		= obj
+OBJ_DIR		= build
 
 # OS-specific MLX configuration
 UNAME_S		:= $(shell uname -s)
@@ -50,6 +50,8 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/render/trace.c \
 			  $(SRC_DIR)/utils/cleanup.c \
 			  $(SRC_DIR)/utils/error.c \
+			  $(SRC_DIR)/utils/ft_atoi.c \
+			  $(SRC_DIR)/utils/ft_atof.c \
 			  $(SRC_DIR)/window/window.c
 
 OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
