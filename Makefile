@@ -34,6 +34,11 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 SRCS		= $(SRC_DIR)/main.c \
+			  $(SRC_DIR)/hud/hud_format.c \
+			  $(SRC_DIR)/hud/hud_init.c \
+			  $(SRC_DIR)/hud/hud_navigation.c \
+			  $(SRC_DIR)/hud/hud_render.c \
+			  $(SRC_DIR)/hud/hud_toggle.c \
 			  $(SRC_DIR)/lighting/lighting.c \
 			  $(SRC_DIR)/lighting/shadow_calc.c \
 			  $(SRC_DIR)/lighting/shadow_config.c \

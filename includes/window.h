@@ -31,6 +31,21 @@ typedef struct s_selection
 	int			index;
 }	t_selection;
 
+/* HUD state structure */
+typedef struct s_hud_state
+{
+	int		visible;
+	int		current_page;
+	int		objects_per_page;
+	int		total_pages;
+	int		dirty;
+	void	*bg_img;
+	char	*bg_data;
+	int		bpp;
+	int		size_line;
+	int		endian;
+}	t_hud_state;
+
 /* Render context containing MLX pointers and scene data */
 typedef struct s_render
 {
@@ -45,6 +60,8 @@ typedef struct s_render
 	t_selection	selection;
 	int			dirty;
 	int			low_quality;
+	int			shift_pressed;
+	t_hud_state	hud;
 }	t_render;
 
 /* Initialize MLX window and set up event handlers */

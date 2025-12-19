@@ -12,6 +12,7 @@
 
 #include "minirt.h"
 #include "window.h"
+#include "hud.h"
 #include <stdlib.h>
 #include <math.h>
 
@@ -24,6 +25,7 @@ int	close_window(void *param)
 	t_render	*render;
 
 	render = (t_render *)param;
+	hud_cleanup(&render->hud, render->mlx);
 	cleanup_all(render->scene, render);
 	exit(0);
 	return (0);
@@ -43,6 +45,12 @@ void	render_scene_to_buffer(t_scene *scene, t_render *render);
 #define KEY_B 98
 #define KEY_Q 113
 #define KEY_I 105
+#define KEY_H 104
+#define KEY_TAB 65289
+#define KEY_SHIFT_L 65505
+#define KEY_SHIFT_R 65506
+#define KEY_UP 65362
+#define KEY_DOWN 65364
 #define KEY_BRACKET_LEFT 91
 #define KEY_BRACKET_RIGHT 93
 #define KEY_KP_0 65438
@@ -272,18 +280,33 @@ int	handle_key(int keycode, void *param)
 	render = (t_render *)param;
 	if (keycode == KEY_ESC)
 		close_window(param);
+	else if (keycode == KEY_H)
+		hud_toggle(render);
+	else if (keycode == KEY_TAB)
+	{
+		if (render->shift_pressed)
+			hud_select_prev(render);
+		else
+			hud_select_next(render);
+	}
+	else if (keycode == KEY_UP)
+		hud_page_up(render);
+	else if (keycode == KEY_DOWN)
+		hud_page_down(render);
 	else if (keycode == KEY_W || keycode == KEY_A || keycode == KEY_S
 		|| keycode == KEY_D)
 	{
 		handle_camera_move(render, keycode);
 		render->low_quality = 1;
 		render->dirty = 1;
+		hud_mark_dirty(render);
 	}
 	else if (keycode == KEY_R || keycode == KEY_F)
 	{
 		handle_camera_pitch(render, keycode);
 		render->low_quality = 1;
 		render->dirty = 1;
+		hud_mark_dirty(render);
 	}
 	else if (keycode == KEY_BRACKET_LEFT || keycode == KEY_BRACKET_RIGHT)
 		handle_object_selection(render, keycode);
@@ -292,6 +315,7 @@ int	handle_key(int keycode, void *param)
 		handle_object_move(render, keycode);
 		render->low_quality = 1;
 		render->dirty = 1;
+		hud_mark_dirty(render);
 	}
 	else if (keycode == KEY_INSERT || keycode == KEY_HOME || keycode == KEY_PGUP
 		|| keycode == KEY_DELETE || keycode == KEY_END || keycode == KEY_PGDN)
@@ -299,6 +323,7 @@ int	handle_key(int keycode, void *param)
 		handle_light_move(render, keycode);
 		render->low_quality = 1;
 		render->dirty = 1;
+		hud_mark_dirty(render);
 	}
 	else if (keycode == KEY_B)
 	{
@@ -318,6 +343,8 @@ int	handle_key(int keycode, void *param)
 			= !render->scene->render_state.show_info;
 		render->dirty = 1;
 	}
+	else if (keycode == KEY_SHIFT_L || keycode == KEY_SHIFT_R)
+		render->shift_pressed = 1;
 	return (0);
 }
 
@@ -339,6 +366,8 @@ int	handle_key_release(int keycode, void *param)
 		render->low_quality = 0;
 		render->dirty = 1;
 	}
+	else if (keycode == KEY_SHIFT_L || keycode == KEY_SHIFT_R)
+		render->shift_pressed = 0;
 	return (0);
 }
 
@@ -357,6 +386,8 @@ int	render_loop(void *param)
 		mlx_put_image_to_window(render->mlx, render->win, render->img, 0, 0);
 		render->dirty = 0;
 	}
+	if (render->hud.visible && render->hud.dirty)
+		hud_render(render);
 	return (0);
 }
 
@@ -393,6 +424,13 @@ t_render	*init_window(t_scene *scene)
 	render->selection.index = 0;
 	render->dirty = 1;
 	render->low_quality = 0;
+	render->shift_pressed = 0;
+	if (hud_init(&render->hud, render->mlx, render->win) == -1)
+	{
+		free(render);
+		return (NULL);
+	}
+	render->hud.total_pages = hud_calculate_total_pages(scene);
 	mlx_hook(render->win, 17, 0, close_window, render);
 	mlx_hook(render->win, 2, 1L << 0, handle_key, render);
 	mlx_hook(render->win, 3, 1L << 1, handle_key_release, render);
