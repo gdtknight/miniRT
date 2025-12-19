@@ -1,6 +1,6 @@
 # Feature Specification: Scene Information HUD
 
-**Feature Branch**: `001-scene-info-hud`  
+**Feature Branch**: `003-scene-info-hud`  
 **Created**: 2025-12-19  
 **Status**: Draft  
 **Input**: User description: "RT 파일 파싱 결과를 좌측 상단에 표시하는 HUD(Heads-Up Display) 기능을 추가하고 싶습니다."

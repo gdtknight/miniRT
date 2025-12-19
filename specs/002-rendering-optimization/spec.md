@@ -1,6 +1,6 @@
 # Feature Specification: Advanced Rendering Performance Optimization
 
-**Feature Branch**: `001-rendering-optimization`  
+**Feature Branch**: `002-rendering-optimization`  
 **Created**: 2025-12-19  
 **Status**: Draft  
 **Input**: User description: "렌더링 속도가 너무 느린 문제를 해결하기 위한 최적화 기능 명세를 작성해주세요"

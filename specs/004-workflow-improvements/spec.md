@@ -1,6 +1,6 @@
 # Feature Specification: Workflow Improvements and Project Structure Reorganization
 
-**Feature Branch**: `001-workflow-improvements`  
+**Feature Branch**: `004-workflow-improvements`  
 **Created**: 2025-12-18  
 **Status**: Draft  
 **Input**: User description: "Workflow Improvements and Project Structure Reorganization"
