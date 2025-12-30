@@ -34,82 +34,41 @@ int	close_window(void *param)
 /* Forward declaration for re-rendering */
 void	render_scene_to_buffer(t_scene *scene, t_render *render);
 
-/* Platform-specific key code definitions */
-#ifdef __APPLE__
-/* macOS (Darwin) virtual key codes */
-# define KEY_ESC 53
-# define KEY_W 13
-# define KEY_A 0
-# define KEY_S 1
-# define KEY_D 2
-# define KEY_R 15
-# define KEY_F 3
-# define KEY_B 11
-# define KEY_Q 12
-# define KEY_I 34
-# define KEY_H 4
-# define KEY_TAB 48
-# define KEY_SHIFT_L 56
-# define KEY_SHIFT_R 60
-# define KEY_UP 126
-# define KEY_DOWN 125
-# define KEY_BRACKET_LEFT 33
-# define KEY_BRACKET_RIGHT 30
-# define KEY_KP_0 82
-# define KEY_KP_1 83
-# define KEY_KP_2 84
-# define KEY_KP_3 85
-# define KEY_KP_4 86
-# define KEY_KP_5 87
-# define KEY_KP_6 88
-# define KEY_KP_7 89
-# define KEY_KP_8 91
-# define KEY_KP_9 92
-# define KEY_INSERT 114
-# define KEY_HOME 115
-# define KEY_PGUP 116
-# define KEY_DELETE 117
-# define KEY_END 119
-# define KEY_PGDN 121
-#elif defined(__linux__)
-/* Linux/X11 KeySym values */
-# define KEY_ESC 65307
-# define KEY_W 119
-# define KEY_A 97
-# define KEY_S 115
-# define KEY_D 100
-# define KEY_R 114
-# define KEY_F 102
-# define KEY_B 98
-# define KEY_Q 113
-# define KEY_I 105
-# define KEY_H 104
-# define KEY_TAB 65289
-# define KEY_SHIFT_L 65505
-# define KEY_SHIFT_R 65506
-# define KEY_UP 65362
-# define KEY_DOWN 65364
-# define KEY_BRACKET_LEFT 91
-# define KEY_BRACKET_RIGHT 93
-# define KEY_KP_0 65438
-# define KEY_KP_1 65436
-# define KEY_KP_2 65433
-# define KEY_KP_3 65435
-# define KEY_KP_4 65430
-# define KEY_KP_5 65437
-# define KEY_KP_6 65432
-# define KEY_KP_7 65429
-# define KEY_KP_8 65431
-# define KEY_KP_9 65434
-# define KEY_INSERT 65379
-# define KEY_HOME 65360
-# define KEY_PGUP 65365
-# define KEY_DELETE 65535
-# define KEY_END 65367
-# define KEY_PGDN 65366
-#else
-# error "Unsupported platform - requires macOS or Linux"
-#endif
+/* Key code definitions for Linux/X11 */
+#define KEY_ESC 65307
+#define KEY_W 119
+#define KEY_A 97
+#define KEY_S 115
+#define KEY_D 100
+#define KEY_R 114
+#define KEY_F 102
+#define KEY_B 98
+#define KEY_Q 113
+#define KEY_I 105
+#define KEY_H 104
+#define KEY_TAB 65289
+#define KEY_SHIFT_L 65505
+#define KEY_SHIFT_R 65506
+#define KEY_UP 65362
+#define KEY_DOWN 65364
+#define KEY_BRACKET_LEFT 91
+#define KEY_BRACKET_RIGHT 93
+#define KEY_KP_0 65438
+#define KEY_KP_1 65436
+#define KEY_KP_2 65433
+#define KEY_KP_3 65435
+#define KEY_KP_4 65430
+#define KEY_KP_5 65437
+#define KEY_KP_6 65432
+#define KEY_KP_7 65429
+#define KEY_KP_8 65431
+#define KEY_KP_9 65434
+#define KEY_INSERT 65379
+#define KEY_HOME 65360
+#define KEY_PGUP 65365
+#define KEY_DELETE 65535
+#define KEY_END 65367
+#define KEY_PGDN 65366
 
 static void	handle_camera_move(t_render *render, int keycode)
 {

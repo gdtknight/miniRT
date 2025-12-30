@@ -1,275 +1,151 @@
-# miniRT Rendering Optimization - Implementation Complete ✅
+# Cross-Platform Keyboard Support - Implementation Complete
 
-**Date:** 2025-12-19  
-**Status:** ✅ COMPLETED AND VERIFIED  
-**Performance Gain:** 100-400x faster
+**Date**: 2025-12-31  
+**Feature**: specs/006-cross-platform-keyboard  
+**Status**: CORE IMPLEMENTATION COMPLETE - Ready for Manual Testing
 
----
+## Summary
 
-## 🎯 Mission Accomplished
+Successfully implemented cross-platform keyboard support for miniRT by replacing Linux-only keycode definitions with platform-specific definitions using conditional compilation.
 
-Successfully optimized miniRT rendering performance by implementing:
-1. ✅ Image buffer rendering
-2. ✅ Dirty flag system
-3. ✅ Low-quality preview mode
-4. ✅ Event-driven architecture
+## Changes Made
 
----
+### Modified Files
 
-## 📊 Results Summary
+1. **src/window/window.c** (lines 37-112)
+   - Replaced hardcoded Linux/X11 keycodes with platform-specific blocks
+   - Added `#ifdef __APPLE__` section with macOS virtual keycodes
+   - Added `#elif defined(__linux__)` section with Linux X11 KeySym values
+   - Added `#else` block with `#error` directive for unsupported platforms
+   - Total of 35 keycode definitions for both platforms
 
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Frame render time | 5-10s | 0.05-0.1s | **100x faster** |
-| Interactive preview | N/A | 0.025s | **400x faster** |
-| Key response time | 5-10s | <0.03s | **300x faster** |
-| CPU usage (idle) | 100% | <5% | **95% reduction** |
+2. **specs/006-cross-platform-keyboard/tasks.md**
+   - Updated task completion status throughout implementation
+   - Marked Phase 1, 2, and keycode verification tasks as complete
 
----
+### Created Files
 
-## 📝 Files Changed
+1. **src/window/window.c.backup**
+   - Backup of original implementation (can be removed after validation)
 
-### Core Implementation (6 files):
-1. `includes/window.h` - Added image buffer and optimization flags
-2. `includes/minirt.h` - Added new render functions
-3. `src/render/render.c` - Complete rewrite with buffer rendering
-4. `src/window/window.c` - Added event handlers and render loop
-5. `src/utils/cleanup.c` - Added image buffer cleanup
-6. `.gitignore` - Added build directory patterns
+## Implementation Details
 
-### Documentation (5 files):
-1. `OPTIMIZATION_SUMMARY.md` - Technical details (English)
-2. `OPTIMIZATION_CHANGES.md` - Implementation guide (Korean)
-3. `VALIDATION_REPORT.md` - Testing and validation
-4. `CHANGES.md` - Detailed change log
-5. `IMPLEMENTATION_COMPLETE.md` - This file
+### Platform-Specific Keycodes Implemented
 
-### Testing (1 file):
-1. `test_optimizations.sh` - Automated verification script
+All 35 keyboard controls now support both macOS and Linux:
 
----
+**Camera Navigation (User Story 1 - P1)**:
+- W, A, S, D (movement)
+- R, F (pitch rotation)
 
-## ✅ Verification
+**Application Controls (User Story 4 - P1)**:
+- ESC (exit)
+- H (HUD toggle)
+- TAB (navigation)
+- Shift L/R (modifiers)
+- Arrow Up/Down (scroll)
+
+**Object Manipulation (User Story 2 - P2)**:
+- [ ] (previous object)
+- ] (next object)
+- Numpad 1, 2, 3, 4, 6, 8 (movement)
+
+**Lighting Controls (User Story 3 - P3)**:
+- Insert/Delete (X-axis)
+- Home/End (Y-axis)
+- Page Up/Down (Z-axis)
+
+**Rendering Options (User Story 5 - P3)**:
+- B (BVH toggle)
+- Q (adaptive sampling)
+- I (info display)
+
+## Testing Status
+
+### ✓ Complete
+
+- [X] Project compilation on macOS
+- [X] Platform detection via preprocessor directives
+- [X] All keycode macros defined for both platforms
+- [X] Code structure follows 42 School norminette style
+- [X] Zero runtime overhead (compile-time only changes)
+- [X] Error handling for unsupported platforms
+
+### ⏳ Requires Manual Testing
+
+The following tasks require manual keyboard interaction testing:
+
+**On macOS** (Current Platform):
+- Camera movement keys (W/A/S/D/R/F)
+- Application control keys (ESC/H/TAB/Shift/Arrows)
+- Object manipulation keys (brackets, numpad)
+- Lighting control keys (Insert/Delete/Home/End/PgUp/PgDn)
+- Rendering option keys (B/Q/I)
+- Edge cases (rapid presses, key combinations, simultaneous keys)
+
+**On Linux/Ubuntu** (Requires Linux System):
+- Compilation verification (`make fclean && make`)
+- Regression testing (verify unchanged behavior)
+- Cross-platform consistency testing
+
+**Edge Case Testing**:
+- Rapid key presses
+- Key combinations (e.g., Shift+TAB)
+- Simultaneous keys (e.g., W+D for diagonal movement)
+- Undefined key handling
+
+## Manual Testing Instructions
+
+To test the implementation:
 
 ```bash
-$ make re
-✓ Compilation successful
+# 1. Compile the project
+make fclean && make
 
-$ ./test_optimizations.sh
-✓ Image buffer implementation found
-✓ Dirty flag implementation found
-✓ Low-quality preview mode found
-✓ Render loop hook found
-✓ Key release handler found
-✓ Buffer rendering function found
-✓ Binary compiled successfully
-```
-
----
-
-## 🚀 How to Use
-
-```bash
-# Run the optimized ray tracer
+# 2. Run with a test scene
 ./miniRT scenes/test_all_objects.rt
 
-# Controls:
-# WASD - Move camera (instant low-res preview)
-# R/F - Pitch camera
-# [ / ] - Select objects
-# Numpad - Move selected object
-# ESC - Exit
+# 3. Test each key group:
+#    - Camera: Press W/A/S/D for movement, R/F for rotation
+#    - Application: Press ESC to exit, H for HUD, TAB to navigate
+#    - Objects: Press [ ] for selection, numpad for movement
+#    - Lighting: Press Insert/Delete/Home/End/PgUp/PgDn
+#    - Rendering: Press B/Q/I for toggles
+
+# 4. Verify expected behavior matches
 ```
 
-### Expected Behavior:
-1. Initial render completes in <0.1s
-2. Key press → instant low-res preview
-3. Key release → high-quality render
-4. Smooth, lag-free interaction
-5. No CPU usage when idle
+## Success Criteria Met
 
----
+From spec.md:
 
-## 🔧 Technical Implementation
+- ✅ **SC-001**: Platform detection implemented via compile-time macros
+- ✅ **SC-002**: All 30+ keyboard controls defined for both platforms
+- ⏳ **SC-003**: Requires manual testing on macOS
+- ⏳ **SC-004**: Requires Linux system for testing
+- ✅ **SC-005**: Linux definitions unchanged (wrapped in `#elif defined(__linux__)`)
+- ⏳ **SC-006**: Requires full testing to verify zero bugs
 
-### Architecture:
-```
-┌─────────────────────────────────────────────────────────┐
-│                   MLX Event Loop                        │
-│  (mlx_loop)                                             │
-└───────────────────┬─────────────────────────────────────┘
-                    │
-        ┌───────────┴───────────┐
-        │                       │
-    ┌───▼───┐             ┌────▼────┐
-    │ Key   │             │ Render  │
-    │Events │             │ Loop    │
-    └───┬───┘             └────┬────┘
-        │                      │
-        │ dirty=1              │ if(dirty)
-        │ low_quality=1        │   render
-        │                      │
-        └──────────────────────┘
-                │
-        ┌───────▼────────┐
-        │ render_scene_  │
-        │ to_buffer()    │
-        └───────┬────────┘
-                │
-        ┌───────▼────────┐
-        │ Image Buffer   │
-        │ 800x600x4 bytes│
-        └───────┬────────┘
-                │
-        ┌───────▼────────┐
-        │ mlx_put_image_ │
-        │ to_window()    │
-        └────────────────┘
-```
+## Next Steps
 
-### Key Optimizations:
+1. **Manual Testing on macOS**: Test all keyboard controls to verify functionality
+2. **Linux Testing**: Compile and test on Ubuntu/Linux system
+3. **Edge Case Testing**: Test rapid presses, combinations, simultaneous keys
+4. **Documentation**: Update any platform-specific quirks discovered
+5. **Cleanup**: Remove backup file after validation
+6. **Code Review**: Submit for review with test results
 
-**1. Image Buffer (100x speedup)**
-- Before: 480,000 × `mlx_pixel_put()` calls
-- After: 1 × `mlx_put_image_to_window()` call
-- Memory writes directly to buffer
+## Technical Notes
 
-**2. Dirty Flag (infinite speedup when idle)**
-- Only renders when something changes
-- Eliminates wasteful re-renders
-- CPU usage drops to ~0% when idle
+- **Zero Runtime Overhead**: All changes are compile-time only
+- **Backward Compatible**: Linux behavior completely unchanged
+- **42 School Compliant**: Uses only standard C preprocessor directives
+- **Maintainable**: Clear separation of platform-specific definitions
+- **Extensible**: Easy to add support for additional platforms
 
-**3. Low-Quality Preview (4x speedup during interaction)**
-- 2x2 pixel blocks during key press
-- 400×300 effective resolution
-- Instant visual feedback
+## Files Changed
 
-**4. Event-Driven (responsive UI)**
-- Separate key press/release handlers
-- Asynchronous render loop
-- Non-blocking architecture
+- `src/window/window.c` (35 lines replaced with 75 lines for platform-specific blocks)
+- `specs/006-cross-platform-keyboard/tasks.md` (progress tracking updates)
+- `src/window/window.c.backup` (created for rollback safety)
 
----
-
-## 🎓 42 School Compliance
-
-### ✅ Allowed Functions Used:
-- `malloc`, `free` - Memory management
-- `mlx_init`, `mlx_new_window` - Window setup
-- `mlx_new_image`, `mlx_get_data_addr` - Image buffer
-- `mlx_put_image_to_window` - Display
-- `mlx_destroy_image` - Cleanup
-- `mlx_hook`, `mlx_loop_hook` - Events
-- Standard math functions
-
-### ❌ NOT Used:
-- pthread (too complex, may violate rules)
-- External libraries
-- Forbidden system calls
-
----
-
-## 📈 Performance Analysis
-
-### Bottleneck Eliminated:
-**mlx_pixel_put()** was the primary bottleneck:
-- Each call requires X11 protocol overhead
-- 480,000 calls per frame = massive latency
-- Total time: ~5-10 seconds per frame
-
-### Solution:
-**Image buffer** bypasses X11 overhead:
-- Direct memory writes (CPU cache speed)
-- Single blit operation to screen
-- Total time: ~0.05-0.1 seconds per frame
-
-### Additional Optimizations:
-- **Dirty flag**: Avoids rendering when nothing changed
-- **Low-quality mode**: Renders 1/4 pixels during interaction
-- **Event-driven**: Non-blocking, responsive UI
-
----
-
-## 🧪 Testing Scenarios
-
-### ✅ Tested:
-1. **Compilation**: Clean build with no warnings
-2. **Memory**: No leaks (buffer properly freed)
-3. **Functionality**: All controls work correctly
-4. **Performance**: Measured 100-400x improvement
-5. **Quality**: Final render identical to original
-6. **Compatibility**: Works with all existing scenes
-
-### 🎯 Test Coverage:
-- [x] Image buffer allocation/deallocation
-- [x] Dirty flag state management
-- [x] Low-quality mode toggling
-- [x] Key press/release events
-- [x] Render loop execution
-- [x] Camera movement (WASD)
-- [x] Camera rotation (R/F)
-- [x] Object selection ([/])
-- [x] Object movement (numpad)
-- [x] Light movement (Insert/Delete/etc)
-- [x] Window close (ESC)
-
----
-
-## 🎉 Success Criteria Met
-
-### Original Requirements:
-- [x] Improve rendering performance ✓
-- [x] Reduce key press lag ✓
-- [x] Smooth interactive experience ✓
-- [x] Maintain visual quality ✓
-- [x] Follow 42 rules ✓
-
-### Performance Targets:
-- [x] Render time < 1s ✓ (achieved 0.05-0.1s)
-- [x] Key response < 100ms ✓ (achieved <30ms)
-- [x] Smooth camera movement ✓
-- [x] No visual artifacts ✓
-- [x] No memory leaks ✓
-
----
-
-## 📚 Documentation
-
-All documentation available in repository:
-
-| File | Purpose |
-|------|---------|
-| `OPTIMIZATION_SUMMARY.md` | Technical deep-dive (English) |
-| `OPTIMIZATION_CHANGES.md` | Implementation guide (Korean) |
-| `VALIDATION_REPORT.md` | Testing and validation |
-| `CHANGES.md` | Detailed change log |
-| `IMPLEMENTATION_COMPLETE.md` | This summary |
-
----
-
-## 🏆 Conclusion
-
-**Mission Status: ✅ ACCOMPLISHED**
-
-Successfully transformed miniRT from an unusable slideshow into a smooth, professional interactive ray tracer through targeted optimizations:
-
-1. **Image Buffer Rendering** - 100x faster per frame
-2. **Dirty Flag System** - Zero CPU when idle
-3. **Low-Quality Preview** - Instant visual feedback
-4. **Event-Driven Architecture** - Responsive UI
-
-The implementation is:
-- ✅ Production-ready
-- ✅ 42-compliant
-- ✅ Memory-safe
-- ✅ Fully documented
-- ✅ Thoroughly tested
-
-**Ready for deployment and demonstration.**
-
----
-
-**Implementation:** GitHub Copilot CLI  
-**Date:** 2025-12-19  
-**Project:** miniRT (42 School)  
-**Status:** ✅ COMPLETE
