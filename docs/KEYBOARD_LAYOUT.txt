@@ -1,0 +1,64 @@
+miniRT Interactive Controls - Keyboard Layout
+==============================================
+
+┌─────────────────────────────────────────────────────────────┐
+│ ESC = Exit                                                  │
+└─────────────────────────────────────────────────────────────┘
+
+Camera Movement (1st Person)
+┌───────────────────────────────────────┐
+│              [R]                      │
+│             Pitch Up                  │
+│                                       │
+│      [W]                              │
+│     Forward                           │
+│                                       │
+│  [A]    [S]    [D]                    │
+│  Left  Back   Right                   │
+│                                       │
+│              [F]                      │
+│            Pitch Down                 │
+└───────────────────────────────────────┘
+
+Object Selection & Movement
+┌───────────────────────────────────────┐
+│  [ ]                                  │
+│  Select    Select                     │
+│  Previous    Next                     │
+│                                       │
+│  Numpad (Object Movement):            │
+│                                       │
+│         [8] Up (Y+)                   │
+│                                       │
+│  [4] Left   [5]   [6] Right           │
+│     (X-)           (X+)               │
+│                                       │
+│         [2] Down (Y-)                 │
+│                                       │
+│  [1] Back (Z-)   [3] Forward (Z+)     │
+└───────────────────────────────────────┘
+
+Light Source Control
+┌───────────────────────────────────────┐
+│  [Insert]  [Home]   [PageUp]          │
+│  Right(X+) Up(Y+)   Forward(Z+)       │
+│                                       │
+│  [Delete]  [End]    [PageDown]        │
+│  Left(X-)  Down(Y-) Back(Z-)          │
+└───────────────────────────────────────┘
+
+Movement Parameters
+┌───────────────────────────────────────┐
+│ Camera Movement Step:  1.0 unit       │
+│ Camera Rotation Step:  5 degrees      │
+│ Object Movement Step:  1.0 unit       │
+│ Light Movement Step:   1.0 unit       │
+└───────────────────────────────────────┘
+
+Notes
+─────
+• Scene re-renders automatically after camera/object/light changes
+• Object selection does not trigger re-render
+• All movements are in world space coordinates
+• Numpad required for object manipulation
+

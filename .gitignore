@@ -51,3 +51,6 @@ core.*
 *.temp
 *.bak
 build/
+
+# Optimization test script
+test_optimizations.sh

@@ -12,6 +12,7 @@
 
 #include "minirt.h"
 #include "ray.h"
+#include "spatial.h"
 #include <math.h>
 
 /*
@@ -95,6 +96,7 @@ int	check_cylinder_intersections(t_scene *scene, t_ray *ray, t_hit *hit)
 /*
 ** Trace ray through scene and determine pixel color.
 ** Tests intersection with all objects and finds closest hit.
+** Uses BVH acceleration if enabled, otherwise brute force.
 ** Returns lit color if object hit, black if no intersection.
 */
 t_color	trace_ray(t_scene *scene, t_ray *ray)
@@ -104,12 +106,19 @@ t_color	trace_ray(t_scene *scene, t_ray *ray)
 
 	hit_found = 0;
 	hit.distance = INFINITY;
-	if (check_sphere_intersections(scene, ray, &hit))
-		hit_found = 1;
-	if (check_plane_intersections(scene, ray, &hit))
-		hit_found = 1;
-	if (check_cylinder_intersections(scene, ray, &hit))
-		hit_found = 1;
+	if (scene->render_state.bvh_enabled && scene->render_state.bvh)
+	{
+		hit_found = bvh_intersect(scene->render_state.bvh, *ray, &hit, scene);
+	}
+	else
+	{
+		if (check_sphere_intersections(scene, ray, &hit))
+			hit_found = 1;
+		if (check_plane_intersections(scene, ray, &hit))
+			hit_found = 1;
+		if (check_cylinder_intersections(scene, ray, &hit))
+			hit_found = 1;
+	}
 	if (hit_found)
 		return (apply_lighting(scene, &hit));
 	return ((t_color){0, 0, 0});

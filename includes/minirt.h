@@ -20,6 +20,10 @@
 # include "objects.h"
 # include "ray.h"
 # include "shadow.h"
+# include "render_state.h"
+
+/* Forward declarations */
+typedef struct s_render	t_render;
 
 /* Epsilon value for floating point comparison to avoid numerical errors */
 # define EPSILON 0.0001
@@ -71,6 +75,7 @@ typedef struct s_scene
 	int				has_ambient;
 	int				has_camera;
 	int				has_light;
+	t_render_state	render_state;
 }	t_scene;
 
 /* Print error message to stderr and return 0 */
@@ -88,8 +93,14 @@ void	cleanup_render(void *render);
 /* Free all allocated memory (scene and render) */
 void	cleanup_all(t_scene *scene, void *render);
 
-/* Render entire scene to window by tracing rays for each pixel */
+/* Render entire scene by iterating over all pixels.
+** Resolution hardcoded to 800x600.
+** Each pixel is ray traced independently.
+** Uses image buffer for fast rendering.
+** Supports low quality mode (half resolution) for interactive preview.
+*/
 void	render_scene(t_scene *scene, void *mlx, void *win);
+void	render_scene_to_buffer(t_scene *scene, t_render *render);
 /* Calculate final color at hit point using lighting and shadows */
 t_color	apply_lighting(t_scene *scene, t_hit *hit);
 

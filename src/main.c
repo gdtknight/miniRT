@@ -13,6 +13,7 @@
 #include "minirt.h"
 #include "parser.h"
 #include "window.h"
+#include "spatial.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -37,6 +38,8 @@ static t_scene	*init_scene(void)
 	scene->has_camera = 0;
 	scene->has_light = 0;
 	scene->shadow_config = init_shadow_config();
+	render_state_init(&scene->render_state);
+	scene->render_state.bvh_enabled = 1;
 	return (scene);
 }
 
@@ -63,6 +66,7 @@ int	main(int argc, char **argv)
 		cleanup_scene(scene);
 		return (1);
 	}
+	scene_build_bvh(scene);
 	render = init_window(scene);
 	if (!render)
 	{

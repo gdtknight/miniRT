@@ -1,246 +1,356 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version Change: 1.2.0 → 1.2.1
-Updated: 2025-12-17
+Version Change: 2.1.0 → 2.2.0
+Updated: 2025-12-19
 
-RATIONALE FOR VERSION 1.2.1:
-- PATCH version bump: Enhancement to existing Principle VII
-- No new principles added, no principles removed
-- Clarification of documentation structure requirements within Principle VII
-- Adds detailed subdirectory organization standards for docs/
-- Maintains backward compatibility with existing principle framework
+RATIONALE FOR VERSION 2.2.0:
+- MINOR version bump: Added new principle about 42 School constraints
+- Added Principle VII: 42 School Function Constraints
+- Defines allowed/prohibited functions for miniRT project
+- Specifies permitted optimization techniques within 42 constraints
+- No backward-incompatible changes to existing principles
+- Existing workflows and templates remain valid
 
 PRINCIPLES DEFINED (7 total):
-1. 42 Norminette Compliance (NON-NEGOTIABLE)
-2. Readability-First Code
-3. Mandatory Unit Testing (NON-NEGOTIABLE)
-4. Bilingual Documentation
-5. Build Verification Workflow (NON-NEGOTIABLE)
-6. GitHub Issue Tracking (NON-NEGOTIABLE)
-7. File Organization Standards (NON-NEGOTIABLE) ← ENHANCED
+1. Project Structure Standards (NON-NEGOTIABLE)
+2. Code Quality Automation (NON-NEGOTIABLE)
+3. Documentation and Wiki Synchronization (NON-NEGOTIABLE)
+4. Workflow System (NON-NEGOTIABLE)
+5. Tools and Environment Standards (NON-NEGOTIABLE)
+6. Bilingual Specification Management (NON-NEGOTIABLE)
+7. 42 School Function Constraints (NON-NEGOTIABLE) - NEW
 
-MODIFIED PRINCIPLES:
-- Principle VII (File Organization Standards) - Enhanced with detailed documentation structure requirements:
-  * Added numbered category structure (01-시작하기/, 02-개발/, 03-기능/, 04-릴리스/, 05-프로젝트_히스토리/, 06-참고자료/)
-  * Added file naming conventions (Korean with underscores, issue-numbered summaries)
-  * Added navigation requirements (docs/README.md as master guide, per-category READMEs)
-  * Added content organization rules (feature docs, historical reports, active dev docs, user guides)
-  * Added maintenance requirements (document lifecycle management)
+ADDED PRINCIPLES:
+- Principle VII: 42 School Function Constraints
+  - Defines allowed functions for miniRT project (libc, math, MiniLibX, libft, GNL)
+  - Explicitly prohibits pthread, fork, external libraries for parallelization
+  - Lists prohibited optimization techniques (multithreading, multiprocessing, SIMD)
+  - Specifies allowed optimization approaches (algorithmic, caching, math optimization)
+  - Ensures all implementations comply with 42 School evaluation requirements
 
 TEMPLATES REQUIRING UPDATES:
-✅ plan-template.md - No changes needed (constitution check already references organizational standards)
-✅ spec-template.md - No changes needed (structure requirements are operational, not specification-level)
-✅ tasks-template.md - No changes needed (task organization already compatible)
-✅ README.md - Already compliant (exception granted for root-level placement)
+✅ plan-template.md - Will add 42 constraints check to constitution validation
+✅ spec-template.md - No changes needed (functional requirements unchanged)
+✅ tasks-template.md - No changes needed (task organization compatible)
+✅ README.md - Already indicates 42 School project status
 
 FOLLOW-UP ACTIONS:
-- Reorganize docs/ directory into numbered category structure
-- Create docs/README.md as master navigation guide in Korean
-- Add category-level README.md files to each subdirectory
-- Migrate existing documentation files to appropriate categories
-- Verify all filenames use Korean with underscores
-- Update cross-references between documentation files
+- Add 42 function constraint checks to plan-template.md constitution section
+- Verify no pthread or prohibited functions exist in current codebase
+- Document optimization strategies within allowed constraints
+- Update CI to validate function usage against allowed list
 -->
 
-# 42 miniRT Constitution
+# miniRT Project Constitution
 
 ## Core Principles
 
-### I. 42 Norminette Compliance (NON-NEGOTIABLE)
+### I. Project Structure Standards (NON-NEGOTIABLE)
 
-All C source files (*.c) and header files (*.h) MUST comply with 42 school norminette
-coding standards. This is a hard requirement with no exceptions.
+All project files MUST follow strict organization rules to maintain clarity between
+CI automation, user-facing tools, and documentation.
 
-- Code MUST pass `norminette` checks without warnings or errors
-- All files MUST include the 42 Header format
-- 42 Header USER and EMAIL fields MUST be populated via environment variables
-- Line length, function complexity, file organization MUST follow norminette rules
+**Script Organization**:
+- CI-related scripts MUST be located in `.github/scripts/`
+- User-facing utility scripts (create_wiki.sh, test_miniRT.sh) MUST remain at project root for accessibility
+- No automation scripts may be scattered throughout the codebase
 
-**Rationale**: The 42 norminette ensures consistent, maintainable code style that is
-required for project evaluation and establishes a shared baseline for all contributors.
+**Documentation Hierarchy**:
+- Old/backup documentation (*.backup, *_OLD.md) MUST be moved to `docs/archive/`
+- Wiki-related documentation MUST be organized in `docs/wiki/`
+- Implementation planning documents MUST be located in `docs/project/`
+- Active documentation MUST use clear, descriptive names without backup suffixes
+- All Korean documentation MUST be centralized in `docs/` directory
 
-### II. Readability-First Code
+**File Lifecycle Management**:
+- Deprecated files MUST be archived, not left scattered at root level
+- Active files MUST have clear purpose and location
+- Logs and build artifacts MUST be in `.gitignore`
 
-Code readability is the top priority. When coding style conflicts arise, choose the
-approach that makes the code easier to understand and maintain.
+**Rationale**: Clear separation between CI infrastructure, user tools, and documentation
+prevents confusion, improves maintainability, and ensures contributors can quickly locate
+resources. Archiving old documents prevents clutter while preserving history.
 
-- Variable and function names MUST be descriptive and meaningful
-- Complex logic MUST be broken into well-named helper functions
-- Magic numbers MUST be replaced with named constants
-- Code organization MUST follow logical grouping principles
+### II. Code Quality Automation (NON-NEGOTIABLE)
 
-**Rationale**: Readable code reduces bugs, accelerates onboarding, and simplifies
-debugging. In an educational context, clarity teaches better than cleverness.
+All code changes MUST pass automated quality gates before being merged. Quality checks
+are automated in CI with no manual exceptions.
 
-### III. Mandatory Unit Testing (NON-NEGOTIABLE)
+**Mandatory Quality Gates**:
+- norminette check MUST pass on all PRs with zero warnings or errors
+- Memory leak check (valgrind) MUST be automated in CI with zero leaks tolerated
+- Build MUST succeed without errors on all supported platforms
+- Quality gate formula: `norminette + build + memory leak check = PASS/FAIL`
 
-Every individual function MUST have unit tests written and passing after implementation.
-No function is considered complete until its unit tests exist and pass.
+**CI Enforcement**:
+- Failed norminette check MUST fail the CI pipeline
+- Memory leaks detected by valgrind MUST fail the CI pipeline
+- Build errors MUST fail the CI pipeline
+- No PR may be merged with failing quality gates
 
-- Unit tests MUST be created for each function after implementation
-- Tests MUST verify expected behavior and edge cases
-- Tests MUST be automated and repeatable
-- Failed tests MUST block merging of code
+**Reporting**:
+- All quality check failures MUST provide clear, actionable error messages
+- CI logs MUST be easily accessible and readable
+- Status badges SHOULD reflect current quality gate status
 
-**Rationale**: Unit testing catches regressions early, documents expected behavior,
-and ensures each component works in isolation before integration.
+**Rationale**: Automated quality gates ensure consistent code quality, prevent
+regression, catch issues early, and maintain project stability without relying
+on manual review. This enables confident iteration and rapid development.
 
-### IV. Bilingual Documentation
+### III. Documentation and Wiki Synchronization (NON-NEGOTIABLE)
 
-All code MUST be documented in both English and Korean to support international
-collaboration and local learning.
+GitHub Wiki MUST be automatically synchronized with source documentation to ensure
+users always have access to current information that matches the released version.
 
-- Every function MUST have English Doxygen-style comments in the source code
-- All functions and implementation details MUST be explained in Korean markdown files
-- Korean documentation MUST reside in `docs/` directory at project root
-- All documentation in `docs/` directory MUST be written in Korean (한글)
-- Documentation MUST be kept in sync with code changes
+**Automation Requirements**:
+- Version tag creation MUST trigger automatic GitHub Wiki update
+- Wiki generation MUST be based on source documentation in `docs/`
+- Wiki MUST always reflect the latest release version
+- Source docs in `docs/` are the single source of truth
 
-**Rationale**: English documentation enables broader code review and collaboration,
-while Korean explanations ensure local learners can deeply understand the implementation
-without language barriers. Consistent Korean documentation in the docs/ directory
-provides centralized learning resources for local developers.
+**Release Synchronization**:
+- Wiki updates MUST occur during the release process
+- Wiki content MUST match the exact state of docs/ in the release tag
+- Release version and documentation version MUST be consistent
+- Wiki pages MUST display the release version they correspond to
 
-### V. Build Verification Workflow (NON-NEGOTIABLE)
+**Synchronization Workflow**:
+- On version tag creation: Extract docs → Generate Wiki markdown → Push to Wiki
+- Documentation changes MUST trigger wiki update workflow when merged to main
+- Failed wiki updates MUST be logged but MUST NOT block releases
+- Release checklist MUST include wiki synchronization verification
 
-After any code change, the complete build-run-verify cycle MUST be executed to ensure
-the project remains in a working state.
+**Content Requirements**:
+- Wiki pages MUST be generated from Korean documentation in docs/
+- Wiki structure MUST mirror docs/ organization for consistency
+- Wiki MUST include version information on each page
+- Each wiki page MUST clearly indicate which release version it documents
 
-Required verification steps after every change:
-1. Verify compilation succeeds without warnings
-2. Verify the compiled program executes successfully
-3. Verify no runtime errors occur during execution
-4. Verify unit tests are created and passing
+**Rationale**: Automatic wiki synchronization eliminates manual documentation drift,
+ensures users see current information, reduces maintenance burden, and creates a
+reliable documentation workflow tied to version releases. Release synchronization
+ensures documentation always matches the codebase state for each version.
 
-**Rationale**: Continuous verification prevents integration issues, maintains project
-stability, and catches problems immediately when context is fresh.
+### IV. Workflow System (NON-NEGOTIABLE)
 
-### VI. GitHub Issue Tracking (NON-NEGOTIABLE)
+Development follows a structured workflow system with clear quality gates at each stage.
 
-All work requests MUST be tracked as GitHub issues, and all commits related to work
-requests MUST mark the associated issue number in the commit title.
+**Development Workflow**:
+- Code changes MUST pass: norminette + build + test
+- Commits MUST be atomic and well-described
+- Local testing MUST be performed before pushing
 
-- Every work request, feature, bug fix, or enhancement MUST have a GitHub issue created
-- Issue numbers MUST be referenced in commit titles using format: `[#123] commit message`
-- Commits MUST link to their corresponding issue for complete traceability
-- Issues MUST remain open until all related work is committed and verified
+**Pull Request Workflow**:
+- PRs MUST pass: norminette + build + test + memory leak check
+- Code review MUST verify adherence to all constitution principles
+- PR title MUST clearly describe the change
+- No PR may be merged with failing checks
 
-**Rationale**: Issue tracking ensures proper project management, provides clear work
-history, enables traceability between requirements and implementation, and facilitates
-code review by connecting changes to their motivating requirements.
+**Release Workflow**:
+- Releases MUST pass all PR checks
+- Releases MUST trigger: Wiki auto-update + artifact generation
+- Release notes MUST document changes clearly in Korean
+- Version tags MUST follow semantic versioning (vX.Y.Z)
 
-### VII. File Organization Standards (NON-NEGOTIABLE)
+**Automation Principles**:
+- All checks MUST be automated—no manual gates
+- Failed checks MUST provide clear failure messages and remediation guidance
+- Workflow status MUST be visible in PR interface
 
-All project files MUST follow strict organization rules to maintain a clean, navigable
-project structure.
+**Rationale**: Structured workflows with automated gates ensure consistency,
+prevent human error, maintain project quality, and enable confident releases.
+Clear stages help contributors understand expectations at each development phase.
 
-**Log Files**:
-- All log files (*.log, *.logs) MUST be stored in the `logs/` directory at project root
-- No log files may be scattered throughout the codebase or left at project root
+### V. Tools and Environment Standards (NON-NEGOTIABLE)
 
-**Documentation Files**:
-- All markdown documentation files (*.md) MUST be stored in the `docs/` directory at project root
-- All documentation in `docs/` directory MUST be written in Korean (한글)
-- Exception: Root-level `README.md` may remain at project root for GitHub display purposes
-- No documentation files should be scattered throughout the codebase
+Development environment and tooling MUST support multiple platforms and provide
+automated dependency management.
 
-**Documentation Structure** (docs/ directory):
-- MUST use numbered category structure with Korean names:
-  * `01-시작하기/` (Getting Started) - Requirements, build guides, scene file guides
-  * `02-개발/` (Development) - File organization, norminette, testing, CI/CD
-  * `03-기능/` (Features) - Feature-specific docs by subsystem (조명/, 렌더링/, 파싱/, etc.)
-  * `04-릴리스/` (Releases) - Release notes, checklists, guides, verification reports
-  * `05-프로젝트_히스토리/` (Project History) - Implementation summaries (by issue), status reports
-  * `06-참고자료/` (References) - Git summaries, legacy documents, archived material
-- File naming MUST use Korean with underscores: `파일_이름.md`
-- Implementation summaries MUST be named by issue number: `NNN_기능_설명.md`
-- Date-based files SHOULD use YYYY-MM-DD prefix when applicable
+**Platform Support**:
+- Project MUST support Linux and macOS
+- Build system MUST detect platform and configure appropriately
+- Platform-specific issues MUST be documented in troubleshooting guides
 
-**Navigation Requirements**:
-- `docs/README.md` MUST exist as master navigation guide in Korean
-- Each category subdirectory SHOULD have its own README.md explaining contents
-- Cross-references between docs MUST use relative paths
+**Dependency Management**:
+- MinilibX build MUST be automated in Makefile
+- External library dependencies MUST be clearly documented
+- Missing dependencies MUST produce clear error messages with installation instructions
 
-**Content Organization Rules**:
-- Feature documentation goes in `03-기능/[subsystem]/`
-- Historical/legacy reports go in `05-프로젝트_히스토리/`
-- Active development docs go in `02-개발/`
-- User-facing guides go in `01-시작하기/`
+**Test Infrastructure**:
+- Test scene files MUST be systematically organized in `scenes/`
+- Test script (test_miniRT.sh) MUST be accessible at project root
+- Test scenes MUST cover all supported features and edge cases
 
-**Maintenance Requirements**:
-- When creating new features, documentation goes in `03-기능/`
-- When completing implementations, summaries go in `05-프로젝트_히스토리/구현_요약/`
-- Outdated docs SHOULD be moved to `06-참고자료/` with date prefix
+**Build Artifacts**:
+- Logs MUST be stored in `logs/` directory
+- Build artifacts MUST be stored in `build/` directory
+- All logs and build artifacts MUST be in `.gitignore`
 
-**Rationale**: Structured documentation enables easy navigation, prevents document sprawl,
-maintains Korean consistency, supports project growth, and ensures developers can quickly
-find relevant information. Numbered categories provide intuitive ordering and scalability.
-The systematic organization reduces cognitive load when navigating the codebase and makes
-it easier for new contributors to understand the project layout. Centralizing Korean
-documentation in docs/ provides a single source of truth for learning resources.
+**Rationale**: Cross-platform support ensures broader usability, automated dependency
+management reduces setup friction, systematic test organization improves quality
+assurance, and proper artifact management keeps the repository clean.
+
+### VI. Bilingual Specification Management (NON-NEGOTIABLE)
+
+All feature specifications MUST be maintained in both English and Korean, with strict
+synchronization requirements to ensure both language versions remain consistent.
+
+**Directory Structure**:
+- English specifications MUST be located in `specs/` directory
+- Korean translations MUST be located in `docs/specs/` directory
+- Directory structure MUST be mirrored between specs/ and docs/specs/
+- File names MUST be identical in both directories
+
+**Synchronization Requirements**:
+- When English specification is created in specs/, Korean version MUST be created in docs/specs/
+- When English specification is updated, Korean version MUST be updated simultaneously
+- Both versions MUST be updated in the same commit/PR
+- Version numbers MUST match between English and Korean documents
+- Content MUST be semantically equivalent between language versions
+
+**Release Consistency**:
+- Release packages MUST include both English and Korean documentation
+- Release notes MUST be available in both languages
+- Wiki synchronization MUST process both language versions
+- Documentation version tags MUST apply to both English and Korean versions
+
+**Quality Assurance**:
+- PRs touching specs/ MUST include corresponding docs/specs/ changes
+- CI checks SHOULD verify both versions exist and are up-to-date
+- Documentation reviews MUST verify semantic consistency between languages
+- Out-of-sync documentation MUST NOT be merged
+
+**Rationale**: Bilingual documentation ensures accessibility for both international
+collaborators and Korean-speaking users. Synchronized maintenance prevents translation
+drift and ensures all stakeholders have access to accurate, current information in
+their preferred language. This supports both the 42 School community and broader
+open-source contribution.
+
+### VII. 42 School Function Constraints (NON-NEGOTIABLE)
+
+All code implementations MUST comply with 42 School miniRT project constraints, which
+strictly limit allowed functions and prohibit certain optimization techniques to ensure
+projects are evaluated fairly according to curriculum requirements.
+
+**Allowed Functions**:
+- Standard C library: `open`, `close`, `read`, `write`, `printf`, `malloc`, `free`, 
+  `perror`, `strerror`, `exit`
+- Math library: All functions from `math.h` (linked with `-lm`)
+- MiniLibX library: All `mlx_*` functions provided by the school's graphics library
+- Custom implementations: `get_next_line` (if implemented by student)
+- Custom library: All functions from `libft` (if written by student)
+
+**Prohibited Functions and Techniques**:
+- pthread library: `pthread_create`, `pthread_join`, `pthread_mutex_*`, and all 
+  pthread-related functions MUST NOT be used
+- Process management: `fork`, `pipe`, and multiprocessing functions MUST NOT be used
+- External optimization libraries: SIMD intrinsics, OpenMP, Intel TBB, or any external
+  parallelization libraries MUST NOT be used
+- Multithreading/multiprocessing: Any form of parallel execution MUST NOT be implemented
+
+**Allowed Optimization Strategies**:
+- Algorithmic optimization: BVH (Bounding Volume Hierarchy), spatial partitioning, 
+  octrees, kd-trees for reducing ray-object intersection tests
+- Early termination: Ray culling, frustum culling, backface culling to skip 
+  unnecessary calculations
+- Caching: Precomputed values, lookup tables, memoization of expensive calculations
+- Memory layout optimization: Structure packing, cache-friendly data organization, 
+  memory access patterns
+- Mathematical optimization: Reduced precision where appropriate, algebraic 
+  simplification, optimized vector operations
+
+**Validation Requirements**:
+- Code review MUST verify no prohibited functions are used
+- Function usage MUST be validated against allowed list before merge
+- Any optimization technique MUST be implementable using only allowed functions
+- CI checks SHOULD scan for prohibited function usage
+
+**Evaluation Compliance**:
+- All implementations MUST pass 42 School evaluation criteria
+- Projects using prohibited functions WILL fail evaluation regardless of functionality
+- Performance optimization MUST NOT compromise evaluation compliance
+- Documentation MUST clearly indicate which optimization techniques are used
+
+**Rationale**: 42 School projects are evaluated based on specific constraints to ensure
+students learn core algorithms and data structures without relying on advanced libraries
+or parallelization. These constraints ensure fair evaluation, promote understanding of
+fundamental computer graphics concepts, and maintain consistency across all student
+submissions. Compliance with these constraints is mandatory for project success.
 
 ## Documentation Standards
 
 **README.md Requirements**:
-- MUST be maintained at project root
-- MUST include a history/changelog section documenting all significant updates
-- MUST provide build instructions, usage examples, and project overview
+- MUST be maintained at project root for GitHub display
+- MUST include project overview, build instructions, and usage examples
+- MUST include development history with version-tagged releases
+- MUST link to GitHub Wiki for detailed documentation
+- MUST be written in Korean as primary language
 
 **Korean Documentation Requirements** (`docs/` directory):
-- MUST contain detailed explanations of all functions in Korean
-- MUST explain design decisions, algorithms, and implementation rationale
-- MUST follow numbered category structure per Principle VII
-- MUST be updated whenever corresponding source code changes
-- All documentation files MUST be written in Korean (한글) per Principle VII
-- MUST maintain docs/README.md as master navigation guide
+- All documentation MUST be written in Korean (한글)
+- MUST contain detailed explanations of features and implementation
+- MUST explain design decisions, algorithms, and technical rationale
+- MUST be updated whenever corresponding code changes
+- MUST maintain clear directory structure (wiki/, archive/, project/)
 
 **Code Comments Requirements**:
-- All C functions MUST have English Doxygen comments including:
-  - Brief description
-  - Parameter descriptions with types
-  - Return value description
-  - Example usage (for complex functions)
+- All C functions MUST have Doxygen-style comments in English
+- Comments MUST include: brief description, parameters, return values
+- Complex algorithms SHOULD include example usage or algorithmic explanation
+- 42 Header format MUST be included in all C files
 
 ## Quality Assurance Workflow
 
-Every code change MUST complete this workflow before being considered done:
+Every code change MUST complete this workflow before being considered ready for merge:
 
-1. **Implementation** - Write the code following norminette standards
-2. **Unit Testing** - Create unit tests for new/modified functions
-3. **Compilation Check** - Verify `make` or equivalent builds without errors/warnings
-4. **Execution Test** - Run the program and verify expected behavior
-5. **Runtime Verification** - Check for memory leaks, segfaults, and other errors
-6. **Documentation Update** - Update English comments and Korean markdown files
-7. **Norminette Check** - Run `norminette` and fix any violations
-8. **File Organization Check** - Verify log files in `logs/` and documentation in `docs/`
+1. **Implementation** - Write code following norminette standards
+2. **Local Build** - Verify `make` builds without errors or warnings
+3. **Execution Test** - Run the program with test scenes and verify behavior
+4. **Norminette Check** - Run `norminette` and fix any violations
+5. **Memory Check** - Run with valgrind and verify zero leaks
+6. **Documentation Update** - Update code comments and docs/ if needed
+7. **Commit & Push** - Atomic commits with clear messages
+8. **CI Validation** - Verify all automated checks pass in GitHub Actions
 
-**Checkpoints**:
-- Code review MUST verify all 8 steps completed
-- Merge MUST be blocked if any step fails
-- CI/CD (if configured) MUST enforce compilation and unit test success
+**Quality Gates**:
+- Local testing SHOULD catch issues before push
+- CI/CD MUST enforce all quality gates automatically
+- Code review MUST verify constitution compliance
+- Failed checks MUST block merging
+
+**Test Scene Coverage**:
+- All features MUST have corresponding test scenes in `scenes/`
+- Regression test scenes MUST be preserved after bug fixes
+- Test script (test_miniRT.sh) MUST validate all critical scenes
 
 ## Governance
 
-This constitution defines the non-negotiable principles and workflows for the 42 miniRT
-project. All development activity MUST comply with these principles.
+This constitution defines the non-negotiable principles and automated workflows for the
+miniRT project. All development activity MUST comply with these principles.
 
 **Amendment Process**:
-- Constitution changes require documentation of rationale
+- Constitution changes require documented rationale in sync impact report
 - Version MUST be incremented using semantic versioning (MAJOR.MINOR.PATCH)
-- MAJOR version for backward-incompatible principle changes
-- MINOR version for new principles or substantial guidance additions
-- PATCH version for clarifications, typo fixes, or minor wording improvements
+- MAJOR version: Backward-incompatible principle changes or complete framework rewrites
+- MINOR version: New principles added or substantial guidance expansions
+- PATCH version: Clarifications, typo fixes, or minor wording improvements
 
 **Compliance Enforcement**:
-- All code reviews MUST verify constitution compliance
+- All PRs MUST verify constitution compliance before merge
+- CI/CD automation MUST enforce all NON-NEGOTIABLE principles
 - Any deviation from NON-NEGOTIABLE principles MUST be rejected
-- Complexity that conflicts with principles MUST be justified in writing and approved
-- Template workflows in `.specify/templates/` MUST reference and enforce these principles
+- Template workflows in `.specify/templates/` MUST reference these principles
 
 **Conflict Resolution**:
-- When principles conflict, NON-NEGOTIABLE principles take precedence
-- Between non-negotiable principles, apply judgment favoring project stability and correctness
+- NON-NEGOTIABLE principles take absolute precedence
+- When principles conflict, prioritize: Code Quality → Documentation → Structure
 - Document conflicts and resolutions in constitution amendments
+- Escalate unresolvable conflicts through GitHub issues
 
-**Version**: 1.2.1 | **Ratified**: 2025-12-15 | **Last Amended**: 2025-12-17
+**Review Cycle**:
+- Constitution SHOULD be reviewed after major feature additions
+- Outdated principles MUST be updated or removed
+- New automation capabilities SHOULD be reflected in principles
+
+**Version**: 2.2.0 | **Ratified**: 2025-12-19 | **Last Amended**: 2025-12-19

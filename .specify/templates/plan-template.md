@@ -33,6 +33,13 @@
 
 [Gates determined based on constitution file]
 
+**42 School Constraints Check** (Principle VII):
+- ✅ All functions used MUST be from allowed list (libc, math, mlx_*, libft, get_next_line)
+- ✅ pthread functions MUST NOT be used
+- ✅ fork/pipe/multiprocessing MUST NOT be used  
+- ✅ External parallelization libraries (SIMD, OpenMP, etc.) MUST NOT be used
+- ✅ Optimizations MUST use only allowed techniques (algorithmic, caching, math, memory layout)
+
 ## Project Structure
 
 ### Documentation (this feature)

@@ -12,6 +12,7 @@
 
 #include "minirt.h"
 #include "parser.h"
+#include "spatial.h"
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -96,7 +97,11 @@ int	parse_scene(const char *filename, t_scene *scene)
 	}
 	close(fd);
 	if (success)
+	{
 		success = validate_scene(scene);
+		if (success)
+			scene_build_bvh(scene);
+	}
 	return (success);
 }
 

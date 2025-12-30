@@ -22,12 +22,13 @@ void	cleanup_scene(t_scene *scene)
 {
 	if (!scene)
 		return ;
+	render_state_cleanup(&scene->render_state);
 	free(scene);
 }
 
 /*
 ** Free memory allocated for render context.
-** Render context contains MLX pointers and scene reference.
+** Destroys MLX image buffer and frees render structure.
 */
 void	cleanup_render(void *param)
 {
@@ -36,6 +37,8 @@ void	cleanup_render(void *param)
 	render = (t_render *)param;
 	if (!render)
 		return ;
+	if (render->img && render->mlx)
+		mlx_destroy_image(render->mlx, render->img);
 	free(render);
 }
 
