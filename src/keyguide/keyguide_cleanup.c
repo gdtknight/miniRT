@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hud_toggle.c                                       :+:      :+:    :+:   */
+/*   keyguide_cleanup.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/19 00:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/19 00:00:00 by yoshin           ###   ########.fr       */
+/*   Created: 2025/12/30 00:00:00 by yoshin            #+#    #+#             */
+/*   Updated: 2025/12/30 00:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "keyguide.h"
 #include "window.h"
-#include "hud.h"
 
-void	hud_toggle(t_render *render)
+void	keyguide_cleanup(t_keyguide_state *keyguide, void *mlx)
 {
-	render->hud.visible = !render->hud.visible;
-	render->keyguide.visible = render->hud.visible;
-	render->hud.dirty = 1;
+	if (keyguide->bg_img)
+	{
+		mlx_destroy_image(mlx, keyguide->bg_img);
+		keyguide->bg_img = NULL;
+		keyguide->bg_data = NULL;
+	}
 }

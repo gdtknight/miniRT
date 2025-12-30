@@ -26,7 +26,7 @@ static void	put_pixel_to_buffer(t_render *render, int x, int y, t_color color)
 	int		offset;
 	int		pixel_color;
 
-	if (x < 0 || x >= 800 || y < 0 || y >= 600)
+	if (x < 0 || x >= WINDOW_WIDTH || y < 0 || y >= WINDOW_HEIGHT)
 		return ;
 	offset = y * render->size_line + x * (render->bpp / 8);
 	pixel_color = (color.r << 16) | (color.g << 8) | color.b;
@@ -45,8 +45,8 @@ static void	render_pixel(t_scene *scene, t_render *render, int x, int y)
 	double	u;
 	double	v;
 
-	u = (2.0 * x / 800.0) - 1.0;
-	v = 1.0 - (2.0 * y / 600.0);
+	u = (2.0 * x / (double)WINDOW_WIDTH) - 1.0;
+	v = 1.0 - (2.0 * y / (double)WINDOW_HEIGHT);
 	ray = create_camera_ray(&scene->camera, u, v);
 	color = trace_ray(scene, &ray);
 	put_pixel_to_buffer(render, x, y, color);
@@ -66,22 +66,22 @@ static void	render_low_quality(t_scene *scene, t_render *render)
 	double	v;
 
 	y = 0;
-	while (y < 600)
+	while (y < WINDOW_HEIGHT)
 	{
 		x = 0;
-		while (x < 800)
+		while (x < WINDOW_WIDTH)
 		{
-			u = (2.0 * x / 800.0) - 1.0;
-			v = 1.0 - (2.0 * y / 600.0);
+			u = (2.0 * x / (double)WINDOW_WIDTH) - 1.0;
+			v = 1.0 - (2.0 * y / (double)WINDOW_HEIGHT);
 			ray = create_camera_ray(&scene->camera, u, v);
 			color = trace_ray(scene, &ray);
 			put_pixel_to_buffer(render, x, y, color);
-			if (x + 1 < 800)
+			if (x + 1 < WINDOW_WIDTH)
 				put_pixel_to_buffer(render, x + 1, y, color);
-			if (y + 1 < 600)
+			if (y + 1 < WINDOW_HEIGHT)
 			{
 				put_pixel_to_buffer(render, x, y + 1, color);
-				if (x + 1 < 800)
+				if (x + 1 < WINDOW_WIDTH)
 					put_pixel_to_buffer(render, x + 1, y + 1, color);
 			}
 			x += 2;
@@ -106,10 +106,10 @@ void	render_scene_to_buffer(t_scene *scene, t_render *render)
 		return ;
 	}
 	y = 0;
-	while (y < 600)
+	while (y < WINDOW_HEIGHT)
 	{
 		x = 0;
-		while (x < 800)
+		while (x < WINDOW_WIDTH)
 		{
 			render_pixel(scene, render, x, y);
 			x++;

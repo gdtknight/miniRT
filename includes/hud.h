@@ -30,6 +30,16 @@
 # define HUD_COLOR_BG 0x000000
 # define HUD_BG_ALPHA 0.65
 
+/* Alpha blending utilities */
+int		blend_colors(int bg_color, int fg_color, double alpha);
+int		get_red(int color);
+int		get_green(int color);
+int		get_blue(int color);
+int		make_color(int r, int g, int b);
+int		get_pixel(char *img_data, int x, int y, int size_line, int bpp);
+void	set_pixel(char *img_data, int x, int y, int color,
+			int size_line, int bpp);
+
 /* ========================================================================== */
 /*                            PUBLIC API FUNCTIONS                            */
 /* ========================================================================== */

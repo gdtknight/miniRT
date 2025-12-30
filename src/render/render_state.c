@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "render_state.h"
+#include "window.h"
 #include <stdlib.h>
 
 void	render_state_init(t_render_state *state)
@@ -108,10 +109,10 @@ int	progressive_next_tile(t_progressive_state *prog, int *x, int *y, int *w,
 	*y = tile_y * prog->tile_size;
 	*w = prog->tile_size;
 	*h = prog->tile_size;
-	if (*x + *w > 800)
-		*w = 800 - *x;
-	if (*y + *h > 600)
-		*h = 600 - *y;
+	if (*x + *w > WINDOW_WIDTH)
+		*w = WINDOW_WIDTH - *x;
+	if (*y + *h > WINDOW_HEIGHT)
+		*h = WINDOW_HEIGHT - *y;
 	prog->current_tile++;
 	return (1);
 }

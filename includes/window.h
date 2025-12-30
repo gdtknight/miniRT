@@ -15,6 +15,11 @@
 
 # include "minirt.h"
 
+/* Window resolution constants - MacBook M1 13-inch native resolution */
+# define WINDOW_WIDTH 1440
+# define WINDOW_HEIGHT 900
+# define ASPECT_RATIO (1440.0 / 900.0)
+
 /* Object type enumeration for selection */
 typedef enum e_obj_type
 {
@@ -46,22 +51,36 @@ typedef struct s_hud_state
 	int		endian;
 }	t_hud_state;
 
+/* Key guide state structure */
+typedef struct s_keyguide_state
+{
+	void	*bg_img;
+	char	*bg_data;
+	int		bpp;
+	int		size_line;
+	int		endian;
+	int		visible;
+	int		x;
+	int		y;
+}	t_keyguide_state;
+
 /* Render context containing MLX pointers and scene data */
 typedef struct s_render
 {
-	void		*mlx;
-	void		*win;
-	void		*img;
-	char		*img_data;
-	int			bpp;
-	int			size_line;
-	int			endian;
-	t_scene		*scene;
-	t_selection	selection;
-	int			dirty;
-	int			low_quality;
-	int			shift_pressed;
-	t_hud_state	hud;
+	void				*mlx;
+	void				*win;
+	void				*img;
+	char				*img_data;
+	int					bpp;
+	int					size_line;
+	int					endian;
+	t_scene				*scene;
+	t_selection			selection;
+	int					dirty;
+	int					low_quality;
+	int					shift_pressed;
+	t_hud_state			hud;
+	t_keyguide_state	keyguide;
 }	t_render;
 
 /* Initialize MLX window and set up event handlers */

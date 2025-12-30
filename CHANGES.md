@@ -1,5 +1,27 @@
 # Rendering Performance Optimization - Change Log
 
+## HUD Improvements and Key Guide (2025-12-30)
+
+### Added
+- **Window Resolution**: Increased from 800x600 to 1440x900 (16:10 aspect ratio)
+- **Semi-Transparent HUD**: Alpha-blended background (65% opacity) for main HUD
+- **Key Guide Overlay**: Compact control reference (300x400px) in upper-right corner
+- **Real-Time Selection Updates**: Immediate HUD updates when using bracket keys []
+- **Alpha Blending Utilities**: New transparency functions (blend_colors, get_pixel, set_pixel)
+
+### Changed  
+- Window initialization uses WINDOW_WIDTH/WINDOW_HEIGHT constants (1440x900)
+- Camera aspect ratio updated to ASPECT_RATIO constant (16:10)
+- HUD toggle (H key) now syncs both main HUD and key guide visibility
+- HUD background now blends with scene pixels instead of solid overlay
+
+### Technical
+- New: src/hud/hud_transparency.c, src/keyguide/{keyguide_init.c, keyguide_render.c, keyguide_cleanup.c}
+- New: includes/keyguide.h
+- Modified: src/window/window.c, src/render/{camera.c, render.c, render_state.c}, src/hud/{hud_render.c, hud_toggle.c}
+
+---
+
 ## Overview
 렌더링 버퍼링/지연 문제를 해결하여 실시간 인터랙션 성능을 100-400배 향상시켰습니다.
 

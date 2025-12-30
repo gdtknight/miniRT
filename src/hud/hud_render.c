@@ -21,10 +21,34 @@ void	hud_mark_dirty(t_render *render)
 	render->hud.dirty = 1;
 }
 
+void	hud_render_background_row(t_render *render, int y)
+{
+	int	x;
+	int	scene_color;
+	int	blended;
+
+	x = HUD_MARGIN_X;
+	while (x < HUD_MARGIN_X + HUD_WIDTH)
+	{
+		scene_color = get_pixel(render->img_data, x, y,
+				render->size_line, render->bpp);
+		blended = blend_colors(scene_color, HUD_COLOR_BG, HUD_BG_ALPHA);
+		set_pixel(render->img_data, x, y, blended,
+			render->size_line, render->bpp);
+		x++;
+	}
+}
+
 void	hud_render_background(t_render *render)
 {
-	mlx_put_image_to_window(render->mlx, render->win,
-		render->hud.bg_img, HUD_MARGIN_X, HUD_MARGIN_Y);
+	int	y;
+
+	y = HUD_MARGIN_Y;
+	while (y < HUD_MARGIN_Y + HUD_HEIGHT)
+	{
+		hud_render_background_row(render, y);
+		y++;
+	}
 }
 
 void	hud_render_camera(t_render *render, int *y)

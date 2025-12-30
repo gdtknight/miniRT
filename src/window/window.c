@@ -13,6 +13,7 @@
 #include "minirt.h"
 #include "window.h"
 #include "hud.h"
+#include "keyguide.h"
 #include <stdlib.h>
 #include <math.h>
 
@@ -25,6 +26,7 @@ int	close_window(void *param)
 	t_render	*render;
 
 	render = (t_render *)param;
+	keyguide_cleanup(&render->keyguide, render->mlx);
 	hud_cleanup(&render->hud, render->mlx);
 	cleanup_all(render->scene, render);
 	exit(0);
@@ -242,6 +244,7 @@ static void	handle_object_selection(t_render *render, int keycode)
 			}
 		}
 	}
+	hud_mark_dirty(render);
 }
 
 static void	move_selected_object(t_render *render, t_vec3 move)
@@ -428,7 +431,10 @@ int	render_loop(void *param)
 		render->dirty = 0;
 	}
 	if (render->hud.visible && render->hud.dirty)
+	{
 		hud_render(render);
+		keyguide_render(render);
+	}
 	return (0);
 }
 
@@ -451,8 +457,9 @@ t_render	*init_window(t_scene *scene)
 		free(render);
 		return (NULL);
 	}
-	render->win = mlx_new_window(render->mlx, 800, 600, "miniRT");
-	render->img = mlx_new_image(render->mlx, 800, 600);
+	render->win = mlx_new_window(render->mlx, WINDOW_WIDTH,
+			WINDOW_HEIGHT, "miniRT");
+	render->img = mlx_new_image(render->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
 	if (!render->win || !render->img)
 	{
 		free(render);
@@ -468,6 +475,12 @@ t_render	*init_window(t_scene *scene)
 	render->shift_pressed = 0;
 	if (hud_init(&render->hud, render->mlx, render->win) == -1)
 	{
+		free(render);
+		return (NULL);
+	}
+	if (keyguide_init(&render->keyguide, render->mlx, render->win) == -1)
+	{
+		hud_cleanup(&render->hud, render->mlx);
 		free(render);
 		return (NULL);
 	}

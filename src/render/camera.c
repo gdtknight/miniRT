@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minirt.h"
+#include "window.h"
 #include "vec3.h"
 #include "ray.h"
 #include <math.h>
@@ -31,7 +32,7 @@ typedef struct s_cam_calc
 */
 static void	init_camera_calc(t_camera *camera, t_cam_calc *calc)
 {
-	calc->aspect_ratio = 800.0 / 600.0;
+	calc->aspect_ratio = ASPECT_RATIO;
 	calc->fov_scale = tan(camera->fov * 0.5 * M_PI / 180.0);
 	calc->right = vec3_normalize(vec3_cross(camera->direction, \
 		(t_vec3){0, 1, 0}));

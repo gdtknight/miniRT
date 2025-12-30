@@ -39,6 +39,10 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/hud/hud_navigation.c \
 			  $(SRC_DIR)/hud/hud_render.c \
 			  $(SRC_DIR)/hud/hud_toggle.c \
+			  $(SRC_DIR)/hud/hud_transparency.c \
+			  $(SRC_DIR)/keyguide/keyguide_init.c \
+			  $(SRC_DIR)/keyguide/keyguide_render.c \
+			  $(SRC_DIR)/keyguide/keyguide_cleanup.c \
 			  $(SRC_DIR)/lighting/lighting.c \
 			  $(SRC_DIR)/lighting/shadow_calc.c \
 			  $(SRC_DIR)/lighting/shadow_attenuation.c \
