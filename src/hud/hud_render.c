@@ -356,6 +356,8 @@ void	hud_render_content(t_render *render)
 	render_light_bright(render, &y);
 	y += HUD_LINE_HEIGHT;
 	hud_render_objects(render, &y);
+	y += HUD_LINE_HEIGHT;
+	hud_render_performance(render, &y);
 }
 
 void	hud_render(t_render *render)

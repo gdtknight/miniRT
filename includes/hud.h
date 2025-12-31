@@ -267,6 +267,31 @@ void	hud_format_vec3(char *buffer, t_vec3 vec);
 void	hud_format_color(char *buffer, t_color color);
 
 /*
+** Format FPS value to string with 1 decimal place.
+** Buffer must be at least 16 bytes.
+*/
+void	hud_format_fps(char *buf, double fps);
+
+/*
+** Format time in microseconds to milliseconds with 1 decimal.
+** Buffer must be at least 16 bytes.
+*/
+void	hud_format_time_ms(char *buf, long time_us);
+
+/*
+** Format BVH enabled status to "ON" or "OFF".
+** Buffer must be at least 4 bytes.
+*/
+void	hud_format_bvh_status(char *buf, int enabled);
+
+/*
+** Render performance metrics section in HUD.
+** Shows FPS, frame time, and BVH status.
+** Called internally by hud_render_content().
+*/
+void	hud_render_performance(t_render *render, int *y);
+
+/*
 ** Render HUD background overlay (semi-transparent dark rectangle).
 ** Called internally by hud_render().
 */

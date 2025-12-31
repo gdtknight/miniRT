@@ -128,3 +128,25 @@ void	hud_format_color(char *buffer, t_color color)
 	i += 3;
 	ft_itoa_buf(buffer + i, color.b);
 }
+
+void	hud_format_fps(char *buf, double fps)
+{
+	hud_format_float(buf, fps);
+}
+
+void	hud_format_time_ms(char *buf, long time_us)
+{
+	double	time_ms;
+
+	time_ms = time_us / 1000.0;
+	hud_format_float(buf, time_ms);
+}
+
+void	hud_format_bvh_status(char *buf, int enabled)
+{
+	if (enabled)
+		ft_strcpy(buf, "ON");
+	else
+		ft_strcpy(buf, "OFF");
+}
+

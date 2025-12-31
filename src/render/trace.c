@@ -13,6 +13,7 @@
 #include "minirt.h"
 #include "ray.h"
 #include "spatial.h"
+#include "metrics.h"
 #include <math.h>
 
 /*
@@ -104,6 +105,7 @@ t_color	trace_ray(t_scene *scene, t_ray *ray)
 	t_hit	hit;
 	int		hit_found;
 
+	metrics_add_ray(&scene->render_state.metrics);
 	hit_found = 0;
 	hit.distance = INFINITY;
 	if (scene->render_state.bvh_enabled && scene->render_state.bvh)

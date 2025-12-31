@@ -15,6 +15,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-15
 - N/A (no persistent storage for keyboard handling) (006-cross-platform-keyboard)
 - C (C99 standard), 42 School norminette compliance + MiniLibX (42 School graphics library), libm (math library), libft (custom C library) (007-hud-improvements)
 - N/A (no persistent storage required for this feature) (007-hud-improvements)
+- C (C99 standard with 42 School norminette compliance) + MiniLibX (graphics), libft (custom C library), math.h (standard math functions) (008-bvh-performance-diagnostics)
+- N/A (all data in-memory during runtime) (008-bvh-performance-diagnostics)
 
 - C (C99 or later with -std=c99 or compatible) + MinilibX (X11/XQuartz graphics library), libm (math library), optional libft (001-raytracer)
 
@@ -34,9 +36,9 @@ tests/
 C (C99 or later with -std=c99 or compatible): Follow standard conventions
 
 ## Recent Changes
+- 008-bvh-performance-diagnostics: Added C (C99 standard with 42 School norminette compliance) + MiniLibX (graphics), libft (custom C library), math.h (standard math functions)
 - 007-hud-improvements: Added C (C99 standard), 42 School norminette compliance + MiniLibX (42 School graphics library), libm (math library), libft (custom C library)
 - 006-cross-platform-keyboard: Added C (C99 standard), compiled with gcc/clang + MiniLibX (X11 for Linux, OpenGL/AppKit for macOS), libm (math library)
-- 001-rendering-performance-optimization: Added C (C99/C11 standard, gcc/clang compatible)
 
 
 <!-- MANUAL ADDITIONS START -->
