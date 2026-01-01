@@ -2,15 +2,20 @@
 
 ## Camera Movement (1st Person View)
 
-### Translation (WASD Keys)
+### Translation
 - **W**: Move forward (in the direction camera is looking)
-- **S**: Move backward (opposite to camera direction)
+- **X**: Move backward (opposite to camera direction)
 - **A**: Move left (strafe left)
 - **D**: Move right (strafe right)
+- **Q**: Move up (world space Y+)
+- **Z**: Move down (world space Y-)
 
-### Rotation (RF Keys)
-- **R**: Pitch up (look upward)
-- **F**: Pitch down (look downward)
+### Rotation
+- **E**: Pitch up (look upward)
+- **C**: Pitch down (look downward)
+
+### Reset
+- **S**: Reset camera to initial position and orientation
 
 Movement speed: 1.0 unit per key press
 Rotation speed: 5 degrees per key press
@@ -27,13 +32,13 @@ Selection cycles through all objects in the scene:
 3. Cylinders (first to last)
 4. Back to spheres
 
-### Object Movement (Keyboard Numpad)
-- **Numpad 4**: Move left (X-)
-- **Numpad 6**: Move right (X+)
-- **Numpad 2**: Move down (Y-)
-- **Numpad 8**: Move up (Y+)
-- **Numpad 1**: Move backward (Z-)
-- **Numpad 3**: Move forward (Z+)
+### Object Movement (R/T/F/G/V/B Keys)
+- **R**: Move left (X-)
+- **T**: Move right (X+)
+- **F**: Move down (Y-)
+- **G**: Move up (Y+)
+- **V**: Move backward (Z-)
+- **B**: Move forward (Z+)
 
 Movement step: 1.0 unit per key press
 
@@ -49,20 +54,34 @@ Movement step: 1.0 unit per key press
 
 Movement step: 1.0 unit per key press
 
+## UI Controls
+- **H**: Toggle HUD visibility
+- **TAB**: Cycle object selection forward
+- **Shift+TAB**: Cycle object selection backward
+- **↑/↓**: Navigate HUD pages
+- **I**: Toggle performance info display
+
 ## General Controls
 - **ESC**: Exit program
 
+## Performance
+
+BVH acceleration is permanently enabled for optimal rendering performance with complex scenes. This ensures consistent frame rates even with hundreds of objects.
+
 ## Notes
 - Scene is automatically re-rendered after camera movement, object movement, or light adjustment
-- Object selection does not trigger re-render (only visual indicator would be shown if implemented)
 - All movements are in world space coordinates
+- Low quality rendering is used during continuous movement for smooth interaction
+- High quality rendering is triggered when keys are released
 
 ## Testing the Controls
 
-Try these sequences with `scenes/test_all_objects.rt`:
+Try these sequences with any scene file:
 
-1. **Camera Movement**: Press W several times to move forward toward the objects
-2. **Camera Rotation**: Press R to look up, F to look down
-3. **Object Selection**: Press ] to cycle through objects
-4. **Object Movement**: Press Numpad 8 to move selected object upward
-5. **Light Control**: Press Home to move light source upward
+1. **Camera Movement**: Press W/X/A/D to move around the scene
+2. **Camera World Movement**: Press Q/Z to move up and down in world space
+3. **Camera Rotation**: Press E to look up, C to look down
+4. **Camera Reset**: Press S to return to the initial camera position
+5. **Object Selection**: Press ] to cycle through objects
+6. **Object Movement**: Press R/T/F/G/V/B to move selected object in all directions
+7. **Light Control**: Press Home/End to move light source vertically

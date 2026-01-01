@@ -47,6 +47,13 @@ void	render_scene_to_buffer(t_scene *scene, t_render *render);
 # define KEY_D 2
 # define KEY_R 15
 # define KEY_F 3
+# define KEY_T 17
+# define KEY_G 5
+# define KEY_V 9
+# define KEY_E 14
+# define KEY_C 8
+# define KEY_X 7
+# define KEY_Z 6
 # define KEY_B 11
 # define KEY_Q 12
 # define KEY_I 34
@@ -83,6 +90,13 @@ void	render_scene_to_buffer(t_scene *scene, t_render *render);
 # define KEY_D 100
 # define KEY_R 114
 # define KEY_F 102
+# define KEY_T 116
+# define KEY_G 103
+# define KEY_V 118
+# define KEY_E 101
+# define KEY_C 99
+# define KEY_X 120
+# define KEY_Z 122
 # define KEY_B 98
 # define KEY_Q 113
 # define KEY_I 105
@@ -125,12 +139,16 @@ static void	handle_camera_move(t_render *render, int keycode)
 			(t_vec3){0, 1, 0}));
 	if (keycode == KEY_W)
 		move = vec3_multiply(render->scene->camera.direction, step);
-	else if (keycode == KEY_S)
+	else if (keycode == KEY_X)
 		move = vec3_multiply(render->scene->camera.direction, -step);
 	else if (keycode == KEY_A)
 		move = vec3_multiply(right, -step);
 	else if (keycode == KEY_D)
 		move = vec3_multiply(right, step);
+	else if (keycode == KEY_Q)
+		move = (t_vec3){0, step, 0};
+	else if (keycode == KEY_Z)
+		move = (t_vec3){0, -step, 0};
 	else
 		return ;
 	render->scene->camera.position = vec3_add(render->scene->camera.position,
@@ -146,9 +164,9 @@ static void	handle_camera_pitch(t_render *render, int keycode)
 	double	sin_a;
 
 	angle = 5.0 * M_PI / 180.0;
-	if (keycode == KEY_F)
+	if (keycode == KEY_C)
 		angle = -angle;
-	else if (keycode != KEY_R)
+	else if (keycode != KEY_E)
 		return ;
 	right = vec3_normalize(vec3_cross(render->scene->camera.direction,
 			(t_vec3){0, 1, 0}));
@@ -164,6 +182,12 @@ static void	handle_camera_pitch(t_render *render, int keycode)
 		+ (right.x * render->scene->camera.direction.y
 			- right.y * render->scene->camera.direction.x) * sin_a;
 	render->scene->camera.direction = vec3_normalize(new_dir);
+}
+
+static void	handle_camera_reset(t_render *render)
+{
+	render->scene->camera.position = render->scene->camera.initial_position;
+	render->scene->camera.direction = render->scene->camera.initial_direction;
 }
 
 static void	handle_object_selection(t_render *render, int keycode)
@@ -274,16 +298,18 @@ static void	handle_object_move(t_render *render, int keycode)
 
 	step = 1.0;
 	move = (t_vec3){0, 0, 0};
-	if (keycode == KEY_KP_4)
+	if (keycode == KEY_R)
 		move.x = -step;
-	else if (keycode == KEY_KP_6)
+	else if (keycode == KEY_T)
 		move.x = step;
-	else if (keycode == KEY_KP_2)
+	else if (keycode == KEY_F)
 		move.y = -step;
-	else if (keycode == KEY_KP_8)
+	else if (keycode == KEY_G)
 		move.y = step;
-	else if (keycode == KEY_KP_1 || keycode == KEY_KP_3)
-		move.z = (keycode == KEY_KP_1) ? -step : step;
+	else if (keycode == KEY_V)
+		move.z = -step;
+	else if (keycode == KEY_B)
+		move.z = step;
 	else
 		return ;
 	move_selected_object(render, move);
@@ -338,24 +364,31 @@ int	handle_key(int keycode, void *param)
 		hud_page_up(render);
 	else if (keycode == KEY_DOWN)
 		hud_page_down(render);
-	else if (keycode == KEY_W || keycode == KEY_A || keycode == KEY_S
-		|| keycode == KEY_D)
+	else if (keycode == KEY_W || keycode == KEY_X || keycode == KEY_A
+		|| keycode == KEY_D || keycode == KEY_Q || keycode == KEY_Z)
 	{
 		handle_camera_move(render, keycode);
 		render->low_quality = 1;
 		render->dirty = 1;
 		hud_mark_dirty(render);
 	}
-	else if (keycode == KEY_R || keycode == KEY_F)
+	else if (keycode == KEY_E || keycode == KEY_C)
 	{
 		handle_camera_pitch(render, keycode);
 		render->low_quality = 1;
 		render->dirty = 1;
 		hud_mark_dirty(render);
 	}
+	else if (keycode == KEY_S)
+	{
+		handle_camera_reset(render);
+		render->dirty = 1;
+		hud_mark_dirty(render);
+	}
 	else if (keycode == KEY_BRACKET_LEFT || keycode == KEY_BRACKET_RIGHT)
 		handle_object_selection(render, keycode);
-	else if (keycode >= KEY_KP_1 && keycode <= KEY_KP_8)
+	else if (keycode == KEY_R || keycode == KEY_T || keycode == KEY_F
+		|| keycode == KEY_G || keycode == KEY_V || keycode == KEY_B)
 	{
 		handle_object_move(render, keycode);
 		render->low_quality = 1;
@@ -369,18 +402,6 @@ int	handle_key(int keycode, void *param)
 		render->low_quality = 1;
 		render->dirty = 1;
 		hud_mark_dirty(render);
-	}
-	else if (keycode == KEY_B)
-	{
-		render->scene->render_state.bvh_enabled
-			= !render->scene->render_state.bvh_enabled;
-		render->dirty = 1;
-	}
-	else if (keycode == KEY_Q)
-	{
-		render->scene->render_state.adaptive_enabled
-			= !render->scene->render_state.adaptive_enabled;
-		render->dirty = 1;
 	}
 	else if (keycode == KEY_I)
 	{
@@ -402,9 +423,11 @@ int	handle_key_release(int keycode, void *param)
 	t_render	*render;
 
 	render = (t_render *)param;
-	if (keycode == KEY_W || keycode == KEY_A || keycode == KEY_S
-		|| keycode == KEY_D || keycode == KEY_R || keycode == KEY_F
-		|| (keycode >= KEY_KP_1 && keycode <= KEY_KP_8)
+	if (keycode == KEY_W || keycode == KEY_X || keycode == KEY_A
+		|| keycode == KEY_D || keycode == KEY_Q || keycode == KEY_Z
+		|| keycode == KEY_E || keycode == KEY_C
+		|| keycode == KEY_R || keycode == KEY_T || keycode == KEY_F
+		|| keycode == KEY_G || keycode == KEY_V || keycode == KEY_B
 		|| keycode == KEY_INSERT || keycode == KEY_HOME || keycode == KEY_PGUP
 		|| keycode == KEY_DELETE || keycode == KEY_END || keycode == KEY_PGDN)
 	{
