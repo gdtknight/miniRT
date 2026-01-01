@@ -73,6 +73,8 @@ int	parse_camera(char *line, t_scene *scene)
 	scene->camera.fov = ft_atof(token);
 	if (!in_range(scene->camera.fov, 0, 180))
 		return (print_error("FOV must be in range [0, 180]"));
+	scene->camera.initial_position = scene->camera.position;
+	scene->camera.initial_direction = scene->camera.direction;
 	scene->has_camera = 1;
 	return (1);
 }

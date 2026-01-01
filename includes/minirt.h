@@ -48,6 +48,8 @@ typedef struct s_camera
 {
 	t_vec3	position;
 	t_vec3	direction;
+	t_vec3	initial_position;
+	t_vec3	initial_direction;
 	double	fov;
 }	t_camera;
 
