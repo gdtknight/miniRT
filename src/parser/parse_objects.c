@@ -49,6 +49,8 @@ int	parse_sphere(char *line, t_scene *scene)
 	sphere->diameter = ft_atof(token);
 	if (sphere->diameter <= 0)
 		return (print_error("Sphere diameter must be positive"));
+	sphere->radius = sphere->diameter / 2.0;
+	sphere->radius_squared = sphere->radius * sphere->radius;
 	token = skip_to_next_token(token);
 	if (!parse_color(token, &sphere->color))
 		return (0);
@@ -88,6 +90,7 @@ int	parse_plane(char *line, t_scene *scene)
 /*
 ** Parse cylinder diameter and height parameters.
 ** Validates both dimensions are positive.
+** Computes precomputed cached values for optimization.
 */
 static int	parse_cylinder_params(char *token, t_cylinder *cylinder)
 {
@@ -97,6 +100,9 @@ static int	parse_cylinder_params(char *token, t_cylinder *cylinder)
 	cylinder->height = ft_atof(token);
 	if (cylinder->diameter <= 0 || cylinder->height <= 0)
 		return (print_error("Cylinder dimensions must be positive"));
+	cylinder->radius = cylinder->diameter / 2.0;
+	cylinder->radius_squared = cylinder->radius * cylinder->radius;
+	cylinder->half_height = cylinder->height / 2.0;
 	return (1);
 }
 

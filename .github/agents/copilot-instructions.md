@@ -19,6 +19,10 @@ Auto-generated from all feature plans. Last updated: 2025-12-15
 - N/A (all data in-memory during runtime) (008-bvh-performance-diagnostics)
 - C (C99), compiled with gcc/clang with -Wall -Wextra -Werror + MiniLibX (school graphics library), libft (custom C library), math.h (009-keyboard-bvh-controls)
 - N/A (scene data loaded from .rt files, no persistent storage) (009-keyboard-bvh-controls)
+- C (C99 standard), compiled with gcc/clang with flags `-Wall -Wextra -Werror` + MiniLibX (42 School graphics library), libm (math library), libft (custom C library) (011-code-refactoring)
+- N/A (reads scene files, no persistent storage) (011-code-refactoring)
+- C (C99 standard), compiled with cc/gcc with flags -Wall -Wextra -Werror + MiniLibX (graphics library), libm (math library), libft (custom C library) (011-code-refactoring)
+- N/A (scene files parsed at runtime, no persistent storage) (011-code-refactoring)
 
 - C (C99 or later with -std=c99 or compatible) + MinilibX (X11/XQuartz graphics library), libm (math library), optional libft (001-raytracer)
 
@@ -38,9 +42,9 @@ tests/
 C (C99 or later with -std=c99 or compatible): Follow standard conventions
 
 ## Recent Changes
+- 011-code-refactoring: Added C (C99 standard), compiled with cc/gcc with flags -Wall -Wextra -Werror + MiniLibX (graphics library), libm (math library), libft (custom C library)
+- 011-code-refactoring: Added C (C99 standard), compiled with gcc/clang with flags `-Wall -Wextra -Werror` + MiniLibX (42 School graphics library), libm (math library), libft (custom C library)
 - 009-keyboard-bvh-controls: Added C (C99), compiled with gcc/clang with -Wall -Wextra -Werror + MiniLibX (school graphics library), libft (custom C library), math.h
-- 008-bvh-performance-diagnostics: Added C (C99 standard with 42 School norminette compliance) + MiniLibX (graphics), libft (custom C library), math.h (standard math functions)
-- 007-hud-improvements: Added C (C99 standard), 42 School norminette compliance + MiniLibX (42 School graphics library), libm (math library), libft (custom C library)
 
 
 <!-- MANUAL ADDITIONS START -->

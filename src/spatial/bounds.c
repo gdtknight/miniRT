@@ -21,11 +21,11 @@ t_aabb	get_object_bounds(t_object_ref ref, void *scene_ptr)
 	scene = (t_scene *)scene_ptr;
 	if (ref.type == OBJ_SPHERE)
 		return (aabb_for_sphere(scene->spheres[ref.index].center,
-				scene->spheres[ref.index].diameter / 2.0));
+				scene->spheres[ref.index].radius));
 	else if (ref.type == OBJ_CYLINDER)
 		return (aabb_for_cylinder(scene->cylinders[ref.index].center,
 				scene->cylinders[ref.index].axis,
-				scene->cylinders[ref.index].diameter / 2.0,
+				scene->cylinders[ref.index].radius,
 				scene->cylinders[ref.index].height));
 	else
 		return (aabb_for_plane(scene->planes[ref.index].point,

@@ -35,25 +35,27 @@ static int	calculate_cylinder_intersection(t_ray *ray, t_cylinder *cyl, \
 		t_cyl_calc *calc)
 {
 	t_vec3	oc;
-	double	radius;
+	double	dir_dot_axis;
+	double	oc_dot_axis;
+	double	dir_dot_dir;
+	double	oc_dot_oc;
 
-	radius = cyl->diameter / 2.0;
 	oc = vec3_subtract(ray->origin, cyl->center);
-	calc->a = vec3_dot(ray->direction, ray->direction) - \
-		vec3_dot(ray->direction, cyl->axis) * \
-		vec3_dot(ray->direction, cyl->axis);
+	dir_dot_axis = vec3_dot(ray->direction, cyl->axis);
+	oc_dot_axis = vec3_dot(oc, cyl->axis);
+	dir_dot_dir = vec3_dot(ray->direction, ray->direction);
+	oc_dot_oc = vec3_dot(oc, oc);
+	calc->a = dir_dot_dir - dir_dot_axis * dir_dot_axis;
 	calc->b = 2.0 * (vec3_dot(ray->direction, oc) - \
-		vec3_dot(ray->direction, cyl->axis) * vec3_dot(oc, cyl->axis));
-	calc->c = vec3_dot(oc, oc) - vec3_dot(oc, cyl->axis) * \
-		vec3_dot(oc, cyl->axis) - radius * radius;
+		dir_dot_axis * oc_dot_axis);
+	calc->c = oc_dot_oc - oc_dot_axis * oc_dot_axis - cyl->radius_squared;
 	calc->discriminant = calc->b * calc->b - 4 * calc->a * calc->c;
 	if (calc->discriminant < 0 || calc->a < EPSILON)
 		return (0);
 	calc->t = (-calc->b - sqrt(calc->discriminant)) / (2.0 * calc->a);
 	if (calc->t < 0.001)
 		calc->t = (-calc->b + sqrt(calc->discriminant)) / (2.0 * calc->a);
-	calc->m = vec3_dot(ray->direction, cyl->axis) * calc->t + \
-		vec3_dot(oc, cyl->axis);
+	calc->m = dir_dot_axis * calc->t + oc_dot_axis;
 	return (1);
 }
 
@@ -80,7 +82,7 @@ int	intersect_cylinder_cap(t_ray *ray, t_cylinder *cyl, t_hit *hit, \
 	p = vec3_add(ray->origin, vec3_multiply(ray->direction, t));
 	dist_sq = vec3_dot(vec3_subtract(p, cap_center), \
 		vec3_subtract(p, cap_center));
-	if (dist_sq > (cyl->diameter / 2.0) * (cyl->diameter / 2.0))
+	if (dist_sq > cyl->radius_squared)
 		return (0);
 	hit->distance = t;
 	hit->point = p;
@@ -106,7 +108,7 @@ int	intersect_cylinder_body(t_ray *ray, t_cylinder *cyl, t_hit *hit)
 	if (calc.t < 0.001 || calc.t > hit->distance)
 		return (0);
 	hit_point = vec3_add(ray->origin, vec3_multiply(ray->direction, calc.t));
-	if (calc.m < -cyl->height / 2.0 || calc.m > cyl->height / 2.0)
+	if (calc.m < -cyl->half_height || calc.m > cyl->half_height)
 		return (0);
 	hit->distance = calc.t;
 	hit->point = hit_point;
@@ -135,14 +137,14 @@ int	intersect_cylinder(t_ray *ray, t_cylinder *cylinder, t_hit *hit)
 	}
 	temp_hit.distance = hit->distance;
 	if (intersect_cylinder_cap(ray, cylinder, &temp_hit, \
-		cylinder->height / 2.0))
+		cylinder->half_height))
 	{
 		*hit = temp_hit;
 		hit_found = 1;
 	}
 	temp_hit.distance = hit->distance;
 	if (intersect_cylinder_cap(ray, cylinder, &temp_hit, \
-		-cylinder->height / 2.0))
+		-cylinder->half_height))
 	{
 		*hit = temp_hit;
 		hit_found = 1;

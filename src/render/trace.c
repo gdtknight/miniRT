@@ -17,22 +17,27 @@
 #include <math.h>
 
 /*
-** Check ray intersection with all spheres in scene.
-** Updates hit info with closest sphere intersection.
-** Returns 1 if any sphere was hit, 0 otherwise.
+** Generic intersection checking for object arrays.
+** Iterates through object array and updates hit with closest intersection.
+** Returns 1 if any intersection found, 0 otherwise.
 */
-int	check_sphere_intersections(t_scene *scene, t_ray *ray, t_hit *hit)
+static int	check_intersections_generic(void *objects, int count, \
+		size_t obj_size, t_intersect_fn intersect_fn, t_ray *ray, t_hit *hit)
 {
 	t_hit	temp_hit;
 	int		i;
 	int		hit_found;
+	void	*current_obj;
 
+	if (objects == NULL && count > 0)
+		return (0);
 	hit_found = 0;
 	i = 0;
-	while (i < scene->sphere_count)
+	while (i < count)
 	{
+		current_obj = (char *)objects + (i * obj_size);
 		temp_hit.distance = hit->distance;
-		if (intersect_sphere(ray, &scene->spheres[i], &temp_hit))
+		if (intersect_fn(ray, current_obj, &temp_hit))
 		{
 			*hit = temp_hit;
 			hit_found = 1;
@@ -40,6 +45,18 @@ int	check_sphere_intersections(t_scene *scene, t_ray *ray, t_hit *hit)
 		i++;
 	}
 	return (hit_found);
+}
+
+/*
+** Check ray intersection with all spheres in scene.
+** Updates hit info with closest sphere intersection.
+** Returns 1 if any sphere was hit, 0 otherwise.
+*/
+int	check_sphere_intersections(t_scene *scene, t_ray *ray, t_hit *hit)
+{
+	return (check_intersections_generic(scene->spheres, \
+		scene->sphere_count, sizeof(t_sphere), \
+		(t_intersect_fn)intersect_sphere, ray, hit));
 }
 
 /*
@@ -49,23 +66,9 @@ int	check_sphere_intersections(t_scene *scene, t_ray *ray, t_hit *hit)
 */
 int	check_plane_intersections(t_scene *scene, t_ray *ray, t_hit *hit)
 {
-	t_hit	temp_hit;
-	int		i;
-	int		hit_found;
-
-	hit_found = 0;
-	i = 0;
-	while (i < scene->plane_count)
-	{
-		temp_hit.distance = hit->distance;
-		if (intersect_plane(ray, &scene->planes[i], &temp_hit))
-		{
-			*hit = temp_hit;
-			hit_found = 1;
-		}
-		i++;
-	}
-	return (hit_found);
+	return (check_intersections_generic(scene->planes, \
+		scene->plane_count, sizeof(t_plane), \
+		(t_intersect_fn)intersect_plane, ray, hit));
 }
 
 /*
@@ -75,23 +78,9 @@ int	check_plane_intersections(t_scene *scene, t_ray *ray, t_hit *hit)
 */
 int	check_cylinder_intersections(t_scene *scene, t_ray *ray, t_hit *hit)
 {
-	t_hit	temp_hit;
-	int		i;
-	int		hit_found;
-
-	hit_found = 0;
-	i = 0;
-	while (i < scene->cylinder_count)
-	{
-		temp_hit.distance = hit->distance;
-		if (intersect_cylinder(ray, &scene->cylinders[i], &temp_hit))
-		{
-			*hit = temp_hit;
-			hit_found = 1;
-		}
-		i++;
-	}
-	return (hit_found);
+	return (check_intersections_generic(scene->cylinders, \
+		scene->cylinder_count, sizeof(t_cylinder), \
+		(t_intersect_fn)intersect_cylinder, ray, hit));
 }
 
 /*

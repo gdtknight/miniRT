@@ -36,6 +36,9 @@ typedef struct s_hit
 
 typedef t_hit	t_hit_record;
 
+/* Generic intersection function pointer type */
+typedef int	(*t_intersect_fn)(t_ray *ray, void *object, t_hit *hit);
+
 /* Function declarations */
 int		intersect_sphere(t_ray *ray, t_sphere *sphere, t_hit *hit);
 int		intersect_plane(t_ray *ray, t_plane *plane, t_hit *hit);

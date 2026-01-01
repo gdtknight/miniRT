@@ -20,7 +20,7 @@
 ** Solves: ||ray.origin + t*ray.direction - sphere.center||² = radius²
 ** Returns closest positive t value, or -1 if no intersection.
 */
-static double	calculate_sphere_t(t_vec3 oc, t_ray *ray, double radius)
+static double	calculate_sphere_t(t_vec3 oc, t_ray *ray, double radius_squared)
 {
 	double	a;
 	double	b;
@@ -30,7 +30,7 @@ static double	calculate_sphere_t(t_vec3 oc, t_ray *ray, double radius)
 
 	a = vec3_dot(ray->direction, ray->direction);
 	b = 2.0 * vec3_dot(oc, ray->direction);
-	c = vec3_dot(oc, oc) - radius * radius;
+	c = vec3_dot(oc, oc) - radius_squared;
 	discriminant = b * b - 4 * a * c;
 	if (discriminant < 0)
 		return (-1);
@@ -49,11 +49,9 @@ int	intersect_sphere(t_ray *ray, t_sphere *sphere, t_hit *hit)
 {
 	t_vec3	oc;
 	double	t;
-	double	radius;
 
-	radius = sphere->diameter / 2.0;
 	oc = vec3_subtract(ray->origin, sphere->center);
-	t = calculate_sphere_t(oc, ray, radius);
+	t = calculate_sphere_t(oc, ray, sphere->radius_squared);
 	if (t < 0.001 || t > hit->distance)
 		return (0);
 	hit->distance = t;
