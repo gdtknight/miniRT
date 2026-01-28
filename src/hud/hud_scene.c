@@ -22,7 +22,7 @@
  */
 void	hud_render_camera(t_render *render, int *y)
 {
-	mlx_string_put(render->mlx, render->win, HUD_MARGIN_X + 10,
+	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
 		*y, HUD_COLOR_TEXT, "Camera:");
 	*y += HUD_LINE_HEIGHT;
 	format_and_print_vec3(render, y, "pos", render->scene->camera.position);
@@ -49,7 +49,7 @@ void	render_camera_fov(t_render *render, int *y)
 	buf[i++] = ':';
 	buf[i] = '\0';
 	hud_format_float(buf + i, render->scene->camera.fov);
-	mlx_string_put(render->mlx, render->win, HUD_MARGIN_X + 10,
+	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
 		*y, HUD_COLOR_TEXT, buf);
 	*y += HUD_LINE_HEIGHT;
 }
@@ -65,7 +65,7 @@ void	hud_render_ambient(t_render *render, int *y)
 	char	buf[128];
 	int		i;
 
-	mlx_string_put(render->mlx, render->win, HUD_MARGIN_X + 10,
+	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
 		*y, HUD_COLOR_TEXT, "Ambient:");
 	*y += HUD_LINE_HEIGHT;
 	i = 0;
@@ -84,7 +84,7 @@ void	hud_render_ambient(t_render *render, int *y)
 	buf[i++] = ' ';
 	buf[i] = '\0';
 	hud_format_color(buf + i, render->scene->ambient.color);
-	mlx_string_put(render->mlx, render->win, HUD_MARGIN_X + 10,
+	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
 		*y, HUD_COLOR_TEXT, buf);
 	*y += HUD_LINE_HEIGHT;
 }
@@ -100,7 +100,7 @@ void	hud_render_light(t_render *render, int *y)
 	char	buf[128];
 	int		i;
 
-	mlx_string_put(render->mlx, render->win, HUD_MARGIN_X + 10,
+	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
 		*y, HUD_COLOR_TEXT, "Light:");
 	*y += HUD_LINE_HEIGHT;
 	i = 0;
@@ -111,7 +111,7 @@ void	hud_render_light(t_render *render, int *y)
 	buf[i++] = 's';
 	buf[i] = '\0';
 	hud_format_vec3(buf + i, render->scene->light.position);
-	mlx_string_put(render->mlx, render->win, HUD_MARGIN_X + 10,
+	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
 		*y, HUD_COLOR_TEXT, buf);
 	*y += HUD_LINE_HEIGHT;
 }
@@ -144,7 +144,7 @@ void	render_light_bright(t_render *render, int *y)
 	buf[i++] = ' ';
 	buf[i] = '\0';
 	hud_format_color(buf + i, render->scene->light.color);
-	mlx_string_put(render->mlx, render->win, HUD_MARGIN_X + 10,
+	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
 		*y, HUD_COLOR_TEXT, buf);
 	*y += HUD_LINE_HEIGHT;
 }

@@ -59,8 +59,7 @@ int	hud_calculate_total_pages(t_scene *scene)
 	int	total_objects;
 	int	total_pages;
 
-	total_objects = scene->sphere_count + scene->plane_count
-		+ scene->cylinder_count;
+	total_objects = scene->objects.count;
 	if (total_objects == 0)
 		return (1);
 	total_pages = (total_objects + HUD_OBJECTS_PER_PAGE - 1)

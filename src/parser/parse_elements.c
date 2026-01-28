@@ -6,50 +6,14 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:19:28 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/18 15:19:29 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "parser.h"
 #include "vec3.h"
-
-/*
-** Parse ambient lighting element from scene file.
-** Format: A <ratio> <R,G,B>
-** Validates ratio is in range [0.0, 1.0].
-*/
-/**
- * @brief parse ambient 함수 - 파싱 수행
- *
- * @param line 파라미터
- * @param scene 파라미터
- *
- * @return int 반환값
- */
-int	parse_ambient(char *line, t_scene *scene)
-{
-	char	*token;
-	double	ratio;
-
-	if (scene->has_ambient)
-		return (print_error("Ambient lighting declared multiple times"));
-	token = line + 2;
-	while (*token == ' ')
-		token++;
-	ratio = ft_atof(token);
-	if (!in_range(ratio, 0.0, 1.0))
-		return (print_error("Ambient ratio must be in range [0.0, 1.0]"));
-	scene->ambient.ratio = ratio;
-	while (*token && *token != ' ')
-		token++;
-	while (*token == ' ')
-		token++;
-	if (!parse_color(token, &scene->ambient.color))
-		return (0);
-	scene->has_ambient = 1;
-	return (1);
-}
+#include "error.h"
 
 static char	*skip_to_next_token(char *token)
 {
@@ -60,24 +24,32 @@ static char	*skip_to_next_token(char *token)
 	return (token);
 }
 
-/*
-** Parse camera element from scene file.
-** Format: C <x,y,z> <nx,ny,nz> <fov>
-** Normalizes direction vector and validates FOV range [0, 180].
-*/
-/**
- * @brief parse camera 함수 - 파싱 수행
- *
- * @param line 파라미터
- * @param scene 파라미터
- *
- * @return int 반환값
- */
+int	parse_ambient(char *line, t_scene *scene)
+{
+	char	*token;
+	double	ratio;
+
+	if (scene_has_ambient(scene))
+		return (print_error("Ambient lighting declared multiple times"));
+	token = line + 2;
+	while (*token == ' ')
+		token++;
+	ratio = ft_atof(token);
+	if (!in_range(ratio, 0.0, 1.0))
+		return (print_error("Ambient ratio must be in range [0.0, 1.0]"));
+	scene->ambient.ratio = ratio;
+	token = skip_to_next_token(token);
+	if (!parse_color(token, &scene->ambient.color))
+		return (0);
+	scene_set_flag(scene, SCENE_HAS_AMBIENT);
+	return (1);
+}
+
 int	parse_camera(char *line, t_scene *scene)
 {
 	char	*token;
 
-	if (scene->has_camera)
+	if (scene_has_camera(scene))
 		return (print_error("Camera declared multiple times"));
 	token = line + 2;
 	while (*token == ' ')
@@ -94,47 +66,28 @@ int	parse_camera(char *line, t_scene *scene)
 		return (print_error("FOV must be in range [0, 180]"));
 	scene->camera.initial_position = scene->camera.position;
 	scene->camera.initial_direction = scene->camera.direction;
-	scene->has_camera = 1;
+	scene_set_flag(scene, SCENE_HAS_CAMERA);
 	return (1);
 }
 
-/*
-** Parse light source element from scene file.
-** Format: L <x,y,z> <brightness> <R,G,B>
-** Validates brightness is in range [0.0, 1.0].
-*/
-/**
- * @brief parse light 함수 - 파싱 수행
- *
- * @param line 파라미터
- * @param scene 파라미터
- *
- * @return int 반환값
- */
 int	parse_light(char *line, t_scene *scene)
 {
 	char	*token;
 
-	if (scene->has_light)
+	if (scene_has_light(scene))
 		return (print_error("Light declared multiple times"));
 	token = line + 2;
 	while (*token == ' ')
 		token++;
 	if (!parse_vector(token, &scene->light.position))
 		return (print_error("Invalid light position"));
-	while (*token && *token != ' ')
-		token++;
-	while (*token == ' ')
-		token++;
+	token = skip_to_next_token(token);
 	scene->light.brightness = ft_atof(token);
 	if (!in_range(scene->light.brightness, 0.0, 1.0))
 		return (print_error("Light brightness must be in range [0.0, 1.0]"));
-	while (*token && *token != ' ')
-		token++;
-	while (*token == ' ')
-		token++;
+	token = skip_to_next_token(token);
 	if (!parse_color(token, &scene->light.color))
 		return (0);
-	scene->has_light = 1;
+	scene_set_flag(scene, SCENE_HAS_LIGHT);
 	return (1);
 }

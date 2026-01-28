@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 15:11:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/12 15:11:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,19 +57,15 @@ void	format_object_list(t_object_ref *objects, int count, char *buffer,
 	int			i;
 	char		*id;
 	t_scene		*scene;
+	t_object	*obj;
 
 	scene = (t_scene *)scene_ptr;
 	strcpy(buffer, "Objects: [");
 	i = 0;
 	while (i < count)
 	{
-		id = NULL;
-		if (objects[i].type == OBJ_SPHERE)
-			id = scene->spheres[objects[i].index].id;
-		else if (objects[i].type == OBJ_PLANE)
-			id = scene->planes[objects[i].index].id;
-		else if (objects[i].type == OBJ_CYLINDER)
-			id = scene->cylinders[objects[i].index].id;
+		obj = &scene->objects.items[objects[i].index];
+		id = obj->id;
 		if (id)
 			strcat(buffer, id);
 		if (i < count - 1)

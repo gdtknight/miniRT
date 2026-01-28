@@ -6,29 +6,18 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 00:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/01/04 00:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "window.h"
 #include "hud.h"
 
-/**
- * @brief hud mark dirty 함수
- *
- * @param render 파라미터
- */
 void	hud_mark_dirty(t_render *render)
 {
 	render->hud.dirty = 1;
 }
 
-/**
- * @brief hud render background row 함수 - 렌더링 수행
- *
- * @param render 파라미터
- * @param y 파라미터
- */
 void	hud_render_background_row(t_render *render, int y)
 {
 	int				x;
@@ -37,10 +26,10 @@ void	hud_render_background_row(t_render *render, int y)
 	t_pixel_params	params;
 
 	x = HUD_MARGIN_X;
-	params.img_data = render->img_data;
+	params.img_data = render->mlx.img.data;
 	params.y = y;
-	params.size_line = render->size_line;
-	params.bpp = render->bpp;
+	params.size_line = render->mlx.img.size_line;
+	params.bpp = render->mlx.img.bpp;
 	while (x < HUD_MARGIN_X + HUD_WIDTH)
 	{
 		params.x = x;
@@ -51,11 +40,6 @@ void	hud_render_background_row(t_render *render, int y)
 	}
 }
 
-/**
- * @brief hud render background 함수 - 렌더링 수행
- *
- * @param render 파라미터
- */
 void	hud_render_background(t_render *render)
 {
 	int	y;
@@ -81,19 +65,11 @@ void	format_and_print_vec3(t_render *render, int *y,
 		buf[i++] = *label++;
 	buf[i] = '\0';
 	hud_format_vec3(buf + i, vec);
-	mlx_string_put(render->mlx, render->win, HUD_MARGIN_X + 10,
+	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
 		*y, HUD_COLOR_TEXT, buf);
 	*y += HUD_LINE_HEIGHT;
 }
 
-/**
- * @brief copy str to buf 함수
- *
- * @param dst 파라미터
- * @param src 파라미터
- *
- * @return int 반환값
- */
 int	copy_str_to_buf(char *dst, char *src)
 {
 	int	i;
