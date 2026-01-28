@@ -13,6 +13,11 @@
 #include "render_debounce.h"
 #include <stdlib.h>
 
+void	debounce_cancel(t_debounce_state *state)
+{
+	state->cancel_requested = 0;
+}
+
 /*
 ** debounce_timer_start - Start the debounce timer
 ** Sets the timer to active and records the current time

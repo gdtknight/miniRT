@@ -13,9 +13,6 @@
 #include "render_debounce.h"
 #include "window.h"
 
-/*
-** debounce_init - Initialize debounce state with default configuration
-*/
 void	debounce_init(t_debounce_state *state)
 {
 	state->state = DEBOUNCE_IDLE;
@@ -26,11 +23,6 @@ void	debounce_init(t_debounce_state *state)
 	state->cancel_requested = 0;
 }
 
-/*
-** debounce_on_input - Handle keyboard input event
-** Transitions state machine based on current state and starts/resets timer
-** Only cancels render if actually in progress
-*/
 void	debounce_on_input(t_debounce_state *state, t_render *render)
 {
 	if (state->state == DEBOUNCE_IDLE)
@@ -52,48 +44,43 @@ void	debounce_on_input(t_debounce_state *state, t_render *render)
 	}
 }
 
-/*
-** debounce_update - Update state machine on each frame
-** Checks timer expiration and transitions between states
-*/
-void	debounce_update(t_debounce_state *state, t_render *render)
+static void	debounce_handle_active(t_debounce_state *state, t_render *render)
 {
-	if (state->state == DEBOUNCE_ACTIVE
-		&& debounce_timer_expired(&state->timer))
+	if (!debounce_timer_expired(&state->timer))
+		return ;
+	if (state->preview_enabled)
+		state->state = DEBOUNCE_PREVIEW;
+	else
+		state->state = DEBOUNCE_FINAL;
+	if (state->preview_enabled)
+		render_set_flag(render, RENDER_LOW_QUALITY);
+	else
+		render_clear_flag(render, RENDER_LOW_QUALITY);
+	render_set_flag(render, RENDER_DIRTY);
+	debounce_timer_stop(&state->timer);
+}
+
+static void	debounce_handle_preview(t_debounce_state *state, t_render *render)
+{
+	if (render_has_flag(render, RENDER_DIRTY))
+		return ;
+	if (state->auto_upgrade)
 	{
-		if (state->preview_enabled)
-			state->state = DEBOUNCE_PREVIEW;
-		else
-			state->state = DEBOUNCE_FINAL;
-		if (state->preview_enabled)
-			render_set_flag(render, RENDER_LOW_QUALITY);
-		else
-			render_clear_flag(render, RENDER_LOW_QUALITY);
+		state->state = DEBOUNCE_FINAL;
+		render_clear_flag(render, RENDER_LOW_QUALITY);
 		render_set_flag(render, RENDER_DIRTY);
-		debounce_timer_stop(&state->timer);
 	}
-	else if (state->state == DEBOUNCE_PREVIEW
-		&& !render_has_flag(render, RENDER_DIRTY))
-	{
-		if (state->auto_upgrade)
-		{
-			state->state = DEBOUNCE_FINAL;
-			render_clear_flag(render, RENDER_LOW_QUALITY);
-			render_set_flag(render, RENDER_DIRTY);
-		}
-		else
-			state->state = DEBOUNCE_IDLE;
-	}
-	else if (state->state == DEBOUNCE_FINAL
-		&& !render_has_flag(render, RENDER_DIRTY))
+	else
 		state->state = DEBOUNCE_IDLE;
 }
 
-/*
-** debounce_cancel - Cancel in-progress render
-** Clears the cancel_requested flag after processing
-*/
-void	debounce_cancel(t_debounce_state *state)
+void	debounce_update(t_debounce_state *state, t_render *render)
 {
-	state->cancel_requested = 0;
+	if (state->state == DEBOUNCE_ACTIVE)
+		debounce_handle_active(state, render);
+	else if (state->state == DEBOUNCE_PREVIEW)
+		debounce_handle_preview(state, render);
+	else if (state->state == DEBOUNCE_FINAL
+		&& !render_has_flag(render, RENDER_DIRTY))
+		state->state = DEBOUNCE_IDLE;
 }
