@@ -63,7 +63,6 @@ long	get_time_ns(void);
 void	metrics_init(t_metrics *metrics);
 void	metrics_start_frame(t_metrics *metrics);
 void	metrics_end_frame(t_metrics *metrics);
-void	metrics_log_render(t_metrics *metrics);
 void	metrics_add_ray(t_metrics *metrics);
 void	metrics_add_intersect_test(t_metrics *metrics);
 

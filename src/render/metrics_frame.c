@@ -83,8 +83,3 @@ void	metrics_end_frame(t_metrics *metrics)
 	t->frame_count++;
 	t->fps = calculate_fps_internal(t);
 }
-
-void	metrics_log_render(t_metrics *metrics)
-{
-	(void)metrics;
-}
