@@ -14,6 +14,21 @@
 #include "minirt.h"
 #include <stdlib.h>
 
+t_vec3	get_object_center(t_object_ref ref, void *scene_ptr)
+{
+	t_scene		*scene;
+	t_object	*obj;
+
+	scene = (t_scene *)scene_ptr;
+	obj = &scene->objects.items[ref.index];
+	if (obj->type == OBJ_SPHERE)
+		return (obj->data.sphere.center);
+	else if (obj->type == OBJ_CYLINDER)
+		return (obj->data.cylinder.center);
+	else
+		return (obj->data.plane.point);
+}
+
 static void	fill_object_refs(t_scene *scene, t_object_ref *refs)
 {
 	int	i;

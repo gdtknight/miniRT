@@ -48,7 +48,7 @@ static t_aabb	bounds_for_plane(t_plane_data *p)
 	large = 1000000.0;
 	(void)p;
 	return (aabb_create((t_vec3){-large, -large, -large},
-			(t_vec3){large, large, large}));
+		(t_vec3){large, large, large}));
 }
 
 t_aabb	aabb_for_object(t_object *obj)
@@ -69,19 +69,4 @@ t_aabb	get_object_bounds(t_object_ref ref, void *scene_ptr)
 	scene = (t_scene *)scene_ptr;
 	obj = &scene->objects.items[ref.index];
 	return (aabb_for_object(obj));
-}
-
-t_vec3	get_object_center(t_object_ref ref, void *scene_ptr)
-{
-	t_scene		*scene;
-	t_object	*obj;
-
-	scene = (t_scene *)scene_ptr;
-	obj = &scene->objects.items[ref.index];
-	if (obj->type == OBJ_SPHERE)
-		return (obj->data.sphere.center);
-	else if (obj->type == OBJ_CYLINDER)
-		return (obj->data.cylinder.center);
-	else
-		return (obj->data.plane.point);
 }
