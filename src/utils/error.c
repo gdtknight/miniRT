@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:20:16 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/28 17:26:04 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,31 @@
 #include <unistd.h>
 #include <string.h>
 
-static const char	*g_error_messages[ERR_COUNT] = {
-	"No error",
-	"Memory allocation failed",
-	"Failed to open file",
-	"Failed to read file",
-	"Invalid file extension (expected .rt)",
-	"Invalid format in scene file",
-	"Invalid ambient light configuration",
-	"Invalid camera configuration",
-	"Invalid light configuration",
-	"Invalid sphere configuration",
-	"Invalid plane configuration",
-	"Invalid cylinder configuration",
-	"Duplicate element in scene file",
-	"Missing required element in scene file",
-	"Failed to initialize window",
-	"Failed to initialize image",
-	"Failed to build BVH",
-	"Invalid parameter"
-};
-
 const char	*error_get_message(t_error_code code)
 {
+	static const char	*error_messages[ERR_COUNT] = {
+		"No error",
+		"Memory allocation failed",
+		"Failed to open file",
+		"Failed to read file",
+		"Invalid file extension (expected .rt)",
+		"Invalid format in scene file",
+		"Invalid ambient light configuration",
+		"Invalid camera configuration",
+		"Invalid light configuration",
+		"Invalid sphere configuration",
+		"Invalid plane configuration",
+		"Invalid cylinder configuration",
+		"Duplicate element in scene file",
+		"Missing required element in scene file",
+		"Failed to initialize window",
+		"Failed to initialize image",
+		"Failed to build BVH",
+		"Invalid parameter"
+	};
+
 	if (code >= 0 && code < ERR_COUNT)
-		return (g_error_messages[code]);
+		return (error_messages[code]);
 	return ("Unknown error");
 }
 
