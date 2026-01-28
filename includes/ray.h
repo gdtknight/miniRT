@@ -64,5 +64,7 @@ typedef struct s_intersect_params
 
 /* Intersection with unified object */
 int		intersect_object_new(t_ray *ray, t_object *obj, t_hit *hit);
+int		intersect_cylinder_new(t_ray *ray, t_cylinder_data *c, t_color color,
+			t_hit *hit);
 
 #endif
