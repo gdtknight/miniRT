@@ -49,6 +49,16 @@
 #  define KEY_DELETE 117
 #  define KEY_END 119
 #  define KEY_PGDN 121
+#  define KEY_J 38
+#  define KEY_K 40
+#  define KEY_N 45
+#  define KEY_M 46
+#  define KEY_U 32
+#  define KEY_O 31
+#  define KEY_Y 16
+#  define KEY_P 35
+#  define KEY_LEFT 123
+#  define KEY_RIGHT 124
 # elif defined(__linux__)
 /* Linux/X11 KeySym values */
 #  define KEY_ESC 65307
@@ -82,6 +92,16 @@
 #  define KEY_DELETE 65535
 #  define KEY_END 65367
 #  define KEY_PGDN 65366
+#  define KEY_J 106
+#  define KEY_K 107
+#  define KEY_N 110
+#  define KEY_M 109
+#  define KEY_U 117
+#  define KEY_O 111
+#  define KEY_Y 121
+#  define KEY_P 112
+#  define KEY_LEFT 65361
+#  define KEY_RIGHT 65363
 # endif
 
 /* Camera control functions */
@@ -98,6 +118,13 @@ void	handle_light_move(t_render *render, int keycode);
 void	handle_hud_keys(t_render *render, int keycode);
 void	handle_camera_keys(t_render *render, int keycode);
 void	handle_transform_keys(t_render *render, int keycode);
+
+/* Object resize and rotation */
+void	handle_object_resize(t_render *render, int keycode);
+void	handle_object_rotate(t_render *render, int keycode);
+
+/* Window expose handler */
+int		handle_expose(t_render *render);
 
 /* Selection helper functions */
 void	cycle_type_forward(t_render *render);

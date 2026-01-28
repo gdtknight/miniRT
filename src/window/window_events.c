@@ -32,7 +32,11 @@ static int	is_movement_key(int keycode)
 		|| keycode == KEY_R || keycode == KEY_T || keycode == KEY_F
 		|| keycode == KEY_G || keycode == KEY_V || keycode == KEY_B
 		|| keycode == KEY_INSERT || keycode == KEY_HOME || keycode == KEY_PGUP
-		|| keycode == KEY_DELETE || keycode == KEY_END || keycode == KEY_PGDN);
+		|| keycode == KEY_DELETE || keycode == KEY_END || keycode == KEY_PGDN
+		|| keycode == KEY_J || keycode == KEY_K || keycode == KEY_N
+		|| keycode == KEY_M || keycode == KEY_U || keycode == KEY_O
+		|| keycode == KEY_Y || keycode == KEY_P
+		|| keycode == KEY_LEFT || keycode == KEY_RIGHT);
 }
 
 /*
@@ -59,12 +63,11 @@ int	handle_key(int keycode, void *param)
 		handle_object_selection(render, keycode);
 	else if (keycode == KEY_I)
 	{
-		render->scene->render_state.show_info
-			= !render->scene->render_state.show_info;
-		render->dirty = 1;
+		render->state_flags ^= RENDER_SHOW_INFO;
+		render_set_flag(render, RENDER_DIRTY);
 	}
 	else if (keycode == KEY_SHIFT_L || keycode == KEY_SHIFT_R)
-		render->shift_pressed = 1;
+		render_set_flag(render, RENDER_SHIFT_HELD);
 	handle_camera_keys(render, keycode);
 	handle_transform_keys(render, keycode);
 	return (0);
@@ -82,13 +85,20 @@ int	handle_key(int keycode, void *param)
  *
  * @return int 반환값
  */
+int	handle_expose(t_render *render)
+{
+	mlx_put_image_to_window(render->mlx.mlx, render->mlx.win,
+		render->mlx.img.img, 0, 0);
+	return (0);
+}
+
 int	handle_key_release(int keycode, void *param)
 {
 	t_render	*render;
 
 	render = (t_render *)param;
 	if (keycode == KEY_SHIFT_L || keycode == KEY_SHIFT_R)
-		render->shift_pressed = 0;
+		render_clear_flag(render, RENDER_SHIFT_HELD);
 	(void)is_movement_key;
 	return (0);
 }

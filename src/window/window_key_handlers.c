@@ -56,6 +56,23 @@ void	handle_camera_keys(t_render *render, int keycode)
  * @param render 파라미터
  * @param keycode 파라미터
  */
+static void	handle_resize_rotate_keys(t_render *render, int keycode)
+{
+	if (keycode == KEY_J || keycode == KEY_K
+		|| keycode == KEY_N || keycode == KEY_M)
+	{
+		handle_object_resize(render, keycode);
+		hud_mark_dirty(render);
+	}
+	else if (keycode == KEY_U || keycode == KEY_O
+		|| keycode == KEY_Y || keycode == KEY_P
+		|| keycode == KEY_LEFT || keycode == KEY_RIGHT)
+	{
+		handle_object_rotate(render, keycode);
+		hud_mark_dirty(render);
+	}
+}
+
 void	handle_transform_keys(t_render *render, int keycode)
 {
 	if (keycode == KEY_R || keycode == KEY_T || keycode == KEY_F
@@ -73,6 +90,8 @@ void	handle_transform_keys(t_render *render, int keycode)
 		debounce_on_input(&render->debounce, render);
 		hud_mark_dirty(render);
 	}
+	else
+		handle_resize_rotate_keys(render, keycode);
 }
 
 /*
@@ -90,7 +109,7 @@ void	handle_hud_keys(t_render *render, int keycode)
 		hud_toggle(render);
 	else if (keycode == KEY_TAB)
 	{
-		if (render->shift_pressed)
+		if (render_has_flag(render, RENDER_SHIFT_HELD))
 			hud_select_prev(render);
 		else
 			hud_select_next(render);
