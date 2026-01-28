@@ -48,7 +48,6 @@ void	hud_render(t_render *render)
 {
 	if (!render->hud.visible)
 		return ;
-	hud_render_background(render);
 	hud_render_content(render);
 	render->hud.dirty = 0;
 }
