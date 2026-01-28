@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cleanup.c                                          :+:      :+:    :+:   */
+/*   mlx_pixel.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/18 15:20:11 by yoshin            #+#    #+#             */
+/*   Created: 2026/01/27 12:00:00 by yoshin            #+#    #+#             */
 /*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
-#include "window.h"
-#include <stdlib.h>
+#include "mlx_context.h"
 
-/* Legacy cleanup function - delegates to scene_destroy */
-void	cleanup_scene(t_scene *scene)
+void	mlx_img_put_pixel(t_mlx_img *img, int x, int y, int color)
 {
-	scene_destroy(scene);
+	char	*dst;
+
+	if (!img || !img->data)
+		return ;
+	dst = img->data + (y * img->size_line + x * (img->bpp / 8));
+	*(unsigned int *)dst = color;
 }
 
-/* Legacy cleanup function - delegates to render_destroy */
-void	cleanup_render(void *param)
+int	mlx_img_get_pixel(t_mlx_img *img, int x, int y)
 {
-	render_destroy((t_render *)param);
-}
+	char	*src;
 
-/* Legacy cleanup function */
-void	cleanup_all(t_scene *scene, void *param)
-{
-	cleanup_render(param);
-	cleanup_scene(scene);
+	if (!img || !img->data)
+		return (0);
+	src = img->data + (y * img->size_line + x * (img->bpp / 8));
+	return (*(unsigned int *)src);
 }

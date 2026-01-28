@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 21:30:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/19 21:30:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,9 @@ typedef struct s_aabb
 	t_vec3	max;
 }	t_aabb;
 
-/* Reference to any object in the scene */
+/* Reference to object in unified object list (simplified) */
 typedef struct s_object_ref
 {
-	int	type;
 	int	index;
 }	t_object_ref;
 
@@ -71,7 +70,7 @@ typedef struct s_axis_check
 	double	box_min;
 	double	box_max;
 	double	ray_origin;
-	double	ray_direction;
+	double	ray_dir;
 	double	*tmin;
 	double	*tmax;
 }	t_axis_check;
@@ -104,10 +103,7 @@ double		max_double(double a, double b);
 /* AABB operations */
 t_aabb		aabb_create(t_vec3 min, t_vec3 max);
 t_aabb		aabb_merge(t_aabb a, t_aabb b);
-t_aabb		aabb_for_sphere(t_vec3 center, double radius);
-t_aabb		aabb_for_cylinder(t_vec3 center, t_vec3 axis, double radius,
-				double height);
-t_aabb		aabb_for_plane(t_vec3 point, t_vec3 normal);
+t_aabb		aabb_for_object(t_object *obj);
 int			aabb_intersect(t_aabb box, t_ray ray, double *t_min, double *t_max);
 double		aabb_surface_area(t_aabb box);
 

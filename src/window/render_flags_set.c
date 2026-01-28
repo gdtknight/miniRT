@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cleanup.c                                          :+:      :+:    :+:   */
+/*   render_flags_set.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/18 15:20:11 by yoshin            #+#    #+#             */
+/*   Created: 2026/01/27 12:00:00 by yoshin            #+#    #+#             */
 /*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
 #include "window.h"
-#include <stdlib.h>
 
-/* Legacy cleanup function - delegates to scene_destroy */
-void	cleanup_scene(t_scene *scene)
+int	render_has_flag(t_render *render, int flag)
 {
-	scene_destroy(scene);
+	if (!render)
+		return (0);
+	return ((render->state_flags & flag) != 0);
 }
 
-/* Legacy cleanup function - delegates to render_destroy */
-void	cleanup_render(void *param)
+void	render_set_flag(t_render *render, int flag)
 {
-	render_destroy((t_render *)param);
+	if (render)
+		render->state_flags |= flag;
 }
 
-/* Legacy cleanup function */
-void	cleanup_all(t_scene *scene, void *param)
+void	render_clear_flag(t_render *render, int flag)
 {
-	cleanup_render(param);
-	cleanup_scene(scene);
+	if (render)
+		render->state_flags &= ~flag;
 }
+

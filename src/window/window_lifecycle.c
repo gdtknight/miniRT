@@ -34,8 +34,8 @@ int	close_window(void *param)
 
 	render = (t_render *)param;
 	pixel_timing_cleanup(&render->pixel_timing);
-	keyguide_cleanup(&render->keyguide, render->mlx);
-	hud_cleanup(&render->hud, render->mlx);
+	keyguide_cleanup(&render->keyguide, render->mlx.mlx);
+	hud_cleanup(&render->hud, render->mlx.mlx);
 	cleanup_all(render->scene, render);
 	exit(0);
 	return (0);
