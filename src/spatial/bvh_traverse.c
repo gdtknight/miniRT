@@ -6,28 +6,25 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 21:30:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/19 21:30:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "spatial.h"
 #include "minirt.h"
-#include "window.h"
 #include "ray.h"
 
-static int	intersect_object(t_object_ref ref, t_ray ray, t_hit_record *hit,
+int	intersect_object_new(t_ray *ray, t_object *obj, t_hit_record *hit);
+
+static int	intersect_ref(t_object_ref ref, t_ray ray, t_hit_record *hit,
 		void *scene_ptr)
 {
-	t_scene	*scene;
+	t_scene		*scene;
+	t_object	*obj;
 
 	scene = (t_scene *)scene_ptr;
-	if (ref.type == OBJ_SPHERE)
-		return (intersect_sphere(&ray, &scene->spheres[ref.index], hit));
-	else if (ref.type == OBJ_PLANE)
-		return (intersect_plane(&ray, &scene->planes[ref.index], hit));
-	else if (ref.type == OBJ_CYLINDER)
-		return (intersect_cylinder(&ray, &scene->cylinders[ref.index], hit));
-	return (0);
+	obj = &scene->objects.items[ref.index];
+	return (intersect_object_new(&ray, obj, hit));
 }
 
 static int	bvh_leaf_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
@@ -41,7 +38,7 @@ static int	bvh_leaf_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 	i = 0;
 	while (i < node->object_count)
 	{
-		if (intersect_object(node->objects[i], ray, &temp_hit, scene))
+		if (intersect_ref(node->objects[i], ray, &temp_hit, scene))
 		{
 			if (!hit_anything || temp_hit.distance < hit->distance)
 			{
@@ -54,13 +51,6 @@ static int	bvh_leaf_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 	return (hit_anything);
 }
 
-/**
- * @brief check child hits 함수 - 확인 수행
- *
- * @param hc 파라미터
- *
- * @return int 반환값
- */
 static int	check_child_hits(t_hit_check *hc)
 {
 	if (hc->hit_left && hc->hit_right)
@@ -109,16 +99,6 @@ int	bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 	return (check_child_hits(&hc));
 }
 
-/**
- * @brief bvh intersect 함수 - 교차 검사 수행
- *
- * @param bvh 파라미터
- * @param ray 파라미터
- * @param hit 파라미터
- * @param scene 파라미터
- *
- * @return int 반환값
- */
 int	bvh_intersect(t_bvh *bvh, t_ray ray, t_hit_record *hit, void *scene)
 {
 	if (!bvh || !bvh->root || !bvh->enabled)
