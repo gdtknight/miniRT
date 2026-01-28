@@ -60,6 +60,7 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/hud/hud_transparency.c \
 			  $(SRC_DIR)/keyguide/keyguide_init.c \
 			  $(SRC_DIR)/keyguide/keyguide_render.c \
+			  $(SRC_DIR)/keyguide/keyguide_render_extra.c \
 			  $(SRC_DIR)/keyguide/keyguide_cleanup.c \
 			  $(SRC_DIR)/lighting/lighting.c \
 			  $(SRC_DIR)/lighting/shadow_calc.c \

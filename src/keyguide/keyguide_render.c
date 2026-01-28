@@ -145,9 +145,9 @@ void	keyguide_render(t_render *render)
 
 	if (!render->keyguide.visible)
 		return ;
-	keyguide_render_background(render);
 	keyguide_render_content(render);
 	y = render->keyguide.y + 20 + 30 + KEYGUIDE_LINE_HEIGHT * 7
 		+ KEYGUIDE_SECTION_GAP + KEYGUIDE_LINE_HEIGHT * 3;
 	keyguide_render_content2(render, &y);
+	keyguide_render_extra(render, &y);
 }
