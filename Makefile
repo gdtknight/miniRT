@@ -34,6 +34,9 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 SRCS		= $(SRC_DIR)/main.c \
+			  $(SRC_DIR)/scene/scene.c \
+			  $(SRC_DIR)/scene/scene_flags.c \
+			  $(SRC_DIR)/scene/object_list.c \
 			  $(SRC_DIR)/bvh_vis/bvh_vis_init.c \
 			  $(SRC_DIR)/bvh_vis/bvh_vis_tree.c \
 			  $(SRC_DIR)/bvh_vis/bvh_vis_node.c \
@@ -68,9 +71,10 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/parser/parse_elements.c \
 			  $(SRC_DIR)/parser/parse_objects.c \
 			  $(SRC_DIR)/parser/parse_validation.c \
+			  $(SRC_DIR)/parser/parse_cylinder.c \
 			  $(SRC_DIR)/parser/parser.c \
-			  $(SRC_DIR)/ray/intersections.c \
-			  $(SRC_DIR)/ray/intersect_cylinder.c \
+			  $(SRC_DIR)/ray/intersect_object.c \
+			  $(SRC_DIR)/ray/intersect_cyl_new.c \
 			  $(SRC_DIR)/render/camera.c \
 			  $(SRC_DIR)/render/metrics_frame.c \
 			  $(SRC_DIR)/render/metrics_counters.c \
@@ -108,9 +112,12 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/window/window_loop.c \
 			  $(SRC_DIR)/window/window_camera.c \
 			  $(SRC_DIR)/window/window_selection.c \
-			  $(SRC_DIR)/window/window_select_helpers.c \
-			  $(SRC_DIR)/window/window_select_cycle.c \
-			  $(SRC_DIR)/window/window_objects.c
+			  $(SRC_DIR)/window/window_objects.c \
+			  $(SRC_DIR)/window/window_resize.c \
+			  $(SRC_DIR)/window/window_rotate.c \
+			  $(SRC_DIR)/window/mlx_context.c \
+			  $(SRC_DIR)/window/mlx_pixel.c \
+			  $(SRC_DIR)/window/render_flags_set.c
 
 OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
