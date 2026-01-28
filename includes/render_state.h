@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 21:30:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/19 21:30:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 # define RENDER_STATE_H
 
 # include <sys/time.h>
-# include "metrics.h"
-# include "spatial.h"
 
 /* Quality mode for adaptive rendering */
 typedef enum e_quality_mode
@@ -51,23 +49,19 @@ typedef struct s_tile_rect
 	int	h;
 }	t_tile_rect;
 
-/* Complete render state management */
+/* Render state (simplified - metrics/bvh moved to scene) */
 typedef struct s_render_state
 {
 	t_quality_mode			quality;
 	t_quality_mode			target_quality;
 	t_interaction_state		interaction;
 	t_progressive_state		progressive;
-	t_metrics				metrics;
-	t_bvh					*bvh;
 	int						adaptive_enabled;
-	int						bvh_enabled;
 	int						show_info;
 }	t_render_state;
 
 /* Render state operations */
 void	render_state_init(t_render_state *state);
-void	render_state_cleanup(t_render_state *state);
 void	render_state_update(t_render_state *state);
 
 /* Quality management */

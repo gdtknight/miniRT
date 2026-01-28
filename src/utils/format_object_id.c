@@ -13,7 +13,7 @@
 #include "format_object_id.h"
 #include <stdio.h>
 
-char	*get_object_type_prefix(t_obj_type type)
+char	*get_object_type_prefix(t_object_type type)
 {
 	if (type == OBJ_SPHERE)
 		return ("sp");
@@ -24,7 +24,7 @@ char	*get_object_type_prefix(t_obj_type type)
 	return ("??");
 }
 
-int	format_object_id(char *buffer, t_obj_type type, int index)
+int	format_object_id(char *buffer, t_object_type type, int index)
 {
 	char	*prefix;
 

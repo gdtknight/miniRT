@@ -15,7 +15,7 @@
 
 # include "window.h"
 
-int		format_object_id(char *buffer, t_obj_type type, int index);
-char	*get_object_type_prefix(t_obj_type type);
+int		format_object_id(char *buffer, t_object_type type, int index);
+char	*get_object_type_prefix(t_object_type type);
 
 #endif
