@@ -25,21 +25,19 @@
  */
 static void	move_selected_object(t_render *render, t_vec3 move)
 {
-	if (render->selection.type == OBJ_SPHERE
-		&& render->selection.index < render->scene->sphere_count)
-		render->scene->spheres[render->selection.index].center
-			= vec3_add(render->scene->spheres[render->selection.index].center,
-				move);
-	else if (render->selection.type == OBJ_PLANE
-		&& render->selection.index < render->scene->plane_count)
-		render->scene->planes[render->selection.index].point
-			= vec3_add(render->scene->planes[render->selection.index].point,
-				move);
-	else if (render->selection.type == OBJ_CYLINDER
-		&& render->selection.index < render->scene->cylinder_count)
-		render->scene->cylinders[render->selection.index].center
-			= vec3_add(render->scene->cylinders[render->selection.index].center,
-				move);
+	t_object	*obj;
+	int			idx;
+
+	idx = render->selection.index;
+	if (idx < 0 || idx >= render->scene->objects.count)
+		return ;
+	obj = &render->scene->objects.items[idx];
+	if (obj->type == OBJ_SPHERE)
+		obj->data.sphere.center = vec3_add(obj->data.sphere.center, move);
+	else if (obj->type == OBJ_PLANE)
+		obj->data.plane.point = vec3_add(obj->data.plane.point, move);
+	else if (obj->type == OBJ_CYLINDER)
+		obj->data.cylinder.center = vec3_add(obj->data.cylinder.center, move);
 }
 
 /*
@@ -74,6 +72,7 @@ void	handle_object_move(t_render *render, int keycode)
 	else
 		return ;
 	move_selected_object(render, move);
+	render_set_flag(render, RENDER_BVH_DIRTY);
 }
 
 /*

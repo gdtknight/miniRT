@@ -39,9 +39,9 @@ static void	put_pixel_to_buffer(t_render *render, int x, int y, t_color color)
 
 	if (x < 0 || x >= WINDOW_WIDTH || y < 0 || y >= WINDOW_HEIGHT)
 		return ;
-	offset = y * render->size_line + x * (render->bpp / 8);
+	offset = y * render->mlx.img.size_line + x * (render->mlx.img.bpp / 8);
 	pixel_color = (color.r << 16) | (color.g << 8) | color.b;
-	*(int *)(render->img_data + offset) = pixel_color;
+	*(int *)(render->mlx.img.data + offset) = pixel_color;
 }
 
 /*
@@ -152,7 +152,7 @@ void	render_scene_to_buffer(t_scene *scene, t_render *render)
 	int		x;
 	int		y;
 
-	if (render->low_quality)
+	if (render_has_flag(render, RENDER_LOW_QUALITY))
 	{
 		render_low_quality(scene, render);
 		return ;

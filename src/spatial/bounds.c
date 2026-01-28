@@ -6,57 +6,82 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 21:30:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/19 21:30:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "spatial.h"
 #include "minirt.h"
-#include "window.h"
+#include <math.h>
 
-/**
- * @brief get object bounds 함수 - 조회 수행
- *
- * @param ref 파라미터
- * @param scene_ptr 파라미터
- *
- * @return t_aabb 반환값
- */
-t_aabb	get_object_bounds(t_object_ref ref, void *scene_ptr)
+static t_aabb	bounds_for_sphere(t_sphere_data *s)
 {
-	t_scene	*scene;
+	t_vec3	rad_vec;
 
-	scene = (t_scene *)scene_ptr;
-	if (ref.type == OBJ_SPHERE)
-		return (aabb_for_sphere(scene->spheres[ref.index].center,
-				scene->spheres[ref.index].radius));
-	else if (ref.type == OBJ_CYLINDER)
-		return (aabb_for_cylinder(scene->cylinders[ref.index].center,
-				scene->cylinders[ref.index].axis,
-				scene->cylinders[ref.index].radius,
-				scene->cylinders[ref.index].height));
-	else
-		return (aabb_for_plane(scene->planes[ref.index].point,
-				scene->planes[ref.index].normal));
+	rad_vec.x = s->radius;
+	rad_vec.y = s->radius;
+	rad_vec.z = s->radius;
+	return (aabb_create(vec3_subtract(s->center, rad_vec),
+			vec3_add(s->center, rad_vec)));
 }
 
-/**
- * @brief get object center 함수 - 조회 수행
- *
- * @param ref 파라미터
- * @param scene_ptr 파라미터
- *
- * @return t_vec3 반환값
- */
-t_vec3	get_object_center(t_object_ref ref, void *scene_ptr)
+static t_aabb	bounds_for_cylinder(t_cylinder_data *c)
 {
-	t_scene	*scene;
+	t_vec3	half_axis;
+	t_vec3	min;
+	t_vec3	max;
+
+	half_axis = vec3_multiply(c->axis, c->half_height);
+	min.x = c->center.x - c->radius - fabs(half_axis.x);
+	min.y = c->center.y - c->radius - fabs(half_axis.y);
+	min.z = c->center.z - c->radius - fabs(half_axis.z);
+	max.x = c->center.x + c->radius + fabs(half_axis.x);
+	max.y = c->center.y + c->radius + fabs(half_axis.y);
+	max.z = c->center.z + c->radius + fabs(half_axis.z);
+	return (aabb_create(min, max));
+}
+
+static t_aabb	bounds_for_plane(t_plane_data *p)
+{
+	double	large;
+
+	large = 1000000.0;
+	(void)p;
+	return (aabb_create((t_vec3){-large, -large, -large},
+			(t_vec3){large, large, large}));
+}
+
+t_aabb	aabb_for_object(t_object *obj)
+{
+	if (obj->type == OBJ_SPHERE)
+		return (bounds_for_sphere(&obj->data.sphere));
+	else if (obj->type == OBJ_CYLINDER)
+		return (bounds_for_cylinder(&obj->data.cylinder));
+	else
+		return (bounds_for_plane(&obj->data.plane));
+}
+
+t_aabb	get_object_bounds(t_object_ref ref, void *scene_ptr)
+{
+	t_scene		*scene;
+	t_object	*obj;
 
 	scene = (t_scene *)scene_ptr;
-	if (ref.type == OBJ_SPHERE)
-		return (scene->spheres[ref.index].center);
-	else if (ref.type == OBJ_CYLINDER)
-		return (scene->cylinders[ref.index].center);
+	obj = &scene->objects.items[ref.index];
+	return (aabb_for_object(obj));
+}
+
+t_vec3	get_object_center(t_object_ref ref, void *scene_ptr)
+{
+	t_scene		*scene;
+	t_object	*obj;
+
+	scene = (t_scene *)scene_ptr;
+	obj = &scene->objects.items[ref.index];
+	if (obj->type == OBJ_SPHERE)
+		return (obj->data.sphere.center);
+	else if (obj->type == OBJ_CYLINDER)
+		return (obj->data.cylinder.center);
 	else
-		return (scene->planes[ref.index].point);
+		return (obj->data.plane.point);
 }

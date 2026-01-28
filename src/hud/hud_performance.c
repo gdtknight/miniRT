@@ -6,35 +6,20 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 00:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/31 00:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "hud.h"
 #include "metrics.h"
 
-/**
- * @brief render perf header 함수 - 렌더링 수행
- *
- * @param render 파라미터
- * @param y 파라미터
- */
 static void	render_perf_header(t_render *render, int *y)
 {
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		HUD_MARGIN_X + 10, *y, HUD_COLOR_HIGHLIGHT, "=== Performance ===");
 	*y += HUD_LINE_HEIGHT;
 }
 
-/**
- * @brief copy str 함수
- *
- * @param dst 파라미터
- * @param src 파라미터
- * @param max_len 파라미터
- *
- * @return int 반환값
- */
 static int	copy_str(char *dst, char *src, int max_len)
 {
 	int	i;
@@ -48,12 +33,6 @@ static int	copy_str(char *dst, char *src, int max_len)
 	return (i);
 }
 
-/**
- * @brief concat and print 함수
- *
- * @param render 파라미터
- * @param params 파라미터
- */
 static void	concat_and_print(t_render *render, t_perf_text *params)
 {
 	char	line[128];
@@ -64,48 +43,36 @@ static void	concat_and_print(t_render *render, t_perf_text *params)
 	if (params->suffix)
 		len += copy_str(line + len, params->suffix, 128 - len);
 	line[len] = '\0';
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		HUD_MARGIN_X + 10, *params->y, HUD_COLOR_TEXT, line);
 	*params->y += HUD_LINE_HEIGHT;
 }
 
-/**
- * @brief render perf basic 함수 - 렌더링 수행
- *
- * @param render 파라미터
- * @param y 파라미터
- */
 static void	render_perf_basic(t_render *render, int *y)
 {
 	t_metrics	*m;
 	char		buf[64];
 	t_perf_text	params;
 
-	m = &render->scene->render_state.metrics;
+	m = &render->scene->metrics;
 	params.y = y;
-	hud_format_fps(buf, m->fps);
+	hud_format_fps(buf, m->timing.fps);
 	params.prefix = "FPS: ";
 	params.value = buf;
 	params.suffix = NULL;
 	concat_and_print(render, &params);
-	hud_format_time_ms(buf, m->render_time_us);
+	hud_format_time_ms(buf, m->timing.render_time_us);
 	params.prefix = "Frame: ";
 	params.value = buf;
 	params.suffix = "ms";
 	concat_and_print(render, &params);
-	hud_format_bvh_status(buf, render->scene->render_state.bvh_enabled);
+	hud_format_bvh_status(buf, (render->scene->flags & SCENE_BVH_ENABLED) != 0);
 	params.prefix = "BVH: ";
 	params.value = buf;
 	params.suffix = NULL;
 	concat_and_print(render, &params);
 }
 
-/**
- * @brief hud render performance 함수 - 렌더링 수행
- *
- * @param render 파라미터
- * @param y 파라미터
- */
 void	hud_render_performance(t_render *render, int *y)
 {
 	render_perf_header(render, y);

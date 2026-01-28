@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:20:11 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/18 15:20:12 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,54 +14,19 @@
 #include "window.h"
 #include <stdlib.h>
 
-/*
-** Free memory allocated for scene structure.
-** Scene contains all objects, lights, and configuration.
-*/
-/**
- * @brief cleanup scene 함수 - 정리 수행
- *
- * @param scene 파라미터
- */
+/* Legacy cleanup function - delegates to scene_destroy */
 void	cleanup_scene(t_scene *scene)
 {
-	if (!scene)
-		return ;
-	render_state_cleanup(&scene->render_state);
-	free(scene);
+	scene_destroy(scene);
 }
 
-/*
-** Free memory allocated for render context.
-** Destroys MLX image buffer and frees render structure.
-*/
-/**
- * @brief cleanup render 함수 - 정리 수행
- *
- * @param param 파라미터
- */
+/* Legacy cleanup function - delegates to render_destroy */
 void	cleanup_render(void *param)
 {
-	t_render	*render;
-
-	render = (t_render *)param;
-	if (!render)
-		return ;
-	if (render->img && render->mlx)
-		mlx_destroy_image(render->mlx, render->img);
-	free(render);
+	render_destroy((t_render *)param);
 }
 
-/*
-** Clean up all allocated resources (scene and render context).
-** Should be called before program exit.
-*/
-/**
- * @brief cleanup all 함수 - 정리 수행
- *
- * @param scene 파라미터
- * @param param 파라미터
- */
+/* Legacy cleanup function */
 void	cleanup_all(t_scene *scene, void *param)
 {
 	cleanup_render(param);

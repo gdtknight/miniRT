@@ -6,100 +6,50 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 00:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/01/04 00:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "window.h"
 #include "hud.h"
-#include <string.h>
 
-/**
- * @brief render sphere obj 함수 - 렌더링 수행
- *
- * @param render 파라미터
- * @param idx 파라미터
- * @param y 파라미터
- * @param color 파라미터
- */
-void	render_sphere_obj(t_render *render, int idx, int *y, int color)
+static t_vec3	get_object_position(t_object *obj)
 {
-	char	buf[128];
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	while (render->scene->spheres[idx].id[j])
-		buf[i++] = render->scene->spheres[idx].id[j++];
-	buf[i++] = ':';
-	buf[i++] = ' ';
-	buf[i++] = 'p';
-	buf[i++] = 'o';
-	buf[i++] = 's';
-	buf[i] = '\0';
-	hud_format_vec3(buf + i, render->scene->spheres[idx].center);
-	mlx_string_put(render->mlx, render->win, HUD_MARGIN_X + 10,
-		*y, color, buf);
-	*y += HUD_LINE_HEIGHT;
+	if (obj->type == OBJ_SPHERE)
+		return (obj->data.sphere.center);
+	else if (obj->type == OBJ_PLANE)
+		return (obj->data.plane.point);
+	else if (obj->type == OBJ_CYLINDER)
+		return (obj->data.cylinder.center);
+	return ((t_vec3){0, 0, 0});
 }
 
-/**
- * @brief render plane obj 함수 - 렌더링 수행
- *
- * @param render 파라미터
- * @param idx 파라미터
- * @param y 파라미터
- * @param color 파라미터
- */
-void	render_plane_obj(t_render *render, int idx, int *y, int color)
+static void	fill_obj_id(char *buf, int *i, t_object *obj)
 {
-	char	buf[128];
-	int		i;
-	int		j;
+	int	j;
 
-	i = 0;
 	j = 0;
-	while (render->scene->planes[idx].id[j])
-		buf[i++] = render->scene->planes[idx].id[j++];
-	buf[i++] = ':';
-	buf[i++] = ' ';
-	buf[i++] = 'p';
-	buf[i++] = 'o';
-	buf[i++] = 's';
-	buf[i] = '\0';
-	hud_format_vec3(buf + i, render->scene->planes[idx].point);
-	mlx_string_put(render->mlx, render->win, HUD_MARGIN_X + 10,
-		*y, color, buf);
-	*y += HUD_LINE_HEIGHT;
+	while (obj->id[j])
+		buf[(*i)++] = obj->id[j++];
+	buf[(*i)++] = ':';
+	buf[(*i)++] = ' ';
+	buf[(*i)++] = 'p';
+	buf[(*i)++] = 'o';
+	buf[(*i)++] = 's';
+	buf[*i] = '\0';
 }
 
-/**
- * @brief render cylinder obj 함수 - 렌더링 수행
- *
- * @param render 파라미터
- * @param idx 파라미터
- * @param y 파라미터
- * @param color 파라미터
- */
-void	render_cylinder_obj(t_render *render, int idx, int *y, int color)
+void	render_object_entry(t_render *render, int idx, int *y, int color)
 {
-	char	buf[128];
-	int		i;
-	int		j;
+	char		buf[128];
+	int			i;
+	t_object	*obj;
 
+	obj = &render->scene->objects.items[idx];
 	i = 0;
-	j = 0;
-	while (render->scene->cylinders[idx].id[j])
-		buf[i++] = render->scene->cylinders[idx].id[j++];
-	buf[i++] = ':';
-	buf[i++] = ' ';
-	buf[i++] = 'p';
-	buf[i++] = 'o';
-	buf[i++] = 's';
-	buf[i] = '\0';
-	hud_format_vec3(buf + i, render->scene->cylinders[idx].center);
-	mlx_string_put(render->mlx, render->win, HUD_MARGIN_X + 10,
+	fill_obj_id(buf, &i, obj);
+	hud_format_vec3(buf + i, get_object_position(obj));
+	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
 		*y, color, buf);
 	*y += HUD_LINE_HEIGHT;
 }

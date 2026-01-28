@@ -45,7 +45,7 @@ void	debounce_on_input(t_debounce_state *state, t_render *render)
 	else if (state->state == DEBOUNCE_PREVIEW
 		|| state->state == DEBOUNCE_FINAL)
 	{
-		if (render->is_rendering)
+		if (render_has_flag(render, RENDER_RENDERING))
 			state->cancel_requested = 1;
 		state->state = DEBOUNCE_ACTIVE;
 		debounce_timer_start(&state->timer);
@@ -65,22 +65,27 @@ void	debounce_update(t_debounce_state *state, t_render *render)
 			state->state = DEBOUNCE_PREVIEW;
 		else
 			state->state = DEBOUNCE_FINAL;
-		render->low_quality = state->preview_enabled;
-		render->dirty = 1;
+		if (state->preview_enabled)
+			render_set_flag(render, RENDER_LOW_QUALITY);
+		else
+			render_clear_flag(render, RENDER_LOW_QUALITY);
+		render_set_flag(render, RENDER_DIRTY);
 		debounce_timer_stop(&state->timer);
 	}
-	else if (state->state == DEBOUNCE_PREVIEW && !render->dirty)
+	else if (state->state == DEBOUNCE_PREVIEW
+		&& !render_has_flag(render, RENDER_DIRTY))
 	{
 		if (state->auto_upgrade)
 		{
 			state->state = DEBOUNCE_FINAL;
-			render->low_quality = 0;
-			render->dirty = 1;
+			render_clear_flag(render, RENDER_LOW_QUALITY);
+			render_set_flag(render, RENDER_DIRTY);
 		}
 		else
 			state->state = DEBOUNCE_IDLE;
 	}
-	else if (state->state == DEBOUNCE_FINAL && !render->dirty)
+	else if (state->state == DEBOUNCE_FINAL
+		&& !render_has_flag(render, RENDER_DIRTY))
 		state->state = DEBOUNCE_IDLE;
 }
 

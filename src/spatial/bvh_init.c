@@ -6,114 +6,43 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 21:30:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/19 21:30:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "spatial.h"
 #include "minirt.h"
-#include "window.h"
 #include <stdlib.h>
 
-/**
- * @brief count objects 함수
- *
- * @param scene 파라미터
- *
- * @return int 반환값
- */
-static int	count_objects(t_scene *scene)
-{
-	return (scene->sphere_count + scene->plane_count + scene->cylinder_count);
-}
-
-/**
- * @brief fill spheres 함수
- *
- * @param scene 파라미터
- * @param refs 파라미터
- * @param idx 파라미터
- */
-static void	fill_spheres(t_scene *scene, t_object_ref *refs, int *idx)
-{
-	int	i;
-
-	i = 0;
-	while (i < scene->sphere_count)
-	{
-		refs[*idx].type = OBJ_SPHERE;
-		refs[*idx].index = i;
-		(*idx)++;
-		i++;
-	}
-}
-
-/**
- * @brief fill planes cylinders 함수
- *
- * @param scene 파라미터
- * @param refs 파라미터
- * @param idx 파라미터
- */
-static void	fill_planes_cylinders(t_scene *scene, t_object_ref *refs, int *idx)
-{
-	int	i;
-
-	i = 0;
-	while (i < scene->plane_count)
-	{
-		refs[*idx].type = OBJ_PLANE;
-		refs[*idx].index = i;
-		(*idx)++;
-		i++;
-	}
-	i = 0;
-	while (i < scene->cylinder_count)
-	{
-		refs[*idx].type = OBJ_CYLINDER;
-		refs[*idx].index = i;
-		(*idx)++;
-		i++;
-	}
-}
-
-/**
- * @brief fill object refs 함수
- *
- * @param scene 파라미터
- * @param refs 파라미터
- */
 static void	fill_object_refs(t_scene *scene, t_object_ref *refs)
 {
-	int	idx;
+	int	i;
 
-	idx = 0;
-	fill_spheres(scene, refs, &idx);
-	fill_planes_cylinders(scene, refs, &idx);
+	i = 0;
+	while (i < scene->objects.count)
+	{
+		refs[i].index = i;
+		i++;
+	}
 }
 
-/**
- * @brief scene build bvh 함수 - 빌드 수행
- *
- * @param scene 파라미터
- */
 void	scene_build_bvh(t_scene *scene)
 {
 	t_object_ref	*refs;
-	int				total_objects;
+	int				total;
 
-	if (!scene->render_state.bvh_enabled)
+	if (!(scene->flags & SCENE_BVH_ENABLED))
 		return ;
-	total_objects = count_objects(scene);
-	if (total_objects == 0)
+	total = scene->objects.count;
+	if (total == 0)
 		return ;
-	refs = malloc(sizeof(t_object_ref) * total_objects);
+	refs = malloc(sizeof(t_object_ref) * total);
 	if (!refs)
 		return ;
 	fill_object_refs(scene, refs);
-	if (!scene->render_state.bvh)
-		scene->render_state.bvh = bvh_create();
-	if (scene->render_state.bvh)
-		bvh_build(scene->render_state.bvh, refs, total_objects, scene);
+	if (!scene->bvh)
+		scene->bvh = bvh_create();
+	if (scene->bvh)
+		bvh_build(scene->bvh, refs, total, scene);
 	free(refs);
 }

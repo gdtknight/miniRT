@@ -6,23 +6,17 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:19:44 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/18 15:19:45 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "parser.h"
-#include "spatial.h"
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 
-/*
-** Read one line from file descriptor.
-** Reads until newline or EOF, returns dynamically allocated string.
-** Returns NULL on EOF or read error.
-*/
 static char	*read_line(int fd)
 {
 	char	*line;
@@ -47,19 +41,6 @@ static char	*read_line(int fd)
 	return (line);
 }
 
-/*
-** Parse single line from scene file.
-** Identifies element type by prefix and calls appropriate parser.
-** Returns 1 on success, 0 on error. Skips empty lines and comments.
-*/
-/**
- * @brief parse line 함수 - 파싱 수행
- *
- * @param line 파라미터
- * @param scene 파라미터
- *
- * @return int 반환값
- */
 static int	parse_line(char *line, t_scene *scene)
 {
 	while (*line == ' ' || *line == '\t')
@@ -81,25 +62,42 @@ static int	parse_line(char *line, t_scene *scene)
 	return (print_error("Invalid element identifier"));
 }
 
-/*
-** Parse scene description file and populate scene structure.
-** Opens file, reads line by line, and dispatches to element parsers.
-** Returns 1 on success, 0 on error.
-*/
-/**
- * @brief parse scene 함수 - 파싱 수행
- *
- * @param filename 파라미터
- * @param scene 파라미터
- *
- * @return int 반환값
- */
+int	validate_scene(t_scene *scene)
+{
+	if (!scene_has_ambient(scene))
+		return (print_error("Missing ambient lighting (A)"));
+	if (!scene_has_camera(scene))
+		return (print_error("Missing camera (C)"));
+	if (!scene_has_light(scene))
+		return (print_error("Missing light (L)"));
+	if (scene->objects.count == 0)
+		return (print_error("No objects in scene"));
+	return (1);
+}
+
+static int	validate_extension(const char *filename)
+{
+	int	len;
+
+	len = 0;
+	while (filename[len])
+		len++;
+	if (len < 3)
+		return (0);
+	if (filename[len - 3] != '.' || filename[len - 2] != 'r'
+		|| filename[len - 1] != 't')
+		return (0);
+	return (1);
+}
+
 int	parse_scene(const char *filename, t_scene *scene)
 {
 	int		fd;
 	char	*line;
 	int		success;
 
+	if (!validate_extension(filename))
+		return (print_error("Invalid file extension (expected .rt)"));
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 		return (print_error("Cannot open file"));
@@ -115,35 +113,6 @@ int	parse_scene(const char *filename, t_scene *scene)
 		free(line);
 	close(fd);
 	if (success)
-	{
 		success = validate_scene(scene);
-		if (success)
-			scene_build_bvh(scene);
-	}
 	return (success);
-}
-
-/*
-** Validate that scene contains all required elements.
-** Checks for ambient light, camera, light source, and at least one object.
-*/
-/**
- * @brief validate scene 함수 - 검증 수행
- *
- * @param scene 파라미터
- *
- * @return int 반환값
- */
-int	validate_scene(t_scene *scene)
-{
-	if (!scene->has_ambient)
-		return (print_error("Missing ambient lighting (A)"));
-	if (!scene->has_camera)
-		return (print_error("Missing camera (C)"));
-	if (!scene->has_light)
-		return (print_error("Missing light (L)"));
-	if (scene->sphere_count == 0 && scene->plane_count == 0
-		&& scene->cylinder_count == 0)
-		return (print_error("No objects in scene"));
-	return (1);
 }
