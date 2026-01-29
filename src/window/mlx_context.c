@@ -12,13 +12,13 @@
 
 #include "mlx_context.h"
 #include "mlx.h"
-#include <string.h>
+#include "libft.h"
 
 int	mlx_img_init(t_mlx_img *img, void *mlx, int width, int height)
 {
 	if (!img || !mlx)
 		return (0);
-	memset(img, 0, sizeof(t_mlx_img));
+	ft_bzero(img, sizeof(t_mlx_img));
 	img->img = mlx_new_image(mlx, width, height);
 	if (!img->img)
 		return (0);
@@ -43,7 +43,7 @@ int	mlx_context_init(t_mlx_context *ctx, int width, int height, char *title)
 {
 	if (!ctx)
 		return (0);
-	memset(ctx, 0, sizeof(t_mlx_context));
+	ft_bzero(ctx, sizeof(t_mlx_context));
 	ctx->mlx = mlx_init();
 	if (!ctx->mlx)
 		return (0);

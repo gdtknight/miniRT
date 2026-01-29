@@ -66,9 +66,6 @@ static int	intersect_plane_new(t_ray *ray, t_plane_data *p, t_color color,
 	return (1);
 }
 
-int	intersect_cylinder_new(t_ray *ray, t_cylinder_data *c, t_color color,
-		t_hit *hit);
-
 int	intersect_object_new(t_ray *ray, t_object *obj, t_hit_record *hit)
 {
 	if (obj->type == OBJ_SPHERE)

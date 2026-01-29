@@ -15,7 +15,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <string.h>
 
 static char	*read_line(int fd)
 {
@@ -37,7 +36,7 @@ static char	*read_line(int fd)
 	line = malloc(i + 1);
 	if (!line)
 		return (NULL);
-	strcpy(line, buffer);
+	ft_strlcpy(line, buffer, i + 1);
 	return (line);
 }
 

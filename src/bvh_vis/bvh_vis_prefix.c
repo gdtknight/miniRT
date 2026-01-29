@@ -12,9 +12,9 @@
 
 #include "bvh_vis.h"
 #include "utils.h"
+#include "libft.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 
 t_prefix_state	prefix_init(void)
 {

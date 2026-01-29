@@ -39,3 +39,13 @@ double	calculate_avg_tests_per_ray(t_metrics *m)
 		return (0.0);
 	return ((double)m->ray.intersect_tests / m->ray.rays_traced);
 }
+
+void	metrics_reset_bvh(t_bvh_metrics *bvh)
+{
+	if (bvh)
+	{
+		bvh->nodes_visited = 0;
+		bvh->tests_skipped = 0;
+		bvh->box_tests = 0;
+	}
+}

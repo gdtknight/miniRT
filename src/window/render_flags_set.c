@@ -30,4 +30,3 @@ void	render_clear_flag(t_render *render, int flag)
 	if (render)
 		render->state_flags &= ~flag;
 }
-

@@ -63,7 +63,7 @@ typedef struct s_object
 	t_object_type	type;
 	t_color			color;
 	char			id[8];
-	union
+	union u_object_data
 	{
 		t_sphere_data	sphere;
 		t_plane_data	plane;

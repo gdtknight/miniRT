@@ -41,13 +41,3 @@ void	metrics_add_bvh_box_test(t_metrics *metrics)
 	if (metrics)
 		metrics->bvh.box_tests++;
 }
-
-void	metrics_reset_bvh(t_bvh_metrics *bvh)
-{
-	if (bvh)
-	{
-		bvh->nodes_visited = 0;
-		bvh->tests_skipped = 0;
-		bvh->box_tests = 0;
-	}
-}
