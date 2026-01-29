@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdbool.h>
+# include "libft.h"
 # include "error.h"
 # include "vec3.h"
 # include "objects.h"
@@ -123,7 +124,6 @@ void	scene_clear_flag(t_scene *scene, int flag);
 void	cleanup_all(t_scene *scene, void *param);
 
 /* Utility functions */
-int		ft_atoi(const char *str);
 double	ft_atof(const char *str);
 
 /* Rendering */
