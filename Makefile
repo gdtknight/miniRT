@@ -12,7 +12,7 @@
 
 NAME		= miniRT
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -I$(INC_DIR) -I$(MLX_DIR)
+CFLAGS		= -Wall -Wextra -Werror -I$(INC_DIR) -I$(MLX_DIR) -I$(LIBFT_DIR)/includes
 
 GREEN		= \033[0;32m
 RED			= \033[0;31m
@@ -21,16 +21,18 @@ RESET		= \033[0m
 INC_DIR		= includes
 SRC_DIR		= src
 OBJ_DIR		= build
+LIBFT_DIR	= lib/libft
+LIBFT		= $(LIBFT_DIR)/libft.a
 
 # OS-specific MLX configuration
 UNAME_S		:= $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
 	MLX_DIR		= lib/minilibx-linux
-	LDFLAGS		= -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
+	LDFLAGS		= -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft -lXext -lX11 -lm
 endif
 ifeq ($(UNAME_S),Darwin)
 	MLX_DIR		= lib/minilibx-macos
-	LDFLAGS		= -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit -lm
+	LDFLAGS		= -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft -framework OpenGL -framework AppKit -lm
 endif
 
 SRCS		= $(SRC_DIR)/main.c \
@@ -102,9 +104,8 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/utils/cleanup.c \
 			  $(SRC_DIR)/utils/error.c \
 			  $(SRC_DIR)/utils/format_object_id.c \
-			  $(SRC_DIR)/utils/ft_atoi.c \
 			  $(SRC_DIR)/utils/ft_atof.c \
-			  $(SRC_DIR)/utils/memory.c \
+			  $(SRC_DIR)/utils/format_helpers.c \
 			  $(SRC_DIR)/utils/timer.c \
 			  $(SRC_DIR)/window/window_init.c \
 			  $(SRC_DIR)/window/window_lifecycle.c \
@@ -124,7 +125,10 @@ OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
+$(LIBFT):
+	@$(MAKE) -C $(LIBFT_DIR)
+
+$(NAME): $(LIBFT) $(OBJS)
 	@echo "$(GREEN)Linking $(NAME)...$(RESET)"
 	@if [ -f "$(MLX_DIR)/Makefile" ]; then make -C $(MLX_DIR); fi
 	@$(CC) $(OBJS) $(LDFLAGS) -o $(NAME)
@@ -139,11 +143,13 @@ clean:
 	@echo "$(RED)Cleaning object files...$(RESET)"
 	@rm -rf $(OBJ_DIR)
 	@if [ -f "$(MLX_DIR)/Makefile" ]; then make -C $(MLX_DIR) clean; fi
+	@$(MAKE) -C $(LIBFT_DIR) clean
 	@echo "$(GREEN)✓ Object files cleaned$(RESET)"
 
 fclean: clean
 	@echo "$(RED)Removing $(NAME)...$(RESET)"
 	@rm -f $(NAME)
+	@$(MAKE) -C $(LIBFT_DIR) fclean
 	@echo "$(GREEN)✓ Executable removed$(RESET)"
 
 re: fclean all
