@@ -254,7 +254,7 @@ void	hud_get_selection_from_global(t_selection *sel, int idx,
 void	hud_format_float(char *buffer, double value);
 
 /*
-** Internal helper functions for formatting
+** Internal helper functions for formatting (implemented using libft)
 */
 void	ft_strcpy(char *dst, const char *src);
 int		ft_numlen(int n);
