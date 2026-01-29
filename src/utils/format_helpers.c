@@ -55,6 +55,19 @@ static void	write_frac_part(char *buf, size_t size, int frac, int precision)
 	}
 }
 
+static int	handle_negative(char *buf, size_t size, double *value)
+{
+	if (*value < 0)
+	{
+		if (size < 2)
+			return (0);
+		buf[0] = '-';
+		buf[1] = '\0';
+		*value = -(*value);
+	}
+	return (1);
+}
+
 int	float_to_str(char *buf, size_t size, double value, int precision)
 {
 	int		int_part;
@@ -65,14 +78,8 @@ int	float_to_str(char *buf, size_t size, double value, int precision)
 	if (size == 0)
 		return (0);
 	buf[0] = '\0';
-	if (value < 0)
-	{
-		if (size < 2)
-			return (0);
-		buf[0] = '-';
-		buf[1] = '\0';
-		value = -value;
-	}
+	if (!handle_negative(buf, size, &value))
+		return (0);
 	mult = 10;
 	if (precision == 2)
 		mult = 100;

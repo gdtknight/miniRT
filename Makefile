@@ -42,6 +42,7 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/bvh_vis/bvh_vis_init.c \
 			  $(SRC_DIR)/bvh_vis/bvh_vis_tree.c \
 			  $(SRC_DIR)/bvh_vis/bvh_vis_node.c \
+			  $(SRC_DIR)/bvh_vis/bvh_vis_format.c \
 			  $(SRC_DIR)/bvh_vis/bvh_vis_stats.c \
 			  $(SRC_DIR)/bvh_vis/bvh_vis_prefix.c \
 			  $(SRC_DIR)/bvh_vis/bvh_vis_print.c \
