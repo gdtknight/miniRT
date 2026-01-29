@@ -12,7 +12,6 @@
 
 #include "minirt.h"
 #include <stdlib.h>
-#include <string.h>
 
 int	object_list_init(t_object_list *list, int capacity)
 {
@@ -50,7 +49,7 @@ int	object_list_grow(t_object_list *list)
 	new_items = malloc(sizeof(t_object) * new_capacity);
 	if (!new_items)
 		return (0);
-	memcpy(new_items, list->items, sizeof(t_object) * list->count);
+	ft_memcpy(new_items, list->items, sizeof(t_object) * list->count);
 	free(list->items);
 	list->items = new_items;
 	list->capacity = new_capacity;

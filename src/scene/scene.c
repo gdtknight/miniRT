@@ -13,7 +13,6 @@
 #include "minirt.h"
 #include "spatial.h"
 #include <stdlib.h>
-#include <string.h>
 
 static void	scene_init_defaults(t_scene *scene)
 {
@@ -30,7 +29,7 @@ t_scene	*scene_create(void)
 	scene = malloc(sizeof(t_scene));
 	if (!scene)
 		return (NULL);
-	memset(scene, 0, sizeof(t_scene));
+	ft_bzero(scene, sizeof(t_scene));
 	if (!object_list_init(&scene->objects, DEFAULT_OBJECT_CAPACITY))
 	{
 		free(scene);
