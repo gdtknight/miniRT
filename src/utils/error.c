@@ -11,9 +11,9 @@
 /* ************************************************************************** */
 
 #include "error.h"
+#include "libft.h"
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
 
 const char	*error_get_message(t_error_code code)
 {
@@ -51,7 +51,7 @@ int	error_print(t_error_code code)
 	msg = error_get_message(code);
 	if (msg)
 	{
-		write(2, msg, strlen(msg));
+		write(2, msg, ft_strlen(msg));
 		write(2, "\n", 1);
 	}
 	return (1);
@@ -69,7 +69,7 @@ int	print_error(const char *message)
 	write(2, "Error\n", 6);
 	if (message)
 	{
-		write(2, message, strlen(message));
+		write(2, message, ft_strlen(message));
 		write(2, "\n", 1);
 	}
 	return (0);
