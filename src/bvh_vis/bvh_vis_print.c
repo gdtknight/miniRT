@@ -6,11 +6,12 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 15:12:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/12 15:12:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/29 00:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bvh_vis.h"
+#include "libft.h"
 #include <stdio.h>
 
 void	print_node_line(t_prefix_state *prefix, t_node_info *info,
@@ -29,5 +30,7 @@ void	print_node_line(t_prefix_state *prefix, t_node_info *info,
 
 void	print_warning_message(const char *message)
 {
-	fprintf(stderr, "Warning: %s\n", message);
+	ft_putstr_fd("Warning: ", 2);
+	ft_putstr_fd((char *)message, 2);
+	ft_putstr_fd("\n", 2);
 }
