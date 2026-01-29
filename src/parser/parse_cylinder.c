@@ -13,7 +13,7 @@
 #include "minirt.h"
 #include "parser.h"
 #include "vec3.h"
-#include <stdio.h>
+#include "utils.h"
 
 static char	*skip_to_next_token(char *token)
 {
@@ -73,7 +73,7 @@ int	parse_cylinder(char *line, t_scene *scene)
 	if (!parse_vector(token, &obj.data.cylinder.axis))
 		return (print_error("Invalid cylinder axis"));
 	obj.data.cylinder.axis = vec3_normalize(obj.data.cylinder.axis);
-	snprintf(obj.id, 8, "cy-%d", get_cylinder_count(scene) + 1);
+	format_id(obj.id, 8, "cy-", get_cylinder_count(scene) + 1);
 	if (!parse_cylinder_dims(token, &obj))
 		return (0);
 	token = skip_to_next_token(skip_to_next_token(token));
