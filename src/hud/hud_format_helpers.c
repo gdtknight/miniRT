@@ -14,11 +14,25 @@
 #include "libft.h"
 #include <stdlib.h>
 
+/**
+ * @brief Copy a string into a destination buffer.
+ *
+ * Uses ft_strlcpy to ensure the destination is null-terminated.
+ *
+ * @param dst Destination buffer.
+ * @param src Source string.
+ */
 void	ft_strcpy(char *dst, const char *src)
 {
 	ft_strlcpy(dst, src, ft_strlen(src) + 1);
 }
 
+/**
+ * @brief Return the length of an integer when printed in base 10.
+ *
+ * @param n Integer to measure.
+ * @return int Number of characters needed to represent n.
+ */
 int	ft_numlen(int n)
 {
 	char	*str;
@@ -32,6 +46,14 @@ int	ft_numlen(int n)
 	return (len);
 }
 
+/**
+ * @brief Convert an integer to string and write into a buffer.
+ *
+ * Writes "0" on allocation failure.
+ *
+ * @param buf Destination buffer.
+ * @param n Integer to format.
+ */
 void	ft_itoa_buf(char *buf, int n)
 {
 	char	*str;

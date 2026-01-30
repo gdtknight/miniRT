@@ -14,11 +14,10 @@
 ** Check if character is whitespace (space, tab, newline, etc).
 */
 /**
- * @brief ft isspace 함수
+ * @brief Check whether a character is whitespace.
  *
- * @param c 파라미터
- *
- * @return int 반환값
+ * @param c Character to test.
+ * @return int 1 if whitespace, 0 otherwise.
  */
 static int	ft_isspace(char c)
 {
@@ -30,11 +29,10 @@ static int	ft_isspace(char c)
 ** Check if character is a digit (0-9).
 */
 /**
- * @brief ft isdigit 함수
+ * @brief Check whether a character is a decimal digit.
  *
- * @param c 파라미터
- *
- * @return int 반환값
+ * @param c Character to test.
+ * @return int 1 if digit, 0 otherwise.
  */
 static int	ft_isdigit(char c)
 {
@@ -46,11 +44,12 @@ static int	ft_isdigit(char c)
 ** Updates string pointer and returns integer value.
 */
 /**
- * @brief parse integer part 함수 - 파싱 수행
+ * @brief Parse the integer part of a floating-point string.
  *
- * @param str 파라미터
+ * Advances the input pointer past digits and returns the integer value.
  *
- * @return double 반환값
+ * @param str Input string pointer (in/out).
+ * @return double Parsed integer part.
  */
 static double	parse_integer_part(const char **str)
 {
@@ -70,11 +69,12 @@ static double	parse_integer_part(const char **str)
 ** Handles digits after decimal point.
 */
 /**
- * @brief parse fractional part 함수 - 파싱 수행
+ * @brief Parse the fractional part of a floating-point string.
  *
- * @param str 파라미터
+ * Advances the input pointer past fractional digits and returns the fraction.
  *
- * @return double 반환값
+ * @param str Input string pointer (in/out).
+ * @return double Parsed fractional part.
  */
 static double	parse_fractional_part(const char **str)
 {
@@ -102,11 +102,12 @@ static double	parse_fractional_part(const char **str)
 ** Stops at first invalid character.
 */
 /**
- * @brief ft atof 함수
+ * @brief Convert a string to double.
  *
- * @param str 파라미터
+ * Parses optional whitespace, sign, integer part, and fractional part.
  *
- * @return double 반환값
+ * @param str Input string.
+ * @return double Parsed value.
  */
 double	ft_atof(const char *str)
 {

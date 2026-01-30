@@ -14,19 +14,38 @@
 #include "window.h"
 #include <stdlib.h>
 
-/* Legacy cleanup function - delegates to scene_destroy */
+/**
+ * @brief Legacy scene cleanup wrapper.
+ *
+ * Delegates to scene_destroy for backward compatibility.
+ *
+ * @param scene Scene to destroy.
+ */
 void	cleanup_scene(t_scene *scene)
 {
 	scene_destroy(scene);
 }
 
-/* Legacy cleanup function - delegates to render_destroy */
+/**
+ * @brief Legacy render cleanup wrapper.
+ *
+ * Delegates to render_destroy for backward compatibility.
+ *
+ * @param param Pointer to render context.
+ */
 void	cleanup_render(void *param)
 {
 	render_destroy((t_render *)param);
 }
 
-/* Legacy cleanup function */
+/**
+ * @brief Legacy combined cleanup wrapper.
+ *
+ * Cleans render and scene resources in order.
+ *
+ * @param scene Scene to destroy.
+ * @param param Pointer to render context.
+ */
 void	cleanup_all(t_scene *scene, void *param)
 {
 	cleanup_render(param);

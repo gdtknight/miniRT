@@ -13,12 +13,26 @@
 #include "window.h"
 #include "hud.h"
 
+/**
+ * @brief Convert selection to a global object index.
+ *
+ * @param sel Current selection.
+ * @param scene Scene containing objects (unused for now).
+ * @return int Global index of the selected object.
+ */
 int	hud_get_global_index(t_selection sel, t_scene *scene)
 {
 	(void)scene;
 	return (sel.index);
 }
 
+/**
+ * @brief Convert a global index to a selection struct.
+ *
+ * @param sel Output selection to populate.
+ * @param idx Global object index.
+ * @param scene Scene containing objects.
+ */
 void	hud_get_selection_from_global(t_selection *sel, int idx,
 	t_scene *scene)
 {
@@ -34,6 +48,13 @@ void	hud_get_selection_from_global(t_selection *sel, int idx,
 	}
 }
 
+/**
+ * @brief Advance selection to the next object.
+ *
+ * Wraps around at the end of the object list and marks HUD dirty.
+ *
+ * @param render Render context containing selection and HUD state.
+ */
 void	hud_select_next(t_render *render)
 {
 	int	total;
@@ -48,6 +69,13 @@ void	hud_select_next(t_render *render)
 	render->hud.dirty = 1;
 }
 
+/**
+ * @brief Move selection to the previous object.
+ *
+ * Wraps around at the start of the object list and marks HUD dirty.
+ *
+ * @param render Render context containing selection and HUD state.
+ */
 void	hud_select_prev(t_render *render)
 {
 	int	total;
@@ -62,6 +90,14 @@ void	hud_select_prev(t_render *render)
 	render->hud.dirty = 1;
 }
 
+/**
+ * @brief Change HUD object list page.
+ *
+ * Increments or decrements the current page and marks the render dirty.
+ *
+ * @param render Render context containing HUD state.
+ * @param direction Positive for next page, negative for previous.
+ */
 void	hud_change_page(t_render *render, int direction)
 {
 	if (render->hud.total_pages <= 1)

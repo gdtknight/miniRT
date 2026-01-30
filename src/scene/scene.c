@@ -14,6 +14,14 @@
 #include "spatial.h"
 #include <stdlib.h>
 
+/**
+ * @brief Initialize default scene settings.
+ *
+ * Sets shadow configuration defaults, enables BVH, clears BVH pointer,
+ * and initializes metrics.
+ *
+ * @param scene Scene to initialize.
+ */
 static void	scene_init_defaults(t_scene *scene)
 {
 	scene->shadow_config = init_shadow_config();
@@ -22,6 +30,13 @@ static void	scene_init_defaults(t_scene *scene)
 	metrics_init(&scene->metrics);
 }
 
+/**
+ * @brief Allocate and initialize a new scene.
+ *
+ * Initializes object list capacity and default settings.
+ *
+ * @return t_scene* Newly created scene or NULL on failure.
+ */
 t_scene	*scene_create(void)
 {
 	t_scene	*scene;
@@ -39,6 +54,13 @@ t_scene	*scene_create(void)
 	return (scene);
 }
 
+/**
+ * @brief Destroy a scene and free all associated resources.
+ *
+ * Releases object list storage, BVH data, and the scene structure.
+ *
+ * @param scene Scene to destroy.
+ */
 void	scene_destroy(t_scene *scene)
 {
 	if (!scene)

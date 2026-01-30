@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:40:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/15 14:15:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 11:35:09 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,14 @@
 #include "window_internal.h"
 #include <math.h>
 
-/*
-** Handle camera movement based on WASDQZ keys.
-** W/X: Forward/Backward, A/D: Left/Right, Q/Z: Up/Down
-*/
 /**
- * @brief handle camera move 함수
+ * @brief Move the camera based on keyboard input.
  *
- * @param render 파라미터
- * @param keycode 파라미터
+ * Translates the camera position along forward/back, right/left, and up/down
+ * axes depending on the pressed key.
+ *
+ * @param render Render context containing the scene and camera.
+ * @param keycode Key code identifying the movement direction.
  */
 void	handle_camera_move(t_render *render, int keycode)
 {
@@ -52,15 +51,14 @@ void	handle_camera_move(t_render *render, int keycode)
 			move);
 }
 
-/*
-** Handle camera pitch rotation based on E/C keys.
-** Rotates camera around the right vector.
-*/
 /**
- * @brief handle camera pitch 함수
+ * @brief Pitch the camera up or down.
  *
- * @param render 파라미터
- * @param keycode 파라미터
+ * Rotates the camera direction around its right vector using fixed step
+ * increments and keeps the direction normalized.
+ *
+ * @param render Render context containing the scene and camera.
+ * @param keycode Key code selecting pitch direction.
  */
 void	handle_camera_pitch(t_render *render, int keycode)
 {
@@ -91,13 +89,12 @@ void	handle_camera_pitch(t_render *render, int keycode)
 	render->scene->camera.direction = vec3_normalize(new_dir);
 }
 
-/*
-** Reset camera to initial position and direction.
-*/
 /**
- * @brief handle camera reset 함수 - 설정 수행
+ * @brief Reset the camera to its initial position and direction.
  *
- * @param render 파라미터
+ * Restores the camera state captured at initialization.
+ *
+ * @param render Render context containing the scene and camera.
  */
 void	handle_camera_reset(t_render *render)
 {

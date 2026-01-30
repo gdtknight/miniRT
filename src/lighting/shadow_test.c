@@ -17,6 +17,17 @@
 
 int	intersect_object_new(t_ray *ray, t_object *obj, t_hit_record *hit);
 
+/**
+ * @brief Test shadow ray against all objects in the scene.
+ *
+ * Iterates through all objects and returns as soon as any intersection is
+ * found within the ray range.
+ *
+ * @param scene Scene containing objects.
+ * @param ray Shadow ray to test.
+ * @param hit Hit record used for intersection queries.
+ * @return int 1 if occluded, 0 if clear.
+ */
 static int	check_object_shadow(t_scene *scene, t_ray *ray, t_hit *hit)
 {
 	int			i;
@@ -33,6 +44,18 @@ static int	check_object_shadow(t_scene *scene, t_ray *ray, t_hit *hit)
 	return (0);
 }
 
+/**
+ * @brief Determine whether a point is shadowed from a light.
+ *
+ * Builds a shadow ray toward the light, applies a bias to avoid self-shadow,
+ * and tests for occlusion by scene objects.
+ *
+ * @param scene Scene containing objects for occlusion tests.
+ * @param point Shaded point in world space.
+ * @param light_pos Light position in world space.
+ * @param bias Bias distance to offset the shadow ray origin.
+ * @return int 1 if the point is in shadow, 0 otherwise.
+ */
 int	is_in_shadow(t_scene *scene, t_vec3 point, t_vec3 light_pos, double bias)
 {
 	t_ray	shadow_ray;

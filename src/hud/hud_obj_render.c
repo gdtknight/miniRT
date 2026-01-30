@@ -13,6 +13,12 @@
 #include "window.h"
 #include "hud.h"
 
+/**
+ * @brief Get the position of an object for HUD display.
+ *
+ * @param obj Object to query.
+ * @return t_vec3 Position vector or zero vector if unsupported.
+ */
 static t_vec3	get_object_position(t_object *obj)
 {
 	if (obj->type == OBJ_SPHERE)
@@ -24,6 +30,13 @@ static t_vec3	get_object_position(t_object *obj)
 	return ((t_vec3){0, 0, 0});
 }
 
+/**
+ * @brief Append object ID and label into the buffer.
+ *
+ * @param buf Destination buffer.
+ * @param i Current index (in/out).
+ * @param obj Object containing ID.
+ */
 static void	fill_obj_id(char *buf, int *i, t_object *obj)
 {
 	int	j;
@@ -39,6 +52,16 @@ static void	fill_obj_id(char *buf, int *i, t_object *obj)
 	buf[*i] = '\0';
 }
 
+/**
+ * @brief Render a single object entry in the HUD list.
+ *
+ * Formats the object ID and position and renders it at the current y.
+ *
+ * @param render Render context containing scene and MLX handles.
+ * @param idx Object index in the scene list.
+ * @param y Current y position (in/out).
+ * @param color Text color for the entry.
+ */
 void	render_object_entry(t_render *render, int idx, int *y, int color)
 {
 	char		buf[128];

@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:40:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/15 15:32:41 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 11:35:49 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,12 @@
 #include "metrics.h"
 #include "spatial.h"
 
-/*
-** Main rendering loop hook.
-** Only re-renders when dirty flag is set.
-*/
-/*
-** Main rendering loop hook.
-** Only re-renders when dirty flag is set.
-*/
 /**
- * @brief render loop 함수 - 렌더링 수행
+ * @brief Rebuild the BVH if the dirty flag is set.
  *
- * @param param 파라미터
+ * Reconstructs the BVH and clears the corresponding render flag.
  *
- * @return int 반환값
+ * @param render Render context containing the scene and flags.
  */
 static void	rebuild_bvh_if_dirty(t_render *render)
 {
@@ -42,6 +34,15 @@ static void	rebuild_bvh_if_dirty(t_render *render)
 	}
 }
 
+/**
+ * @brief Execute a full render pass and present the framebuffer.
+ *
+ * Runs the renderer, updates metrics, handles debounce cancellation, and
+ * swaps the image buffer to the window on success.
+ *
+ * @param render Render context containing scene and buffers.
+ * @return int 1 if the render completed, 0 if canceled.
+ */
 static int	execute_render_pass(t_render *render)
 {
 	render_set_flag(render, RENDER_RENDERING);
@@ -61,6 +62,15 @@ static int	execute_render_pass(t_render *render)
 	return (1);
 }
 
+/**
+ * @brief MLX loop hook for continuous rendering updates.
+ *
+ * Updates debounce state, rebuilds BVH if needed, renders when dirty, and
+ * draws HUD overlays when requested.
+ *
+ * @param param Pointer to the render context.
+ * @return int Always returns 0 for MLX loop hook.
+ */
 int	render_loop(void *param)
 {
 	t_render	*render;

@@ -15,6 +15,14 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
+/**
+ * @brief Initialize render state to default values.
+ *
+ * Sets default quality, interaction tracking, progressive render settings,
+ * and UI flags. Intended to be called once when the render context is created.
+ *
+ * @param state Render state structure to initialize.
+ */
 void	render_state_init(t_render_state *state)
 {
 	state->quality = QUALITY_HIGH;
@@ -31,6 +39,14 @@ void	render_state_init(t_render_state *state)
 	state->show_info = 1;
 }
 
+/**
+ * @brief Update render state based on adaptive quality rules.
+ *
+ * If adaptive quality is enabled and conditions allow, this upgrades the
+ * current quality to the target quality after the interaction cooldown.
+ *
+ * @param state Render state structure to update.
+ */
 void	render_state_update(t_render_state *state)
 {
 	if (state->adaptive_enabled && quality_should_upgrade(state))

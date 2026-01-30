@@ -13,6 +13,16 @@
 #include "bvh_vis.h"
 #include <stdio.h>
 
+/**
+ * @brief Recursively traverse the BVH and print each node.
+ *
+ * Formats node info, prints tree lines with prefixes, and visits children
+ * in depth-first order.
+ *
+ * @param node Current BVH node.
+ * @param ctx Traversal context containing prefix and config.
+ * @param is_last Non-zero if this node is the last sibling.
+ */
 static void	traverse_recursive(t_bvh_node *node, t_traverse_ctx *ctx,
 				int is_last)
 {
@@ -42,6 +52,13 @@ static void	traverse_recursive(t_bvh_node *node, t_traverse_ctx *ctx,
 	}
 }
 
+/**
+ * @brief Print the BVH tree and optional statistics summary.
+ *
+ * @param node Root node to visualize.
+ * @param ctx Traversal context for formatting.
+ * @param stats Optional statistics structure to fill and print.
+ */
 void	bvh_visualize_tree(t_bvh_node *node, t_traverse_ctx *ctx,
 			t_bvh_stats *stats)
 {

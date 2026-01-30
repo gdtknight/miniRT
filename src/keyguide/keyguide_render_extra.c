@@ -12,6 +12,12 @@
 
 #include "keyguide.h"
 
+/**
+ * @brief Render resize controls section.
+ *
+ * @param render Render context containing key guide position.
+ * @param y Current y position (in/out) for text rendering.
+ */
 static void	keyguide_render_resize(t_render *render, int *y)
 {
 	*y += KEYGUIDE_SECTION_GAP + KEYGUIDE_LINE_HEIGHT;
@@ -25,6 +31,12 @@ static void	keyguide_render_resize(t_render *render, int *y)
 		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "N/M - Height");
 }
 
+/**
+ * @brief Render rotation controls section.
+ *
+ * @param render Render context containing key guide position.
+ * @param y Current y position (in/out) for text rendering.
+ */
 static void	keyguide_render_rotation(t_render *render, int *y)
 {
 	*y += KEYGUIDE_SECTION_GAP + KEYGUIDE_LINE_HEIGHT;
@@ -42,6 +54,12 @@ static void	keyguide_render_rotation(t_render *render, int *y)
 		"<-/-> - Rot Z");
 }
 
+/**
+ * @brief Render extra key guide sections (resize and rotation).
+ *
+ * @param render Render context containing key guide state.
+ * @param y Current y position (in/out) for text rendering.
+ */
 void	keyguide_render_extra(t_render *render, int *y)
 {
 	keyguide_render_resize(render, y);

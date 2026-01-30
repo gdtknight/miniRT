@@ -18,6 +18,17 @@
 
 int	intersect_object_new(t_ray *ray, t_object *obj, t_hit_record *hit);
 
+/**
+ * @brief Brute-force intersection test against all objects.
+ *
+ * Iterates over every object in the scene and updates the hit record with
+ * the closest intersection found along the ray.
+ *
+ * @param scene Scene containing objects.
+ * @param ray Ray to test.
+ * @param hit In/out hit record (initialized with max distance).
+ * @return int 1 if any intersection is found, 0 otherwise.
+ */
 static int	check_all_objects(t_scene *scene, t_ray *ray, t_hit *hit)
 {
 	int			i;
@@ -41,6 +52,16 @@ static int	check_all_objects(t_scene *scene, t_ray *ray, t_hit *hit)
 	return (found);
 }
 
+/**
+ * @brief Trace a ray through the scene and compute its color.
+ *
+ * Tests the ray against the BVH if enabled; otherwise falls back to a full
+ * object scan. If an intersection is found, lighting is evaluated at the hit.
+ *
+ * @param scene Scene containing geometry and lighting.
+ * @param ray Ray to trace.
+ * @return t_color Resulting color (black if no hit).
+ */
 t_color	trace_ray(t_scene *scene, t_ray *ray)
 {
 	t_hit	hit;

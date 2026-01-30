@@ -12,11 +12,27 @@
 
 #include "metrics.h"
 
+/**
+ * @brief Return the current FPS estimate.
+ *
+ * @param m Metrics structure containing timing data.
+ * @return double FPS value.
+ */
 double	calculate_fps(t_metrics *m)
 {
 	return (m->timing.fps);
 }
 
+/**
+ * @brief Calculate BVH efficiency as a percentage.
+ *
+ * Compares actual intersection tests against the naive tests (rays * objects)
+ * and returns a higher percentage for better efficiency.
+ *
+ * @param m Metrics structure containing ray and intersect counts.
+ * @param object_count Number of objects in the scene.
+ * @return double Efficiency percentage in [0, 100].
+ */
 double	calculate_bvh_efficiency(t_metrics *m, int object_count)
 {
 	long	naive_tests;
@@ -33,6 +49,12 @@ double	calculate_bvh_efficiency(t_metrics *m, int object_count)
 	return (efficiency * 100.0);
 }
 
+/**
+ * @brief Calculate average intersection tests per traced ray.
+ *
+ * @param m Metrics structure containing ray and intersect counts.
+ * @return double Average tests per ray (0 if no rays).
+ */
 double	calculate_avg_tests_per_ray(t_metrics *m)
 {
 	if (m->ray.rays_traced == 0)
@@ -40,6 +62,11 @@ double	calculate_avg_tests_per_ray(t_metrics *m)
 	return ((double)m->ray.intersect_tests / m->ray.rays_traced);
 }
 
+/**
+ * @brief Reset BVH-related metrics counters.
+ *
+ * @param bvh BVH metrics structure to reset.
+ */
 void	metrics_reset_bvh(t_bvh_metrics *bvh)
 {
 	if (bvh)

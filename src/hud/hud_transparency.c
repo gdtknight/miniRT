@@ -13,11 +13,10 @@
 #include "hud.h"
 
 /**
- * @brief get pixel 함수 - 조회 수행
+ * @brief Read a pixel color from the image buffer.
  *
- * @param params 파라미터
- *
- * @return int 반환값
+ * @param params Pixel access parameters.
+ * @return int Packed color value.
  */
 int	get_pixel(t_pixel_params *params)
 {
@@ -29,10 +28,10 @@ int	get_pixel(t_pixel_params *params)
 }
 
 /**
- * @brief set pixel 함수 - 설정 수행
+ * @brief Write a pixel color into the image buffer.
  *
- * @param params 파라미터
- * @param color 파라미터
+ * @param params Pixel access parameters.
+ * @param color Packed color value.
  */
 void	set_pixel(t_pixel_params *params, int color)
 {

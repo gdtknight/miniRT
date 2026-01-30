@@ -13,12 +13,11 @@
 #include "spatial.h"
 
 /**
- * @brief min double 함수
+ * @brief Return the smaller of two doubles.
  *
- * @param a 파라미터
- * @param b 파라미터
- *
- * @return double 반환값
+ * @param a First value.
+ * @param b Second value.
+ * @return double Minimum of a and b.
  */
 double	min_double(double a, double b)
 {
@@ -28,12 +27,11 @@ double	min_double(double a, double b)
 }
 
 /**
- * @brief max double 함수
+ * @brief Return the larger of two doubles.
  *
- * @param a 파라미터
- * @param b 파라미터
- *
- * @return double 반환값
+ * @param a First value.
+ * @param b Second value.
+ * @return double Maximum of a and b.
  */
 double	max_double(double a, double b)
 {
@@ -43,12 +41,11 @@ double	max_double(double a, double b)
 }
 
 /**
- * @brief aabb create 함수 - 생성 수행
+ * @brief Create an AABB from min and max corners.
  *
- * @param min 파라미터
- * @param max 파라미터
- *
- * @return t_aabb 반환값
+ * @param min Minimum corner.
+ * @param max Maximum corner.
+ * @return t_aabb Constructed bounding box.
  */
 t_aabb	aabb_create(t_vec3 min, t_vec3 max)
 {
@@ -60,12 +57,11 @@ t_aabb	aabb_create(t_vec3 min, t_vec3 max)
 }
 
 /**
- * @brief aabb merge 함수
+ * @brief Merge two AABBs into a bounding box containing both.
  *
- * @param a 파라미터
- * @param b 파라미터
- *
- * @return t_aabb 반환값
+ * @param a First AABB.
+ * @param b Second AABB.
+ * @return t_aabb Merged bounding box.
  */
 t_aabb	aabb_merge(t_aabb a, t_aabb b)
 {
@@ -81,11 +77,10 @@ t_aabb	aabb_merge(t_aabb a, t_aabb b)
 }
 
 /**
- * @brief aabb surface area 함수
+ * @brief Compute the surface area of an AABB.
  *
- * @param box 파라미터
- *
- * @return double 반환값
+ * @param box AABB to measure.
+ * @return double Surface area.
  */
 double	aabb_surface_area(t_aabb box)
 {

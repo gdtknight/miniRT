@@ -18,6 +18,15 @@
 #include "pixel_timing.h"
 #include <stdlib.h>
 
+/**
+ * @brief Initialize render state fields and subsystems.
+ *
+ * Binds the scene, resets selection, sets initial render flags, and
+ * initializes timing/debounce subsystems.
+ *
+ * @param render Render context to initialize.
+ * @param scene Scene associated with the render context.
+ */
 static void	init_render_state(t_render *render, t_scene *scene)
 {
 	render->scene = scene;
@@ -28,6 +37,16 @@ static void	init_render_state(t_render *render, t_scene *scene)
 	debounce_init(&render->debounce);
 }
 
+/**
+ * @brief Initialize HUD and key guide UI components.
+ *
+ * Creates background images for HUD and key guide overlays and precomputes
+ * pagination state based on the scene.
+ *
+ * @param render Render context containing UI state.
+ * @param scene Scene used to compute pagination info.
+ * @return int 0 on success, -1 on failure.
+ */
 static int	init_ui_components(t_render *render, t_scene *scene)
 {
 	if (hud_init(&render->hud, render->mlx.mlx, render->mlx.win) == -1)
@@ -46,6 +65,13 @@ static int	init_ui_components(t_render *render, t_scene *scene)
 	return (0);
 }
 
+/**
+ * @brief Register MLX event hooks for input and rendering.
+ *
+ * Sets up key press/release, expose, close, and loop callbacks.
+ *
+ * @param render Render context passed to callbacks.
+ */
 static void	register_hooks(t_render *render)
 {
 	mlx_hook(render->mlx.win, 17, 0, close_window, render);
@@ -55,6 +81,15 @@ static void	register_hooks(t_render *render)
 	mlx_loop_hook(render->mlx.mlx, render_loop, render);
 }
 
+/**
+ * @brief Create and initialize a render context.
+ *
+ * Allocates the render context, sets up MLX window and buffers, initializes
+ * render state and UI components, and registers event hooks.
+ *
+ * @param scene Scene to render.
+ * @return t_render* Newly created render context or NULL on failure.
+ */
 t_render	*render_create(t_scene *scene)
 {
 	t_render	*render;
@@ -74,6 +109,13 @@ t_render	*render_create(t_scene *scene)
 	return (render);
 }
 
+/**
+ * @brief Destroy a render context and release all resources.
+ *
+ * Frees UI components, timing resources, MLX context, and the render struct.
+ *
+ * @param render Render context to destroy.
+ */
 void	render_destroy(t_render *render)
 {
 	if (!render)

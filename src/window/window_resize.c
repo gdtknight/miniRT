@@ -14,6 +14,15 @@
 #include "window.h"
 #include "window_internal.h"
 
+/**
+ * @brief Resize a sphere by adjusting its radius.
+ *
+ * Applies a fixed step based on key input, clamps to a minimum radius,
+ * and updates the cached radius squared value.
+ *
+ * @param obj Sphere object to resize.
+ * @param keycode Key code indicating resize direction.
+ */
 static void	resize_sphere(t_object *obj, int keycode)
 {
 	double	step;
@@ -30,6 +39,15 @@ static void	resize_sphere(t_object *obj, int keycode)
 		* obj->data.sphere.radius;
 }
 
+/**
+ * @brief Resize a cylinder by adjusting radius or height.
+ *
+ * Uses key input to change radius (J/K) or half-height (N/M), clamps to a
+ * minimum size, and updates cached radius squared when needed.
+ *
+ * @param obj Cylinder object to resize.
+ * @param keycode Key code indicating resize direction.
+ */
 static void	resize_cylinder(t_object *obj, int keycode)
 {
 	double	step;
@@ -55,6 +73,15 @@ static void	resize_cylinder(t_object *obj, int keycode)
 	}
 }
 
+/**
+ * @brief Handle object resize keys for the selected object.
+ *
+ * Applies resize operations to spheres and cylinders, marks BVH dirty, and
+ * triggers debounce for re-rendering.
+ *
+ * @param render Render context containing selection and scene.
+ * @param keycode Key code indicating resize action.
+ */
 void	handle_object_resize(t_render *render, int keycode)
 {
 	t_object	*obj;

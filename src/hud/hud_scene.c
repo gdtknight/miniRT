@@ -15,10 +15,12 @@
 #include "hud_text.h"
 
 /**
- * @brief hud render camera 함수 - 렌더링 수행
+ * @brief Render camera section in the HUD.
  *
- * @param render 파라미터
- * @param y 파라미터
+ * Displays camera position and direction.
+ *
+ * @param render Render context containing scene.
+ * @param y Current y position (in/out).
  */
 void	hud_render_camera(t_render *render, int *y)
 {
@@ -30,10 +32,10 @@ void	hud_render_camera(t_render *render, int *y)
 }
 
 /**
- * @brief render camera fov 함수 - 렌더링 수행
+ * @brief Render camera field-of-view in the HUD.
  *
- * @param render 파라미터
- * @param y 파라미터
+ * @param render Render context containing scene.
+ * @param y Current y position (in/out).
  */
 void	render_camera_fov(t_render *render, int *y)
 {
@@ -55,10 +57,10 @@ void	render_camera_fov(t_render *render, int *y)
 }
 
 /**
- * @brief hud render ambient 함수 - 렌더링 수행
+ * @brief Render ambient light section in the HUD.
  *
- * @param render 파라미터
- * @param y 파라미터
+ * @param render Render context containing scene.
+ * @param y Current y position (in/out).
  */
 void	hud_render_ambient(t_render *render, int *y)
 {
@@ -90,10 +92,10 @@ void	hud_render_ambient(t_render *render, int *y)
 }
 
 /**
- * @brief hud render light 함수 - 렌더링 수행
+ * @brief Render light position section in the HUD.
  *
- * @param render 파라미터
- * @param y 파라미터
+ * @param render Render context containing scene.
+ * @param y Current y position (in/out).
  */
 void	hud_render_light(t_render *render, int *y)
 {
@@ -117,10 +119,10 @@ void	hud_render_light(t_render *render, int *y)
 }
 
 /**
- * @brief render light bright 함수 - 렌더링 수행
+ * @brief Render light brightness and color section in the HUD.
  *
- * @param render 파라미터
- * @param y 파라미터
+ * @param render Render context containing scene.
+ * @param y Current y position (in/out).
  */
 void	render_light_bright(t_render *render, int *y)
 {

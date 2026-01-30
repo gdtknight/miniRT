@@ -14,6 +14,13 @@
 #include "minirt.h"
 #include <stdlib.h>
 
+/**
+ * @brief Get the geometric center of an object referenced by index.
+ *
+ * @param ref Object reference containing index.
+ * @param scene_ptr Pointer to the scene.
+ * @return t_vec3 Center point of the object.
+ */
 t_vec3	get_object_center(t_object_ref ref, void *scene_ptr)
 {
 	t_scene		*scene;
@@ -29,6 +36,12 @@ t_vec3	get_object_center(t_object_ref ref, void *scene_ptr)
 		return (obj->data.plane.point);
 }
 
+/**
+ * @brief Fill object reference array with indices from the scene.
+ *
+ * @param scene Scene containing object list.
+ * @param refs Output array to populate.
+ */
 static void	fill_object_refs(t_scene *scene, t_object_ref *refs)
 {
 	int	i;
@@ -41,6 +54,14 @@ static void	fill_object_refs(t_scene *scene, t_object_ref *refs)
 	}
 }
 
+/**
+ * @brief Build or rebuild the BVH for the scene.
+ *
+ * Allocates an index array, creates the BVH if needed, and constructs the
+ * hierarchy from current scene objects.
+ *
+ * @param scene Scene containing objects and BVH state.
+ */
 void	scene_build_bvh(t_scene *scene)
 {
 	t_object_ref	*refs;

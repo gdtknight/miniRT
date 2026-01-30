@@ -15,6 +15,14 @@
 #include "vec3.h"
 #include "error.h"
 
+/**
+ * @brief Advance to the next space-delimited token.
+ *
+ * Skips the current token and any trailing spaces.
+ *
+ * @param token Current token pointer.
+ * @return char* Pointer to the next token.
+ */
 static char	*skip_to_next_token(char *token)
 {
 	while (*token && *token != ' ')
@@ -24,6 +32,15 @@ static char	*skip_to_next_token(char *token)
 	return (token);
 }
 
+/**
+ * @brief Parse ambient light definition.
+ *
+ * Validates ratio and color, applies to the scene, and marks the ambient flag.
+ *
+ * @param line Raw line from the scene file.
+ * @param scene Scene to update.
+ * @return int 1 on success, 0 on failure.
+ */
 int	parse_ambient(char *line, t_scene *scene)
 {
 	char	*token;
@@ -45,6 +62,16 @@ int	parse_ambient(char *line, t_scene *scene)
 	return (1);
 }
 
+/**
+ * @brief Parse camera definition.
+ *
+ * Extracts position, direction, and FOV, normalizes direction, and stores
+ * initial camera state for reset operations.
+ *
+ * @param line Raw line from the scene file.
+ * @param scene Scene to update.
+ * @return int 1 on success, 0 on failure.
+ */
 int	parse_camera(char *line, t_scene *scene)
 {
 	char	*token;
@@ -70,6 +97,16 @@ int	parse_camera(char *line, t_scene *scene)
 	return (1);
 }
 
+/**
+ * @brief Parse light source definition.
+ *
+ * Extracts position, brightness, and color, validates ranges, and marks the
+ * light flag in the scene.
+ *
+ * @param line Raw line from the scene file.
+ * @param scene Scene to update.
+ * @return int 1 on success, 0 on failure.
+ */
 int	parse_light(char *line, t_scene *scene)
 {
 	char	*token;

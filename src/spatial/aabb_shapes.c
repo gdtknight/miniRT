@@ -14,12 +14,11 @@
 #include <math.h>
 
 /**
- * @brief aabb for sphere 함수
+ * @brief Compute an AABB for a sphere.
  *
- * @param center 파라미터
- * @param radius 파라미터
- *
- * @return t_aabb 반환값
+ * @param center Sphere center.
+ * @param radius Sphere radius.
+ * @return t_aabb Bounding box enclosing the sphere.
  */
 t_aabb	aabb_for_sphere(t_vec3 center, double radius)
 {
@@ -34,6 +33,17 @@ t_aabb	aabb_for_sphere(t_vec3 center, double radius)
 	return (box);
 }
 
+/**
+ * @brief Compute an AABB for a finite cylinder.
+ *
+ * Uses the axis and half-height to compute extents in each axis.
+ *
+ * @param center Cylinder center.
+ * @param axis Cylinder axis (normalized).
+ * @param radius Cylinder radius.
+ * @param height Cylinder full height.
+ * @return t_aabb Bounding box enclosing the cylinder.
+ */
 t_aabb	aabb_for_cylinder(t_vec3 center, t_vec3 axis, double radius,
 		double height)
 {
@@ -55,12 +65,13 @@ t_aabb	aabb_for_cylinder(t_vec3 center, t_vec3 axis, double radius,
 }
 
 /**
- * @brief aabb for plane 함수
+ * @brief Compute a large AABB for an infinite plane.
  *
- * @param point 파라미터
- * @param normal 파라미터
+ * Approximates the plane with a large bounding box centered at the point.
  *
- * @return t_aabb 반환값
+ * @param point A point on the plane.
+ * @param normal Plane normal (unused in this approximation).
+ * @return t_aabb Large bounding box representing the plane.
  */
 t_aabb	aabb_for_plane(t_vec3 point, t_vec3 normal)
 {

@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 15:11:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/29 00:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 11:58:19 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,25 @@
 #include "utils.h"
 #include <stdlib.h>
 
+/**
+ * @brief Check whether a BVH node is a leaf.
+ *
+ * @param node BVH node to test.
+ * @return int 1 if leaf, 0 otherwise.
+ */
 int	is_leaf_node(t_bvh_node *node)
 {
 	return (node->left == NULL && node->right == NULL);
 }
 
+/**
+ * @brief Append a formatted vec3 to a buffer.
+ *
+ * @param buf Destination buffer.
+ * @param size Destination buffer size.
+ * @param v Vector to append.
+ * @param precision Decimal precision for components.
+ */
 static void	append_vec3_to_buf(char *buf, size_t size, t_vec3 v, int precision)
 {
 	char	num[32];
@@ -35,6 +49,14 @@ static void	append_vec3_to_buf(char *buf, size_t size, t_vec3 v, int precision)
 	ft_strlcat(buf, num, size);
 }
 
+/**
+ * @brief Format an AABB bounds string in compact or verbose form.
+ *
+ * @param bounds AABB to format.
+ * @param buf Destination buffer.
+ * @param size Destination buffer size.
+ * @param comp Non-zero for compact formatting.
+ */
 static void	format_bounds_str(t_aabb bounds, char *buf, size_t size, int comp)
 {
 	buf[0] = '\0';
@@ -56,6 +78,13 @@ static void	format_bounds_str(t_aabb bounds, char *buf, size_t size, int comp)
 	}
 }
 
+/**
+ * @brief Build formatted node info for visualization.
+ *
+ * @param node BVH node to format.
+ * @param config Visualization configuration (unused here).
+ * @return t_node_info Populated node info struct.
+ */
 t_node_info	format_node_info(t_bvh_node *node, t_vis_config *config)
 {
 	t_node_info	info;
@@ -71,6 +100,13 @@ t_node_info	format_node_info(t_bvh_node *node, t_vis_config *config)
 	return (info);
 }
 
+/**
+ * @brief Format a bounding box string for display.
+ *
+ * @param bounds AABB to format.
+ * @param buffer Destination buffer.
+ * @param compact Non-zero for compact format.
+ */
 void	format_bounding_box(t_aabb bounds, char *buffer, int compact)
 {
 	format_bounds_str(bounds, buffer, 128, compact);

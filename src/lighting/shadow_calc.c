@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:19:04 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/18 15:19:05 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 11:45:30 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,16 @@
 #include "vec3.h"
 #include <math.h>
 
-/*
-** Calculate adaptive shadow bias based on surface angle.
-** Increases bias for grazing angles to prevent shadow acne.
-** Returns adjusted bias value scaled by angle factor.
-*/
+/**
+ * @brief Compute adaptive shadow bias based on angle to the light.
+ *
+ * Increases bias for grazing angles to reduce shadow acne artifacts.
+ *
+ * @param normal Surface normal at the shaded point.
+ * @param light_dir Normalized direction toward the light.
+ * @param base_bias Base bias value.
+ * @return double Adjusted bias value.
+ */
 double	calculate_shadow_bias(t_vec3 normal, t_vec3 light_dir,
 		double base_bias)
 {
@@ -40,6 +45,16 @@ double	calculate_shadow_bias(t_vec3 normal, t_vec3 light_dir,
 ** Uses stratified sampling in circular pattern around light.
 ** Returns zero vector if only one sample requested.
 */
+/**
+ * @brief Generate a stratified offset for soft shadow sampling.
+ *
+ * Produces a 2D offset in a circular pattern to jitter the light position.
+ *
+ * @param radius Sampling radius around the light.
+ * @param sample_index Index of the current sample.
+ * @param total_samples Total number of samples.
+ * @return t_vec3 Offset vector for the sample.
+ */
 t_vec3	generate_shadow_sample_offset(double radius, int sample_index,
 		int total_samples)
 {
@@ -66,12 +81,14 @@ t_vec3	generate_shadow_sample_offset(double radius, int sample_index,
 ** Cast single shadow ray with offset.
 */
 /**
- * @brief sample shadow ray 함수
+ * @brief Cast a single shadow ray with soft shadow offset.
  *
- * @param params 파라미터
- * @param index 파라미터
+ * Computes a sample offset and tests whether the point is occluded toward
+ * the jittered light position.
  *
- * @return int 반환값
+ * @param params Shadow sampling parameters.
+ * @param index Sample index.
+ * @return int 1 if in shadow, 0 if lit.
  */
 static int	sample_shadow_ray(t_shadow_sample *params, int index)
 {
@@ -88,6 +105,18 @@ static int	sample_shadow_ray(t_shadow_sample *params, int index)
 /*
 ** Calculate shadow samples by casting rays to light positions.
 */
+/**
+ * @brief Count shadowed samples for soft shadows.
+ *
+ * Casts multiple shadow rays toward jittered light positions and returns
+ * the number of occluded samples.
+ *
+ * @param scene Scene containing objects for occlusion tests.
+ * @param point Point being shaded.
+ * @param light_pos Light position in world space.
+ * @param config Shadow configuration including sample count.
+ * @return double Number of samples that are in shadow.
+ */
 static double	calc_shadow_samples(t_scene *scene, t_vec3 point,
 		t_vec3 light_pos, t_shadow_config *config)
 {
@@ -120,6 +149,17 @@ static double	calc_shadow_samples(t_scene *scene, t_vec3 point,
 ** Casts multiple rays to determine partial occlusion.
 ** Returns 0.0 (fully lit) to 1.0 (fully shadowed).
 */
+/**
+ * @brief Compute shadow factor as the ratio of occluded samples.
+ *
+ * Returns 0.0 for fully lit and 1.0 for fully shadowed.
+ *
+ * @param scene Scene containing objects for occlusion tests.
+ * @param point Point being shaded.
+ * @param light_pos Light position in world space.
+ * @param config Shadow configuration including sample count.
+ * @return double Shadow factor in [0, 1].
+ */
 double	calculate_shadow_factor(t_scene *scene, t_vec3 point,
 		t_vec3 light_pos, t_shadow_config *config)
 {

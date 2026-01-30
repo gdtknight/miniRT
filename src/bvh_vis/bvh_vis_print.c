@@ -14,6 +14,13 @@
 #include "libft.h"
 #include <stdio.h>
 
+/**
+ * @brief Print a single BVH node line with tree prefixes.
+ *
+ * @param prefix Prefix state to draw tree branches.
+ * @param info Formatted node info.
+ * @param is_last Non-zero if this node is the last sibling.
+ */
 void	print_node_line(t_prefix_state *prefix, t_node_info *info,
 			int is_last)
 {
@@ -28,6 +35,11 @@ void	print_node_line(t_prefix_state *prefix, t_node_info *info,
 	printf("\n");
 }
 
+/**
+ * @brief Print a warning message to stderr.
+ *
+ * @param message Warning text.
+ */
 void	print_warning_message(const char *message)
 {
 	ft_putstr_fd("Warning: ", 2);

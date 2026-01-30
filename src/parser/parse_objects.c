@@ -15,6 +15,14 @@
 #include "vec3.h"
 #include "utils.h"
 
+/**
+ * @brief Advance to the next space-delimited token.
+ *
+ * Skips the current token and trailing spaces.
+ *
+ * @param token Current token pointer.
+ * @return char* Pointer to the next token.
+ */
 static char	*skip_to_next_token(char *token)
 {
 	while (*token && *token != ' ')
@@ -24,6 +32,13 @@ static char	*skip_to_next_token(char *token)
 	return (token);
 }
 
+/**
+ * @brief Count objects of a specific type in the scene.
+ *
+ * @param scene Scene containing object list.
+ * @param type Object type to count.
+ * @return int Number of objects of the given type.
+ */
 static int	get_type_count(t_scene *scene, t_object_type type)
 {
 	int	i;
@@ -40,6 +55,16 @@ static int	get_type_count(t_scene *scene, t_object_type type)
 	return (count);
 }
 
+/**
+ * @brief Parse a sphere definition line into a scene object.
+ *
+ * Extracts center, diameter, and color, assigns an ID, and appends the
+ * sphere to the scene object list.
+ *
+ * @param line Raw line from the scene file.
+ * @param scene Scene to update.
+ * @return int 1 on success, 0 on failure.
+ */
 int	parse_sphere(char *line, t_scene *scene)
 {
 	char		*token;
@@ -67,6 +92,16 @@ int	parse_sphere(char *line, t_scene *scene)
 	return (1);
 }
 
+/**
+ * @brief Parse a plane definition line into a scene object.
+ *
+ * Extracts point, normal, and color, assigns an ID, and appends the plane
+ * to the scene object list.
+ *
+ * @param line Raw line from the scene file.
+ * @param scene Scene to update.
+ * @return int 1 on success, 0 on failure.
+ */
 int	parse_plane(char *line, t_scene *scene)
 {
 	char		*token;

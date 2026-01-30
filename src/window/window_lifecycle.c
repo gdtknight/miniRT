@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:40:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/12 20:31:58 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 11:35:40 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,14 @@
 #include "pixel_timing.h"
 #include <stdlib.h>
 
-/*
-** Handle window close event (X button clicked).
-** Cleans up resources and exits program.
-*/
 /**
- * @brief close window 함수
+ * @brief Handle window close event and shut down cleanly.
  *
- * @param param 파라미터
+ * Releases timing, HUD, and key guide resources, then frees scene and render
+ * context before exiting the process.
  *
- * @return int 반환값
+ * @param param Pointer to the render context.
+ * @return int Always returns 0 for MLX event handling.
  */
 int	close_window(void *param)
 {

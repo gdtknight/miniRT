@@ -15,6 +15,14 @@
 #include "vec3.h"
 #include "utils.h"
 
+/**
+ * @brief Advance to the next space-delimited token.
+ *
+ * Moves past the current token and any following spaces.
+ *
+ * @param token Current token pointer.
+ * @return char* Pointer to the next token.
+ */
 static char	*skip_to_next_token(char *token)
 {
 	while (*token && *token != ' ')
@@ -24,6 +32,12 @@ static char	*skip_to_next_token(char *token)
 	return (token);
 }
 
+/**
+ * @brief Count existing cylinder objects in the scene.
+ *
+ * @param scene Scene containing object list.
+ * @return int Number of cylinders currently in the scene.
+ */
 static int	get_cylinder_count(t_scene *scene)
 {
 	int	i;
@@ -40,6 +54,15 @@ static int	get_cylinder_count(t_scene *scene)
 	return (count);
 }
 
+/**
+ * @brief Parse cylinder diameter and height from tokens.
+ *
+ * Validates positive dimensions and updates radius, radius_sq, and half_height.
+ *
+ * @param token Pointer to the diameter token.
+ * @param obj Cylinder object to update.
+ * @return int 1 on success, 0 on failure.
+ */
 static int	parse_cylinder_dims(char *token, t_object *obj)
 {
 	double	diameter;
@@ -58,6 +81,16 @@ static int	parse_cylinder_dims(char *token, t_object *obj)
 	return (1);
 }
 
+/**
+ * @brief Parse a cylinder definition line into a scene object.
+ *
+ * Extracts center, axis, dimensions, and color, assigns an ID, and appends
+ * the cylinder to the scene object list.
+ *
+ * @param line Raw line from the scene file.
+ * @param scene Scene to update.
+ * @return int 1 on success, 0 on failure.
+ */
 int	parse_cylinder(char *line, t_scene *scene)
 {
 	char		*token;

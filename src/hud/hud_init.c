@@ -14,12 +14,13 @@
 #include <stdlib.h>
 
 /**
- * @brief hud create background 함수 - 생성 수행
+ * @brief Create the HUD background image buffer.
  *
- * @param hud 파라미터
- * @param mlx 파라미터
+ * Allocates the background image and fills it with a semi-transparent color.
  *
- * @return int 반환값
+ * @param hud HUD state to populate.
+ * @param mlx MLX connection pointer.
+ * @return int 0 on success, -1 on failure.
  */
 int	hud_create_background(t_hud_state *hud, void *mlx)
 {
@@ -48,11 +49,10 @@ int	hud_create_background(t_hud_state *hud, void *mlx)
 }
 
 /**
- * @brief hud calculate total pages 함수 - 계산 수행
+ * @brief Calculate the number of object list pages for the HUD.
  *
- * @param scene 파라미터
- *
- * @return int 반환값
+ * @param scene Scene containing object list.
+ * @return int Total number of pages (minimum 1).
  */
 int	hud_calculate_total_pages(t_scene *scene)
 {
@@ -68,13 +68,14 @@ int	hud_calculate_total_pages(t_scene *scene)
 }
 
 /**
- * @brief hud init 함수 - 초기화 수행
+ * @brief Initialize HUD state and background resources.
  *
- * @param hud 파라미터
- * @param mlx 파라미터
- * @param win 파라미터
+ * Sets initial state values and allocates the background image.
  *
- * @return int 반환값
+ * @param hud HUD state to initialize.
+ * @param mlx MLX connection pointer.
+ * @param win Window pointer (unused but kept for API consistency).
+ * @return int 0 on success, -1 on failure.
  */
 int	hud_init(t_hud_state *hud, void *mlx, void *win)
 {
@@ -91,10 +92,12 @@ int	hud_init(t_hud_state *hud, void *mlx, void *win)
 }
 
 /**
- * @brief hud cleanup 함수 - 정리 수행
+ * @brief Destroy HUD background resources.
  *
- * @param hud 파라미터
- * @param mlx 파라미터
+ * Frees the background image and clears cached pointers.
+ *
+ * @param hud HUD state to clean up.
+ * @param mlx MLX connection pointer.
  */
 void	hud_cleanup(t_hud_state *hud, void *mlx)
 {

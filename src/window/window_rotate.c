@@ -15,6 +15,16 @@
 #include "window_internal.h"
 #include <math.h>
 
+/**
+ * @brief Rotate a vector around an axis using Rodrigues' formula.
+ *
+ * Applies the rotation of vector v around unit axis k by the given angle.
+ *
+ * @param v Vector to rotate.
+ * @param k Rotation axis (should be normalized).
+ * @param angle Rotation angle in radians.
+ * @return t_vec3 Rotated vector.
+ */
 static t_vec3	rodrigues_rotate(t_vec3 v, t_vec3 k, double angle)
 {
 	t_vec3	cross;
@@ -33,6 +43,16 @@ static t_vec3	rodrigues_rotate(t_vec3 v, t_vec3 k, double angle)
 	return (result);
 }
 
+/**
+ * @brief Map rotation key input to axis and angle.
+ *
+ * Determines rotation axis based on key input and writes the signed step
+ * angle to the output parameter.
+ *
+ * @param keycode Key code indicating rotation direction.
+ * @param angle Output pointer to receive angle in radians.
+ * @return t_vec3 Rotation axis vector.
+ */
 static t_vec3	get_rotation_axis(int keycode, double *angle)
 {
 	double	step;
@@ -58,6 +78,16 @@ static t_vec3	get_rotation_axis(int keycode, double *angle)
 	return ((t_vec3){0.0, 0.0, 1.0});
 }
 
+/**
+ * @brief Apply rotation to a cylinder axis or plane normal.
+ *
+ * Rotates the relevant direction vector, normalizes it, and writes it back
+ * to the object if the result is valid.
+ *
+ * @param obj Object to rotate (cylinder or plane).
+ * @param axis Rotation axis.
+ * @param angle Rotation angle in radians.
+ */
 static void	apply_rotation(t_object *obj, t_vec3 axis, double angle)
 {
 	t_vec3	rotated;
@@ -77,6 +107,15 @@ static void	apply_rotation(t_object *obj, t_vec3 axis, double angle)
 		obj->data.plane.normal = rotated;
 }
 
+/**
+ * @brief Handle object rotation keys for the selected object.
+ *
+ * Applies axis rotations to planes and cylinders, marks BVH dirty, and
+ * triggers debounce for re-rendering.
+ *
+ * @param render Render context containing selection and scene.
+ * @param keycode Key code indicating rotation direction.
+ */
 void	handle_object_rotate(t_render *render, int keycode)
 {
 	t_object	*obj;

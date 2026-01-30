@@ -13,6 +13,15 @@
 #include "minirt.h"
 #include <stdlib.h>
 
+/**
+ * @brief Initialize an object list with a given capacity.
+ *
+ * Allocates storage for the specified number of objects and resets counters.
+ *
+ * @param list Object list to initialize.
+ * @param capacity Initial capacity (must be > 0).
+ * @return int 1 on success, 0 on failure.
+ */
 int	object_list_init(t_object_list *list, int capacity)
 {
 	if (!list || capacity <= 0)
@@ -25,6 +34,11 @@ int	object_list_init(t_object_list *list, int capacity)
 	return (1);
 }
 
+/**
+ * @brief Free object list storage and reset counters.
+ *
+ * @param list Object list to destroy.
+ */
 void	object_list_destroy(t_object_list *list)
 {
 	if (!list)
@@ -38,6 +52,14 @@ void	object_list_destroy(t_object_list *list)
 	list->capacity = 0;
 }
 
+/**
+ * @brief Grow object list capacity by a factor of 2.
+ *
+ * Allocates a new buffer, copies existing objects, and swaps pointers.
+ *
+ * @param list Object list to grow.
+ * @return int 1 on success, 0 on failure.
+ */
 int	object_list_grow(t_object_list *list)
 {
 	t_object	*new_items;
@@ -56,6 +78,13 @@ int	object_list_grow(t_object_list *list)
 	return (1);
 }
 
+/**
+ * @brief Add an object to the list, growing if needed.
+ *
+ * @param list Object list to update.
+ * @param obj Object to append.
+ * @return int 1 on success, 0 on failure.
+ */
 int	object_list_add(t_object_list *list, t_object *obj)
 {
 	if (!list || !obj)

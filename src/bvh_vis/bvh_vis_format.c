@@ -14,6 +14,14 @@
 #include "minirt.h"
 #include <stdlib.h>
 
+/**
+ * @brief Format a list of object IDs into a buffer.
+ *
+ * @param objects Array of object references.
+ * @param count Number of objects.
+ * @param buffer Destination buffer (assumed large enough).
+ * @param scene_ptr Pointer to the scene for ID lookup.
+ */
 void	format_object_list(t_object_ref *objects, int count, char *buffer,
 			void *scene_ptr)
 {
@@ -38,6 +46,14 @@ void	format_object_list(t_object_ref *objects, int count, char *buffer,
 	ft_strlcat(buffer, "]", 256);
 }
 
+/**
+ * @brief Format node info in compact mode.
+ *
+ * Uses short type labels and depth-only bounds display.
+ *
+ * @param node BVH node to describe.
+ * @param info Output node info structure.
+ */
 void	format_node_compact(t_bvh_node *node, t_node_info *info)
 {
 	char	*num;

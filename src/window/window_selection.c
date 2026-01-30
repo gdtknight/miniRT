@@ -15,6 +15,14 @@
 #include "window_internal.h"
 #include "hud.h"
 
+/**
+ * @brief Handle object selection cycling keys.
+ *
+ * Moves selection forward/backward through objects and marks the HUD dirty.
+ *
+ * @param render Render context containing scene and HUD state.
+ * @param keycode Key code indicating selection direction.
+ */
 void	handle_object_selection(t_render *render, int keycode)
 {
 	if (render->scene->objects.count == 0)

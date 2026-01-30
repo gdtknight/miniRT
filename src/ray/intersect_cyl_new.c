@@ -15,6 +15,17 @@
 #include "vec3.h"
 #include <math.h>
 
+/**
+ * @brief Compute cylinder intersection quadratic parameters.
+ *
+ * Calculates coefficients and discriminant for the infinite cylinder and
+ * stores intermediate values in the calc struct.
+ *
+ * @param ray Ray to test.
+ * @param c Cylinder data.
+ * @param calc Output calculation structure.
+ * @return int 1 if solvable, 0 if no intersection.
+ */
 static int	calc_cyl_intersect(t_ray *ray, t_cylinder_data *c, t_cyl_calc *calc)
 {
 	t_vec3	oc;
@@ -37,6 +48,17 @@ static int	calc_cyl_intersect(t_ray *ray, t_cylinder_data *c, t_cyl_calc *calc)
 	return (1);
 }
 
+/**
+ * @brief Intersect a ray with a cylinder end cap.
+ *
+ * Computes intersection with the cap plane and checks radial bounds.
+ *
+ * @param ray Ray to test.
+ * @param c Cylinder data.
+ * @param hit Hit record to update.
+ * @param cap_m Offset along the axis for the cap center.
+ * @return int 1 if a valid cap hit is found, 0 otherwise.
+ */
 static int	intersect_cyl_cap_new(t_ray *ray, t_cylinder_data *c, t_hit *hit,
 		double cap_m)
 {
@@ -64,6 +86,17 @@ static int	intersect_cyl_cap_new(t_ray *ray, t_cylinder_data *c, t_hit *hit,
 	return (1);
 }
 
+/**
+ * @brief Intersect a ray with the finite cylinder body.
+ *
+ * Solves the quadratic for the infinite cylinder and validates that the hit
+ * lies within the cylinder's height bounds.
+ *
+ * @param ray Ray to test.
+ * @param c Cylinder data.
+ * @param hit Hit record to update.
+ * @return int 1 if a valid body hit is found, 0 otherwise.
+ */
 static int	intersect_cyl_body_new(t_ray *ray, t_cylinder_data *c, t_hit *hit)
 {
 	t_cyl_calc	calc;
@@ -84,6 +117,16 @@ static int	intersect_cyl_body_new(t_ray *ray, t_cylinder_data *c, t_hit *hit)
 	return (1);
 }
 
+/**
+ * @brief Apply a cylinder hit result to the final hit record.
+ *
+ * Copies the temporary hit, applies color, and marks the found flag.
+ *
+ * @param hit Output hit record.
+ * @param temp Temporary hit record.
+ * @param color Surface color.
+ * @param found Output flag indicating a hit was found.
+ */
 static void	apply_cyl_hit(t_hit *hit, t_hit *temp, t_color color, int *found)
 {
 	temp->color = color;
@@ -91,6 +134,17 @@ static void	apply_cyl_hit(t_hit *hit, t_hit *temp, t_color color, int *found)
 	*found = 1;
 }
 
+/**
+ * @brief Intersect a ray with a finite cylinder (body + caps).
+ *
+ * Tests the cylindrical body and both end caps, updating the closest hit.
+ *
+ * @param ray Ray to test.
+ * @param c Cylinder data.
+ * @param color Surface color.
+ * @param hit Hit record to update.
+ * @return int 1 if any intersection is found, 0 otherwise.
+ */
 int	intersect_cylinder_new(t_ray *ray, t_cylinder_data *c, t_color color,
 		t_hit *hit)
 {

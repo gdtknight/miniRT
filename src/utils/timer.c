@@ -13,6 +13,13 @@
 #include "metrics.h"
 #include <time.h>
 
+/**
+ * @brief Return the current time in nanoseconds.
+ *
+ * Uses CLOCK_MONOTONIC to provide a steady time source.
+ *
+ * @return long Time in nanoseconds.
+ */
 long	get_time_ns(void)
 {
 	struct timespec	ts;
@@ -22,9 +29,9 @@ long	get_time_ns(void)
 }
 
 /**
- * @brief timer start 함수
+ * @brief Store the current time in a timeval.
  *
- * @param tv 파라미터
+ * @param tv Timeval to fill.
  */
 void	timer_start(struct timeval *tv)
 {
@@ -32,11 +39,10 @@ void	timer_start(struct timeval *tv)
 }
 
 /**
- * @brief timer elapsed us 함수
+ * @brief Compute elapsed time in microseconds since start.
  *
- * @param start 파라미터
- *
- * @return long 반환값
+ * @param start Start time.
+ * @return long Elapsed microseconds.
  */
 long	timer_elapsed_us(struct timeval *start)
 {
@@ -50,11 +56,10 @@ long	timer_elapsed_us(struct timeval *start)
 }
 
 /**
- * @brief timer elapsed ms 함수
+ * @brief Compute elapsed time in milliseconds since start.
  *
- * @param start 파라미터
- *
- * @return double 반환값
+ * @param start Start time.
+ * @return double Elapsed milliseconds.
  */
 double	timer_elapsed_ms(struct timeval *start)
 {

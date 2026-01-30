@@ -6,15 +6,26 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 12:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 11:46:16 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
 #include "ray.h"
 #include "vec3.h"
 #include <math.h>
 
+/**
+ * @brief Intersect a ray with a sphere and update hit record.
+ *
+ * Solves the quadratic equation for sphere intersection and records the
+ * nearest valid hit if within the current hit distance.
+ *
+ * @param ray Ray to test.
+ * @param s Sphere data.
+ * @param color Surface color of the sphere.
+ * @param hit Hit record to update.
+ * @return int 1 if an intersection is found, 0 otherwise.
+ */
 static int	intersect_sphere_new(t_ray *ray, t_sphere_data *s, t_color color,
 		t_hit *hit)
 {
@@ -43,6 +54,18 @@ static int	intersect_sphere_new(t_ray *ray, t_sphere_data *s, t_color color,
 	return (1);
 }
 
+/**
+ * @brief Intersect a ray with a plane and update hit record.
+ *
+ * Computes ray-plane intersection and updates the hit record when a valid
+ * nearer hit is found.
+ *
+ * @param ray Ray to test.
+ * @param p Plane data.
+ * @param color Surface color of the plane.
+ * @param hit Hit record to update.
+ * @return int 1 if an intersection is found, 0 otherwise.
+ */
 static int	intersect_plane_new(t_ray *ray, t_plane_data *p, t_color color,
 		t_hit *hit)
 {
@@ -66,6 +89,16 @@ static int	intersect_plane_new(t_ray *ray, t_plane_data *p, t_color color,
 	return (1);
 }
 
+/**
+ * @brief Dispatch ray intersection based on object type.
+ *
+ * Calls the appropriate intersection routine for the object's geometry.
+ *
+ * @param ray Ray to test.
+ * @param obj Scene object to intersect.
+ * @param hit Hit record to update.
+ * @return int 1 if an intersection is found, 0 otherwise.
+ */
 int	intersect_object_new(t_ray *ray, t_object *obj, t_hit_record *hit)
 {
 	if (obj->type == OBJ_SPHERE)

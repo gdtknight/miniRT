@@ -16,6 +16,18 @@
 
 int	intersect_object_new(t_ray *ray, t_object *obj, t_hit_record *hit);
 
+/**
+ * @brief Intersect a ray with an object reference.
+ *
+ * Resolves the object from the scene and dispatches to the intersection
+ * routine.
+ *
+ * @param ref Object reference containing index.
+ * @param ray Ray to test.
+ * @param hit Hit record to update.
+ * @param scene_ptr Pointer to the scene.
+ * @return int 1 if hit, 0 otherwise.
+ */
 static int	intersect_ref(t_object_ref ref, t_ray ray, t_hit_record *hit,
 		void *scene_ptr)
 {
@@ -27,6 +39,17 @@ static int	intersect_ref(t_object_ref ref, t_ray ray, t_hit_record *hit,
 	return (intersect_object_new(&ray, obj, hit));
 }
 
+/**
+ * @brief Intersect a ray with all objects in a BVH leaf node.
+ *
+ * Tracks the nearest hit among the node's object references.
+ *
+ * @param node Leaf node containing object references.
+ * @param ray Ray to test.
+ * @param hit Output hit record.
+ * @param scene Pointer to the scene.
+ * @return int 1 if any hit is found, 0 otherwise.
+ */
 static int	bvh_leaf_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 		void *scene)
 {
@@ -51,6 +74,12 @@ static int	bvh_leaf_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 	return (hit_anything);
 }
 
+/**
+ * @brief Choose the closest hit among left and right child results.
+ *
+ * @param hc Hit check context with child hit results.
+ * @return int 1 if any child hit is valid, 0 otherwise.
+ */
 static int	check_child_hits(t_hit_check *hc)
 {
 	if (hc->hit_left && hc->hit_right)
@@ -74,6 +103,17 @@ static int	check_child_hits(t_hit_check *hc)
 	return (0);
 }
 
+/**
+ * @brief Traverse a BVH node to test for ray intersections.
+ *
+ * Performs AABB test, descends into children, and selects the closest hit.
+ *
+ * @param node BVH node to test.
+ * @param ray Ray to test.
+ * @param hit Output hit record.
+ * @param scene Pointer to the scene.
+ * @return int 1 if any hit is found, 0 otherwise.
+ */
 int	bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 		void *scene)
 {
@@ -99,6 +139,15 @@ int	bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 	return (check_child_hits(&hc));
 }
 
+/**
+ * @brief Intersect a ray against the BVH root if enabled.
+ *
+ * @param bvh BVH structure.
+ * @param ray Ray to test.
+ * @param hit Output hit record.
+ * @param scene Pointer to the scene.
+ * @return int 1 if any hit is found, 0 otherwise.
+ */
 int	bvh_intersect(t_bvh *bvh, t_ray ray, t_hit_record *hit, void *scene)
 {
 	if (!bvh || !bvh->root || !bvh->enabled)

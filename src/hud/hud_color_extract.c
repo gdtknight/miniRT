@@ -13,11 +13,10 @@
 #include "hud.h"
 
 /**
- * @brief get red 함수 - 조회 수행
+ * @brief Extract the red component from a packed color.
  *
- * @param color 파라미터
- *
- * @return int 반환값
+ * @param color Packed color value.
+ * @return int Red component (0-255).
  */
 int	get_red(int color)
 {
@@ -25,11 +24,10 @@ int	get_red(int color)
 }
 
 /**
- * @brief get green 함수 - 조회 수행
+ * @brief Extract the green component from a packed color.
  *
- * @param color 파라미터
- *
- * @return int 반환값
+ * @param color Packed color value.
+ * @return int Green component (0-255).
  */
 int	get_green(int color)
 {
@@ -37,11 +35,10 @@ int	get_green(int color)
 }
 
 /**
- * @brief get blue 함수 - 조회 수행
+ * @brief Extract the blue component from a packed color.
  *
- * @param color 파라미터
- *
- * @return int 반환값
+ * @param color Packed color value.
+ * @return int Blue component (0-255).
  */
 int	get_blue(int color)
 {

@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:40:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/15 14:14:36 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 11:36:02 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 #include "window.h"
 #include "window_internal.h"
 
-/*
-** Move the currently selected object by the given delta vector.
-*/
 /**
- * @brief move selected object 함수
+ * @brief Move the currently selected object by a delta vector.
  *
- * @param render 파라미터
- * @param move 파라미터
+ * Applies the translation to the correct object type and ignores invalid
+ * selection indices.
+ *
+ * @param render Render context containing selection and scene.
+ * @param move Translation vector to apply.
  */
 static void	move_selected_object(t_render *render, t_vec3 move)
 {
@@ -40,15 +40,14 @@ static void	move_selected_object(t_render *render, t_vec3 move)
 		obj->data.cylinder.center = vec3_add(obj->data.cylinder.center, move);
 }
 
-/*
-** Handle object movement with RTFGVB keys.
-** R/T: X axis, F/G: Y axis, V/B: Z axis
-*/
 /**
- * @brief handle object move 함수
+ * @brief Handle object movement keys.
  *
- * @param render 파라미터
- * @param keycode 파라미터
+ * Converts key input into axis-aligned movement and marks the BVH as dirty
+ * to trigger rebuild.
+ *
+ * @param render Render context containing selection and flags.
+ * @param keycode Key code identifying movement direction.
  */
 void	handle_object_move(t_render *render, int keycode)
 {
@@ -75,15 +74,13 @@ void	handle_object_move(t_render *render, int keycode)
 	render_set_flag(render, RENDER_BVH_DIRTY);
 }
 
-/*
-** Handle light movement with Insert/Delete/Home/End/PgUp/PgDn keys.
-** Insert/Delete: X axis, Home/End: Y axis, PgUp/PgDn: Z axis
-*/
 /**
- * @brief handle light move 함수
+ * @brief Handle light movement keys.
  *
- * @param render 파라미터
- * @param keycode 파라미터
+ * Translates the scene light position along the X/Y/Z axes based on key input.
+ *
+ * @param render Render context containing scene lighting.
+ * @param keycode Key code identifying movement direction.
  */
 void	handle_light_move(t_render *render, int keycode)
 {

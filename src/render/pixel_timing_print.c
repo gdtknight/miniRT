@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 11:40:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/14 11:40:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 11:33:36 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,21 @@
 #include <stdio.h>
 
 static void	print_timing_header_and_limits(t_pixel_timing *timing);
-static void	print_timing_percentiles(double avg_ns, double median_ns,
-				double p95, double p99);
+static void	print_timing_percentiles(
+				double avg_ns,
+				double median_ns,
+				double p95,
+				double p99);
 
+/**
+ * @brief Print pixel timing statistics to stdout.
+ *
+ * Computes average, median, and percentile timings from the sorted sample
+ * buffer and prints a formatted summary. If no samples exist, prints a
+ * minimal message.
+ *
+ * @param timing Pixel timing structure containing samples and aggregates.
+ */
 void	pixel_timing_print_stats(t_pixel_timing *timing)
 {
 	double	avg_ns;
@@ -43,6 +55,11 @@ void	pixel_timing_print_stats(t_pixel_timing *timing)
 	printf("================================\n\n");
 }
 
+/**
+ * @brief Print header and min/max timing values.
+ *
+ * @param timing Pixel timing structure containing limits.
+ */
 static void	print_timing_header_and_limits(t_pixel_timing *timing)
 {
 	printf("\n=== Pixel Timing Statistics ===\n");
@@ -53,6 +70,14 @@ static void	print_timing_header_and_limits(t_pixel_timing *timing)
 		timing->max_time / 1000.0, timing->max_time / 1000000.0);
 }
 
+/**
+ * @brief Print average, median, and percentile timing values.
+ *
+ * @param avg_ns Average timing in nanoseconds.
+ * @param median_ns Median timing in nanoseconds.
+ * @param p95 95th percentile timing in nanoseconds.
+ * @param p99 99th percentile timing in nanoseconds.
+ */
 static void	print_timing_percentiles(double avg_ns, double median_ns,
 	double p95, double p99)
 {

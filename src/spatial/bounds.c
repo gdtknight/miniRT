@@ -14,6 +14,12 @@
 #include "minirt.h"
 #include <math.h>
 
+/**
+ * @brief Compute AABB for a sphere.
+ *
+ * @param s Sphere data.
+ * @return t_aabb Bounding box of the sphere.
+ */
 static t_aabb	bounds_for_sphere(t_sphere_data *s)
 {
 	t_vec3	rad_vec;
@@ -25,6 +31,12 @@ static t_aabb	bounds_for_sphere(t_sphere_data *s)
 			vec3_add(s->center, rad_vec)));
 }
 
+/**
+ * @brief Compute AABB for a finite cylinder.
+ *
+ * @param c Cylinder data.
+ * @return t_aabb Bounding box of the cylinder.
+ */
 static t_aabb	bounds_for_cylinder(t_cylinder_data *c)
 {
 	t_vec3	half_axis;
@@ -41,6 +53,12 @@ static t_aabb	bounds_for_cylinder(t_cylinder_data *c)
 	return (aabb_create(min, max));
 }
 
+/**
+ * @brief Compute a large AABB approximation for a plane.
+ *
+ * @param p Plane data (unused in approximation).
+ * @return t_aabb Large bounding box.
+ */
 static t_aabb	bounds_for_plane(t_plane_data *p)
 {
 	double	large;
@@ -51,6 +69,12 @@ static t_aabb	bounds_for_plane(t_plane_data *p)
 		(t_vec3){large, large, large}));
 }
 
+/**
+ * @brief Compute an object's bounding box based on its type.
+ *
+ * @param obj Object to bound.
+ * @return t_aabb Bounding box for the object.
+ */
 t_aabb	aabb_for_object(t_object *obj)
 {
 	if (obj->type == OBJ_SPHERE)
@@ -61,6 +85,13 @@ t_aabb	aabb_for_object(t_object *obj)
 		return (bounds_for_plane(&obj->data.plane));
 }
 
+/**
+ * @brief Retrieve bounds for an object referenced by index.
+ *
+ * @param ref Object reference containing index.
+ * @param scene_ptr Pointer to the scene.
+ * @return t_aabb Bounding box for the referenced object.
+ */
 t_aabb	get_object_bounds(t_object_ref ref, void *scene_ptr)
 {
 	t_scene		*scene;

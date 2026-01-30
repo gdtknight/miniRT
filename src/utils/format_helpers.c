@@ -14,6 +14,17 @@
 #include "libft.h"
 #include <stdlib.h>
 
+/**
+ * @brief Format an ID by concatenating a prefix and integer.
+ *
+ * Writes into the provided buffer using bounded libft functions.
+ *
+ * @param buf Destination buffer.
+ * @param size Destination buffer size.
+ * @param prefix Prefix string.
+ * @param n Numeric suffix.
+ * @return int 1 on success, 0 on allocation failure.
+ */
 int	format_id(char *buf, size_t size, const char *prefix, int n)
 {
 	char	*num;
@@ -27,6 +38,14 @@ int	format_id(char *buf, size_t size, const char *prefix, int n)
 	return (1);
 }
 
+/**
+ * @brief Append fractional part to an existing numeric string.
+ *
+ * @param buf Destination buffer containing integer part.
+ * @param size Destination buffer size.
+ * @param frac Fractional digits as integer.
+ * @param precision Number of fractional digits (1 or 2).
+ */
 static void	write_frac_part(char *buf, size_t size, int frac, int precision)
 {
 	char	*frac_str;
@@ -55,6 +74,14 @@ static void	write_frac_part(char *buf, size_t size, int frac, int precision)
 	}
 }
 
+/**
+ * @brief Handle negative values by writing '-' and flipping sign.
+ *
+ * @param buf Destination buffer.
+ * @param size Destination buffer size.
+ * @param value Value to potentially negate (in/out).
+ * @return int 1 on success, 0 if buffer is too small.
+ */
 static int	handle_negative(char *buf, size_t size, double *value)
 {
 	if (*value < 0)
@@ -68,6 +95,17 @@ static int	handle_negative(char *buf, size_t size, double *value)
 	return (1);
 }
 
+/**
+ * @brief Format a floating-point number into a buffer.
+ *
+ * Supports 1 or 2 decimal digits with rounding.
+ *
+ * @param buf Destination buffer.
+ * @param size Destination buffer size.
+ * @param value Value to format.
+ * @param precision Number of decimal digits (1 or 2).
+ * @return int 1 on success, 0 on failure.
+ */
 int	float_to_str(char *buf, size_t size, double value, int precision)
 {
 	int		int_part;

@@ -14,13 +14,15 @@
 #include "window.h"
 
 /**
- * @brief keyguide init 함수 - 초기화 수행
+ * @brief Initialize the key guide overlay state.
  *
- * @param keyguide 파라미터
- * @param mlx 파라미터
- * @param win 파라미터
+ * Creates the background image buffer, caches image metadata, and computes
+ * the on-screen position of the key guide panel.
  *
- * @return int 반환값
+ * @param keyguide Key guide state to initialize.
+ * @param mlx MLX connection pointer.
+ * @param win Window pointer (unused but kept for API consistency).
+ * @return int 0 on success, -1 on failure.
  */
 int	keyguide_init(t_keyguide_state *keyguide, void *mlx, void *win)
 {

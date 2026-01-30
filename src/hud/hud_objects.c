@@ -16,10 +16,10 @@
 #include "hud_obj_render.h"
 
 /**
- * @brief render object header 함수 - 렌더링 수행
+ * @brief Render the object list header with page info.
  *
- * @param render 파라미터
- * @param y 파라미터
+ * @param render Render context containing HUD state.
+ * @param y Current y position (in/out).
  */
 static void	render_object_header(t_render *render, int *y)
 {
@@ -47,11 +47,13 @@ static void	render_object_header(t_render *render, int *y)
 }
 
 /**
- * @brief render object by index 함수 - 렌더링 수행
+ * @brief Render an object entry by global index.
  *
- * @param render 파라미터
- * @param g_idx 파라미터
- * @param y 파라미터
+ * Highlights the selected object entry.
+ *
+ * @param render Render context containing scene and selection.
+ * @param g_idx Global object index.
+ * @param y Current y position (in/out).
  */
 static void	render_object_by_index(t_render *render, int g_idx, int *y)
 {
@@ -66,10 +68,10 @@ static void	render_object_by_index(t_render *render, int g_idx, int *y)
 }
 
 /**
- * @brief hud render objects 함수 - 렌더링 수행
+ * @brief Render the HUD object list for the current page.
  *
- * @param render 파라미터
- * @param y 파라미터
+ * @param render Render context containing HUD and scene.
+ * @param y Current y position (in/out).
  */
 void	hud_render_objects(t_render *render, int *y)
 {

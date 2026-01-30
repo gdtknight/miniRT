@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:40:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/15 14:14:49 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 11:35:35 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 #include "window_internal.h"
 #include "hud.h"
 
-/*
-** Handle camera-related keys and mark dirty for low quality render.
-*/
 /**
- * @brief handle camera keys 함수
+ * @brief Handle camera-related keys and trigger re-rendering.
  *
- * @param render 파라미터
- * @param keycode 파라미터
+ * Dispatches movement, pitch, and reset operations and marks the render
+ * state dirty via the debounce system.
+ *
+ * @param render Render context containing scene and debounce state.
+ * @param keycode Key code to interpret.
  */
 void	handle_camera_keys(t_render *render, int keycode)
 {
@@ -47,14 +47,14 @@ void	handle_camera_keys(t_render *render, int keycode)
 	}
 }
 
-/*
-** Handle object and light movement keys.
-*/
 /**
- * @brief handle transform keys 함수
+ * @brief Handle resize/rotate key groups for objects.
  *
- * @param render 파라미터
- * @param keycode 파라미터
+ * Applies size or rotation updates to the selected object and marks the HUD
+ * as dirty.
+ *
+ * @param render Render context containing selection state.
+ * @param keycode Key code to interpret.
  */
 static void	handle_resize_rotate_keys(t_render *render, int keycode)
 {
@@ -73,6 +73,15 @@ static void	handle_resize_rotate_keys(t_render *render, int keycode)
 	}
 }
 
+/**
+ * @brief Handle object and light transformation keys.
+ *
+ * Moves objects, moves lights, or delegates to resize/rotate handlers
+ * while triggering debounce and HUD refresh.
+ *
+ * @param render Render context containing scene and selection state.
+ * @param keycode Key code to interpret.
+ */
 void	handle_transform_keys(t_render *render, int keycode)
 {
 	if (keycode == KEY_R || keycode == KEY_T || keycode == KEY_F
@@ -94,14 +103,14 @@ void	handle_transform_keys(t_render *render, int keycode)
 		handle_resize_rotate_keys(render, keycode);
 }
 
-/*
-** Handle HUD-related keys.
-*/
 /**
- * @brief handle hud keys 함수
+ * @brief Handle HUD interaction keys.
  *
- * @param render 파라미터
- * @param keycode 파라미터
+ * Toggles HUD visibility, changes selection, and switches pages based on
+ * navigation keys.
+ *
+ * @param render Render context containing HUD state.
+ * @param keycode Key code to interpret.
  */
 void	handle_hud_keys(t_render *render, int keycode)
 {

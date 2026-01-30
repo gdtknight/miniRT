@@ -14,6 +14,18 @@
 #include "mlx.h"
 #include "libft.h"
 
+/**
+ * @brief Initialize an MLX image buffer and metadata.
+ *
+ * Allocates a new image via MLX, retrieves the raw pixel buffer address,
+ * and stores image properties in the provided struct.
+ *
+ * @param img Image structure to initialize.
+ * @param mlx MLX connection pointer.
+ * @param width Image width in pixels.
+ * @param height Image height in pixels.
+ * @return int 1 on success, 0 on failure.
+ */
 int	mlx_img_init(t_mlx_img *img, void *mlx, int width, int height)
 {
 	if (!img || !mlx)
@@ -27,6 +39,14 @@ int	mlx_img_init(t_mlx_img *img, void *mlx, int width, int height)
 	return (1);
 }
 
+/**
+ * @brief Destroy an MLX image and reset image fields.
+ *
+ * Frees the MLX image resource if present and clears cached pointers.
+ *
+ * @param img Image structure to destroy.
+ * @param mlx MLX connection pointer.
+ */
 void	mlx_img_destroy(t_mlx_img *img, void *mlx)
 {
 	if (!img || !mlx)
@@ -39,6 +59,18 @@ void	mlx_img_destroy(t_mlx_img *img, void *mlx)
 	img->data = NULL;
 }
 
+/**
+ * @brief Initialize MLX connection, window, and back buffer.
+ *
+ * Creates an MLX connection, window, and image buffer. All fields are
+ * zeroed prior to initialization to ensure safe cleanup on failure.
+ *
+ * @param ctx Context structure to initialize.
+ * @param width Window width in pixels.
+ * @param height Window height in pixels.
+ * @param title Window title string.
+ * @return int 1 on success, 0 on failure.
+ */
 int	mlx_context_init(t_mlx_context *ctx, int width, int height, char *title)
 {
 	if (!ctx)
@@ -55,6 +87,13 @@ int	mlx_context_init(t_mlx_context *ctx, int width, int height, char *title)
 	return (1);
 }
 
+/**
+ * @brief Destroy MLX resources in the context.
+ *
+ * Releases the image buffer and window if they exist and clears pointers.
+ *
+ * @param ctx Context structure to destroy.
+ */
 void	mlx_context_destroy(t_mlx_context *ctx)
 {
 	if (!ctx)

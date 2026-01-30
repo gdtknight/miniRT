@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:19:39 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/18 15:19:39 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 11:46:02 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,27 @@
 #include "parser.h"
 #include "vec3.h"
 
-/*
-** Check if value is within specified range [min, max] inclusive.
-** Used for parameter validation during parsing.
-*/
 /**
- * @brief in range 함수
+ * @brief Check whether a value lies within an inclusive range.
  *
- * @param value 파라미터
- * @param min 파라미터
- * @param max 파라미터
- *
- * @return int 반환값
+ * @param value Value to check.
+ * @param min Minimum allowed value.
+ * @param max Maximum allowed value.
+ * @return int 1 if within range, 0 otherwise.
  */
 int	in_range(double value, double min, double max)
 {
 	return (value >= min && value <= max);
 }
 
-/*
-** Parse 3D vector from comma-separated string.
-** Format: "x,y,z" where x, y, z are floating point numbers.
-** Returns 1 on success, 0 on parsing error.
-*/
 /**
- * @brief parse vector 함수 - 파싱 수행
+ * @brief Parse a 3D vector from "x,y,z" format.
  *
- * @param str 파라미터
- * @param vec 파라미터
+ * Uses ft_atof for each component and expects commas as separators.
  *
- * @return int 반환값
+ * @param str Input string containing vector components.
+ * @param vec Output vector to fill.
+ * @return int 1 on success, 0 on failure.
  */
 int	parse_vector(char *str, t_vec3 *vec)
 {
@@ -66,18 +57,14 @@ int	parse_vector(char *str, t_vec3 *vec)
 	return (1);
 }
 
-/*
-** Parse RGB color from comma-separated string.
-** Format: "R,G,B" where R, G, B are integers in range [0, 255].
-** Returns 1 on success, 0 on parsing or validation error.
-*/
 /**
- * @brief parse color 함수 - 파싱 수행
+ * @brief Parse an RGB color from "R,G,B" format.
  *
- * @param str 파라미터
- * @param color 파라미터
+ * Validates each component in the 0–255 range.
  *
- * @return int 반환값
+ * @param str Input string containing color components.
+ * @param color Output color to fill.
+ * @return int 1 on success, 0 on failure.
  */
 int	parse_color(char *str, t_color *color)
 {

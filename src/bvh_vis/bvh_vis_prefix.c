@@ -16,6 +16,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/**
+ * @brief Initialize the prefix state used for tree printing.
+ *
+ * Allocates a buffer and resets prefix metadata.
+ *
+ * @return t_prefix_state Initialized prefix state.
+ */
 t_prefix_state	prefix_init(void)
 {
 	t_prefix_state	state;
@@ -35,6 +42,15 @@ t_prefix_state	prefix_init(void)
 	return (state);
 }
 
+/**
+ * @brief Append a new prefix segment for a child node.
+ *
+ * Expands the buffer if needed and writes either a branch or space segment.
+ *
+ * @param state Prefix state to update.
+ * @param is_last Non-zero if the current node is the last sibling.
+ * @return int 1 on success, 0 on allocation failure.
+ */
 int	prefix_push(t_prefix_state *state, int is_last)
 {
 	const char	*prefix;
@@ -63,6 +79,11 @@ int	prefix_push(t_prefix_state *state, int is_last)
 	return (1);
 }
 
+/**
+ * @brief Remove the last prefix segment.
+ *
+ * @param state Prefix state to update.
+ */
 void	prefix_pop(t_prefix_state *state)
 {
 	if (state->length >= 4)
@@ -74,12 +95,22 @@ void	prefix_pop(t_prefix_state *state)
 		state->level--;
 }
 
+/**
+ * @brief Print the current prefix to stdout.
+ *
+ * @param state Prefix state to print.
+ */
 void	prefix_print(t_prefix_state *state)
 {
 	if (state && state->buffer && state->length > 0)
 		printf("%s", state->buffer);
 }
 
+/**
+ * @brief Free prefix buffer and reset state.
+ *
+ * @param state Prefix state to destroy.
+ */
 void	prefix_destroy(t_prefix_state *state)
 {
 	if (state && state->buffer)

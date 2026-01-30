@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:40:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/15 14:14:54 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 11:35:18 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,15 @@
 #include "hud.h"
 #include "keyguide.h"
 
-/*
-** Handle keyboard input events with interactive controls.
-** Uses dirty flag and low quality rendering for smooth interaction.
-*/
 /**
- * @brief handle key 함수
+ * @brief Handle key press events and trigger actions.
  *
- * @param keycode 파라미터
- * @param param 파라미터
+ * Routes keyboard input to HUD controls, object selection, camera movement,
+ * and transform operations while updating render flags as needed.
  *
- * @return int 반환값
+ * @param keycode Key code of the pressed key.
+ * @param param Pointer to the render context.
+ * @return int Always returns 0 for MLX event handling.
  */
 int	handle_key(int keycode, void *param)
 {
@@ -50,17 +48,14 @@ int	handle_key(int keycode, void *param)
 	return (0);
 }
 
-/*
-** Handle key release events.
-** Switches to high quality rendering when interaction stops.
-*/
 /**
- * @brief handle key release 함수
+ * @brief Handle window expose events by presenting the framebuffer.
  *
- * @param keycode 파라미터
- * @param param 파라미터
+ * Pushes the current image buffer to the window and draws HUD overlays
+ * if they are enabled.
  *
- * @return int 반환값
+ * @param render Render context containing image buffer and HUD state.
+ * @return int Always returns 0 for MLX event handling.
  */
 int	handle_expose(t_render *render)
 {
@@ -74,6 +69,15 @@ int	handle_expose(t_render *render)
 	return (0);
 }
 
+/**
+ * @brief Handle key release events.
+ *
+ * Updates render flags when modifier keys are released.
+ *
+ * @param keycode Key code of the released key.
+ * @param param Pointer to the render context.
+ * @return int Always returns 0 for MLX event handling.
+ */
 int	handle_key_release(int keycode, void *param)
 {
 	t_render	*render;

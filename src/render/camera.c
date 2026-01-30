@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:19:56 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/18 15:19:56 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 11:33:02 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,14 @@
 #include "ray.h"
 #include <math.h>
 
-/*
-** Initialize camera coordinate system (right and up vectors).
-** Creates orthonormal basis from camera direction.
-** Assumes world up is (0, 1, 0) for calculating right vector.
-*/
 /**
- * @brief init camera calc 함수 - 초기화 수행
+ * @brief Initialize camera basis vectors and projection parameters.
  *
- * @param camera 파라미터
- * @param calc 파라미터
+ * Computes aspect ratio, field-of-view scaling, and orthonormal basis
+ * vectors (right/up) derived from the camera direction.
+ *
+ * @param camera Camera defining position, direction, and FOV.
+ * @param calc Output structure populated with derived values.
  */
 static void	init_camera_calc(t_camera *camera, t_cam_calc *calc)
 {
@@ -36,19 +34,17 @@ static void	init_camera_calc(t_camera *camera, t_cam_calc *calc)
 	calc->up = vec3_normalize(vec3_cross(calc->right, camera->direction));
 }
 
-/*
-** Create camera ray for pixel at normalized coordinates (x, y).
-** x, y in range [-1, 1] where (0,0) is center of screen.
-** Calculates ray direction based on camera FOV and orientation.
-*/
 /**
- * @brief create camera ray 함수 - 생성 수행
+ * @brief Create a camera ray for normalized device coordinates.
  *
- * @param camera 파라미터
- * @param x 파라미터
- * @param y 파라미터
+ * Converts the normalized screen coordinate (x, y) into a ray direction
+ * based on the camera basis and FOV, then returns a ray originating at
+ * the camera position.
  *
- * @return t_ray 반환값
+ * @param camera Camera describing the view.
+ * @param x Normalized horizontal coordinate in [-1, 1].
+ * @param y Normalized vertical coordinate in [-1, 1].
+ * @return t_ray Ray originating at the camera through (x, y).
  */
 t_ray	create_camera_ray(t_camera *camera, double x, double y)
 {

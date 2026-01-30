@@ -13,6 +13,12 @@
 #include "format_object_id.h"
 #include "utils.h"
 
+/**
+ * @brief Return the prefix string for an object type.
+ *
+ * @param type Object type.
+ * @return char* Prefix string (e.g., "sp-").
+ */
 char	*get_object_type_prefix(t_object_type type)
 {
 	if (type == OBJ_SPHERE)
@@ -24,6 +30,16 @@ char	*get_object_type_prefix(t_object_type type)
 	return ("xx-");
 }
 
+/**
+ * @brief Format an object ID into a buffer.
+ *
+ * Builds a prefix based on type and appends a 1-based index.
+ *
+ * @param buffer Destination buffer.
+ * @param type Object type.
+ * @param index Zero-based index.
+ * @return int 1 on success, 0 on failure.
+ */
 int	format_object_id(char *buffer, t_object_type type, int index)
 {
 	char	*prefix;

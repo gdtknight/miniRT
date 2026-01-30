@@ -16,6 +16,14 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+/**
+ * @brief Read a single line from a file descriptor.
+ *
+ * Reads up to a newline or buffer limit and returns a heap-allocated string.
+ *
+ * @param fd File descriptor to read from.
+ * @return char* Newly allocated line string, or NULL on EOF/error.
+ */
 static char	*read_line(int fd)
 {
 	char	*line;
@@ -40,6 +48,16 @@ static char	*read_line(int fd)
 	return (line);
 }
 
+/**
+ * @brief Parse a single scene line and dispatch to element parsers.
+ *
+ * Skips whitespace and comments and routes to the correct parser based on
+ * the element identifier.
+ *
+ * @param line Line content to parse.
+ * @param scene Scene to update.
+ * @return int 1 on success, 0 on failure.
+ */
 static int	parse_line(char *line, t_scene *scene)
 {
 	while (*line == ' ' || *line == '\t')
@@ -61,6 +79,14 @@ static int	parse_line(char *line, t_scene *scene)
 	return (print_error("Invalid element identifier"));
 }
 
+/**
+ * @brief Validate required scene elements after parsing.
+ *
+ * Ensures ambient light, camera, light source, and at least one object exist.
+ *
+ * @param scene Scene to validate.
+ * @return int 1 if valid, 0 otherwise.
+ */
 int	validate_scene(t_scene *scene)
 {
 	if (!scene_has_ambient(scene))
@@ -74,6 +100,12 @@ int	validate_scene(t_scene *scene)
 	return (1);
 }
 
+/**
+ * @brief Validate that a file name ends with ".rt".
+ *
+ * @param filename Path to the scene file.
+ * @return int 1 if extension matches, 0 otherwise.
+ */
 static int	validate_extension(const char *filename)
 {
 	int	len;
@@ -89,6 +121,16 @@ static int	validate_extension(const char *filename)
 	return (1);
 }
 
+/**
+ * @brief Parse a scene file into a scene structure.
+ *
+ * Validates the extension, reads each line, parses elements, and verifies
+ * required components are present.
+ *
+ * @param filename Path to the scene file.
+ * @param scene Scene to populate.
+ * @return int 1 on success, 0 on failure.
+ */
 int	parse_scene(const char *filename, t_scene *scene)
 {
 	int		fd;

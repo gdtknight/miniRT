@@ -15,9 +15,12 @@
 #include "window.h"
 
 /**
- * @brief keyguide render background 함수 - 렌더링 수행
+ * @brief Render the key guide background overlay.
  *
- * @param render 파라미터
+ * Draws a semi-transparent rectangle by blending scene pixels with a
+ * background color within the key guide bounds.
+ *
+ * @param render Render context containing image buffer and key guide state.
  */
 void	keyguide_render_background(t_render *render)
 {
@@ -49,10 +52,10 @@ void	keyguide_render_background(t_render *render)
 }
 
 /**
- * @brief keyguide render camera section 함수 - 렌더링 수행
+ * @brief Render the camera controls section in the key guide.
  *
- * @param render 파라미터
- * @param y 파라미터
+ * @param render Render context containing key guide position.
+ * @param y Current y position (in/out) for text rendering.
  */
 static void	keyguide_render_camera_section(t_render *render, int *y)
 {
@@ -76,9 +79,9 @@ static void	keyguide_render_camera_section(t_render *render, int *y)
 }
 
 /**
- * @brief keyguide render content 함수 - 렌더링 수행
+ * @brief Render the main key guide content (navigation + camera).
  *
- * @param render 파라미터
+ * @param render Render context containing key guide position.
  */
 void	keyguide_render_content(t_render *render)
 {
@@ -101,10 +104,10 @@ void	keyguide_render_content(t_render *render)
 }
 
 /**
- * @brief keyguide render content2 함수 - 렌더링 수행
+ * @brief Render the secondary key guide content (objects + display).
  *
- * @param render 파라미터
- * @param y 파라미터
+ * @param render Render context containing key guide position.
+ * @param y Current y position (in/out) for text rendering.
  */
 void	keyguide_render_content2(t_render *render, int *y)
 {
@@ -135,9 +138,11 @@ void	keyguide_render_content2(t_render *render, int *y)
 }
 
 /**
- * @brief keyguide render 함수 - 렌더링 수행
+ * @brief Render the full key guide overlay.
  *
- * @param render 파라미터
+ * Draws all sections if the key guide is visible.
+ *
+ * @param render Render context containing key guide state.
  */
 void	keyguide_render(t_render *render)
 {

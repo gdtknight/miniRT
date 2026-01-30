@@ -18,6 +18,19 @@
 #include <stdlib.h>
 #include <string.h>
 
+/**
+ * @brief Parse CLI arguments and extract options/scene filename.
+ *
+ * Scans argv for the optional "--bvh-vis" flag and a single scene file path.
+ * Returns failure if an unknown option is provided or if multiple scene files
+ * are passed. On success, updates filename and bvh_vis output parameters.
+ *
+ * @param argc Argument count from main.
+ * @param argv Argument vector from main.
+ * @param filename Output pointer for the scene file path.
+ * @param bvh_vis Output flag for BVH visualization mode.
+ * @return int 1 on success (scene file present), 0 on failure.
+ */
 static int	parse_args(int argc, char **argv, char **filename, int *bvh_vis)
 {
 	int	i;
@@ -39,6 +52,16 @@ static int	parse_args(int argc, char **argv, char **filename, int *bvh_vis)
 	return (*filename != NULL);
 }
 
+/**
+ * @brief Create a scene, parse it from file, and build the BVH.
+ *
+ * Allocates a new scene, parses the given .rt file into it, and builds
+ * acceleration structures. On failure, cleans up and reports errors.
+ *
+ * @param filename Path to the scene file.
+ * @param scene Output pointer receiving the created scene.
+ * @return int 1 on success, 0 on failure.
+ */
 static int	init_and_parse(char *filename, t_scene **scene)
 {
 	*scene = scene_create();
@@ -56,6 +79,17 @@ static int	init_and_parse(char *filename, t_scene **scene)
 	return (1);
 }
 
+/**
+ * @brief Initialize rendering context and optional BVH visualization.
+ *
+ * Enables BVH visualization on the scene if requested and available,
+ * then creates the render context tied to the given scene.
+ *
+ * @param scene Parsed scene used for rendering.
+ * @param render Output pointer receiving the render context.
+ * @param bvh_vis Non-zero to enable BVH visualization.
+ * @return int 1 on success, 0 on failure.
+ */
 static int	init_render_ctx(t_scene *scene, t_render **render, int bvh_vis)
 {
 	if (bvh_vis && scene->bvh)
@@ -70,6 +104,16 @@ static int	init_render_ctx(t_scene *scene, t_render **render, int bvh_vis)
 	return (1);
 }
 
+/**
+ * @brief Program entry point for miniRT.
+ *
+ * Validates CLI arguments, loads the scene, initializes the render context,
+ * and starts the MLX event loop. Returns a non-zero exit code on failure.
+ *
+ * @param argc Argument count.
+ * @param argv Argument vector.
+ * @return int Exit status (0 on success, 1 on failure).
+ */
 int	main(int argc, char **argv)
 {
 	t_scene		*scene;

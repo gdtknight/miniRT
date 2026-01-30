@@ -13,6 +13,17 @@
 #include "render_progressive.h"
 #include "window.h"
 
+/**
+ * @brief Initialize progressive rendering state for tiled rendering.
+ *
+ * Computes the total number of tiles for the given dimensions and tile size,
+ * resets counters, and enables progressive rendering.
+ *
+ * @param prog Progressive state to initialize.
+ * @param width Target render width.
+ * @param height Target render height.
+ * @param tile_size Square tile size in pixels.
+ */
 void	progressive_init(t_progressive_state *prog, int width, int height,
 		int tile_size)
 {
@@ -29,12 +40,14 @@ void	progressive_init(t_progressive_state *prog, int width, int height,
 }
 
 /**
- * @brief progressive next tile 함수
+ * @brief Compute the next tile rectangle to render.
  *
- * @param prog 파라미터
- * @param rect 파라미터
+ * Converts the current tile index into a tile rectangle and clamps the
+ * rectangle to the render bounds. Advances the tile index on success.
  *
- * @return int 반환값
+ * @param prog Progressive state providing tile counters.
+ * @param rect Output rectangle describing the next tile.
+ * @return int 1 if a tile is available, 0 if finished or disabled.
  */
 int	progressive_next_tile(t_progressive_state *prog, t_tile_rect *rect)
 {
@@ -60,9 +73,12 @@ int	progressive_next_tile(t_progressive_state *prog, t_tile_rect *rect)
 }
 
 /**
- * @brief progressive reset 함수 - 설정 수행
+ * @brief Reset progressive rendering counters.
  *
- * @param prog 파라미터
+ * Resets the current tile index and completed count without changing
+ * the enabled state or tile size.
+ *
+ * @param prog Progressive state to reset.
  */
 void	progressive_reset(t_progressive_state *prog)
 {
