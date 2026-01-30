@@ -75,7 +75,7 @@ sudo apt-get install libx11-dev libxext-dev libbsd-dev
 make
 
 # 4. 실행
-./miniRT scenes/test_simple.rt
+./miniRT scenes/valid/valid_smoke_simple.rt
 ```
 
 ### 기본 사용법
@@ -85,8 +85,8 @@ make
 ./miniRT <scene_file.rt>
 
 # 예제 장면들
-./miniRT scenes/test_simple.rt           # 간단한 테스트
-./miniRT scenes/test_comprehensive.rt    # 종합 테스트 (40개 객체)
+./miniRT scenes/valid/valid_smoke_simple.rt           # 간단한 테스트
+./miniRT scenes/valid/valid_scene_comprehensive.rt    # 종합 테스트 (40개 객체)
 ```
 
 ### 인터랙티브 컨트롤
@@ -214,10 +214,10 @@ make fclean     # 모든 빌드 파일 삭제
 norminette src/ includes/
 
 # 메모리 누수 검사 (Linux)
-valgrind --leak-check=full --show-leak-kinds=all ./miniRT scenes/test_simple.rt
+valgrind --leak-check=full --show-leak-kinds=all ./miniRT scenes/valid/valid_smoke_simple.rt
 
 # 메모리 누수 검사 (macOS)
-leaks -atExit -- ./miniRT scenes/test_simple.rt
+leaks -atExit -- ./miniRT scenes/valid/valid_smoke_simple.rt
 ```
 
 ### 제공되는 테스트 장면 (40개)
@@ -385,7 +385,7 @@ make clean && make
 ls scenes/
 
 # 장면 파일 형식 검증
-cat scenes/test_simple.rt
+cat scenes/valid/valid_smoke_simple.rt
 
 # 권한 확인
 chmod +x miniRT
@@ -395,10 +395,10 @@ chmod +x miniRT
 
 ```bash
 # Valgrind 디버깅 (Linux)
-valgrind --leak-check=full --track-origins=yes ./miniRT scenes/test_simple.rt
+valgrind --leak-check=full --track-origins=yes ./miniRT scenes/valid/valid_smoke_simple.rt
 
 # leaks 디버깅 (macOS)
-leaks -atExit -- ./miniRT scenes/test_simple.rt
+leaks -atExit -- ./miniRT scenes/valid/valid_smoke_simple.rt
 ```
 
 ### 성능 이슈

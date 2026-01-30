@@ -66,11 +66,11 @@ check "src/utils/timer.c exists"
 
 echo ""
 echo "5. Checking test scenes..."
-[ -f scenes/perf_test_20_spheres.rt ]
-check "scenes/perf_test_20_spheres.rt exists"
+[ -f scenes/perf/perf_spheres_20.rt ]
+check "scenes/perf/perf_spheres_20.rt exists"
 
-[ -f scenes/perf_test_50_spheres.rt ]
-check "scenes/perf_test_50_spheres.rt exists"
+[ -f scenes/perf/perf_spheres_50.rt ]
+check "scenes/perf/perf_spheres_50.rt exists"
 
 echo ""
 echo "6. Checking for required symbols in binary..."
@@ -100,10 +100,10 @@ if [ $FAIL -eq 0 ]; then
     echo -e "${GREEN}✓ All checks passed! BVH optimization is properly implemented.${NC}"
     echo ""
     echo "Next steps:"
-    echo "1. Test rendering with: ./miniRT scenes/perf_test_20_spheres.rt"
+    echo "1. Test rendering with: ./miniRT scenes/perf/perf_spheres_20.rt"
     echo "2. Toggle BVH with 'B' key during rendering"
     echo "3. Compare performance with BVH on vs off"
-    echo "4. Try larger scene: ./miniRT scenes/perf_test_50_spheres.rt"
+    echo "4. Try larger scene: ./miniRT scenes/perf/perf_spheres_50.rt"
     exit 0
 else
     echo -e "${RED}✗ Some checks failed. Please review the implementation.${NC}"

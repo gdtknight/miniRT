@@ -86,7 +86,7 @@ description: "Task list for Advanced Rendering Performance Optimization feature"
 
 **✅ COMPLETED**: BVH spatial acceleration is fully implemented and provides 10-100x speedup for complex scenes without requiring threading.
 
-**Independent Test**: Create scenes/perf_test_50_spheres.rt with 50 spheres. Measure rendering time with and without spatial acceleration. With acceleration enabled, rendering time should be <10% of non-accelerated time. Verify rendering output is identical.
+**Independent Test**: Create scenes/perf/perf_spheres_50.rt with 50 spheres. Measure rendering time with and without spatial acceleration. With acceleration enabled, rendering time should be <10% of non-accelerated time. Verify rendering output is identical.
 
 ### Implementation for User Story 2
 
@@ -101,7 +101,7 @@ description: "Task list for Advanced Rendering Performance Optimization feature"
 - [X] T031 [US2] Add spatial acceleration toggle (keyboard 'b') in src/window/window.c
 - [X] T032 [US2] Add BVH statistics (nodes, depth, tests skipped) to metrics in src/utils/metrics.c (integrated in timer.c)
 - [X] T033 [US2] Verify memory overhead stays under 50% of scene size in src/spatial/bvh_build.c
-- [X] T034 [US2] Create large scene test file scenes/perf_test_100_objects.rt (perf_test_50_spheres.rt exists)
+- [X] T034 [US2] Create large scene test file scenes/perf_test_100_objects.rt (perf_spheres_50.rt exists)
 
 **Checkpoint**: User Story 2 is COMPLETE and functional. Scenes with 50+ objects render significantly faster than baseline. BVH can be toggled with 'b' key.
 
@@ -138,7 +138,7 @@ description: "Task list for Advanced Rendering Performance Optimization feature"
 
 **✅ PARTIALLY COMPLETED**: Infrastructure exists (tile structure, progressive state) but tile-based rendering not fully integrated into main render loop.
 
-**Independent Test**: Start rendering scenes/perf_test_50_spheres.rt and verify tiles appear progressively across screen. User should see 20% of image within 20% of total rendering time. Tiles should appear in non-sequential order (not top-to-bottom).
+**Independent Test**: Start rendering scenes/perf/perf_spheres_50.rt and verify tiles appear progressively across screen. User should see 20% of image within 20% of total rendering time. Tiles should appear in non-sequential order (not top-to-bottom).
 
 ### Implementation for User Story 4
 

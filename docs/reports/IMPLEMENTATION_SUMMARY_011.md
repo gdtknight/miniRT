@@ -241,7 +241,7 @@ typedef struct s_cylinder {
 - ✅ Zero memory leaks expected (no dynamic allocation added)
 
 ### Functional Validation
-- ✅ `./miniRT scenes/test_all_objects.rt` runs successfully
+- ✅ `./miniRT scenes/perf/perf_all_objects.rt` runs successfully
 - ✅ Test scenes render without errors
 - ✅ Visual output unchanged (identical rendering)
 

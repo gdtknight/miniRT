@@ -1,295 +1,85 @@
-# miniRT 테스트 장면 파일 가이드
+# miniRT 테스트 장면 파일 가이드 (정리본)
 
-**작성일**: 2025-12-15  
-**목적**: 각 사용자 스토리별 테스트 장면 파일 설명
+**작성일**: 2026-01-30  
+**목적**: 테스트 장면을 목적별로 통합 정리
 
 ---
 
-## 📁 장면 파일 목록 (28개)
+## 📁 디렉토리 구조
 
-### 🎯 사용자 스토리별 테스트 장면
-
-#### US-01: 기본 장면 렌더링
-```bash
-./miniRT scenes/us01_basic_scene.rt        # 모든 객체 타입 (구, 평면, 원기둥)
-./miniRT scenes/us01_sphere_only.rt        # 구만 있는 단순 장면
-./miniRT scenes/us01_multiple_objects.rt   # 여러 객체가 있는 장면
 ```
-
-**검증 사항**:
-- ✅ 구, 평면, 원기둥이 화면에 표시됨
-- ✅ 카메라 시점과 FOV가 올바르게 반영됨
-- ✅ 객체들이 올바른 위치에 렌더링됨
-
----
-
-#### US-02: 장면 파일 파싱
-```bash
-./miniRT scenes/us02_parse_test.rt         # 표준 파싱 테스트
-```
-
-**검증 사항**:
-- ✅ A, C, L 요소가 정확히 파싱됨
-- ✅ sp, pl, cy 객체가 정확히 파싱됨
-- ✅ 공백과 줄바꿈이 유연하게 처리됨
-
----
-
-#### US-03: 조명 효과 구현
-```bash
-./miniRT scenes/us03_lighting_ambient.rt   # 주변광 테스트
-./miniRT scenes/us03_lighting_diffuse.rt   # 확산광 테스트
-./miniRT scenes/us03_shadows.rt            # 그림자 테스트
-```
-
-**검증 사항**:
-- ✅ 주변광으로 객체가 완전히 어둡지 않음
-- ✅ 확산광으로 조명 방향에 따른 밝기 변화
-- ✅ 하드 섀도우가 정확하게 표시됨
-
----
-
-#### US-04: 객체 교차점 계산
-```bash
-./miniRT scenes/us04_sphere_intersection.rt     # 구 교차점
-./miniRT scenes/us04_plane_intersection.rt      # 평면 교차점
-./miniRT scenes/us04_cylinder_intersection.rt   # 원기둥 교차점
-./miniRT scenes/us04_all_intersections.rt       # 모든 교차점
-```
-
-**검증 사항**:
-- ✅ 구와 광선의 교차 계산 정확
-- ✅ 평면과 광선의 교차 계산 정확
-- ✅ 원기둥(측면, 상하단)과 광선의 교차 계산 정확
-
----
-
-#### US-05: 윈도우 제어
-```bash
-./miniRT scenes/us05_window_test.rt        # 단순 장면으로 윈도우 테스트
-```
-
-**검증 사항**:
-- ✅ ESC 키로 정상 종료
-- ✅ X 버튼 클릭으로 정상 종료
-- ✅ 창 전환/최소화가 유동적으로 동작
-- ✅ 메모리 누수 없이 종료
-
----
-
-#### US-06: 객체 변환 (이동/회전)
-```bash
-./miniRT scenes/us06_transformations.rt    # 다양한 위치/방향의 객체들
-```
-
-**검증 사항**:
-- ✅ 평면의 법선 벡터가 올바르게 적용됨
-- ✅ 원기둥의 축 벡터가 올바르게 적용됨
-- ✅ 카메라의 방향 벡터가 올바르게 적용됨
-
----
-
-#### US-07: 객체 속성 조정
-```bash
-./miniRT scenes/us07_sphere_sizes.rt       # 다양한 크기의 구
-./miniRT scenes/us07_cylinder_sizes.rt     # 다양한 크기의 원기둥
-```
-
-**검증 사항**:
-- ✅ 구의 직경 파라미터가 정확히 반영됨
-- ✅ 원기둥의 직경/높이 파라미터가 정확히 반영됨
-
----
-
-### ❌ 오류 케이스 테스트
-
-#### 범위 오류
-```bash
-./miniRT scenes/error_fov_out_of_range.rt       # FOV 범위 초과 (180)
-./miniRT scenes/error_ambient_out_of_range.rt   # 주변광 비율 초과 (1.5)
-./miniRT scenes/error_rgb_out_of_range.rt       # RGB 값 초과 (300)
-```
-
-**예상 결과**: `Error\n` + 명확한 에러 메시지 출력
-
----
-
-#### 필수 요소 오류
-```bash
-./miniRT scenes/error_missing_sphere.rt         # 객체 없음 (A, C, L만)
-./miniRT scenes/error_duplicate_ambient.rt      # A 중복 선언
-```
-
-**예상 결과**: `Error\n` + 명확한 에러 메시지 출력
-
----
-
-#### 형식 오류
-```bash
-./miniRT scenes/error_invalid_format.rt         # 잘못된 파일 형식
-./miniRT nonexistent.rt                         # 파일 없음
-./miniRT                                        # 인자 없음
-```
-
-**예상 결과**: `Error\n` + 명확한 에러 메시지 출력
-
----
-
-### 🧪 추가 테스트 장면
-
-#### 조명 강도 테스트
-```bash
-./miniRT scenes/test_dark_ambient.rt       # 어두운 주변광 (0.05)
-./miniRT scenes/test_bright_ambient.rt     # 밝은 주변광 (0.8)
+scenes/
+  valid/    # 정상 렌더링/기능 테스트
+  perf/     # 성능/스트레스 테스트
+  invalid/  # 오류/파서 실패 케이스
+  archive/  # 이전 문서 아카이브
 ```
 
 ---
 
-#### FOV 테스트
-```bash
-./miniRT scenes/test_fov_narrow.rt         # 좁은 FOV (30도)
-./miniRT scenes/test_fov_wide.rt           # 넓은 FOV (120도)
-```
+## ✅ valid/ (정상 케이스)
+
+### 사용자 스토리(US) 기반
+- `valid_us01_basic.rt` / `valid_us01_sphere_only.rt` / `valid_us01_multiple.rt`
+- `valid_us02_parse.rt`
+- `valid_us03_lighting_ambient.rt` / `valid_us03_lighting_diffuse.rt` / `valid_us03_shadows.rt`
+- `valid_us04_intersect_sphere.rt` / `valid_us04_intersect_plane.rt`
+- `valid_us04_intersect_cylinder.rt` / `valid_us04_intersect_all.rt`
+- `valid_us05_window.rt`
+- `valid_us06_transformations.rt`
+- `valid_us07_sphere_sizes.rt` / `valid_us07_cylinder_sizes.rt`
+
+### 추가 시각/기능 테스트
+- `valid_smoke_simple.rt` / `valid_scene_complex.rt`
+- `valid_scene_comprehensive.rt` / `valid_scene_overlapping.rt`
+- `valid_camera_angle.rt`
+- `valid_camera_fov_narrow.rt` / `valid_camera_fov_wide.rt`
+- `valid_light_ambient_dark.rt` / `valid_light_ambient_bright.rt`
+- `valid_light_inside_object.rt`
+- `valid_shadow_soft.rt` (보너스 성격)
+- `valid_intersect_inside.rt`
+- `valid_transform_rotation.rt` / `valid_transform_resize.rt`
 
 ---
 
-#### 카메라 각도 테스트
-```bash
-./miniRT scenes/test_camera_angle.rt       # 다양한 각도에서 본 장면
-```
+## 📈 perf/ (성능/부하 테스트)
+
+- `perf_spheres_20.rt`
+- `perf_spheres_50.rt`
+- `perf_all_objects.rt` (객체 수 최대)
+- `perf_timing.rt`
 
 ---
 
-#### 복잡한 장면
-```bash
-./miniRT scenes/test_complex_scene.rt      # 여러 객체 + 여러 평면
-./miniRT scenes/test_simple.rt             # 가장 단순한 테스트 장면
-```
+## ❌ invalid/ (오류/파서 실패 케이스)
+
+- 범위/값 오류: `invalid_*_out_of_range.rt`, `invalid_negative_radius.rt`
+- 중복/누락: `invalid_ambient_duplicate.rt`, `invalid_missing_sphere.rt`, `invalid_missing_ambient.rt`
+- 형식 오류: `invalid_format.rt`, `invalid_syntax.rt`
+- 기타: `invalid_camera_bad.rt`, `invalid_light_bad.rt`, `invalid_parse_mid.rt`, `invalid_parse_last.rt`
 
 ---
 
-## 🚀 테스트 실행 가이드
+## 🚀 실행 예시
 
-### 1. 전체 정상 케이스 테스트
+### 정상 케이스 일괄 테스트
 ```bash
-#!/bin/bash
-echo "Testing all valid scenes..."
-for scene in scenes/us*.rt scenes/test_*.rt; do
-    echo "Testing: $scene"
-    ./miniRT "$scene" || echo "  ⚠️  Failed: $scene"
+for scene in scenes/valid/*.rt scenes/perf/*.rt; do
+  echo "Testing: $scene"
+  ./miniRT "$scene" || echo "  ✗ Failed: $scene"
 done
 ```
 
-### 2. 오류 케이스 테스트
+### 오류 케이스 테스트
 ```bash
-#!/bin/bash
-echo "Testing error cases..."
-for scene in scenes/error_*.rt; do
-    echo "Testing: $scene"
-    ./miniRT "$scene" 2>&1 | grep -q "Error" && echo "  ✓ Correct error handling" || echo "  ✗ Missing error message"
+for scene in scenes/invalid/*.rt; do
+  echo "Testing: $scene"
+  ./miniRT "$scene" 2>&1 | grep -q "Error" && echo "  ✓ Error handled" || echo "  ✗ Missing error"
 done
 ```
 
-### 3. 메모리 누수 테스트
-```bash
-#!/bin/bash
-echo "Testing memory leaks..."
-valgrind --leak-check=full --error-exitcode=1 ./miniRT scenes/test_simple.rt
-echo "  ✓ No memory leaks detected"
-```
-
-### 4. 개별 사용자 스토리 테스트
-```bash
-# US-01: 기본 렌더링
-./miniRT scenes/us01_basic_scene.rt
-
-# US-03: 조명 효과
-./miniRT scenes/us03_lighting_ambient.rt
-./miniRT scenes/us03_lighting_diffuse.rt
-./miniRT scenes/us03_shadows.rt
-
-# US-04: 교차점 계산
-./miniRT scenes/us04_all_intersections.rt
-```
-
 ---
 
-## 📊 장면 파일 구조 설명
+## 🗂 archive/
 
-### 기본 형식
-```
-A  ratio                        R,G,B
-C  x,y,z       dx,dy,dz         fov
-L  x,y,z                        ratio           R,G,B
-sp x,y,z                        diameter        R,G,B
-pl x,y,z       nx,ny,nz                         R,G,B
-cy x,y,z       ax,ay,az         diameter height R,G,B
-```
-
-### 예제: test_simple.rt
-```
-A  0.2                          255,255,255    # 20% 주변광, 흰색
-C  0,0,-15     0,0,1            70             # 원점에서 15 뒤, 앞을 향함, 70도 FOV
-L  0,8,-8                       0.7            255,255,255  # 조명 위치, 70% 밝기
-sp 0,0,0                        6              255,0,0      # 원점에 지름 6인 빨간 구
-```
-
----
-
-## ✅ 검증 체크리스트
-
-### 기본 기능
-- [ ] 구, 평면, 원기둥 모두 렌더링됨
-- [ ] 카메라 위치와 방향이 정확함
-- [ ] FOV가 올바르게 적용됨
-- [ ] 객체 크기가 정확함
-
-### 조명
-- [ ] 주변광이 적용되어 완전히 어둡지 않음
-- [ ] 확산광이 조명 방향에 따라 변화함
-- [ ] 그림자가 선명하게 표시됨 (hard shadow)
-
-### 오류 처리
-- [ ] 범위 밖 값 감지
-- [ ] 필수 요소 누락 감지
-- [ ] 중복 선언 감지
-- [ ] 파일 없음 감지
-- [ ] 모든 오류에 "Error\n" + 메시지 출력
-
-### 성능
-- [ ] 단순 장면 (< 5개 객체) < 5초
-- [ ] 복잡한 장면 (< 20개 객체) < 30초
-- [ ] 메모리 누수 0
-
----
-
-## 🔧 트러블슈팅
-
-### 렌더링이 안 되는 경우
-1. MinilibX가 설치되어 있는지 확인
-2. 디스플레이 환경이 설정되어 있는지 확인 (X11)
-3. `make re`로 재빌드
-
-### 오류 메시지가 출력되는 경우
-1. 장면 파일 형식 확인 (공백, 쉼표)
-2. 값 범위 확인 (FOV [0-180], ratio [0.0-1.0], RGB [0-255])
-3. 필수 요소 확인 (A, C, L 각 1개)
-
-### 메모리 누수가 발생하는 경우
-1. 모든 malloc에 대응하는 free 확인
-2. 오류 경로에서도 정리 함수 호출 확인
-3. MinilibX 리소스 해제 확인
-
----
-
-## 📚 참고 자료
-
-- **테스팅 가이드**: `docs/02-개발/테스트_가이드.md`
-- **체크리스트**: `docs/04-릴리스/릴리스_게이트_체크리스트.md`
-- **요구사항**: `docs/01-시작하기/miniRT_요구사항.md`
-- **사양**: `specs/001-raytracer/spec.md`
-
----
-
-**작성자**: GitHub Copilot CLI  
-**최종 수정**: 2025-12-15
+`NEW_SCENES_SUMMARY.md`, `TEST_SCENES_README.md`는 내용 중복으로 `archive/`로 이동함.

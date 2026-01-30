@@ -27,7 +27,7 @@
   - ✅ 10-100x speedup on complex scenes (50+ objects)
   - ✅ Runtime BVH toggle with 'B' key
   - ✅ Performance metrics and monitoring
-  - ✅ Test scenes (perf_test_20_spheres.rt, perf_test_50_spheres.rt)
+  - ✅ Test scenes (perf_spheres_20.rt, perf_spheres_50.rt)
 - **Skipped**: Parallel ray tracing (pthread not allowed in 42 project)
 - **Tasks**: 34/68 completed (BVH implementation done, pthread tasks skipped)
 
@@ -73,8 +73,8 @@
    - bvh_traverse.c (2.8KB)
 
 ✅ Test scenes created:
-   - perf_test_20_spheres.rt (505 bytes)
-   - perf_test_50_spheres.rt (1.2KB)
+   - perf_spheres_20.rt (505 bytes)
+   - perf_spheres_50.rt (1.2KB)
 
 ✅ Runtime execution: Program launches and runs correctly
 ```

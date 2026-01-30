@@ -42,7 +42,7 @@ xcode-select --install
 
 ```bash
 chmod +x miniRT
-./miniRT scenes/test_simple.rt
+./miniRT scenes/valid/valid_smoke_simple.rt
 ```
 
 ### Q: "Error: Failed to open file" 메시지가 나옵니다.
@@ -50,7 +50,7 @@ chmod +x miniRT
 **A**: 장면 파일 경로가 올바른지 확인하세요.
 
 ```bash
-ls -la scenes/test_simple.rt
+ls -la scenes/valid/valid_smoke_simple.rt
 ./miniRT /full/path/to/scene.rt  # 절대 경로 사용
 ```
 
@@ -59,7 +59,7 @@ ls -la scenes/test_simple.rt
 **A**: 장면 파일 형식이 올바른지 확인하세요.
 
 ```bash
-cat scenes/test_simple.rt  # 파일 내용 확인
+cat scenes/valid/valid_smoke_simple.rt  # 파일 내용 확인
 ```
 
 필수 요소(A, C, L)가 모두 있는지 확인하고, 카메라가 객체를 바라보는지 확인하세요.
@@ -117,10 +117,10 @@ cat scenes/test_simple.rt  # 파일 내용 확인
 
 ```bash
 # Linux
-valgrind --leak-check=full ./miniRT scenes/test_simple.rt
+valgrind --leak-check=full ./miniRT scenes/valid/valid_smoke_simple.rt
 
 # macOS
-leaks -atExit -- ./miniRT scenes/test_simple.rt
+leaks -atExit -- ./miniRT scenes/valid/valid_smoke_simple.rt
 ```
 
 ESC 키로 정상 종료하면 모든 메모리가 해제되어야 합니다.
@@ -316,7 +316,7 @@ norminette src/ includes/
 
 3. **간단한 장면으로 테스트**
    ```bash
-   ./miniRT scenes/test_simple.rt
+   ./miniRT scenes/valid/valid_smoke_simple.rt
    ```
    - 간단한 장면이 정상 작동하면 복잡한 장면의 문제
    - 간단한 장면도 검은 화면이면 설치 문제

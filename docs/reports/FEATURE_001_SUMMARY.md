@@ -188,7 +188,7 @@
 make clean && make
 
 # Run with test scene
-./miniRT scenes/test_complex_scene.rt
+./miniRT scenes/valid/valid_scene_complex.rt
 
 # Toggle metrics with 'I' key during render
 # Press 'I' to show/hide performance HUD

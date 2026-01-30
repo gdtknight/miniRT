@@ -154,7 +154,7 @@ The implementation is:
 
 ```bash
 # Test interactive performance
-./miniRT scenes/test_all_objects.rt
+./miniRT scenes/perf/perf_all_objects.rt
 
 # Controls:
 # WASD - Move camera (should show instant low-res preview)

@@ -42,11 +42,11 @@ fi
 # T013-T020: Test with simple scene
 echo ""
 echo "T013-T020: Testing scene loading..."
-if [ ! -f "scenes/test_simple.rt" ]; then
-    echo "⚠️  Warning: test_simple.rt not found, using test_all_objects.rt"
-    TEST_SCENE="scenes/test_all_objects.rt"
+if [ ! -f "scenes/valid/valid_smoke_simple.rt" ]; then
+    echo "⚠️  Warning: valid_smoke_simple.rt not found, using perf_all_objects.rt"
+    TEST_SCENE="scenes/perf/perf_all_objects.rt"
 else
-    TEST_SCENE="scenes/test_simple.rt"
+    TEST_SCENE="scenes/valid/valid_smoke_simple.rt"
 fi
 
 # Test that program can start with a scene (will timeout, but that's expected for GUI)

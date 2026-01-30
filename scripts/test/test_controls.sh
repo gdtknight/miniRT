@@ -13,7 +13,7 @@ if [ ! -f "./miniRT" ]; then
 fi
 
 # Check for test scene
-if [ ! -f "scenes/test_all_objects.rt" ]; then
+if [ ! -f "scenes/perf/perf_all_objects.rt" ]; then
     echo "Error: Test scene not found"
     exit 1
 fi
@@ -25,7 +25,7 @@ echo "Manual Test Instructions:"
 echo "=========================="
 echo ""
 echo "1. Camera Movement (WASD):"
-echo "   - Launch: ./miniRT scenes/test_all_objects.rt"
+echo "   - Launch: ./miniRT scenes/perf/perf_all_objects.rt"
 echo "   - Press W: Camera should move forward"
 echo "   - Press S: Camera should move backward"
 echo "   - Press A: Camera should strafe left"
@@ -62,5 +62,5 @@ echo "- Controls should respond immediately"
 echo "- No crashes or memory leaks"
 echo ""
 echo "To run the interactive test, execute:"
-echo "  ./miniRT scenes/test_all_objects.rt"
+echo "  ./miniRT scenes/perf/perf_all_objects.rt"
 echo ""

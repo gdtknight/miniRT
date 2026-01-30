@@ -42,7 +42,7 @@ This miniRT project has **STRICT function restrictions**:
 ### Test Results:
 
 ```bash
-./miniRT scenes/perf_test_50_spheres.rt
+./miniRT scenes/perf/perf_spheres_50.rt
 # BVH enabled: Fast rendering
 # Press 'B' to disable: Noticeably slower
 # Press 'B' to enable: Fast again
@@ -124,7 +124,7 @@ Remaining:
 - src/render/render_state.c
 - src/utils/timer.c
 - src/window/window.c (BVH toggle)
-- scenes/perf_test_*.rt
+- scenes/perf/perf_*.rt
 
 ---
 

@@ -44,7 +44,7 @@ includes/shadow.h                    # Shadow system header
 tests/test_shadow_calc.c            # Unit tests for shadow calc
 tests/test_shadow_config.c          # Unit tests for config
 docs/03-기능/조명/그림자_시스템.md  # Korean documentation
-scenes/test_soft_shadows.rt         # Test scene for soft shadows
+scenes/valid/valid_shadow_soft.rt         # Test scene for soft shadows
 scenes/test_shadow_attenuation.rt   # Test scene for attenuation
 ```
 
@@ -118,7 +118,7 @@ Makefile                            # Add new source files
 **Files**:
 - `src/lighting/lighting.c` (modify)
 - `includes/minirt.h` (modify)
-- `scenes/test_soft_shadows.rt` (create)
+- `scenes/valid/valid_shadow_soft.rt` (create)
 
 **Modifications**:
 1. Add `t_shadow_config` to `t_scene`

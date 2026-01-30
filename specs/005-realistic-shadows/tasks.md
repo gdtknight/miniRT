@@ -429,7 +429,7 @@ diffuse = diffuse * (1.0 - final_shadow);
 **Description**: Create scene demonstrating soft shadows
 
 **Files**:
-- `scenes/test_soft_shadows.rt` (create)
+- `scenes/valid/valid_shadow_soft.rt` (create)
 
 **Scene Elements**:
 1. Single sphere with soft shadow
