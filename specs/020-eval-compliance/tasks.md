@@ -136,7 +136,7 @@
 
 **Purpose**: 전체 기능 통합 검증, 테스트 씬 파일 생성, Norm/메모리 최종 확인.
 
-- [X] T022 [P] Create test scene files: `scenes/resize_test.rt`, `scenes/rotation_test.rt`, `scenes/inside_test.rt` per quickstart.md 검증 테스트 씬 섹션. 기존 scenes/ 디렉토리에 추가.
+- [X] T022 [P] Create test scene files: `scenes/valid/valid_transform_resize.rt`, `scenes/valid/valid_transform_rotation.rt`, `scenes/valid/valid_intersect_inside.rt` per quickstart.md 검증 테스트 씬 섹션. 기존 scenes/ 디렉토리에 추가.
 - [X] T023 Run full Norminette check on all modified/new files: `norminette includes/window_internal.h includes/window.h src/parser/parser.c src/window/window_init.c src/window/window_events.c src/window/window_key_handlers.c src/window/window_objects.c src/window/window_resize.c src/ray/intersect_cyl_new.c src/render/render.c`. 모든 파일 0 errors.
 - [X] T024 Run memory leak check: `leaks miniRT` (macOS) during interactive operation — resize/rotation/expose 이벤트 반복 후 leak 없음 확인.
 - [X] T025 Execute quickstart.md 통합 검증 체크리스트 전체 수행: 키 매핑 검증, Window Stability, 렌더 중 입력 안전(FR-013), 실린더 내부 교차, 키코드 플랫폼 검증.

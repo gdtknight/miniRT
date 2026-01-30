@@ -27,10 +27,10 @@ git checkout 011-performance-optimization
 make clean && make
 
 # 3. Run complex scene (baseline - should be <1 FPS)
-time ./miniRT scenes/test_complex_scene.rt
+time ./miniRT scenes/valid/valid_scene_complex.rt
 
 # 4. After implementation, run again (should be 3-5 FPS)
-./miniRT scenes/test_complex_scene.rt
+./miniRT scenes/valid/valid_scene_complex.rt
 
 # 5. Toggle performance metrics with 'I' key during render
 # You should see:
@@ -337,10 +337,10 @@ void cleanup_scene(t_scene *scene)
 #### 1. Visual Correctness Test
 ```bash
 # Generate reference image without BVH (brute-force)
-./miniRT scenes/test_complex_scene.rt --no-bvh --output reference.ppm
+./miniRT scenes/valid/valid_scene_complex.rt --no-bvh --output reference.ppm
 
 # Generate image with BVH
-./miniRT scenes/test_complex_scene.rt --output optimized.ppm
+./miniRT scenes/valid/valid_scene_complex.rt --output optimized.ppm
 
 # Compare pixel-by-pixel (should be identical)
 diff reference.ppm optimized.ppm
@@ -350,7 +350,7 @@ diff reference.ppm optimized.ppm
 #### 2. Performance Test
 ```bash
 # Run with metrics enabled
-./miniRT scenes/test_complex_scene.rt
+./miniRT scenes/valid/valid_scene_complex.rt
 
 # Press 'I' to show metrics
 # Verify:
@@ -362,7 +362,7 @@ diff reference.ppm optimized.ppm
 #### 3. Memory Test
 ```bash
 # Check for memory leaks with valgrind
-valgrind --leak-check=full --show-leak-kinds=all ./miniRT scenes/test_complex_scene.rt
+valgrind --leak-check=full --show-leak-kinds=all ./miniRT scenes/valid/valid_scene_complex.rt
 
 # Expected: 0 bytes leaked
 ```
@@ -446,10 +446,10 @@ build_info.min_objects_leaf = 8;  // Was 4
 **Solution**:
 ```bash
 # Enable debug output in BVH traversal
-DEBUG_BVH=1 ./miniRT scenes/test_complex_scene.rt
+DEBUG_BVH=1 ./miniRT scenes/valid/valid_scene_complex.rt
 
 # Check AABB bounds visually
-./miniRT scenes/test_complex_scene.rt --debug-aabb
+./miniRT scenes/valid/valid_scene_complex.rt --debug-aabb
 ```
 
 **Common bugs**:

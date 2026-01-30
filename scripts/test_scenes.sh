@@ -21,7 +21,7 @@ echo -e "${BLUE}========================================${NC}\n"
 echo -e "${BLUE}[1] Testing Valid Scenes${NC}"
 echo "-----------------------------------"
 
-for scene in scenes/us*.rt scenes/test_*.rt; do
+for scene in scenes/valid/*.rt scenes/perf/*.rt; do
     [ ! -f "$scene" ] && continue
     ((TOTAL++))
     
@@ -42,7 +42,7 @@ done
 echo -e "\n${BLUE}[2] Testing Error Cases${NC}"
 echo "-----------------------------------"
 
-for scene in scenes/error_*.rt; do
+for scene in scenes/invalid/*.rt; do
     [ ! -f "$scene" ] && continue
     ((TOTAL++))
     

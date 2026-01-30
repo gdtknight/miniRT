@@ -85,7 +85,7 @@ typedef struct s_render
 make
 
 # 실행
-./miniRT scenes/test_all_objects.rt
+./miniRT scenes/perf/perf_all_objects.rt
 
 # 조작법
 # WASD - 카메라 이동 (즉시 저해상도 프리뷰)

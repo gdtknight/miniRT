@@ -39,7 +39,7 @@
 - ✅ T031: Added keyboard 'B' toggle for BVH in `src/window/window.c`
 - ⚠️  T032: PARTIAL - Basic BVH statistics structure in metrics (full logging deferred)
 - ⚠️  T033: DEFERRED - Memory overhead verification (to be tested)
-- ✅ T034: Created test scenes: `scenes/perf_test_20_spheres.rt`, `scenes/perf_test_50_spheres.rt`
+- ✅ T034: Created test scenes: `scenes/perf/perf_spheres_20.rt`, `scenes/perf/perf_spheres_50.rt`
 
 ### Phase 5: User Story 3 - Adaptive Quality ✅ FOUNDATION COMPLETE
 - ✅ T035: Implemented quality profile structure in `src/render/render_state.c`
@@ -88,8 +88,8 @@
 7. `Makefile` - Added new source files
 
 ### Test Scenes Created
-1. `scenes/perf_test_20_spheres.rt` - 20 spheres for testing
-2. `scenes/perf_test_50_spheres.rt` - 50 spheres for performance testing
+1. `scenes/perf/perf_spheres_20.rt` - 20 spheres for testing
+2. `scenes/perf/perf_spheres_50.rt` - 50 spheres for performance testing
 
 ## Technical Implementation Details
 

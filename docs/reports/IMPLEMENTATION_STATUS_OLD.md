@@ -29,8 +29,8 @@ Successfully implemented BVH (Bounding Volume Hierarchy) spatial acceleration fo
 8. `src/spatial/bvh_traverse.c` - BVH ray traversal (2.8 KB)
 9. `src/render/render_state.c` - State management (3.6 KB)
 10. `src/utils/timer.c` - Performance timing (2.3 KB)
-11. `scenes/perf_test_20_spheres.rt` - Test scene 20 objects
-12. `scenes/perf_test_50_spheres.rt` - Test scene 50 objects
+11. `scenes/perf/perf_spheres_20.rt` - Test scene 20 objects
+12. `scenes/perf/perf_spheres_50.rt` - Test scene 50 objects
 13. `validate_optimization.sh` - Validation script
 14. `RENDERING_OPTIMIZATION_IMPLEMENTATION.md` - Detailed docs
 15. `IMPLEMENTATION_STATUS.md` - This file
@@ -128,12 +128,12 @@ Failed: 0/17 tests
 make clean && make
 
 # Test with 20 spheres
-./miniRT scenes/perf_test_20_spheres.rt
+./miniRT scenes/perf/perf_spheres_20.rt
 # Press 'B' to toggle BVH on/off
 # Observe rendering speed difference
 
 # Test with 50 spheres  
-./miniRT scenes/perf_test_50_spheres.rt
+./miniRT scenes/perf/perf_spheres_50.rt
 # With 50 objects, BVH impact should be very noticeable
 ```
 

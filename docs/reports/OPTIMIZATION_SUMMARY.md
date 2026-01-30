@@ -166,7 +166,7 @@ typedef struct s_render
 
 2. **Performance Test**: Compare render times before/after
    ```bash
-   time ./miniRT scenes/test_complex_scene.rt
+   time ./miniRT scenes/valid/valid_scene_complex.rt
    ```
 
 3. **Quality Test**: Verify final render quality is unchanged

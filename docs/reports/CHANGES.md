@@ -194,7 +194,7 @@ Visual: Blocky but instant feedback
 
 ### Manual Testing:
 ```bash
-./miniRT scenes/test_all_objects.rt
+./miniRT scenes/perf/perf_all_objects.rt
 
 # Test cases:
 # 1. Press W → should see instant low-res preview

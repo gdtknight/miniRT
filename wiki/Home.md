@@ -36,7 +36,7 @@
 git clone <repository>
 cd miniRT
 make
-./miniRT scenes/test_simple.rt
+./miniRT scenes/valid/valid_smoke_simple.rt
 ```
 
 ### 주요 키보드 컨트롤

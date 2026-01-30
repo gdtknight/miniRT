@@ -1,0 +1,8 @@
+# Test trailing token at end of line
+A  0.2                          255,255,255
+
+C  0,0,-15         0,0,1       70
+L  0,8,-8                       0.7             255,255,255
+
+# Line 8 has extra token at end
+sp 0,0,0                        6               255,0,0 extra

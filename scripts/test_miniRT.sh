@@ -55,20 +55,20 @@ fi
 # 2. Valid scene tests
 echo -e "\n${BLUE}[2] Valid Scene Tests${NC}"
 
-if [ -f "scenes/test_simple.rt" ]; then
-    run_test "Simple scene" "scenes/test_simple.rt" "pass"
+if [ -f "scenes/valid/valid_smoke_simple.rt" ]; then
+    run_test "Simple scene" "scenes/valid/valid_smoke_simple.rt" "pass"
 fi
 
-if [ -f "scenes/test_all_objects.rt" ]; then
-    run_test "All objects scene" "scenes/test_all_objects.rt" "pass"
+if [ -f "scenes/perf/perf_all_objects.rt" ]; then
+    run_test "All objects scene" "scenes/perf/perf_all_objects.rt" "pass"
 fi
 
-if [ -f "scenes/us01_sphere_only.rt" ]; then
-    run_test "Sphere only" "scenes/us01_sphere_only.rt" "pass"
+if [ -f "scenes/valid/valid_us01_sphere_only.rt" ]; then
+    run_test "Sphere only" "scenes/valid/valid_us01_sphere_only.rt" "pass"
 fi
 
-if [ -f "scenes/us04_sphere_intersection.rt" ]; then
-    run_test "Sphere intersection" "scenes/us04_sphere_intersection.rt" "pass"
+if [ -f "scenes/valid/valid_us04_intersect_sphere.rt" ]; then
+    run_test "Sphere intersection" "scenes/valid/valid_us04_intersect_sphere.rt" "pass"
 fi
 
 # 3. Error handling tests
@@ -79,11 +79,11 @@ run_test "Missing file" "nonexistent.rt" "fail"
 
 # Test existing error scenes
 ERROR_SCENES=(
-    "scenes/error_ambient_out_of_range.rt:Ambient out of range"
-    "scenes/error_duplicate_ambient.rt:Duplicate ambient"
-    "scenes/error_fov_out_of_range.rt:FOV out of range"
-    "scenes/error_invalid_format.rt:Invalid format"
-    "scenes/error_missing_sphere.rt:Missing sphere"
+    "scenes/invalid/invalid_ambient_out_of_range.rt:Ambient out of range"
+    "scenes/invalid/invalid_ambient_duplicate.rt:Duplicate ambient"
+    "scenes/invalid/invalid_fov_out_of_range.rt:FOV out of range"
+    "scenes/invalid/invalid_format.rt:Invalid format"
+    "scenes/invalid/invalid_missing_sphere.rt:Missing sphere"
 )
 
 for entry in "${ERROR_SCENES[@]}"; do

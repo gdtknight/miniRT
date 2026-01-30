@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 12:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,6 @@
 #include "parser.h"
 #include "vec3.h"
 #include "utils.h"
-
-/**
- * @brief Advance to the next space-delimited token.
- *
- * Moves past the current token and any following spaces.
- *
- * @param token Current token pointer.
- * @return char* Pointer to the next token.
- */
-static char	*skip_to_next_token(char *token)
-{
-	while (*token && *token != ' ')
-		token++;
-	while (*token == ' ')
-		token++;
-	return (token);
-}
 
 /**
  * @brief Count existing cylinder objects in the scene.
@@ -59,26 +42,55 @@ static int	get_cylinder_count(t_scene *scene)
  *
  * Validates positive dimensions and updates radius, radius_sq, and half_height.
  *
- * @param token Pointer to the diameter token.
+ * @param token Pointer to the dimension tokens.
  * @param obj Cylinder object to update.
- * @return int 1 on success, 0 on failure.
+ * @return t_parse_result PARSE_OK on success, error code on failure.
  */
-static int	parse_cylinder_dims(char *token, t_object *obj)
+static t_parse_result	parse_cylinder_dims(const char **token, t_object *obj)
 {
-	double	diameter;
-	double	height;
+	double			diameter;
+	double			height;
+	t_parse_result	result;
 
-	token = skip_to_next_token(token);
-	diameter = ft_atof(token);
-	token = skip_to_next_token(token);
-	height = ft_atof(token);
+	result = parse_double(*token, &diameter, token);
+	if (result != PARSE_OK)
+		return (result);
+	*token = skip_whitespace(*token);
+	result = parse_double(*token, &height, token);
+	if (result != PARSE_OK)
+		return (result);
 	if (diameter <= 0 || height <= 0)
-		return (print_error("Cylinder dimensions must be positive"));
+		return (PARSE_ERR_RANGE);
 	obj->data.cylinder.radius = diameter / 2.0;
 	obj->data.cylinder.radius_sq = obj->data.cylinder.radius
 		* obj->data.cylinder.radius;
 	obj->data.cylinder.half_height = height / 2.0;
-	return (1);
+	return (PARSE_OK);
+}
+
+/**
+ * @brief Parse cylinder center and axis vectors.
+ *
+ * @param token Token pointer.
+ * @param obj Object to populate.
+ * @return t_parse_result PARSE_OK on success, error code on failure.
+ */
+static t_parse_result	parse_cyl_vectors(const char **token, t_object *obj)
+{
+	t_parse_result	result;
+
+	result = parse_vector_strict(*token, &obj->data.cylinder.center, token);
+	if (result != PARSE_OK)
+		return (result);
+	*token = skip_whitespace(*token);
+	result = parse_vector_strict(*token, &obj->data.cylinder.axis, token);
+	if (result != PARSE_OK)
+		return (result);
+	result = validate_direction_vector(&obj->data.cylinder.axis);
+	if (result != PARSE_OK)
+		return (result);
+	obj->data.cylinder.axis = vec3_normalize(obj->data.cylinder.axis);
+	return (PARSE_OK);
 }
 
 /**
@@ -89,30 +101,31 @@ static int	parse_cylinder_dims(char *token, t_object *obj)
  *
  * @param line Raw line from the scene file.
  * @param scene Scene to update.
- * @return int 1 on success, 0 on failure.
+ * @return t_parse_result PARSE_OK on success, error code on failure.
  */
-int	parse_cylinder(char *line, t_scene *scene)
+t_parse_result	parse_cylinder(char *line, t_scene *scene)
 {
-	char		*token;
-	t_object	obj;
+	const char		*token;
+	t_object		obj;
+	t_parse_result	result;
 
 	obj.type = OBJ_CYLINDER;
-	token = line + 3;
-	while (*token == ' ')
-		token++;
-	if (!parse_vector(token, &obj.data.cylinder.center))
-		return (print_error("Invalid cylinder center"));
-	token = skip_to_next_token(token);
-	if (!parse_vector(token, &obj.data.cylinder.axis))
-		return (print_error("Invalid cylinder axis"));
-	obj.data.cylinder.axis = vec3_normalize(obj.data.cylinder.axis);
+	token = skip_whitespace(line + 3);
+	result = parse_cyl_vectors(&token, &obj);
+	if (result != PARSE_OK)
+		return (result);
+	token = skip_whitespace(token);
+	result = parse_cylinder_dims(&token, &obj);
+	if (result != PARSE_OK)
+		return (result);
+	token = skip_whitespace(token);
+	result = parse_color_strict(token, &obj.color, &token);
+	if (result != PARSE_OK)
+		return (result);
+	if (!at_line_end(token))
+		return (PARSE_ERR_TRAILING_TOKEN);
 	format_id(obj.id, 8, "cy-", get_cylinder_count(scene) + 1);
-	if (!parse_cylinder_dims(token, &obj))
-		return (0);
-	token = skip_to_next_token(skip_to_next_token(token));
-	if (!parse_color(token, &obj.color))
-		return (0);
 	if (!object_list_add(&scene->objects, &obj))
-		return (print_error("Failed to add cylinder"));
-	return (1);
+		return (PARSE_ERR_FORMAT);
+	return (PARSE_OK);
 }

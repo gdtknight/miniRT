@@ -103,7 +103,7 @@ To test the implementation:
 make fclean && make
 
 # 2. Run with a test scene
-./miniRT scenes/test_all_objects.rt
+./miniRT scenes/perf/perf_all_objects.rt
 
 # 3. Test each key group:
 #    - Camera: Press W/A/S/D for movement, R/F for rotation

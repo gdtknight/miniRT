@@ -79,13 +79,13 @@ miniRT는 광선 추적(Ray Tracing) 기법을 이용하여 3D 장면을 사실�
 
 <!-- 
 TODO: 스크린샷 추가
-- test_simple.rt: 기본 구체와 평면
+- valid_smoke_simple.rt: 기본 구체와 평면
 - test_comprehensive.rt: 다중 객체 종합 테스트
 -->
 
 ```bash
 # 기본 장면 렌더링
-./miniRT scenes/test_simple.rt
+./miniRT scenes/valid/valid_smoke_simple.rt
 ```
 
 ### 조명 효과
@@ -98,7 +98,7 @@ TODO: 스크린샷 추가
 
 ```bash
 # Phong 조명 모델 데모
-./miniRT scenes/us03_lighting_diffuse.rt
+./miniRT scenes/valid/valid_us03_lighting_diffuse.rt
 ```
 
 ### 그림자 효과
@@ -123,7 +123,7 @@ TODO: 스크린샷 추가
 
 ```bash
 # 종합 테스트 (18개 객체)
-./miniRT scenes/test_comprehensive.rt
+./miniRT scenes/valid/valid_scene_comprehensive.rt
 ```
 
 **📸 Note**: 실제 렌더링 이미지는 프로그램을 실행하여 확인할 수 있습니다.
@@ -147,7 +147,7 @@ sudo apt-get install libx11-dev libxext-dev libbsd-dev
 make
 
 # 4. 실행
-./miniRT scenes/test_simple.rt
+./miniRT scenes/valid/valid_smoke_simple.rt
 ```
 
 ### 기본 사용법
@@ -157,10 +157,10 @@ make
 ./miniRT <scene_file.rt>
 
 # 예제 장면들
-./miniRT scenes/test_simple.rt           # 간단한 테스트
-./miniRT scenes/us03_lighting_diffuse.rt # 조명 효과
+./miniRT scenes/valid/valid_smoke_simple.rt           # 간단한 테스트
+./miniRT scenes/valid/valid_us03_lighting_diffuse.rt # 조명 효과
 ./miniRT scenes/us04_shadow_soft.rt      # 그림자 효과
-./miniRT scenes/test_comprehensive.rt    # 종합 테스트
+./miniRT scenes/valid/valid_scene_comprehensive.rt    # 종합 테스트
 ```
 
 ### 인터랙티브 컨트롤
@@ -307,7 +307,7 @@ Wiki에는 다음 내용이 포함되어 있습니다:
 norminette src/ includes/
 
 # 메모리 누수 검사
-valgrind --leak-check=full ./miniRT scenes/test_simple.rt
+valgrind --leak-check=full ./miniRT scenes/valid/valid_smoke_simple.rt
 ```
 
 ### 제공되는 테스트 장면 (32개)
@@ -374,14 +374,14 @@ valgrind --leak-check=full ./miniRT scenes/test_simple.rt
 
 ```bash
 # 로컬에서 메모리 검사 실행
-.github/scripts/check-memory-leaks.sh scenes/test_simple.rt
+.github/scripts/check-memory-leaks.sh scenes/valid/valid_smoke_simple.rt
 
 # Linux (valgrind)
 .github/scripts/install-valgrind.sh
-valgrind --leak-check=full ./miniRT scenes/test_simple.rt
+valgrind --leak-check=full ./miniRT scenes/valid/valid_smoke_simple.rt
 
 # macOS (leaks)
-./miniRT scenes/test_simple.rt &
+./miniRT scenes/valid/valid_smoke_simple.rt &
 leaks $!
 ```
 
@@ -496,16 +496,16 @@ make re
 ### 씬 파일 로딩 오류
 ```bash
 # 파일 형식 확인 (UTF-8, Unix LF)
-file scenes/test_simple.rt
+file scenes/valid/valid_smoke_simple.rt
 
 # 문법 검증 (에러 케이스로 테스트)
-./miniRT scenes/error_invalid_format.rt
+./miniRT scenes/invalid/invalid_format.rt
 ```
 
 ### 메모리 오류
 ```bash
 # Valgrind로 디버깅
-valgrind --leak-check=full ./miniRT scenes/test_simple.rt
+valgrind --leak-check=full ./miniRT scenes/valid/valid_smoke_simple.rt
 ```
 
 더 많은 정보는 [Wiki](https://github.com/gdtknight/miniRT_final/wiki)를 참조하세요.
