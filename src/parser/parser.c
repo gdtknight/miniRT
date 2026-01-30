@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:19:44 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,37 +16,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-/**
- * @brief Read a single line from a file descriptor.
- *
- * Reads up to a newline or buffer limit and returns a heap-allocated string.
- *
- * @param fd File descriptor to read from.
- * @return char* Newly allocated line string, or NULL on EOF/error.
- */
-static char	*read_line(int fd)
-{
-	char	*line;
-	char	buffer[1024];
-	int		bytes_read;
-	int		i;
-
-	bytes_read = read(fd, buffer, 1);
-	if (bytes_read <= 0)
-		return (NULL);
-	i = 0;
-	while (bytes_read > 0 && buffer[i] != '\n' && i < 1023)
-	{
-		i++;
-		bytes_read = read(fd, &buffer[i], 1);
-	}
-	buffer[i] = '\0';
-	line = malloc(i + 1);
-	if (!line)
-		return (NULL);
-	ft_strlcpy(line, buffer, i + 1);
-	return (line);
-}
+t_parse_result	dispatch_element(char *line, t_scene *scene,
+					t_error_context *ctx);
+int				validate_extension(const char *filename);
 
 /**
  * @brief Parse a single scene line and dispatch to element parsers.
@@ -56,27 +28,22 @@ static char	*read_line(int fd)
  *
  * @param line Line content to parse.
  * @param scene Scene to update.
+ * @param ctx Error context for reporting.
  * @return int 1 on success, 0 on failure.
  */
-static int	parse_line(char *line, t_scene *scene)
+static int	parse_line(char *line, t_scene *scene, t_error_context *ctx)
 {
-	while (*line == ' ' || *line == '\t')
-		line++;
-	if (*line == '\0' || *line == '\n' || *line == '#')
-		return (1);
-	if (line[0] == 'A' && line[1] == ' ')
-		return (parse_ambient(line, scene));
-	else if (line[0] == 'C' && line[1] == ' ')
-		return (parse_camera(line, scene));
-	else if (line[0] == 'L' && line[1] == ' ')
-		return (parse_light(line, scene));
-	else if (line[0] == 's' && line[1] == 'p' && line[2] == ' ')
-		return (parse_sphere(line, scene));
-	else if (line[0] == 'p' && line[1] == 'l' && line[2] == ' ')
-		return (parse_plane(line, scene));
-	else if (line[0] == 'c' && line[1] == 'y' && line[2] == ' ')
-		return (parse_cylinder(line, scene));
-	return (print_error("Invalid element identifier"));
+	t_parse_result	result;
+
+	ctx->element_type = NULL;
+	result = dispatch_element(line, scene, ctx);
+	if (result != PARSE_OK)
+	{
+		ctx->error_code = result;
+		error_context_print(ctx);
+		return (0);
+	}
+	return (1);
 }
 
 /**
@@ -101,24 +68,52 @@ int	validate_scene(t_scene *scene)
 }
 
 /**
- * @brief Validate that a file name ends with ".rt".
+ * @brief Check if line was too long and report error.
  *
- * @param filename Path to the scene file.
- * @return int 1 if extension matches, 0 otherwise.
+ * @param reader Line reader.
+ * @param ctx Error context.
+ * @return int 1 if error occurred, 0 otherwise.
  */
-static int	validate_extension(const char *filename)
+static int	check_line_too_long(t_line_reader *reader, t_error_context *ctx)
 {
-	int	len;
+	if (reader->line_too_long)
+	{
+		error_context_set_line(ctx, reader->line_num);
+		ctx->error_code = PARSE_ERR_LINE_TOO_LONG;
+		error_context_print(ctx);
+		return (1);
+	}
+	return (0);
+}
 
-	len = 0;
-	while (filename[len])
-		len++;
-	if (len < 3)
-		return (0);
-	if (filename[len - 3] != '.' || filename[len - 2] != 'r'
-		|| filename[len - 1] != 't')
-		return (0);
-	return (1);
+/**
+ * @brief Process lines from reader until EOF or error.
+ *
+ * @param reader Line reader.
+ * @param scene Scene to populate.
+ * @param ctx Error context.
+ * @return int 1 on success, 0 on failure.
+ */
+static int	process_lines(t_line_reader *reader, t_scene *scene,
+	t_error_context *ctx)
+{
+	char	*line;
+	int		success;
+
+	success = 1;
+	line = line_reader_next(reader);
+	while (success)
+	{
+		if (check_line_too_long(reader, ctx))
+			return (0);
+		if (line == NULL)
+			break ;
+		error_context_set_line(ctx, reader->line_num);
+		success = parse_line(line, scene, ctx);
+		free(line);
+		line = line_reader_next(reader);
+	}
+	return (success);
 }
 
 /**
@@ -133,25 +128,23 @@ static int	validate_extension(const char *filename)
  */
 int	parse_scene(const char *filename, t_scene *scene)
 {
-	int		fd;
-	char	*line;
-	int		success;
+	int				fd;
+	t_line_reader	reader;
+	t_error_context	ctx;
+	int				success;
 
 	if (!validate_extension(filename))
 		return (print_error("Invalid file extension (expected .rt)"));
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 		return (print_error("Cannot open file"));
-	success = 1;
-	line = read_line(fd);
-	while (success && line != NULL)
+	error_context_init(&ctx);
+	if (!line_reader_init(&reader, fd))
 	{
-		success = parse_line(line, scene);
-		free(line);
-		line = read_line(fd);
+		close(fd);
+		return (print_error("Failed to initialize line reader"));
 	}
-	if (line != NULL)
-		free(line);
+	success = process_lines(&reader, scene, &ctx);
 	close(fd);
 	if (success)
 		success = validate_scene(scene);

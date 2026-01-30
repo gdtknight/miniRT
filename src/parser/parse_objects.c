@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:19:34 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,6 @@
 #include "parser.h"
 #include "vec3.h"
 #include "utils.h"
-
-/**
- * @brief Advance to the next space-delimited token.
- *
- * Skips the current token and trailing spaces.
- *
- * @param token Current token pointer.
- * @return char* Pointer to the next token.
- */
-static char	*skip_to_next_token(char *token)
-{
-	while (*token && *token != ' ')
-		token++;
-	while (*token == ' ')
-		token++;
-	return (token);
-}
 
 /**
  * @brief Count objects of a specific type in the scene.
@@ -56,6 +39,31 @@ static int	get_type_count(t_scene *scene, t_object_type type)
 }
 
 /**
+ * @brief Parse sphere dimensions and color.
+ *
+ * @param token Current token pointer.
+ * @param obj Object to populate.
+ * @return t_parse_result PARSE_OK on success, error code on failure.
+ */
+static t_parse_result	parse_sphere_data(const char **token, t_object *obj)
+{
+	double			diameter;
+	t_parse_result	result;
+
+	result = parse_double(*token, &diameter, token);
+	if (result != PARSE_OK)
+		return (result);
+	if (diameter <= 0)
+		return (PARSE_ERR_RANGE);
+	obj->data.sphere.radius = diameter / 2.0;
+	obj->data.sphere.radius_sq = obj->data.sphere.radius
+		* obj->data.sphere.radius;
+	*token = skip_whitespace(*token);
+	result = parse_color_strict(*token, &obj->color, token);
+	return (result);
+}
+
+/**
  * @brief Parse a sphere definition line into a scene object.
  *
  * Extracts center, diameter, and color, assigns an ID, and appends the
@@ -63,33 +71,52 @@ static int	get_type_count(t_scene *scene, t_object_type type)
  *
  * @param line Raw line from the scene file.
  * @param scene Scene to update.
- * @return int 1 on success, 0 on failure.
+ * @return t_parse_result PARSE_OK on success, error code on failure.
  */
-int	parse_sphere(char *line, t_scene *scene)
+t_parse_result	parse_sphere(char *line, t_scene *scene)
 {
-	char		*token;
-	t_object	obj;
-	double		diameter;
+	const char		*token;
+	t_object		obj;
+	t_parse_result	result;
 
 	obj.type = OBJ_SPHERE;
-	token = line + 3;
-	while (*token == ' ')
-		token++;
-	if (!parse_vector(token, &obj.data.sphere.center))
-		return (print_error("Invalid sphere center"));
-	token = skip_to_next_token(token);
-	diameter = ft_atof(token);
-	if (diameter <= 0)
-		return (print_error("Sphere diameter must be positive"));
-	obj.data.sphere.radius = diameter / 2.0;
-	obj.data.sphere.radius_sq = obj.data.sphere.radius * obj.data.sphere.radius;
+	token = skip_whitespace(line + 3);
+	result = parse_vector_strict(token, &obj.data.sphere.center, &token);
+	if (result != PARSE_OK)
+		return (result);
+	token = skip_whitespace(token);
+	result = parse_sphere_data(&token, &obj);
+	if (result != PARSE_OK)
+		return (result);
+	if (!at_line_end(token))
+		return (PARSE_ERR_TRAILING_TOKEN);
 	format_id(obj.id, 8, "sp-", get_type_count(scene, OBJ_SPHERE) + 1);
-	token = skip_to_next_token(token);
-	if (!parse_color(token, &obj.color))
-		return (0);
 	if (!object_list_add(&scene->objects, &obj))
-		return (print_error("Failed to add sphere"));
-	return (1);
+		return (PARSE_ERR_FORMAT);
+	return (PARSE_OK);
+}
+
+/**
+ * @brief Parse plane normal and color.
+ *
+ * @param token Current token pointer.
+ * @param obj Object to populate.
+ * @return t_parse_result PARSE_OK on success, error code on failure.
+ */
+static t_parse_result	parse_plane_data(const char **token, t_object *obj)
+{
+	t_parse_result	result;
+
+	result = parse_vector_strict(*token, &obj->data.plane.normal, token);
+	if (result != PARSE_OK)
+		return (result);
+	result = validate_direction_vector(&obj->data.plane.normal);
+	if (result != PARSE_OK)
+		return (result);
+	obj->data.plane.normal = vec3_normalize(obj->data.plane.normal);
+	*token = skip_whitespace(*token);
+	result = parse_color_strict(*token, &obj->color, token);
+	return (result);
 }
 
 /**
@@ -100,28 +127,27 @@ int	parse_sphere(char *line, t_scene *scene)
  *
  * @param line Raw line from the scene file.
  * @param scene Scene to update.
- * @return int 1 on success, 0 on failure.
+ * @return t_parse_result PARSE_OK on success, error code on failure.
  */
-int	parse_plane(char *line, t_scene *scene)
+t_parse_result	parse_plane(char *line, t_scene *scene)
 {
-	char		*token;
-	t_object	obj;
+	const char		*token;
+	t_object		obj;
+	t_parse_result	result;
 
 	obj.type = OBJ_PLANE;
-	token = line + 3;
-	while (*token == ' ')
-		token++;
-	if (!parse_vector(token, &obj.data.plane.point))
-		return (print_error("Invalid plane point"));
-	token = skip_to_next_token(token);
-	if (!parse_vector(token, &obj.data.plane.normal))
-		return (print_error("Invalid plane normal"));
-	obj.data.plane.normal = vec3_normalize(obj.data.plane.normal);
+	token = skip_whitespace(line + 3);
+	result = parse_vector_strict(token, &obj.data.plane.point, &token);
+	if (result != PARSE_OK)
+		return (result);
+	token = skip_whitespace(token);
+	result = parse_plane_data(&token, &obj);
+	if (result != PARSE_OK)
+		return (result);
+	if (!at_line_end(token))
+		return (PARSE_ERR_TRAILING_TOKEN);
 	format_id(obj.id, 8, "pl-", get_type_count(scene, OBJ_PLANE) + 1);
-	token = skip_to_next_token(token);
-	if (!parse_color(token, &obj.color))
-		return (0);
 	if (!object_list_add(&scene->objects, &obj))
-		return (print_error("Failed to add plane"));
-	return (1);
+		return (PARSE_ERR_FORMAT);
+	return (PARSE_OK);
 }

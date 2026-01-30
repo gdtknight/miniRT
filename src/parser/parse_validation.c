@@ -6,13 +6,14 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:19:39 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/30 11:46:02 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "parser.h"
 #include "vec3.h"
+#include <math.h>
 
 /**
  * @brief Check whether a value lies within an inclusive range.
@@ -28,7 +29,7 @@ int	in_range(double value, double min, double max)
 }
 
 /**
- * @brief Parse a 3D vector from "x,y,z" format.
+ * @brief Parse a 3D vector from "x,y,z" format (legacy).
  *
  * Uses ft_atof for each component and expects commas as separators.
  *
@@ -58,7 +59,7 @@ int	parse_vector(char *str, t_vec3 *vec)
 }
 
 /**
- * @brief Parse an RGB color from "R,G,B" format.
+ * @brief Parse an RGB color from "R,G,B" format (legacy).
  *
  * Validates each component in the 0–255 range.
  *
