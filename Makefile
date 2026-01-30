@@ -75,8 +75,17 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/parser/parse_elements.c \
 			  $(SRC_DIR)/parser/parse_objects.c \
 			  $(SRC_DIR)/parser/parse_validation.c \
+			  $(SRC_DIR)/parser/parse_validation_strict.c \
 			  $(SRC_DIR)/parser/parse_cylinder.c \
+			  $(SRC_DIR)/parser/parse_error.c \
+			  $(SRC_DIR)/parser/parse_error_msg.c \
+			  $(SRC_DIR)/parser/parse_token.c \
+			  $(SRC_DIR)/parser/parse_number.c \
+			  $(SRC_DIR)/parser/parse_number_utils.c \
+			  $(SRC_DIR)/parser/parse_line_reader.c \
 			  $(SRC_DIR)/parser/parser.c \
+			  $(SRC_DIR)/parser/parser_dispatch.c \
+			  $(SRC_DIR)/parser/parser_utils.c \
 			  $(SRC_DIR)/ray/intersect_object.c \
 			  $(SRC_DIR)/ray/intersect_cyl_new.c \
 			  $(SRC_DIR)/render/camera.c \
