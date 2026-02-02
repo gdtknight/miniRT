@@ -6,12 +6,13 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:15:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/02/02 14:15:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "render_quality.h"
 #include <sys/time.h>
+#include <stdlib.h>
 
 /**
  * @brief Compute elapsed time in microseconds since a start timestamp.
@@ -71,7 +72,8 @@ int	quality_should_upgrade(t_render_state *state)
  * @brief Record an interaction and optionally drop to low quality.
  *
  * Marks the render as interacting, updates interaction counters/timestamp,
- * and if adaptive quality is enabled, switches to low quality for responsiveness.
+ * and if adaptive quality is enabled, switches to low quality for
+ * responsiveness.
  *
  * @param state Render state to update.
  */
