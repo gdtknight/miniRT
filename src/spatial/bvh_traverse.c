@@ -14,8 +14,6 @@
 #include "minirt.h"
 #include "ray.h"
 
-int	intersect_object_new(t_ray *ray, t_object *obj, t_hit_record *hit);
-
 /**
  * @brief Intersect a ray with an object reference.
  *

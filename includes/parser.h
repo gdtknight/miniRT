@@ -79,6 +79,9 @@ int				line_reader_get_line_num(t_line_reader *reader);
 
 t_parse_result	parse_double(const char *str, double *value, const char **end);
 t_parse_result	parse_int(const char *str, int *value, const char **end);
+int				parse_is_digit(char c);
+double			parse_int_part(const char **str, int *has_digits);
+double			parse_frac_part(const char **str, int *has_digits);
 
 /*
  * Token Utilities API
@@ -97,6 +100,9 @@ void			error_context_set_line(t_error_context *ctx, int line);
 void			error_context_set_element(t_error_context *ctx,
 					const char *type);
 void			error_context_print(t_error_context *ctx);
+void			error_write_str(const char *str);
+void			error_write_int(int n);
+const char		*get_error_message(t_parse_result code);
 
 /*
  * Validation API (Enhanced)
@@ -119,6 +125,9 @@ t_parse_result	validate_direction_vector(t_vec3 *vec);
  * @return 1 on success, 0 on error
  */
 int				parse_scene(const char *filename, t_scene *scene);
+t_parse_result	dispatch_element(char *line, t_scene *scene,
+					t_error_context *ctx);
+int				validate_extension(const char *filename);
 
 /**
  * @brief Parse ambient lighting element

@@ -12,10 +12,6 @@
 
 #include "parser.h"
 
-int		parse_is_digit(char c);
-double	parse_int_part(const char **str, int *has_digits);
-double	parse_frac_part(const char **str, int *has_digits);
-
 /**
  * @brief Parse double value with format validation.
  *

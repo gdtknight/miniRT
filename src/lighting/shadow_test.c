@@ -15,8 +15,6 @@
 #include "vec3.h"
 #include "ray.h"
 
-int	intersect_object_new(t_ray *ray, t_object *obj, t_hit_record *hit);
-
 /**
  * @brief Test shadow ray against all objects in the scene.
  *
