@@ -15,43 +15,6 @@
 #include "window.h"
 
 /**
- * @brief Render the key guide background overlay.
- *
- * Draws a semi-transparent rectangle by blending scene pixels with a
- * background color within the key guide bounds.
- *
- * @param render Render context containing image buffer and key guide state.
- */
-void	keyguide_render_background(t_render *render)
-{
-	int				x;
-	int				y;
-	int				scene_color;
-	int				blended;
-	t_pixel_params	params;
-
-	y = render->keyguide.y;
-	while (y < render->keyguide.y + KEYGUIDE_HEIGHT)
-	{
-		x = render->keyguide.x;
-		while (x < render->keyguide.x + KEYGUIDE_WIDTH)
-		{
-			params.img_data = render->mlx.img.data;
-			params.x = x;
-			params.y = y;
-			params.size_line = render->mlx.img.size_line;
-			params.bpp = render->mlx.img.bpp;
-			scene_color = get_pixel(&params);
-			blended = blend_colors(scene_color, KEYGUIDE_COLOR_BG,
-					KEYGUIDE_BG_ALPHA);
-			set_pixel(&params, blended);
-			x++;
-		}
-		y++;
-	}
-}
-
-/**
  * @brief Render the camera controls section in the key guide.
  *
  * @param render Render context containing key guide position.

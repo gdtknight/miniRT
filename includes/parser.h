@@ -187,22 +187,6 @@ t_parse_result	parse_cylinder(char *line, t_scene *scene);
 int				validate_scene(t_scene *scene);
 
 /**
- * @brief Parse vector from string (x,y,z format) - legacy
- * @param str String to parse
- * @param vec Vector to populate
- * @return 1 on success, 0 on error
- */
-int				parse_vector(char *str, t_vec3 *vec);
-
-/**
- * @brief Parse color from string (R,G,B format) - legacy
- * @param str String to parse
- * @param color Color to populate
- * @return 1 on success, 0 on error
- */
-int				parse_color(char *str, t_color *color);
-
-/**
  * @brief Check if value is in range [min, max]
  * @param value Value to check
  * @param min Minimum value
