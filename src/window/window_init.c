@@ -93,6 +93,7 @@ t_render	*render_create(t_scene *scene)
 		return (NULL);
 	if (!mlx_context_init(&render->mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "miniRT"))
 	{
+		mlx_context_destroy(&render->mlx);
 		free(render);
 		return (NULL);
 	}
