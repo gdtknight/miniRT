@@ -13,6 +13,7 @@
 #include "spatial.h"
 #include "minirt.h"
 #include "ray.h"
+#include "metrics.h"
 
 /**
  * @brief Intersect a ray with an object reference.
@@ -60,6 +61,7 @@ static int	bvh_leaf_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 	i = 0;
 	while (i < node->object_count)
 	{
+		metrics_add_intersect_test(&((t_scene *)scene)->metrics);
 		if (intersect_ref(node->objects[i], ray, &temp_hit, scene))
 		{
 			if (!hit_anything || temp_hit.distance < hit->distance)
@@ -124,8 +126,10 @@ int	bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 
 	if (!node)
 		return (0);
+	metrics_add_bvh_node_visit(&((t_scene *)scene)->metrics);
 	t_min = 0.001;
 	t_max = 1000000.0;
+	metrics_add_bvh_box_test(&((t_scene *)scene)->metrics);
 	if (!aabb_intersect(node->bounds, ray, &t_min, &t_max))
 		return (0);
 	if (node->object_count > 0)

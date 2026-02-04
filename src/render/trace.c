@@ -40,6 +40,7 @@ static int	check_all_objects(t_scene *scene, t_ray *ray, t_hit *hit)
 	{
 		obj = &scene->objects.items[i];
 		temp.distance = hit->distance;
+		metrics_add_intersect_test(&scene->metrics);
 		if (intersect_object_new(ray, obj, &temp))
 		{
 			*hit = temp;
