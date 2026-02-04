@@ -76,14 +76,16 @@ static double	calculate_specular(t_vec3 light_dir, t_vec3 normal,
 static double	calc_lighting_factor(t_scene *scene, t_hit *hit,
 		t_vec3 light_dir, t_vec3 view_dir)
 {
-	double	diffuse;
-	double	specular;
-	double	shadow_factor;
+	double			diffuse;
+	double			specular;
+	double			shadow_factor;
+	t_shadow_query	query;
 
 	diffuse = vec3_dot(hit->normal, light_dir);
 	if (diffuse < 0)
 		diffuse = 0;
-	shadow_factor = calculate_shadow_factor(scene, hit->point,
+	query = (t_shadow_query){hit->point, hit->normal};
+	shadow_factor = calculate_shadow_factor(scene, query,
 			scene->light.position, &scene->shadow_config);
 	specular = calculate_specular(light_dir, hit->normal, view_dir) * 0.5;
 	return ((diffuse + specular) * (1.0 - shadow_factor));
