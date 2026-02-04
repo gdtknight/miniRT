@@ -40,7 +40,7 @@ typedef struct s_selection
 	int				index;
 }	t_selection;
 
-/* HUD state structure (legacy compatible) */
+/* HUD state structure */
 typedef struct s_hud_state
 {
 	int		visible;
@@ -48,21 +48,11 @@ typedef struct s_hud_state
 	int		objects_per_page;
 	int		total_pages;
 	int		dirty;
-	void	*bg_img;
-	char	*bg_data;
-	int		bpp;
-	int		size_line;
-	int		endian;
 }	t_hud_state;
 
-/* Key guide state structure (legacy compatible) */
+/* Key guide state structure */
 typedef struct s_keyguide_state
 {
-	void	*bg_img;
-	char	*bg_data;
-	int		bpp;
-	int		size_line;
-	int		endian;
 	int		visible;
 	int		x;
 	int		y;
