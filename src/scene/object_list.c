@@ -12,6 +12,7 @@
 
 #include "minirt.h"
 #include <stdlib.h>
+#include <limits.h>
 
 /**
  * @brief Initialize an object list with a given capacity.
@@ -66,6 +67,8 @@ int	object_list_grow(t_object_list *list)
 	int			new_capacity;
 
 	if (!list)
+		return (0);
+	if (list->capacity > INT_MAX / 2)
 		return (0);
 	new_capacity = list->capacity * 2;
 	new_items = malloc(sizeof(t_object) * new_capacity);
