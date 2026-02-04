@@ -25,6 +25,11 @@ static int	refill_buffer(t_line_reader *reader)
 	reader->buf_len = read(reader->fd, reader->buffer,
 			LINE_READER_BUFFER_SIZE);
 	reader->buf_pos = 0;
+	if (reader->buf_len < 0)
+	{
+		reader->io_error = 1;
+		reader->buf_len = 0;
+	}
 	return (reader->buf_len);
 }
 

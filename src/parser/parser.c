@@ -109,6 +109,12 @@ static int	process_lines(t_line_reader *reader, t_scene *scene,
 		free(line);
 		line = line_reader_next(reader);
 	}
+	if (reader->io_error)
+	{
+		ctx->error_code = PARSE_ERR_IO;
+		error_context_print(ctx);
+		return (0);
+	}
 	return (success);
 }
 

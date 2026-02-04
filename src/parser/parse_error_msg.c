@@ -61,7 +61,8 @@ const char	*get_error_message(t_parse_result code)
 		"Unexpected token at end of line",
 		"Unknown element identifier",
 		"Invalid number format",
-		"Missing required element"
+		"Missing required element",
+		"I/O error while reading file"
 	};
 
 	if (code < PARSE_ERR_COUNT)

@@ -37,6 +37,7 @@ typedef enum e_parse_result
 	PARSE_ERR_UNKNOWN_ELEMENT,
 	PARSE_ERR_NUMBER_FORMAT,
 	PARSE_ERR_MISSING_ELEMENT,
+	PARSE_ERR_IO,
 	PARSE_ERR_COUNT
 }	t_parse_result;
 
@@ -52,6 +53,7 @@ typedef struct s_line_reader
 	int		buf_len;
 	int		line_num;
 	int		line_too_long;
+	int		io_error;
 }	t_line_reader;
 
 /*
