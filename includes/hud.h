@@ -37,6 +37,7 @@ typedef struct s_pixel_params
 	int		y;
 	int		size_line;
 	int		bpp;
+	int		endian;
 }	t_pixel_params;
 
 /* Performance text rendering parameters */

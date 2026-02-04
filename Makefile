@@ -128,6 +128,7 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/window/window_resize.c \
 			  $(SRC_DIR)/window/window_rotate.c \
 			  $(SRC_DIR)/window/mlx_context.c \
+			  $(SRC_DIR)/window/mlx_pixel_codec.c \
 			  $(SRC_DIR)/window/mlx_pixel.c \
 			  $(SRC_DIR)/window/render_flags_set.c
 

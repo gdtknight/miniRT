@@ -41,6 +41,7 @@ void	hud_render_background_row(t_render *render, int y)
 	params.y = y;
 	params.size_line = render->mlx.img.size_line;
 	params.bpp = render->mlx.img.bpp;
+	params.endian = render->mlx.img.endian;
 	while (x < HUD_MARGIN_X + HUD_WIDTH)
 	{
 		params.x = x;

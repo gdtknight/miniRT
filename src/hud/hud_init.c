@@ -13,6 +13,26 @@
 #include "hud.h"
 #include <stdlib.h>
 
+static void	fill_background_pixels(t_pixel_params *params, int color)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < HUD_HEIGHT)
+	{
+		params->y = y;
+		x = 0;
+		while (x < HUD_WIDTH)
+		{
+			params->x = x;
+			set_pixel(params, color);
+			x++;
+		}
+		y++;
+	}
+}
+
 /**
  * @brief Create the HUD background image buffer.
  *
@@ -24,27 +44,20 @@
  */
 int	hud_create_background(t_hud_state *hud, void *mlx)
 {
-	int	x;
-	int	y;
-	int	pixel;
+	int				pixel;
+	t_pixel_params	params;
 
 	hud->bg_img = mlx_new_image(mlx, HUD_WIDTH, HUD_HEIGHT);
 	if (!hud->bg_img)
 		return (-1);
 	hud->bg_data = mlx_get_data_addr(hud->bg_img, &hud->bpp,
 			&hud->size_line, &hud->endian);
-	y = 0;
-	while (y < HUD_HEIGHT)
-	{
-		x = 0;
-		while (x < HUD_WIDTH)
-		{
-			pixel = (int)(HUD_COLOR_BG * HUD_BG_ALPHA);
-			((int *)hud->bg_data)[y * (hud->size_line / 4) + x] = pixel;
-			x++;
-		}
-		y++;
-	}
+	params.img_data = hud->bg_data;
+	params.size_line = hud->size_line;
+	params.bpp = hud->bpp;
+	params.endian = hud->endian;
+	pixel = (int)(HUD_COLOR_BG * HUD_BG_ALPHA);
+	fill_background_pixels(&params, pixel);
 	return (0);
 }
 

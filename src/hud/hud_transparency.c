@@ -24,7 +24,7 @@ int	get_pixel(t_pixel_params *params)
 
 	pixel = params->img_data + (params->y * params->size_line
 			+ params->x * (params->bpp / 8));
-	return (*(int *)pixel);
+	return (mlx_decode_pixel_bytes(pixel, params->bpp, params->endian));
 }
 
 /**
@@ -39,5 +39,5 @@ void	set_pixel(t_pixel_params *params, int color)
 
 	pixel = params->img_data + (params->y * params->size_line
 			+ params->x * (params->bpp / 8));
-	*(int *)pixel = color;
+	mlx_encode_pixel_bytes(pixel, params->bpp, params->endian, color);
 }
