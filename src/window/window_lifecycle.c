@@ -12,16 +12,13 @@
 
 #include "minirt.h"
 #include "window.h"
-#include "hud.h"
-#include "keyguide.h"
-#include "pixel_timing.h"
 #include <stdlib.h>
 
 /**
  * @brief Handle window close event and shut down cleanly.
  *
- * Releases timing, HUD, and key guide resources, then frees scene and render
- * context before exiting the process.
+ * Delegates all resource cleanup to cleanup_all (which calls render_destroy)
+ * then exits the process.
  *
  * @param param Pointer to the render context.
  * @return int Always returns 0 for MLX event handling.
@@ -31,9 +28,6 @@ int	close_window(void *param)
 	t_render	*render;
 
 	render = (t_render *)param;
-	pixel_timing_cleanup(&render->pixel_timing);
-	keyguide_cleanup(&render->keyguide, render->mlx.mlx);
-	hud_cleanup(&render->hud, render->mlx.mlx);
 	cleanup_all(render->scene, render);
 	exit(0);
 	return (0);
