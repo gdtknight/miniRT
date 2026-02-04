@@ -53,13 +53,13 @@ static int	parse_line(char *line, t_scene *scene, t_error_context *ctx)
 int	validate_scene(t_scene *scene)
 {
 	if (!scene_has_ambient(scene))
-		return (print_error("Missing ambient lighting (A)"));
+		return (error_print(ERR_PARSE_MISSING), 0);
 	if (!scene_has_camera(scene))
-		return (print_error("Missing camera (C)"));
+		return (error_print(ERR_PARSE_MISSING), 0);
 	if (!scene_has_light(scene))
-		return (print_error("Missing light (L)"));
+		return (error_print(ERR_PARSE_MISSING), 0);
 	if (scene->objects.count == 0)
-		return (print_error("No objects in scene"));
+		return (error_print(ERR_PARSE_MISSING), 0);
 	return (1);
 }
 
@@ -136,15 +136,15 @@ int	parse_scene(const char *filename, t_scene *scene)
 	int				success;
 
 	if (!validate_extension(filename))
-		return (print_error("Invalid file extension (expected .rt)"));
+		return (error_print(ERR_FILE_EXT), 0);
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
-		return (print_error("Cannot open file"));
+		return (error_print(ERR_FILE_OPEN), 0);
 	error_context_init(&ctx);
 	if (!line_reader_init(&reader, fd))
 	{
 		close(fd);
-		return (print_error("Failed to initialize line reader"));
+		return (error_print(ERR_MALLOC), 0);
 	}
 	success = process_lines(&reader, scene, &ctx);
 	close(fd);

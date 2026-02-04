@@ -14,6 +14,11 @@
 #include "parser.h"
 #include "vec3.h"
 
+int	in_range(double value, double min, double max)
+{
+	return (value >= min && value <= max);
+}
+
 /**
  * @brief Parse vector with strict validation.
  *

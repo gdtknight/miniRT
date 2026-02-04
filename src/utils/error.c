@@ -79,22 +79,3 @@ void	error_exit(t_error_code code)
 	error_print(code);
 	exit(EXIT_FAILURE);
 }
-
-/**
- * @brief Legacy error print function with custom message.
- *
- * Prints "Error" header and the provided message to stderr.
- *
- * @param message Error message string.
- * @return int Always returns 0 for convenience.
- */
-int	print_error(const char *message)
-{
-	write(2, "Error\n", 6);
-	if (message)
-	{
-		write(2, message, ft_strlen(message));
-		write(2, "\n", 1);
-	}
-	return (0);
-}
