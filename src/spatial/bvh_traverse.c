@@ -130,6 +130,8 @@ int	bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 		return (0);
 	if (node->object_count > 0)
 		return (bvh_leaf_intersect(node, ray, hit, scene));
+	left_hit.distance = hit->distance;
+	right_hit.distance = hit->distance;
 	hc.hit_left = bvh_node_intersect(node->left, ray, &left_hit, scene);
 	hc.hit_right = bvh_node_intersect(node->right, ray, &right_hit, scene);
 	hc.left_hit = &left_hit;

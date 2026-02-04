@@ -30,14 +30,10 @@
  */
 static void	put_pixel_to_buffer(t_render *render, int x, int y, t_color color)
 {
-	int		offset;
 	int		pixel_color;
 
-	if (x < 0 || x >= WINDOW_WIDTH || y < 0 || y >= WINDOW_HEIGHT)
-		return ;
-	offset = y * render->mlx.img.size_line + x * (render->mlx.img.bpp / 8);
 	pixel_color = (color.r << 16) | (color.g << 8) | color.b;
-	*(int *)(render->mlx.img.data + offset) = pixel_color;
+	mlx_img_put_pixel(&render->mlx.img, x, y, pixel_color);
 }
 
 /**
