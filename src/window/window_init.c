@@ -40,9 +40,9 @@ static void	init_render_state(t_render *render, t_scene *scene)
 /**
  * @brief Initialize HUD and key guide UI components.
  *
- * Creates background images for HUD and key guide overlays and precomputes
- * pagination state based on the scene. On failure, caller is responsible
- * for cleaning up already-initialized resources via render_destroy.
+ * Initializes HUD and key guide state and precomputes pagination based
+ * on the scene. On failure, caller is responsible for cleaning up
+ * already-initialized resources via render_destroy.
  *
  * @param render Render context containing UI state.
  * @param scene Scene used to compute pagination info.
@@ -93,7 +93,6 @@ t_render	*render_create(t_scene *scene)
 		return (NULL);
 	if (!mlx_context_init(&render->mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "miniRT"))
 	{
-		mlx_context_destroy(&render->mlx);
 		free(render);
 		return (NULL);
 	}
