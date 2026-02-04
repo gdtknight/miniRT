@@ -17,8 +17,7 @@
 /**
  * @brief Handle window close event and shut down cleanly.
  *
- * Delegates all resource cleanup to cleanup_all (which calls render_destroy)
- * then exits the process.
+ * Frees render and scene resources, then exits the process.
  *
  * @param param Pointer to the render context.
  * @return int Always returns 0 for MLX event handling.
@@ -26,9 +25,12 @@
 int	close_window(void *param)
 {
 	t_render	*render;
+	t_scene		*scene;
 
 	render = (t_render *)param;
-	cleanup_all(render->scene, render);
+	scene = render->scene;
+	render_destroy(render);
+	scene_destroy(scene);
 	exit(0);
 	return (0);
 }

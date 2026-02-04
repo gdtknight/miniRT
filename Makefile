@@ -74,7 +74,6 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/math/vector_ops.c \
 			  $(SRC_DIR)/parser/parse_elements.c \
 			  $(SRC_DIR)/parser/parse_objects.c \
-			  $(SRC_DIR)/parser/parse_validation.c \
 			  $(SRC_DIR)/parser/parse_validation_strict.c \
 			  $(SRC_DIR)/parser/parse_cylinder.c \
 			  $(SRC_DIR)/parser/parse_error.c \
@@ -95,15 +94,11 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/render/pixel_timing.c \
 			  $(SRC_DIR)/render/pixel_timing_print.c \
 			  $(SRC_DIR)/render/render.c \
-			  $(SRC_DIR)/render/render_state.c \
-			  $(SRC_DIR)/render/render_quality.c \
-			  $(SRC_DIR)/render/render_progressive.c \
 			  $(SRC_DIR)/render/render_debounce.c \
 			  $(SRC_DIR)/render/render_debounce_timer.c \
 			  $(SRC_DIR)/render/trace.c \
 			  $(SRC_DIR)/spatial/aabb.c \
 			  $(SRC_DIR)/spatial/aabb_basic.c \
-			  $(SRC_DIR)/spatial/aabb_shapes.c \
 			  $(SRC_DIR)/spatial/bounds.c \
 			  $(SRC_DIR)/spatial/bvh_lifecycle.c \
 			  $(SRC_DIR)/spatial/bvh_build_partition.c \
@@ -111,10 +106,7 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/spatial/bvh_build_core.c \
 			  $(SRC_DIR)/spatial/bvh_init.c \
 			  $(SRC_DIR)/spatial/bvh_traverse.c \
-			  $(SRC_DIR)/utils/cleanup.c \
 			  $(SRC_DIR)/utils/error.c \
-			  $(SRC_DIR)/utils/format_object_id.c \
-			  $(SRC_DIR)/utils/ft_atof.c \
 			  $(SRC_DIR)/utils/format_helpers.c \
 			  $(SRC_DIR)/utils/timer.c \
 			  $(SRC_DIR)/window/window_init.c \
