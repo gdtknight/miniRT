@@ -56,6 +56,8 @@ static int	execute_render_pass(t_render *render)
 		return (0);
 	}
 	metrics_end_frame(&render->scene->metrics);
+	metrics_print_summary(&render->scene->metrics,
+		render->scene->objects.count);
 	mlx_put_image_to_window(render->mlx.mlx, render->mlx.win,
 		render->mlx.img.img, 0, 0);
 	render_clear_flag(render, RENDER_DIRTY);

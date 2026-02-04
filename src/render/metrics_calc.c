@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "metrics.h"
+#include <stdio.h>
 
 /**
  * @brief Return the current FPS estimate.
@@ -75,4 +76,34 @@ void	metrics_reset_bvh(t_bvh_metrics *bvh)
 		bvh->tests_skipped = 0;
 		bvh->box_tests = 0;
 	}
+}
+
+/**
+ * @brief Print a summary of all render metrics to stdout.
+ *
+ * Outputs frame timing, ray counts, intersection stats, and BVH counters
+ * for benchmarking and profiling purposes.
+ *
+ * @param m Metrics structure containing all counter data.
+ * @param object_count Number of objects in the scene.
+ */
+void	metrics_print_summary(t_metrics *m, int object_count)
+{
+	double	tests_per_ray;
+	double	bvh_eff;
+
+	tests_per_ray = calculate_avg_tests_per_ray(m);
+	bvh_eff = calculate_bvh_efficiency(m, object_count);
+	printf("\n=== Render Metrics ===\n");
+	printf("Frame time:        %.1f ms\n", m->timing.render_time_us / 1000.0);
+	printf("FPS:               %.1f\n", m->timing.fps);
+	printf("Rays traced:       %ld\n", m->ray.rays_traced);
+	printf("Intersect tests:   %ld\n", m->ray.intersect_tests);
+	printf("Tests/ray:         %.1f\n", tests_per_ray);
+	printf("BVH nodes visited: %ld\n", m->bvh.nodes_visited);
+	printf("BVH box tests:     %ld\n", m->bvh.box_tests);
+	printf("BVH efficiency:    %.1f%%\n", bvh_eff);
+	printf("Objects:           %d\n", object_count);
+	printf("=======================\n\n");
+	fflush(stdout);
 }
