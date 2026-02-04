@@ -55,6 +55,7 @@ static int	bvh_leaf_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 	int				hit_anything;
 	t_hit_record	temp_hit;
 
+	temp_hit.distance = hit->distance;
 	hit_anything = 0;
 	i = 0;
 	while (i < node->object_count)
