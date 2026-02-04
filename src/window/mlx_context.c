@@ -83,9 +83,9 @@ int	mlx_context_init(t_mlx_context *ctx, int width, int height, char *title)
 		return (0);
 	ctx->win = mlx_new_window(ctx->mlx, width, height, title);
 	if (!ctx->win)
-		return (0);
+		return (mlx_context_destroy(ctx), 0);
 	if (!mlx_img_init(&ctx->img, ctx->mlx, width, height))
-		return (0);
+		return (mlx_context_destroy(ctx), 0);
 	return (1);
 }
 
