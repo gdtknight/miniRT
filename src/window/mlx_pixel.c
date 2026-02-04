@@ -29,6 +29,8 @@ void	mlx_img_put_pixel(t_mlx_img *img, int x, int y, int color)
 
 	if (!img || !img->data)
 		return ;
+	if (x < 0 || x >= img->width || y < 0 || y >= img->height)
+		return ;
 	dst = img->data + (y * img->size_line + x * (img->bpp / 8));
 	*(unsigned int *)dst = color;
 }
@@ -49,6 +51,8 @@ int	mlx_img_get_pixel(t_mlx_img *img, int x, int y)
 	char	*src;
 
 	if (!img || !img->data)
+		return (0);
+	if (x < 0 || x >= img->width || y < 0 || y >= img->height)
 		return (0);
 	src = img->data + (y * img->size_line + x * (img->bpp / 8));
 	return (*(unsigned int *)src);

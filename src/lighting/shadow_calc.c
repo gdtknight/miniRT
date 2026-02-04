@@ -117,23 +117,21 @@ static int	sample_shadow_ray(t_shadow_sample *params, int index)
  * @param config Shadow configuration including sample count.
  * @return double Number of samples that are in shadow.
  */
-static double	calc_shadow_samples(t_scene *scene, t_vec3 point,
+static double	calc_shadow_samples(t_scene *scene, t_shadow_query query,
 		t_vec3 light_pos, t_shadow_config *config)
 {
 	t_shadow_sample	params;
 	double			shadow_count;
-	t_vec3			normal;
 	t_vec3			light_dir;
 	int				i;
 
 	shadow_count = 0.0;
-	light_dir = vec3_normalize(vec3_subtract(light_pos, point));
-	normal = (t_vec3){0.0, 1.0, 0.0};
+	light_dir = vec3_normalize(vec3_subtract(light_pos, query.point));
 	params.scene = scene;
-	params.point = point;
+	params.point = query.point;
 	params.light_pos = light_pos;
 	params.config = config;
-	params.bias = calculate_shadow_bias(normal, light_dir, 0.001);
+	params.bias = calculate_shadow_bias(query.normal, light_dir, 0.001);
 	i = 0;
 	while (i < config->samples)
 	{
@@ -160,11 +158,11 @@ static double	calc_shadow_samples(t_scene *scene, t_vec3 point,
  * @param config Shadow configuration including sample count.
  * @return double Shadow factor in [0, 1].
  */
-double	calculate_shadow_factor(t_scene *scene, t_vec3 point,
+double	calculate_shadow_factor(t_scene *scene, t_shadow_query query,
 		t_vec3 light_pos, t_shadow_config *config)
 {
 	double	shadow_count;
 
-	shadow_count = calc_shadow_samples(scene, point, light_pos, config);
+	shadow_count = calc_shadow_samples(scene, query, light_pos, config);
 	return (shadow_count / (double)config->samples);
 }

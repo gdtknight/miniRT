@@ -25,6 +25,8 @@ typedef struct s_mlx_img
 	int		bpp;
 	int		size_line;
 	int		endian;
+	int		width;
+	int		height;
 }	t_mlx_img;
 
 /**

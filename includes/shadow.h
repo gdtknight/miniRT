@@ -35,6 +35,13 @@ typedef struct s_shadow_config
 	int		enable_ao;
 }	t_shadow_config;
 
+/* Shadow query: surface point + normal for bias calculation */
+typedef struct s_shadow_query
+{
+	t_vec3	point;
+	t_vec3	normal;
+}	t_shadow_query;
+
 /* Helper structure for shadow sampling parameters */
 typedef struct s_shadow_sample
 {
@@ -116,7 +123,7 @@ t_vec3			generate_shadow_sample_offset(double radius,
  * @param config Shadow configuration
  * @return Shadow factor (0.0-1.0)
  */
-double			calculate_shadow_factor(t_scene *scene, t_vec3 point,
+double			calculate_shadow_factor(t_scene *scene, t_shadow_query query,
 					t_vec3 light_pos, t_shadow_config *config);
 
 /**

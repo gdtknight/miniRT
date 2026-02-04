@@ -27,10 +27,14 @@
  */
 static void	init_camera_calc(t_camera *camera, t_cam_calc *calc)
 {
+	t_vec3	world_up;
+
 	calc->aspect_ratio = ASPECT_RATIO_NUM / ASPECT_RATIO_DEN;
 	calc->fov_scale = tan(camera->fov * 0.5 * M_PI / 180.0);
-	calc->right = vec3_normalize(vec3_cross(camera->direction,
-				(t_vec3){0, 1, 0}));
+	world_up = (t_vec3){0, 1, 0};
+	if (fabs(vec3_dot(camera->direction, world_up)) > 0.999)
+		world_up = (t_vec3){0, 0, 1};
+	calc->right = vec3_normalize(vec3_cross(camera->direction, world_up));
 	calc->up = vec3_normalize(vec3_cross(calc->right, camera->direction));
 }
 

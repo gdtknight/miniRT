@@ -36,6 +36,8 @@ int	mlx_img_init(t_mlx_img *img, void *mlx, int width, int height)
 		return (0);
 	img->data = mlx_get_data_addr(img->img, &img->bpp,
 			&img->size_line, &img->endian);
+	img->width = width;
+	img->height = height;
 	return (1);
 }
 

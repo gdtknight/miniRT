@@ -16,8 +16,6 @@
 #include "metrics.h"
 #include <math.h>
 
-int	intersect_object_new(t_ray *ray, t_object *obj, t_hit_record *hit);
-
 /**
  * @brief Brute-force intersection test against all objects.
  *

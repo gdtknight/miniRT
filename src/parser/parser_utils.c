@@ -29,6 +29,7 @@ int	line_reader_init(t_line_reader *reader, int fd)
 	reader->buf_len = 0;
 	reader->line_num = 0;
 	reader->line_too_long = 0;
+	reader->io_error = 0;
 	return (1);
 }
 

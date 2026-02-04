@@ -12,10 +12,6 @@
 
 #include "parser.h"
 
-void		error_write_str(const char *str);
-void		error_write_int(int n);
-const char	*get_error_message(t_parse_result code);
-
 /**
  * @brief Initialize error context with default values.
  *

@@ -38,6 +38,8 @@ typedef struct s_progressive_state
 	int		total_tiles;
 	int		tiles_completed;
 	int		tile_size;
+	int		width;
+	int		height;
 }	t_progressive_state;
 
 /* Progressive tile coordinates */
