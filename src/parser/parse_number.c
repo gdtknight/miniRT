@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "parser.h"
+#include <limits.h>
 
 /**
  * @brief Parse double value with format validation.
@@ -54,14 +55,20 @@ t_parse_result	parse_double(const char *str, double *value, const char **end)
  * @param result Output result.
  * @param has_digits Set to 1 if digits found.
  */
-static void	parse_int_digits(const char **str, int *result, int *has_digits)
+static int	parse_int_digits(const char **str, int *result, int *has_digits)
 {
+	int	digit;
+
 	while (parse_is_digit(**str))
 	{
-		*result = *result * 10 + (**str - '0');
+		digit = **str - '0';
+		if (*result > (INT_MAX - digit) / 10)
+			return (0);
+		*result = *result * 10 + digit;
 		(*str)++;
 		*has_digits = 1;
 	}
+	return (1);
 }
 
 /**
@@ -89,7 +96,8 @@ t_parse_result	parse_int(const char *str, int *value, const char **end)
 			sign = -1;
 		str++;
 	}
-	parse_int_digits(&str, &result, &has_digits);
+	if (!parse_int_digits(&str, &result, &has_digits))
+		return (PARSE_ERR_NUMBER_FORMAT);
 	if (!has_digits)
 		return (PARSE_ERR_NUMBER_FORMAT);
 	*value = result * sign;
