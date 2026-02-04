@@ -71,36 +71,4 @@ typedef struct s_object
 	}	data;
 }	t_object;
 
-/* Legacy type aliases for backward compatibility */
-typedef struct s_sphere
-{
-	t_vec3	center;
-	double	diameter;
-	t_color	color;
-	double	radius;
-	double	radius_squared;
-	char	id[8];
-}	t_sphere;
-
-typedef struct s_plane
-{
-	t_vec3	point;
-	t_vec3	normal;
-	t_color	color;
-	char	id[8];
-}	t_plane;
-
-typedef struct s_cylinder
-{
-	t_vec3	center;
-	t_vec3	axis;
-	double	diameter;
-	double	height;
-	t_color	color;
-	double	radius;
-	double	radius_squared;
-	double	half_height;
-	char	id[8];
-}	t_cylinder;
-
 #endif

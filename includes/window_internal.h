@@ -126,16 +126,4 @@ void	handle_object_rotate(t_render *render, int keycode);
 /* Window expose handler */
 int		handle_expose(t_render *render);
 
-/* Selection helper functions */
-void	cycle_type_forward(t_render *render);
-void	cycle_backward_sphere(t_render *render);
-void	cycle_backward_plane(t_render *render);
-void	cycle_backward_cylinder(t_render *render);
-int		next_type_from_sphere(t_scene *scene);
-int		next_type_from_plane(t_scene *scene);
-int		next_type_from_cylinder(t_scene *scene);
-
-/* Forward declaration for re-rendering */
-void	render_scene_to_buffer(t_scene *scene, t_render *render);
-
 #endif

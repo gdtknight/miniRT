@@ -120,12 +120,6 @@ int		scene_has_light(t_scene *scene);
 void	scene_set_flag(t_scene *scene, int flag);
 void	scene_clear_flag(t_scene *scene, int flag);
 
-/* Cleanup */
-void	cleanup_all(t_scene *scene, void *param);
-
-/* Utility functions */
-double	ft_atof(const char *str);
-
 /* Rendering */
 void	render_scene_to_buffer(t_scene *scene, t_render *render);
 t_color	apply_lighting(t_scene *scene, t_hit *hit);

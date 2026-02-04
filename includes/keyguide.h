@@ -40,7 +40,6 @@
 int		keyguide_init(t_keyguide_state *keyguide, void *mlx, void *win);
 void	keyguide_cleanup(t_keyguide_state *keyguide, void *mlx);
 void	keyguide_render(t_render *render);
-void	keyguide_render_background(t_render *render);
 void	keyguide_render_content(t_render *render);
 void	keyguide_render_extra(t_render *render, int *y);
 
