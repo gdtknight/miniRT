@@ -47,6 +47,7 @@ void	metrics_init(t_metrics *metrics)
 	init_frame_timing(&metrics->timing);
 	metrics->ray.rays_traced = 0;
 	metrics->ray.intersect_tests = 0;
+	metrics->ray.shadow_intersect_tests = 0;
 	metrics->bvh.nodes_visited = 0;
 	metrics->bvh.tests_skipped = 0;
 	metrics->bvh.box_tests = 0;
@@ -64,6 +65,7 @@ void	metrics_start_frame(t_metrics *metrics)
 {
 	metrics->ray.rays_traced = 0;
 	metrics->ray.intersect_tests = 0;
+	metrics->ray.shadow_intersect_tests = 0;
 	metrics->bvh.nodes_visited = 0;
 	metrics->bvh.tests_skipped = 0;
 	metrics->bvh.box_tests = 0;

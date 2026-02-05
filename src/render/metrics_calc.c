@@ -98,8 +98,9 @@ void	metrics_print_summary(t_metrics *m, int object_count)
 	printf("Frame time:        %.1f ms\n", m->timing.render_time_us / 1000.0);
 	printf("FPS:               %.4f\n", m->timing.fps);
 	printf("Rays traced:       %ld\n", m->ray.rays_traced);
-	printf("Intersect tests:   %ld\n", m->ray.intersect_tests);
-	printf("Tests/ray:         %.1f\n", tests_per_ray);
+	printf("Primary tests:     %ld\n", m->ray.intersect_tests);
+	printf("Shadow tests:      %ld\n", m->ray.shadow_intersect_tests);
+	printf("Primary tests/ray: %.1f\n", tests_per_ray);
 	printf("BVH nodes visited: %ld\n", m->bvh.nodes_visited);
 	printf("BVH box tests:     %ld\n", m->bvh.box_tests);
 	printf("BVH efficiency:    %.1f%%\n", bvh_eff);

@@ -30,6 +30,7 @@ typedef struct s_ray_metrics
 {
 	long	rays_traced;
 	long	intersect_tests;
+	long	shadow_intersect_tests;
 }	t_ray_metrics;
 
 /* Frame timing data */
@@ -65,6 +66,7 @@ void	metrics_start_frame(t_metrics *metrics);
 void	metrics_end_frame(t_metrics *metrics);
 void	metrics_add_ray(t_metrics *metrics);
 void	metrics_add_intersect_test(t_metrics *metrics);
+void	metrics_add_shadow_intersect(t_metrics *metrics);
 
 /* BVH metrics operations */
 void	metrics_add_bvh_node_visit(t_metrics *metrics);

@@ -36,7 +36,7 @@ static int	check_object_shadow(t_scene *scene, t_ray *ray, t_hit *hit)
 	while (i < scene->objects.count)
 	{
 		obj = &scene->objects.items[i];
-		metrics_add_intersect_test(&scene->metrics);
+		metrics_add_shadow_intersect(&scene->metrics);
 		if (intersect_object_new(ray, obj, hit))
 			return (1);
 		i++;

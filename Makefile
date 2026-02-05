@@ -91,6 +91,7 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/render/metrics_frame.c \
 			  $(SRC_DIR)/render/metrics_counters.c \
 			  $(SRC_DIR)/render/metrics_calc.c \
+			  $(SRC_DIR)/render/metrics_shadow.c \
 			  $(SRC_DIR)/render/pixel_timing.c \
 			  $(SRC_DIR)/render/pixel_timing_print.c \
 			  $(SRC_DIR)/render/render.c \
