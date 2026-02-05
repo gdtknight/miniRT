@@ -58,7 +58,7 @@
 
 - [X] T013 Run S1–S4 scenes 5 times each, record median metrics per `docs/optimization-metrics-collection-plan.md`
 - [X] T014 Create `docs/benchmark-results.md` Round 1 using template from `docs/benchmark-baseline.md` Appendix B, filling baseline vs optimized data
-- [ ] T015 Commit code change (`src/render/trace.c`) and benchmark documentation (`docs/benchmark-results.md`)
+- [X] T015 Commit code change (`src/render/trace.c`) and benchmark documentation (`docs/benchmark-results.md`)
 
 **Checkpoint**: Round 1 benchmark recorded, feature complete.
 
