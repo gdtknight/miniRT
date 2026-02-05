@@ -31,6 +31,7 @@ typedef struct s_pixel_timing
 
 void	pixel_timing_init(t_pixel_timing *timing);
 void	pixel_timing_cleanup(t_pixel_timing *timing);
+void	pixel_timing_reset(t_pixel_timing *timing);
 void	pixel_timing_add_sample(t_pixel_timing *timing, long time_ns);
 void	pixel_timing_calculate_stats(t_pixel_timing *timing);
 void	pixel_timing_print_stats(t_pixel_timing *timing);

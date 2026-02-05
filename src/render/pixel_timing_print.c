@@ -12,6 +12,22 @@
 
 #include "pixel_timing.h"
 #include <stdio.h>
+#include <limits.h>
+
+/**
+ * @brief Reset per-frame pixel timing counters.
+ *
+ * Clears sample count and aggregate statistics without releasing memory.
+ *
+ * @param timing Pixel timing structure to reset.
+ */
+void	pixel_timing_reset(t_pixel_timing *timing)
+{
+	timing->count = 0;
+	timing->min_time = LONG_MAX;
+	timing->max_time = 0;
+	timing->total_time = 0;
+}
 
 /**
  * @brief Print header and min/max timing values.
