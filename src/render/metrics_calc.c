@@ -25,29 +25,21 @@ double	calculate_fps(t_metrics *m)
 }
 
 /**
- * @brief Calculate BVH efficiency as a percentage.
+ * @brief Calculate BVH skip rate as a percentage.
  *
- * Compares actual intersection tests against the naive tests (rays * objects)
- * and returns a higher percentage for better efficiency.
+ * Returns the ratio of skipped nodes to total visited nodes, expressed
+ * as a percentage. Higher values indicate more effective early-out.
  *
- * @param m Metrics structure containing ray and intersect counts.
- * @param object_count Number of objects in the scene.
- * @return double Efficiency percentage in [0, 100].
+ * @param m Metrics structure containing BVH traversal counts.
+ * @param object_count Number of objects in the scene (unused, kept for API).
+ * @return double Skip rate percentage in [0, 100].
  */
 double	calculate_bvh_efficiency(t_metrics *m, int object_count)
 {
-	long	naive_tests;
-	double	efficiency;
-
-	if (object_count == 0 || m->ray.rays_traced == 0)
+	(void)object_count;
+	if (m->bvh.nodes_visited == 0)
 		return (0.0);
-	naive_tests = m->ray.rays_traced * object_count;
-	if (naive_tests == 0)
-		return (0.0);
-	efficiency = 1.0 - ((double)m->ray.intersect_tests / naive_tests);
-	if (efficiency < 0.0)
-		return (0.0);
-	return (efficiency * 100.0);
+	return ((double)m->bvh.tests_skipped / m->bvh.nodes_visited * 100.0);
 }
 
 /**
@@ -102,8 +94,8 @@ void	metrics_print_summary(t_metrics *m, int object_count)
 	printf("Shadow tests:      %ld\n", m->ray.shadow_intersect_tests);
 	printf("Primary tests/ray: %.1f\n", tests_per_ray);
 	printf("BVH nodes visited: %ld\n", m->bvh.nodes_visited);
-	printf("BVH box tests:     %ld\n", m->bvh.box_tests);
-	printf("BVH efficiency:    %.1f%%\n", bvh_eff);
+	printf("BVH box tests:     %ld\n", m->bvh.nodes_visited);
+	printf("BVH skip rate:     %.1f%%\n", bvh_eff);
 	printf("Objects:           %d\n", object_count);
 	printf("=======================\n\n");
 	fflush(stdout);

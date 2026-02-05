@@ -124,14 +124,14 @@ int	bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 	t_hit_record	right_hit;
 	t_hit_check		hc;
 
-	if (!node)
-		return (0);
 	metrics_add_bvh_node_visit(&((t_scene *)scene)->metrics);
 	t_min = 0.001;
 	t_max = 1000000.0;
-	metrics_add_bvh_box_test(&((t_scene *)scene)->metrics);
 	if (!aabb_intersect(node->bounds, ray, &t_min, &t_max))
+	{
+		metrics_add_bvh_skip(&((t_scene *)scene)->metrics);
 		return (0);
+	}
 	if (node->object_count > 0)
 		return (bvh_leaf_intersect(node, ray, hit, scene));
 	left_hit.distance = hit->distance;
