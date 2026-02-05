@@ -35,7 +35,7 @@
 
 | 병목 | 근거 | 출처 |
 |------|------|------|
-| BVH miss 폴백 이중 탐색 | `trace_ray()`에서 BVH miss 시 `check_all_objects()` 재실행. BVH efficiency 0% 원인 | benchmark §4.3 (실측 발견) |
+| BVH miss 폴백 이중 탐색 | `trace_ray()`에서 BVH miss 시 `check_all_objects()` 재실행. BVH skip rate 측정 왜곡 원인 | benchmark §4.3 (실측 발견) |
 | Shadow ray brute-force | `check_object_shadow()` 선형 순회. 전체 비용의 ~90%+ 추정 | research P1, benchmark §4.4 |
 | Shadow offset 삼각함수 반복 | 16 samples × sqrt/cos/sin per pixel | research P4 |
 | Camera basis 매 픽셀 재계산 | `init_camera_calc()` 1,296,000회/frame 동일 계산 | research P2 |
@@ -55,7 +55,7 @@
 
 | ID | 항목 | 위험도 | 수정 파일 수 | 효과 근거 |
 |----|------|--------|------------|-----------|
-| **P0** | BVH miss 폴백 제거 | LOW | 1 | 실측: 모든 씬 이중 탐색, BVH eff 0% |
+| **P0** | BVH miss 폴백 제거 | LOW | 1 | 실측: 모든 씬 이중 탐색, skip rate 왜곡 |
 | **P1** | Shadow ray BVH + any-hit | LOW | 2 | 이론: shadow 75% 감소 |
 | **P2** | Camera basis 프레임 캐싱 | LOW | 3 | 이론: ~259M cycles/frame (2%) |
 | **P3** | Specular pow32 경량화 | LOW | 1 | 이론: ~130M cycles/frame (1%) |
@@ -108,7 +108,7 @@ Primary + shadow 양쪽에 효과.
 
 | 순서 | ID | 항목 | 변경 내용 | 수정 파일 |
 |------|-----|------|-----------|-----------|
-| C-1 | P2 | Camera basis 캐싱 | `t_camera.cache` 필드, 프레임 시작 시 1회 계산 | `minirt.h`, `camera.c`, `window_camera.c` |
+| C-1 | P2 | Camera basis 캐싱 | `t_camera.cache` 필드, 카메라 변경 시 cache 갱신 (dirty flag) | `minirt.h`, `camera.c`, `window_camera.c` |
 | C-2 | P5 | BVH inv_dir precompute | `t_ray.inv_dir` 필드, traversal 진입 시 1회 계산 | `ray.h`, `aabb.c`, `bvh_traverse.c` |
 | C-3 | P6 | BVH child ordering | near/far child t_entry 비교, hit 시 t_max 갱신 | `bvh_traverse.c`, `aabb.c` |
 
@@ -154,7 +154,7 @@ Primary + shadow 양쪽에 효과.
 
 | ID | 위험 | 영향 | 대응 |
 |----|------|------|------|
-| P0 | BVH가 모든 오브젝트를 커버하지 않는 경우 | 일부 오브젝트 렌더 누락 | BVH 빌드가 전체 objects.items를 포함하는지 확인 후 적용 |
+| P0 | BVH가 모든 오브젝트를 커버하지 않는 경우 | 일부 오브젝트 렌더 누락 | 적용 전 검증: (1) `bvh_build()`에 전달되는 count == `objects.count` 확인, (2) 4개 시나리오(S1~S4) 렌더 결과가 폴백 제거 전후 동일한지 픽셀 비교 |
 | P1 | shadow any-hit BVH 경로에서 distance 상한 미적용 | 광원 뒤 오브젝트를 차폐물로 오판 | `hit.distance = light_distance` 설정 유지 |
 | P6 | child ordering으로 traversal 결과 변경 | 최근접 hit 누락 | t_max pruning만 적용, hit 판정 로직 변경 없음 |
 | 공통 | 부동소수점 반올림 차이 | RGB ±1 이내 차이 | 적용 전후 동일 씬 픽셀 비교 검증 |
