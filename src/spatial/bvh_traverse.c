@@ -16,32 +16,10 @@
 #include "metrics.h"
 
 /**
- * @brief Intersect a ray with an object reference.
- *
- * Resolves the object from the scene and dispatches to the intersection
- * routine.
- *
- * @param ref Object reference containing index.
- * @param ray Ray to test.
- * @param hit Hit record to update.
- * @param scene_ptr Pointer to the scene.
- * @return int 1 if hit, 0 otherwise.
- */
-static int	intersect_ref(t_object_ref ref, t_ray ray, t_hit_record *hit,
-		void *scene_ptr)
-{
-	t_scene		*scene;
-	t_object	*obj;
-
-	scene = (t_scene *)scene_ptr;
-	obj = &scene->objects.items[ref.index];
-	return (intersect_object_new(&ray, obj, hit));
-}
-
-/**
  * @brief Intersect a ray with all objects in a BVH leaf node.
  *
- * Tracks the nearest hit among the node's object references.
+ * Resolves each object reference, tests intersection, and tracks the
+ * nearest hit among the node's objects.
  *
  * @param node Leaf node containing object references.
  * @param ray Ray to test.
@@ -55,6 +33,7 @@ static int	bvh_leaf_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 	int				i;
 	int				hit_anything;
 	t_hit_record	temp_hit;
+	t_object		*obj;
 
 	temp_hit.distance = hit->distance;
 	hit_anything = 0;
@@ -62,7 +41,8 @@ static int	bvh_leaf_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 	while (i < node->object_count)
 	{
 		metrics_add_intersect_test(&((t_scene *)scene)->metrics);
-		if (intersect_ref(node->objects[i], ray, &temp_hit, scene))
+		obj = &((t_scene *)scene)->objects.items[node->objects[i].index];
+		if (intersect_object_new(&ray, obj, &temp_hit))
 		{
 			if (!hit_anything || temp_hit.distance < hit->distance)
 			{
@@ -105,6 +85,32 @@ static int	check_child_hits(t_hit_check *hc)
 }
 
 /**
+ * @brief Recurse into both children and select the closest hit.
+ *
+ * @param node Internal BVH node with left/right children.
+ * @param ray Ray to test.
+ * @param hit Output hit record.
+ * @param scene Pointer to the scene.
+ * @return int 1 if any child hit is found, 0 otherwise.
+ */
+static int	traverse_children(t_bvh_node *node, t_ray ray, t_hit_record *hit,
+		void *scene)
+{
+	t_hit_record	left_hit;
+	t_hit_record	right_hit;
+	t_hit_check		hc;
+
+	left_hit.distance = hit->distance;
+	right_hit.distance = hit->distance;
+	hc.hit_left = bvh_node_intersect(node->left, ray, &left_hit, scene);
+	hc.hit_right = bvh_node_intersect(node->right, ray, &right_hit, scene);
+	hc.left_hit = &left_hit;
+	hc.right_hit = &right_hit;
+	hc.hit = hit;
+	return (check_child_hits(&hc));
+}
+
+/**
  * @brief Traverse a BVH node to test for ray intersections.
  *
  * Performs AABB test, descends into children, and selects the closest hit.
@@ -118,12 +124,11 @@ static int	check_child_hits(t_hit_check *hc)
 int	bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 		void *scene)
 {
-	double			t_min;
-	double			t_max;
-	t_hit_record	left_hit;
-	t_hit_record	right_hit;
-	t_hit_check		hc;
+	double	t_min;
+	double	t_max;
 
+	if (!node)
+		return (0);
 	metrics_add_bvh_node_visit(&((t_scene *)scene)->metrics);
 	t_min = 0.001;
 	t_max = 1000000.0;
@@ -134,14 +139,7 @@ int	bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 	}
 	if (node->object_count > 0)
 		return (bvh_leaf_intersect(node, ray, hit, scene));
-	left_hit.distance = hit->distance;
-	right_hit.distance = hit->distance;
-	hc.hit_left = bvh_node_intersect(node->left, ray, &left_hit, scene);
-	hc.hit_right = bvh_node_intersect(node->right, ray, &right_hit, scene);
-	hc.left_hit = &left_hit;
-	hc.right_hit = &right_hit;
-	hc.hit = hit;
-	return (check_child_hits(&hc));
+	return (traverse_children(node, ray, hit, scene));
 }
 
 /**
