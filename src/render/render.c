@@ -147,6 +147,7 @@ void	render_scene_to_buffer(t_scene *scene, t_render *render)
 		render_low_quality(scene, render);
 		return ;
 	}
+	pixel_timing_reset(&render->pixel_timing);
 	y = 0;
 	while (y < WINDOW_HEIGHT)
 	{

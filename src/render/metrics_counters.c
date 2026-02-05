@@ -55,14 +55,3 @@ void	metrics_add_bvh_skip(t_metrics *metrics)
 	if (metrics)
 		metrics->bvh.tests_skipped++;
 }
-
-/**
- * @brief Increment the BVH bounding box test counter.
- *
- * @param metrics Metrics structure to update.
- */
-void	metrics_add_bvh_box_test(t_metrics *metrics)
-{
-	if (metrics)
-		metrics->bvh.box_tests++;
-}

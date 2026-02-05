@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "metrics.h"
+#include <stdio.h>
 
 /**
  * @brief Return the current FPS estimate.
@@ -24,29 +25,21 @@ double	calculate_fps(t_metrics *m)
 }
 
 /**
- * @brief Calculate BVH efficiency as a percentage.
+ * @brief Calculate BVH skip rate as a percentage.
  *
- * Compares actual intersection tests against the naive tests (rays * objects)
- * and returns a higher percentage for better efficiency.
+ * Returns the ratio of skipped nodes to total visited nodes, expressed
+ * as a percentage. Higher values indicate more effective early-out.
  *
- * @param m Metrics structure containing ray and intersect counts.
- * @param object_count Number of objects in the scene.
- * @return double Efficiency percentage in [0, 100].
+ * @param m Metrics structure containing BVH traversal counts.
+ * @param object_count Number of objects in the scene (unused, kept for API).
+ * @return double Skip rate percentage in [0, 100].
  */
 double	calculate_bvh_efficiency(t_metrics *m, int object_count)
 {
-	long	naive_tests;
-	double	efficiency;
-
-	if (object_count == 0 || m->ray.rays_traced == 0)
+	(void)object_count;
+	if (m->bvh.nodes_visited == 0)
 		return (0.0);
-	naive_tests = m->ray.rays_traced * object_count;
-	if (naive_tests == 0)
-		return (0.0);
-	efficiency = 1.0 - ((double)m->ray.intersect_tests / naive_tests);
-	if (efficiency < 0.0)
-		return (0.0);
-	return (efficiency * 100.0);
+	return ((double)m->bvh.tests_skipped / m->bvh.nodes_visited * 100.0);
 }
 
 /**
@@ -73,6 +66,35 @@ void	metrics_reset_bvh(t_bvh_metrics *bvh)
 	{
 		bvh->nodes_visited = 0;
 		bvh->tests_skipped = 0;
-		bvh->box_tests = 0;
 	}
+}
+
+/**
+ * @brief Print a summary of all render metrics to stdout.
+ *
+ * Outputs frame timing, ray counts, intersection stats, and BVH counters
+ * for benchmarking and profiling purposes.
+ *
+ * @param m Metrics structure containing all counter data.
+ * @param object_count Number of objects in the scene.
+ */
+void	metrics_print_summary(t_metrics *m, int object_count)
+{
+	double	tests_per_ray;
+	double	bvh_eff;
+
+	tests_per_ray = calculate_avg_tests_per_ray(m);
+	bvh_eff = calculate_bvh_efficiency(m, object_count);
+	printf("\n=== Render Metrics ===\n");
+	printf("Frame time:        %.1f ms\n", m->timing.render_time_us / 1000.0);
+	printf("FPS:               %.4f\n", m->timing.fps);
+	printf("Rays traced:       %ld\n", m->ray.rays_traced);
+	printf("Primary tests:     %ld\n", m->ray.intersect_tests);
+	printf("Shadow tests:      %ld\n", m->ray.shadow_intersect_tests);
+	printf("Primary tests/ray: %.1f\n", tests_per_ray);
+	printf("BVH nodes visited: %ld\n", m->bvh.nodes_visited);
+	printf("BVH skip rate:     %.1f%%\n", bvh_eff);
+	printf("Objects:           %d\n", object_count);
+	printf("=======================\n\n");
+	fflush(stdout);
 }
