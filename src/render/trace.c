@@ -54,8 +54,8 @@ static int	check_all_objects(t_scene *scene, t_ray *ray, t_hit *hit)
 /**
  * @brief Trace a ray through the scene and compute its color.
  *
- * Tests the ray against the BVH if enabled; otherwise falls back to a full
- * object scan. If an intersection is found, lighting is evaluated at the hit.
+ * When BVH is valid (enabled and root non-NULL), uses BVH traversal only.
+ * Otherwise falls back to brute-force scan against all objects.
  *
  * @param scene Scene containing geometry and lighting.
  * @param ray Ray to trace.
@@ -64,22 +64,16 @@ static int	check_all_objects(t_scene *scene, t_ray *ray, t_hit *hit)
 t_color	trace_ray(t_scene *scene, t_ray *ray)
 {
 	t_hit	hit;
-	int		found;
 
 	metrics_add_ray(&scene->metrics);
-	found = 0;
 	hit.distance = INFINITY;
-	if (scene->bvh && scene->bvh->enabled)
+	if (scene->bvh && scene->bvh->enabled && scene->bvh->root)
 	{
 		if (bvh_intersect(scene->bvh, *ray, &hit, scene))
-			found = 1;
+			return (apply_lighting(scene, &hit));
+		return ((t_color){0, 0, 0});
 	}
-	if (!found)
-	{
-		if (check_all_objects(scene, ray, &hit))
-			found = 1;
-	}
-	if (found)
+	if (check_all_objects(scene, ray, &hit))
 		return (apply_lighting(scene, &hit));
 	return ((t_color){0, 0, 0});
 }
