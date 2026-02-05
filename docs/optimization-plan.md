@@ -31,7 +31,8 @@
 
 ### 1.2 남은 병목
 
-실측(benchmark-baseline.md)과 이론 분석(research-report.md)에서 확인된 병목:
+실측(benchmark-baseline.md)과 이론 분석(research-report.md)에서 확인된 병목.
+BVH skip rate = `tests_skipped / nodes_visited × 100%` (AABB 미교차로 서브트리를 건너뛴 비율).
 
 | 병목 | 근거 | 출처 |
 |------|------|------|
@@ -79,9 +80,9 @@
 
 | 순서 | ID | 항목 | 변경 내용 | 수정 파일 |
 |------|-----|------|-----------|-----------|
-| 0-1 | P0 | BVH miss 폴백 제거 | `trace_ray()`에서 BVH 활성 시 `check_all_objects` 폴백 삭제 | `trace.c` |
+| 0-1 | P0 | BVH miss 폴백 제거 | `trace_ray()`에서 BVH 유효 시 `check_all_objects` 폴백 삭제 | `src/render/trace.c` |
 
-**검증**: 재측정 후 intersect_tests가 `rays × objects` 이하인지 확인.
+**검증**: 재측정 후 S2–S4 중 최소 1개 씬에서 primary `intersect_tests`가 baseline 대비 10% 이상 감소 확인 (이중 카운트 제거).
 
 ### Phase A: 안전한 수학 최적화
 
@@ -89,9 +90,9 @@
 
 | 순서 | ID | 항목 | 변경 내용 | 수정 파일 |
 |------|-----|------|-----------|-----------|
-| A-1 | P3 | Specular pow32 | `pow(spec, 32.0)` → 반복 제곱 5회 | `lighting.c` |
-| A-2 | P8 | Sphere sqrt 캐싱 | discriminant sqrt 결과 로컬 변수 저장 | `intersect_object.c` |
-| A-3 | P7 | Shadow magnitude 통합 | `vec3_magnitude` + `vec3_normalize` → 1회 sqrt 공유 | `shadow_test.c` (+`vector_ops.c` 선택) |
+| A-1 | P3 | Specular pow32 | `pow(spec, 32.0)` → 반복 제곱 5회 | `src/lighting/lighting.c` |
+| A-2 | P8 | Sphere sqrt 캐싱 | discriminant sqrt 결과 로컬 변수 저장 | `src/ray/intersect_object.c` |
+| A-3 | P7 | Shadow magnitude 통합 | `vec3_magnitude` + `vec3_normalize` → 1회 sqrt 공유 | `src/lighting/shadow_test.c` (+`src/math/vector_ops.c` 선택) |
 
 ### Phase B: Shadow 경로 최적화
 
@@ -99,8 +100,8 @@
 
 | 순서 | ID | 항목 | 변경 내용 | 수정 파일 |
 |------|-----|------|-----------|-----------|
-| B-1 | P4 | Shadow offset LUT | 오프셋 테이블 1회 precompute, 샘플 루프에서 참조 | `shadow.h`, `shadow_config.c`, `shadow_calc.c` |
-| B-2 | P1 | Shadow ray BVH | `check_object_shadow()` → `bvh_intersect_any()` 경유 + early exit | `shadow_test.c`, `bvh_traverse.c` |
+| B-1 | P4 | Shadow offset LUT | 오프셋 테이블 1회 precompute, 샘플 루프에서 참조 | `includes/shadow.h`, `src/lighting/shadow_config.c`, `src/lighting/shadow_calc.c` |
+| B-2 | P1 | Shadow ray BVH | `check_object_shadow()` → `bvh_intersect_any()` 경유 + early exit | `src/lighting/shadow_test.c`, `src/spatial/bvh_traverse.c` |
 
 ### Phase C: Camera + BVH traversal 개선
 
@@ -108,15 +109,15 @@ Primary + shadow 양쪽에 효과.
 
 | 순서 | ID | 항목 | 변경 내용 | 수정 파일 |
 |------|-----|------|-----------|-----------|
-| C-1 | P2 | Camera basis 캐싱 | `t_camera.cache` 필드, 카메라 변경 시 cache 갱신 (dirty flag) | `minirt.h`, `camera.c`, `window_camera.c` |
-| C-2 | P5 | BVH inv_dir precompute | `t_ray.inv_dir` 필드, traversal 진입 시 1회 계산 | `ray.h`, `aabb.c`, `bvh_traverse.c` |
-| C-3 | P6 | BVH child ordering | near/far child t_entry 비교, hit 시 t_max 갱신 | `bvh_traverse.c`, `aabb.c` |
+| C-1 | P2 | Camera basis 캐싱 | `t_camera.cache` 필드, 카메라 변경 시 cache 갱신 (dirty flag) | `includes/minirt.h`, `src/render/camera.c`, `src/window/window_camera.c` |
+| C-2 | P5 | BVH inv_dir precompute | `t_ray.inv_dir` 필드, traversal 진입 시 1회 계산 | `includes/ray.h`, `src/spatial/aabb.c`, `src/spatial/bvh_traverse.c` |
+| C-3 | P6 | BVH child ordering | near/far child t_entry 비교, hit 시 t_max 갱신 | `src/spatial/bvh_traverse.c`, `src/spatial/aabb.c` |
 
 ### Phase D: 기타
 
 | 순서 | ID | 항목 | 변경 내용 | 수정 파일 |
 |------|-----|------|-----------|-----------|
-| D-1 | P9 | BVH rebuild debounce | `DEBOUNCE_ACTIVE` 중 rebuild 지연 | `window_loop.c` |
+| D-1 | P9 | BVH rebuild debounce | `DEBOUNCE_ACTIVE` 중 rebuild 지연 | `src/window/window_loop.c` |
 
 ---
 
@@ -126,11 +127,11 @@ Primary + shadow 양쪽에 효과.
 
 | 시점 | 기록 위치 | 내용 |
 |------|-----------|------|
-| Phase 0 완료 후 | benchmark-results.md Round 1 | P0 폴백 제거 효과. **baseline 재측정 포함** (분리 metrics 최초 실측) |
-| Phase A 완료 후 | benchmark-results.md Round 2 | P3+P8+P7 수학 최적화 누적 효과 |
-| B-1 (P4) 후 | benchmark-results.md Round 3 | Shadow LUT 단독 효과 |
-| B-2 (P1) 후 | benchmark-results.md Round 4 | Shadow BVH 단독 효과 |
-| Phase C 완료 후 | benchmark-results.md Round 5 | Camera + BVH traversal 누적 효과 |
+| Phase 0 완료 후 | `docs/benchmark-results.md` Round 1 | P0 폴백 제거 효과. **baseline 재측정 포함** (분리 metrics 최초 실측) |
+| Phase A 완료 후 | `docs/benchmark-results.md` Round 2 | P3+P8+P7 수학 최적화 누적 효과 |
+| B-1 (P4) 후 | `docs/benchmark-results.md` Round 3 | Shadow LUT 단독 효과 |
+| B-2 (P1) 후 | `docs/benchmark-results.md` Round 4 | Shadow BVH 단독 효과 |
+| Phase C 완료 후 | `docs/benchmark-results.md` Round 5 | Camera + BVH traversal 누적 효과 |
 
 측정 조건:
 - 시나리오 S1~S4 (collection-plan §4)
@@ -154,7 +155,7 @@ Primary + shadow 양쪽에 효과.
 
 | ID | 위험 | 영향 | 대응 |
 |----|------|------|------|
-| P0 | BVH가 모든 오브젝트를 커버하지 않는 경우 | 일부 오브젝트 렌더 누락 | 적용 전 검증: (1) `bvh_build()`에 전달되는 count == `objects.count` 확인, (2) 4개 시나리오(S1~S4) 렌더 결과가 폴백 제거 전후 동일한지 픽셀 비교 |
+| P0 | BVH가 모든 오브젝트를 커버하지 않는 경우 | 일부 오브젝트 렌더 누락 | 적용 전 검증: (1) `bvh_build()`에 전달되는 count == `objects.count` 확인, (2) 4개 시나리오(S1~S4) 렌더 결과가 폴백 제거 전후 동일한지 픽셀 비교. 부수 효과: 폴백 경로의 `check_all_objects()`가 BVH 외부에서 intersect_tests를 누적하여 skip rate 해석을 왜곡하므로, 제거 시 BVH 계측 정확성도 복원됨 |
 | P1 | shadow any-hit BVH 경로에서 distance 상한 미적용 | 광원 뒤 오브젝트를 차폐물로 오판 | `hit.distance = light_distance` 설정 유지 |
 | P6 | child ordering으로 traversal 결과 변경 | 최근접 hit 누락 | t_max pruning만 적용, hit 판정 로직 변경 없음 |
 | 공통 | 부동소수점 반올림 차이 | RGB ±1 이내 차이 | 적용 전후 동일 씬 픽셀 비교 검증 |
@@ -172,4 +173,4 @@ Primary + shadow 양쪽에 효과.
 | `optimization-metrics-collection-plan.md` | 측정 절차/지표 정의 | **활성** (모든 측정에 준수) |
 | `benchmark-baseline.md` | Baseline 데이터 + A/B 템플릿 | **활성** (재측정 대기) |
 | **`optimization-plan.md`** (본 문서) | 통합 실행 계획 | **활성** (이 문서 기준으로 진행) |
-| `benchmark-results.md` | 최적화별 A/B 결과 누적 | 미생성 (Round 1부터 생성) |
+| `benchmark-results.md` | 최적화별 A/B 결과 누적 | 미생성 (`docs/` 하위, Round 1부터 생성) |
