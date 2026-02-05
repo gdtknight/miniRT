@@ -22,7 +22,6 @@ typedef struct s_bvh_metrics
 {
 	long	nodes_visited;
 	long	tests_skipped;
-	long	box_tests;
 }	t_bvh_metrics;
 
 /* Ray tracing metrics */
@@ -71,7 +70,6 @@ void	metrics_add_shadow_intersect(t_metrics *metrics);
 /* BVH metrics operations */
 void	metrics_add_bvh_node_visit(t_metrics *metrics);
 void	metrics_add_bvh_skip(t_metrics *metrics);
-void	metrics_add_bvh_box_test(t_metrics *metrics);
 void	metrics_reset_bvh(t_bvh_metrics *bvh);
 
 /* Metrics calculations */

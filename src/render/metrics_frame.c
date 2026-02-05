@@ -50,7 +50,6 @@ void	metrics_init(t_metrics *metrics)
 	metrics->ray.shadow_intersect_tests = 0;
 	metrics->bvh.nodes_visited = 0;
 	metrics->bvh.tests_skipped = 0;
-	metrics->bvh.box_tests = 0;
 	metrics->quality_mode = 0;
 }
 
@@ -68,7 +67,6 @@ void	metrics_start_frame(t_metrics *metrics)
 	metrics->ray.shadow_intersect_tests = 0;
 	metrics->bvh.nodes_visited = 0;
 	metrics->bvh.tests_skipped = 0;
-	metrics->bvh.box_tests = 0;
 	timer_start(&metrics->timing.start_time);
 }
 

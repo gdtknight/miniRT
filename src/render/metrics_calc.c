@@ -66,7 +66,6 @@ void	metrics_reset_bvh(t_bvh_metrics *bvh)
 	{
 		bvh->nodes_visited = 0;
 		bvh->tests_skipped = 0;
-		bvh->box_tests = 0;
 	}
 }
 
@@ -94,7 +93,6 @@ void	metrics_print_summary(t_metrics *m, int object_count)
 	printf("Shadow tests:      %ld\n", m->ray.shadow_intersect_tests);
 	printf("Primary tests/ray: %.1f\n", tests_per_ray);
 	printf("BVH nodes visited: %ld\n", m->bvh.nodes_visited);
-	printf("BVH box tests:     %ld\n", m->bvh.nodes_visited);
 	printf("BVH skip rate:     %.1f%%\n", bvh_eff);
 	printf("Objects:           %d\n", object_count);
 	printf("=======================\n\n");
