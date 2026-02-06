@@ -15,6 +15,20 @@
 #include <stdlib.h>
 
 /**
+ * @brief Free shadow offset LUT memory.
+ *
+ * @param config Shadow configuration containing offset_lut.
+ */
+static void	free_shadow_offset_lut(t_shadow_config *config)
+{
+	if (config && config->offset_lut)
+	{
+		free(config->offset_lut);
+		config->offset_lut = NULL;
+	}
+}
+
+/**
  * @brief Initialize default scene settings.
  *
  * Sets shadow configuration defaults, enables BVH, clears BVH pointer,
@@ -68,5 +82,6 @@ void	scene_destroy(t_scene *scene)
 	object_list_destroy(&scene->objects);
 	if (scene->bvh)
 		bvh_destroy(scene->bvh);
+	free_shadow_offset_lut(&scene->shadow_config);
 	free(scene);
 }

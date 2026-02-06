@@ -33,6 +33,7 @@ typedef struct s_shadow_config
 	double	softness;
 	double	bias_scale;
 	int		enable_ao;
+	t_vec3	*offset_lut;
 }	t_shadow_config;
 
 /* Shadow query: surface point + normal for bias calculation */
