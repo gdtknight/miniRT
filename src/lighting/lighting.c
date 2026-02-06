@@ -34,6 +34,24 @@ static void	clamp_color(t_color *result)
 }
 
 /**
+ * @brief Compute x^32 using repeated squaring.
+ *
+ * Faster alternative to pow(x, 32.0) for integer exponent.
+ *
+ * @param x Base value.
+ * @return double x raised to the power of 32.
+ */
+static double	fast_pow32(double x)
+{
+	x = x * x;
+	x = x * x;
+	x = x * x;
+	x = x * x;
+	x = x * x;
+	return (x);
+}
+
+/**
  * @brief Compute Phong specular term for a surface point.
  *
  * Calculates the reflection vector and raises the view alignment to a
@@ -57,7 +75,7 @@ static double	calculate_specular(t_vec3 light_dir, t_vec3 normal,
 	spec = vec3_dot(reflect_dir, view_dir);
 	if (spec < 0.0)
 		spec = 0.0;
-	spec = pow(spec, 32.0);
+	spec = fast_pow32(spec);
 	return (spec);
 }
 

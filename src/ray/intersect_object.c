@@ -42,9 +42,10 @@ static int	intersect_sphere_new(t_ray *ray, t_sphere_data *s, t_color color,
 	d = b * b - 4 * a * c;
 	if (d < 0)
 		return (0);
-	d = (-b - sqrt(d)) / (2.0 * a);
+	c = sqrt(d);
+	d = (-b - c) / (2.0 * a);
 	if (d < 0.001)
-		d = (-b + sqrt(b * b - 4 * a * c)) / (2.0 * a);
+		d = (-b + c) / (2.0 * a);
 	if (d < 0.001 || d > hit->distance)
 		return (0);
 	hit->distance = d;

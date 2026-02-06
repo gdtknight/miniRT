@@ -185,3 +185,146 @@ Objects:           18
 4. **Primary tests/ray 극적 감소**: S2 31.2 → 0.3, S3 81.2 → 0.3. Baseline은 합산 값이므로 직접 비교는 불가하나, BVH가 대부분의 오브젝트를 AABB 레벨에서 걸러내고 있음을 확인.
 
 5. **Shadow 경로 지배 확인**: S4에서 shadow_tests/pixel = 770.1 (= 18 objects × ~42.8 samples). Shadow brute-force (P1)가 다음 최적화 우선순위임을 실측으로 재확인.
+
+---
+
+## Round 2: Phase A — Safe Math Optimizations (P3+P8+P7)
+
+브랜치: `029-math-optimizations`
+변경 요약:
+- P3: `pow(spec, 32.0)` → `fast_pow32()` 반복 제곱 5회 (`src/lighting/lighting.c`)
+- P8: Sphere sqrt 캐싱 — `c = sqrt(d)` 저장 후 재사용 (`src/ray/intersect_object.c`)
+- P7: Shadow magnitude/normalize 통합 — `mag` 변수로 sqrt 1회만 호출 (`src/lighting/shadow_test.c`)
+
+> **측정 조건**: 1회 측정. Round 1 결과를 baseline으로 사용.
+
+### Timing
+
+| 씬 | Round 1 (ms) | Phase A (ms) | 개선율 (%) |
+|----|-------------|--------------|-----------|
+| S1 | 465.4 | 466.2 | -0.2% |
+| S2 | 1,142.4 | 1,142.8 | -0.0% |
+| S3 | 1,775.8 | 1,767.9 | **0.4%** |
+| S4 | 26,784.4 | 26,178.2 | **2.3%** |
+
+### Pixel timing — Avg (µs)
+
+| 씬 | Round 1 | Phase A | 개선율 (%) |
+|----|---------|---------|-----------|
+| S1 | 0.541 | 0.540 | 0.2% |
+| S2 | 1.934 | 1.933 | 0.1% |
+| S3 | 3.253 | 3.238 | 0.5% |
+| S4 | 55.314 | 54.054 | **2.3%** |
+
+### Raw Output
+
+#### S1 (valid_smoke_simple.rt — 1 object)
+
+```
+=== Pixel Timing Statistics ===
+Total pixels: 480000
+Min time:     0.000 µs (0.000000 ms)
+Max time:     32.000 µs (0.032000 ms)
+Average:      0.540 µs (0.000540 ms)
+Median:       0.000 µs (0.000000 ms)
+95th %ile:    1.000 µs (0.001000 ms)
+99th %ile:    1.000 µs (0.001000 ms)
+
+=== Render Metrics ===
+Frame time:        466.2 ms
+FPS:               2.1451
+Rays traced:       1296000
+Primary tests:     103041
+Shadow tests:      864976
+Primary tests/ray: 0.1
+BVH nodes visited: 1296000
+BVH skip rate:     92.0%
+Objects:           1
+```
+
+#### S2 (perf_spheres_20.rt — 20 spheres)
+
+```
+=== Pixel Timing Statistics ===
+Total pixels: 480000
+Min time:     0.000 µs (0.000000 ms)
+Max time:     49.000 µs (0.049000 ms)
+Average:      1.933 µs (0.001933 ms)
+Median:       0.000 µs (0.000000 ms)
+95th %ile:    1.000 µs (0.001000 ms)
+99th %ile:    11.000 µs (0.011000 ms)
+
+=== Render Metrics ===
+Frame time:        1142.8 ms
+FPS:               0.8750
+Rays traced:       1296000
+Primary tests:     353905
+Shadow tests:      15364205
+Primary tests/ray: 0.3
+BVH nodes visited: 5223492
+BVH skip rate:     58.8%
+Objects:           20
+```
+
+#### S3 (perf_spheres_50.rt — 50 spheres)
+
+```
+=== Pixel Timing Statistics ===
+Total pixels: 480000
+Min time:     0.000 µs (0.000000 ms)
+Max time:     59.000 µs (0.059000 ms)
+Average:      3.238 µs (0.003238 ms)
+Median:       0.000 µs (0.000000 ms)
+95th %ile:    1.000 µs (0.001000 ms)
+99th %ile:    22.000 µs (0.022000 ms)
+
+=== Render Metrics ===
+Frame time:        1767.9 ms
+FPS:               0.5657
+Rays traced:       1296000
+Primary tests:     357899
+Shadow tests:      43150396
+Primary tests/ray: 0.3
+BVH nodes visited: 4465654
+BVH skip rate:     60.3%
+Objects:           50
+```
+
+#### S4 (perf_all_objects.rt — 7sp + 7cy + 3pl)
+
+```
+=== Pixel Timing Statistics ===
+Total pixels: 480000
+Min time:     5.000 µs (0.005000 ms)
+Max time:     107.000 µs (0.107000 ms)
+Average:      54.054 µs (0.054054 ms)
+Median:       19.000 µs (0.019000 ms)
+95th %ile:    21.000 µs (0.021000 ms)
+99th %ile:    22.000 µs (0.022000 ms)
+
+=== Render Metrics ===
+Frame time:        26178.2 ms
+FPS:               0.0382
+Rays traced:       1296000
+Primary tests:     6689782
+Shadow tests:      369636978
+Primary tests/ray: 5.2
+BVH nodes visited: 19629738
+BVH skip rate:     32.9%
+Objects:           18
+```
+
+### 분석
+
+1. **S1, S2 변화 없음**: 단순 씬에서 수학 최적화 효과가 측정 노이즈 범위 내. 예상대로 미미한 영향.
+
+2. **S3 소폭 개선 (0.4%)**: 50개 sphere에서 P8(sqrt 캐싱) 효과가 누적되어 측정 가능한 개선 발생.
+
+3. **S4 유의미한 개선 (2.3%)**: 가장 복잡한 씬에서 세 가지 최적화의 누적 효과 확인.
+   - P7(shadow magnitude/normalize): 369M shadow tests × sqrt 1회 절감
+   - P8(sphere sqrt): 7개 sphere × 다수 ray에서 sqrt 캐싱 효과
+   - P3(pow32): specular 계산 경량화
+
+4. **이론 추정 대비 실측**: 연구 보고서의 이론 추정(P3 ~1%, P7 ~8%, P8 ~소량)보다 실측 효과가 작음. Shadow brute-force(P1)가 전체 비용의 98%+를 차지하여 수학 최적화 효과가 상대적으로 희석됨.
+
+5. **다음 단계**: Phase B(P4 Shadow LUT, P1 Shadow BVH)가 S4 병목 해소에 핵심. 현재 shadow_tests가 369M으로 압도적이므로, shadow 경로 최적화가 가장 큰 개선 잠재력 보유.

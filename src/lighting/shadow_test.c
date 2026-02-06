@@ -62,10 +62,12 @@ int	is_in_shadow(t_scene *scene, t_vec3 point, t_vec3 light_pos, double bias)
 	t_hit	shadow_hit;
 	t_vec3	to_light;
 	t_vec3	light_dir;
+	double	mag;
 
 	to_light = vec3_subtract(light_pos, point);
-	shadow_hit.distance = vec3_magnitude(to_light);
-	light_dir = vec3_normalize(to_light);
+	mag = vec3_magnitude(to_light);
+	shadow_hit.distance = mag;
+	light_dir = vec3_multiply(to_light, 1.0 / mag);
 	shadow_ray.origin = vec3_add(point, vec3_multiply(light_dir, bias));
 	shadow_ray.direction = light_dir;
 	return (check_object_shadow(scene, &shadow_ray, &shadow_hit));
