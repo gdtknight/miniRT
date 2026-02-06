@@ -328,3 +328,146 @@ Objects:           18
 4. **이론 추정 대비 실측**: 연구 보고서의 이론 추정(P3 ~1%, P7 ~8%, P8 ~소량)보다 실측 효과가 작음. Shadow brute-force(P1)가 전체 비용의 98%+를 차지하여 수학 최적화 효과가 상대적으로 희석됨.
 
 5. **다음 단계**: Phase B(P4 Shadow LUT, P1 Shadow BVH)가 S4 병목 해소에 핵심. 현재 shadow_tests가 369M으로 압도적이므로, shadow 경로 최적화가 가장 큰 개선 잠재력 보유.
+
+---
+
+## Round 3: Phase B-1 — P4 Shadow Offset LUT
+
+브랜치: `030-shadow-offset-lut`
+변경 요약:
+- Shadow offset LUT precompute: `init_shadow_offset_lut()`에서 cos/sin/sqrt 1회 계산 후 저장
+- `sample_shadow_ray()`에서 LUT 참조로 삼각함수 호출 제거
+- Magnitude guard: `is_in_shadow()`에서 mag < 0.0001 시 early return (NaN/INF 방지)
+- LUT cleanup: `scene_destroy()`에서 메모리 해제
+
+> **측정 조건**: 1회 측정. Round 2 결과를 baseline으로 사용.
+
+### Timing
+
+| 씬 | Round 2 (ms) | Round 3 (ms) | 개선율 (%) |
+|----|-------------|--------------|-----------|
+| S1 | 466.2 | 438.3 | **6.0%** |
+| S2 | 1,142.8 | 1,122.9 | **1.7%** |
+| S3 | 1,767.9 | 1,753.4 | **0.8%** |
+| S4 | 26,178.2 | 25,583.8 | **2.3%** |
+
+### Pixel timing — Avg (µs)
+
+| 씬 | Round 2 | Round 3 | 개선율 (%) |
+|----|---------|---------|-----------|
+| S1 | 0.540 | 0.477 | **11.7%** |
+| S2 | 1.933 | 1.880 | **2.7%** |
+| S3 | 3.238 | 3.195 | **1.3%** |
+| S4 | 54.054 | 52.800 | **2.3%** |
+
+### Raw Output
+
+#### S1 (valid_smoke_simple.rt — 1 object)
+
+```
+=== Pixel Timing Statistics ===
+Total pixels: 480000
+Min time:     0.000 µs (0.000000 ms)
+Max time:     21.000 µs (0.021000 ms)
+Average:      0.477 µs (0.000477 ms)
+Median:       0.000 µs (0.000000 ms)
+95th %ile:    1.000 µs (0.001000 ms)
+99th %ile:    1.000 µs (0.001000 ms)
+
+=== Render Metrics ===
+Frame time:        438.3 ms
+FPS:               2.2815
+Rays traced:       1296000
+Primary tests:     103041
+Shadow tests:      864976
+Primary tests/ray: 0.1
+BVH nodes visited: 1296000
+BVH skip rate:     92.0%
+Objects:           1
+```
+
+#### S2 (perf_spheres_20.rt — 20 spheres)
+
+```
+=== Pixel Timing Statistics ===
+Total pixels: 480000
+Min time:     0.000 µs (0.000000 ms)
+Max time:     57.000 µs (0.057000 ms)
+Average:      1.880 µs (0.001880 ms)
+Median:       0.000 µs (0.000000 ms)
+95th %ile:    1.000 µs (0.001000 ms)
+99th %ile:    11.000 µs (0.011000 ms)
+
+=== Render Metrics ===
+Frame time:        1122.9 ms
+FPS:               0.8906
+Rays traced:       1296000
+Primary tests:     353905
+Shadow tests:      15364205
+Primary tests/ray: 0.3
+BVH nodes visited: 5223492
+BVH skip rate:     58.8%
+Objects:           20
+```
+
+#### S3 (perf_spheres_50.rt — 50 spheres)
+
+```
+=== Pixel Timing Statistics ===
+Total pixels: 480000
+Min time:     0.000 µs (0.000000 ms)
+Max time:     95.000 µs (0.095000 ms)
+Average:      3.195 µs (0.003195 ms)
+Median:       0.000 µs (0.000000 ms)
+95th %ile:    1.000 µs (0.001000 ms)
+99th %ile:    22.000 µs (0.022000 ms)
+
+=== Render Metrics ===
+Frame time:        1753.4 ms
+FPS:               0.5703
+Rays traced:       1296000
+Primary tests:     357899
+Shadow tests:      43150396
+Primary tests/ray: 0.3
+BVH nodes visited: 4465654
+BVH skip rate:     60.3%
+Objects:           50
+```
+
+#### S4 (perf_all_objects.rt — 7sp + 7cy + 3pl)
+
+```
+=== Pixel Timing Statistics ===
+Total pixels: 480000
+Min time:     4.000 µs (0.004000 ms)
+Max time:     1010.000 µs (1.010000 ms)
+Average:      52.800 µs (0.052800 ms)
+Median:       19.000 µs (0.019000 ms)
+95th %ile:    20.000 µs (0.020000 ms)
+99th %ile:    21.000 µs (0.021000 ms)
+
+=== Render Metrics ===
+Frame time:        25583.8 ms
+FPS:               0.0391
+Rays traced:       1296000
+Primary tests:     6689782
+Shadow tests:      369636978
+Primary tests/ray: 5.2
+BVH nodes visited: 19629738
+BVH skip rate:     32.9%
+Objects:           18
+```
+
+### 분석
+
+1. **S1 6.0% 개선**: 가장 단순한 씬에서 오히려 가장 큰 개선. Shadow sample 수 대비 오버헤드 비율이 높아 LUT 효과가 두드러짐.
+
+2. **S2–S3 1–2% 개선**: Shadow tests가 많아지면서 intersection 비용이 지배적. LUT 효과가 상대적으로 희석됨.
+
+3. **S4 2.3% 개선**: 369M shadow tests에서 cos/sin 호출 제거로 ~600ms 절감. Round 2와 동일한 2.3% 개선율이지만, 절대값으로는 더 큰 효과.
+
+4. **이론 vs 실측**: 연구 보고서 예상(~99% trig 비용 절감)은 per-sample 기준. 전체 프레임 타임에서 trig 비용이 차지하는 비율이 작아 전체 개선율은 1–6% 수준.
+
+5. **누적 효과**: Baseline 대비 S4 총 개선율 = (27,173.7 - 25,583.8) / 27,173.7 = **5.9%**. P0+Phase A+P4 누적 효과.
+
+6. **다음 단계**: P1 (Shadow ray BVH)이 S4 병목 해소의 핵심. Shadow tests 369M을 BVH로 가속하면 대폭 개선 기대.

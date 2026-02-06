@@ -94,9 +94,14 @@ static int	sample_shadow_ray(t_shadow_sample *params, int index)
 {
 	t_vec3	offset;
 	t_vec3	sample_light_pos;
+	double	radius;
 
-	offset = generate_shadow_sample_offset(params->config->softness * 2.0,
-			index, params->config->samples);
+	radius = params->config->softness * 2.0;
+	if (params->config->offset_lut)
+		offset = vec3_multiply(params->config->offset_lut[index], radius);
+	else
+		offset = generate_shadow_sample_offset(radius, index,
+				params->config->samples);
 	sample_light_pos = vec3_add(params->light_pos, offset);
 	return (is_in_shadow(params->scene, params->point,
 			sample_light_pos, params->bias));
