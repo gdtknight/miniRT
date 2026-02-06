@@ -207,7 +207,7 @@
 
 - [X] T024 Run S1–S4 scenes and record metrics (1회 측정, metrics summary 캡처)
 - [X] T025 Update `docs/benchmark-results.md` with Round 3 data (Phase B-1: P4 단독 효과)
-- [ ] T026 Commit code changes and benchmark documentation
+- [X] T026 Commit code changes and benchmark documentation
 
 **Checkpoint**: Round 3 benchmark 기록 완료, P4 feature complete.
 
