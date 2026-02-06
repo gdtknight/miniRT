@@ -98,7 +98,7 @@
 
 - [X] T021 Run S1–S4 scenes and record metrics (1회 측정)
 - [X] T022 Update `docs/benchmark-results.md` with Round 2 data (Phase A: P3+P8+P7 누적 효과)
-- [ ] T023 Commit code changes and benchmark documentation
+- [X] T023 Commit code changes and benchmark documentation
 
 **Checkpoint**: Round 2 benchmark 기록 완료, feature complete.
 
