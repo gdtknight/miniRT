@@ -59,10 +59,15 @@ static void	render_pixel(t_scene *scene, t_render *render, int x, int y)
 	u = (2.0 * x / (double)WINDOW_WIDTH) - 1.0;
 	v = 1.0 - (2.0 * y / (double)WINDOW_HEIGHT);
 	ray = create_camera_ray(&scene->camera, u, v);
-	timing[0] = get_time_ns();
-	color = trace_ray(scene, &ray);
-	timing[1] = get_time_ns();
-	pixel_timing_add_sample(&render->pixel_timing, timing[1] - timing[0]);
+	if (render_has_flag(render, RENDER_ENABLE_PIXEL_TIMING))
+	{
+		timing[0] = get_time_ns();
+		color = trace_ray(scene, &ray);
+		timing[1] = get_time_ns();
+		pixel_timing_add_sample(&render->pixel_timing, timing[1] - timing[0]);
+	}
+	else
+		color = trace_ray(scene, &ray);
 	put_pixel_to_buffer(render, x, y, color);
 }
 
