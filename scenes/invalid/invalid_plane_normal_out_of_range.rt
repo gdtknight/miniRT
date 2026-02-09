@@ -1,0 +1,8 @@
+# Test plane with normal vector component out of [-1,1] range
+A  0.2                          255,255,255
+
+C  0,0,-15         0,0,1       70
+L  0,8,-8                       0.7             255,255,255
+
+# Line 8: plane normal vector has y=2.0 which exceeds valid range [-1,1]
+pl 0,0,0           0,2.0,0                      150,150,150

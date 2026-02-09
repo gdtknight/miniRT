@@ -67,6 +67,9 @@ static t_parse_result	parse_camera_vecs(const char **token, t_scene *scene)
 	result = parse_vector_strict(*token, &scene->camera.direction, token);
 	if (result != PARSE_OK)
 		return (result);
+	result = validate_vector_range(&scene->camera.direction);
+	if (result != PARSE_OK)
+		return (result);
 	result = validate_direction_vector(&scene->camera.direction);
 	if (result != PARSE_OK)
 		return (result);

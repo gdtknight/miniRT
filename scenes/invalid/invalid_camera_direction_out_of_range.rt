@@ -1,0 +1,8 @@
+# Test camera with direction vector component out of [-1,1] range
+A  0.2                          255,255,255
+
+# Line 4: camera direction has y=1.5 which exceeds valid range [-1,1]
+C  0,0,-15         0,1.5,0     70
+L  0,8,-8                       0.7             255,255,255
+
+sp 0,0,20                       10              255,0,0

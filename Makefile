@@ -75,6 +75,7 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/parser/parse_elements.c \
 			  $(SRC_DIR)/parser/parse_objects.c \
 			  $(SRC_DIR)/parser/parse_validation_strict.c \
+			  $(SRC_DIR)/parser/parse_vector_validation.c \
 			  $(SRC_DIR)/parser/parse_cylinder.c \
 			  $(SRC_DIR)/parser/parse_error.c \
 			  $(SRC_DIR)/parser/parse_error_msg.c \
