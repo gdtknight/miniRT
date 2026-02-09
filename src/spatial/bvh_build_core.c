@@ -37,6 +37,7 @@ t_bvh_node	*create_leaf_node(t_object_ref *objects, int count, void *scene)
 	node->right = NULL;
 	node->object_count = count;
 	node->depth = 0;
+	node->split_axis = -1;
 	node->objects = malloc(sizeof(t_object_ref) * count);
 	if (!node->objects)
 	{
@@ -86,6 +87,7 @@ t_bvh_node	*bvh_build_recursive(t_object_ref *objects, int count,
 	sp.count = count;
 	sp.scene = scene;
 	sp.depth = depth;
+	sp.axis = axis;
 	return (create_split_node(&sp));
 }
 

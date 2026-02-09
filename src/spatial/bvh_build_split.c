@@ -70,6 +70,7 @@ t_bvh_node	*create_split_node(t_split_params *sp)
 	node->objects = NULL;
 	node->object_count = 0;
 	node->depth = sp->depth;
+	node->split_axis = sp->axis;
 	node->left = bvh_build_recursive(sp->objects, sp->mid,
 			sp->scene, sp->depth + 1);
 	node->right = bvh_build_recursive(sp->objects + sp->mid,

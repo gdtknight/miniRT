@@ -42,6 +42,7 @@ typedef struct s_bvh_node
 	t_object_ref		*objects;
 	int					object_count;
 	int					depth;
+	int					split_axis;
 }	t_bvh_node;
 
 /* BVH tree root structure */
@@ -70,7 +71,7 @@ typedef struct s_axis_check
 	double	box_min;
 	double	box_max;
 	double	ray_origin;
-	double	ray_dir;
+	double	inv_dir;
 	double	*tmin;
 	double	*tmax;
 }	t_axis_check;
@@ -94,6 +95,7 @@ typedef struct s_split_params
 	int				count;
 	void			*scene;
 	int				depth;
+	int				axis;
 }	t_split_params;
 
 /* Helper functions */
@@ -119,6 +121,8 @@ t_bvh_node	*bvh_build_recursive(t_object_ref *objects, int count,
 int			bvh_intersect(t_bvh *bvh, t_ray ray, t_hit_record *hit,
 				void *scene);
 int			bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
+				void *scene);
+int			bvh_intersect_any(t_bvh *bvh, t_ray ray, double max_dist,
 				void *scene);
 
 /* Object bounds calculation */
