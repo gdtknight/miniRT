@@ -15,6 +15,7 @@
 #include "vec3.h"
 #include "ray.h"
 #include "metrics.h"
+#include "spatial.h"
 
 /**
  * @brief Test shadow ray against all objects in the scene.
@@ -48,7 +49,7 @@ static int	check_object_shadow(t_scene *scene, t_ray *ray, t_hit *hit)
  * @brief Determine whether a point is shadowed from a light.
  *
  * Builds a shadow ray toward the light, applies a bias to avoid self-shadow,
- * and tests for occlusion by scene objects.
+ * and tests for occlusion by scene objects. Uses BVH acceleration if enabled.
  *
  * @param scene Scene containing objects for occlusion tests.
  * @param point Shaded point in world space.
@@ -72,5 +73,11 @@ int	is_in_shadow(t_scene *scene, t_vec3 point, t_vec3 light_pos, double bias)
 	light_dir = vec3_multiply(to_light, 1.0 / mag);
 	shadow_ray.origin = vec3_add(point, vec3_multiply(light_dir, bias));
 	shadow_ray.direction = light_dir;
+	shadow_ray.inv_dir.x = 1.0 / light_dir.x;
+	shadow_ray.inv_dir.y = 1.0 / light_dir.y;
+	shadow_ray.inv_dir.z = 1.0 / light_dir.z;
+	if (scene->bvh && scene->bvh->enabled && scene->bvh->root
+		&& scene->objects.count > SHADOW_BVH_THRESHOLD)
+		return (bvh_intersect_any(scene->bvh, shadow_ray, mag, scene));
 	return (check_object_shadow(scene, &shadow_ray, &shadow_hit));
 }
