@@ -14,6 +14,7 @@
 #include "parser.h"
 #include "window.h"
 #include "spatial.h"
+#include "bvh_vis.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -93,7 +94,10 @@ static int	init_and_parse(char *filename, t_scene **scene)
 static int	init_render_ctx(t_scene *scene, t_render **render, int bvh_vis)
 {
 	if (bvh_vis && scene->bvh)
+	{
 		scene->bvh->visualize = 1;
+		bvh_visualize(scene->bvh, NULL, scene);
+	}
 	*render = render_create(scene);
 	if (!*render)
 	{

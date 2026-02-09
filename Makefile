@@ -107,6 +107,7 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/spatial/bvh_build_core.c \
 			  $(SRC_DIR)/spatial/bvh_init.c \
 			  $(SRC_DIR)/spatial/bvh_traverse.c \
+			  $(SRC_DIR)/spatial/bvh_any_hit.c \
 			  $(SRC_DIR)/utils/error.c \
 			  $(SRC_DIR)/utils/format_helpers.c \
 			  $(SRC_DIR)/utils/timer.c \
