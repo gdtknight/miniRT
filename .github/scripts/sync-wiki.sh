@@ -143,7 +143,7 @@ process_docs() {
         add_version_footer "$wiki_path" "$version"
         
         count=$((count + 1))
-    done < <(find docs -name "*.md" -type f -print0)
+    done < <(find docs -maxdepth 1 -name "*.md" -type f -print0)
     
     echo "Processed $count documentation files"
 }
