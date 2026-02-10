@@ -45,14 +45,22 @@ typedef struct s_bvh_node
 	int					split_axis;
 }	t_bvh_node;
 
+/* BVH plane reference list for separated plane intersection */
+typedef struct s_plane_refs
+{
+	int		*indices;
+	int		count;
+}	t_plane_refs;
+
 /* BVH tree root structure */
 typedef struct s_bvh
 {
-	t_bvh_node	*root;
-	int			enabled;
-	int			total_nodes;
-	int			max_depth;
-	int			visualize;
+	t_bvh_node		*root;
+	int				enabled;
+	int				total_nodes;
+	int				max_depth;
+	int				visualize;
+	t_plane_refs	plane_refs;
 }	t_bvh;
 
 /* Helper structure for BVH hit checking */
