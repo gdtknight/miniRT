@@ -35,6 +35,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.LIBFT_DEPLOY_KEY }}
+          submodules: true
 
       - name: Install dependencies
         run: |
@@ -73,6 +76,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.LIBFT_DEPLOY_KEY }}
+          submodules: true
 
       - name: Build miniRT
         run: |
