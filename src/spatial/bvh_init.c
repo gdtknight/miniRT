@@ -87,6 +87,40 @@ static void	fill_separated_refs(t_scene *scene, t_object_ref *refs)
 }
 
 /**
+ * @brief Allocate plane indices and bounded object refs for BVH build.
+ *
+ * Frees existing plane_refs.indices before reallocating (R2 leak fix).
+ * On malloc failure, cleans up partial allocations and returns 0 (R1).
+ *
+ * @param scene Scene with BVH to populate.
+ * @param refs Output pointer for bounded object refs.
+ * @param pc Plane count.
+ * @param bc Bounded object count.
+ * @return int 1 on success, 0 on allocation failure.
+ */
+static int	alloc_bvh_refs(t_scene *scene, t_object_ref **refs, int pc, int bc)
+{
+	free(scene->bvh->plane_refs.indices);
+	scene->bvh->plane_refs.count = 0;
+	scene->bvh->plane_refs.indices = NULL;
+	if (pc > 0)
+		scene->bvh->plane_refs.indices = malloc(sizeof(int) * pc);
+	*refs = NULL;
+	if (bc > 0)
+		*refs = malloc(sizeof(t_object_ref) * bc);
+	if (pc > 0 && !scene->bvh->plane_refs.indices)
+		return (0);
+	if (bc > 0 && !*refs)
+	{
+		free(scene->bvh->plane_refs.indices);
+		scene->bvh->plane_refs.indices = NULL;
+		return (0);
+	}
+	scene->bvh->plane_refs.count = pc;
+	return (1);
+}
+
+/**
  * @brief Build or rebuild the BVH for the scene with plane separation.
  *
  * Separates planes from bounded objects, builds BVH with bounded
@@ -108,15 +142,13 @@ void	scene_build_bvh(t_scene *scene)
 		return ;
 	pc = count_planes(scene);
 	bc = scene->objects.count - pc;
-	scene->bvh->plane_refs.count = pc;
-	scene->bvh->plane_refs.indices = NULL;
-	if (pc > 0)
-		scene->bvh->plane_refs.indices = malloc(sizeof(int) * pc);
-	refs = NULL;
-	if (bc > 0)
-		refs = malloc(sizeof(t_object_ref) * bc);
+	if (!alloc_bvh_refs(scene, &refs, pc, bc))
+	{
+		free(refs);
+		return ;
+	}
 	fill_separated_refs(scene, refs);
-	if (bc > 0 && refs)
+	if (bc > 0)
 		bvh_build(scene->bvh, refs, bc, scene);
 	free(refs);
 }
