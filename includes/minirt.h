@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:17:55 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/18 15:21:25 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,29 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdbool.h>
+# include "libft.h"
+# include "error.h"
 # include "vec3.h"
 # include "objects.h"
 # include "ray.h"
 # include "shadow.h"
-# include "render_state.h"
+# include "metrics.h"
 
 /* Forward declarations */
 typedef struct s_render	t_render;
+typedef struct s_bvh	t_bvh;
+
+/* Scene flags (bit flags) */
+# define SCENE_HAS_AMBIENT  0x01
+# define SCENE_HAS_CAMERA   0x02
+# define SCENE_HAS_LIGHT    0x04
+# define SCENE_BVH_ENABLED  0x08
+
+/* Default object capacity */
+# define DEFAULT_OBJECT_CAPACITY 32
+
+/* Epsilon value for floating point comparison */
+# define EPSILON 0.0001
 
 /* Helper structure for camera ray calculations */
 typedef struct s_cam_calc
@@ -34,8 +49,15 @@ typedef struct s_cam_calc
 	t_vec3	up;
 }	t_cam_calc;
 
-/* Epsilon value for floating point comparison to avoid numerical errors */
-# define EPSILON 0.0001
+/* Camera basis cache with dirty flag for per-frame caching */
+typedef struct s_camera_cache
+{
+	t_vec3	right;
+	t_vec3	up;
+	double	aspect_ratio;
+	double	fov_scale;
+	int		valid;
+}	t_camera_cache;
 
 /* Floating point color for intermediate calculations (0.0 - 1.0+) */
 typedef struct s_color_f
@@ -55,11 +77,12 @@ typedef struct s_ambient
 /* Camera defines viewpoint and field of view for rendering */
 typedef struct s_camera
 {
-	t_vec3	position;
-	t_vec3	direction;
-	t_vec3	initial_position;
-	t_vec3	initial_direction;
-	double	fov;
+	t_vec3			position;
+	t_vec3			direction;
+	t_vec3			initial_position;
+	t_vec3			initial_direction;
+	double			fov;
+	t_camera_cache	cache;
 }	t_camera;
 
 /* Point light source emitting from a single point in all directions */
@@ -70,53 +93,48 @@ typedef struct s_light
 	t_color	color;
 }	t_light;
 
-/* Complete scene: ambient light, camera, light, and geometric objects */
+/* Object storage with dynamic array */
+typedef struct s_object_list
+{
+	t_object	*items;
+	int			count;
+	int			capacity;
+}	t_object_list;
+
+/* Complete scene structure (refactored) */
 typedef struct s_scene
 {
 	t_ambient		ambient;
 	t_camera		camera;
 	t_light			light;
 	t_shadow_config	shadow_config;
-	t_sphere		spheres[100];
-	int				sphere_count;
-	t_plane			planes[100];
-	int				plane_count;
-	t_cylinder		cylinders[100];
-	int				cylinder_count;
-	int				has_ambient;
-	int				has_camera;
-	int				has_light;
-	t_render_state	render_state;
+	t_object_list	objects;
+	int				flags;
+	t_bvh			*bvh;
+	t_metrics		metrics;
 }	t_scene;
 
-/* Print error message to stderr and return 0 */
-int		print_error(const char *message);
+/* Scene lifecycle */
+t_scene	*scene_create(void);
+void	scene_destroy(t_scene *scene);
 
-/* Convert string to integer */
-int		ft_atoi(const char *str);
-/* Convert string to double */
-double	ft_atof(const char *str);
+/* Object list operations */
+int		object_list_init(t_object_list *list, int capacity);
+void	object_list_destroy(t_object_list *list);
+int		object_list_add(t_object_list *list, t_object *obj);
+int		object_list_grow(t_object_list *list);
 
-/* Free allocated memory for scene structure */
-void	cleanup_scene(t_scene *scene);
-/* Free allocated memory for render structure */
-void	cleanup_render(void *render);
-/* Free all allocated memory (scene and render) */
-void	cleanup_all(t_scene *scene, void *render);
+/* Scene flag helpers */
+int		scene_has_ambient(t_scene *scene);
+int		scene_has_camera(t_scene *scene);
+int		scene_has_light(t_scene *scene);
+void	scene_set_flag(t_scene *scene, int flag);
+void	scene_clear_flag(t_scene *scene, int flag);
 
-/* Render entire scene by iterating over all pixels.
-** Resolution hardcoded to 800x600.
-** Each pixel is ray traced independently.
-** Uses image buffer for fast rendering.
-** Supports low quality mode (half resolution) for interactive preview.
-*/
+/* Rendering */
 void	render_scene_to_buffer(t_scene *scene, t_render *render);
-/* Calculate final color at hit point using lighting and shadows */
 t_color	apply_lighting(t_scene *scene, t_hit *hit);
-
-/* Create camera ray for given screen coordinates (NDC space) */
 t_ray	create_camera_ray(t_camera *camera, double x, double y);
-/* Trace ray through scene and return color */
 t_color	trace_ray(t_scene *scene, t_ray *ray);
 
 #endif

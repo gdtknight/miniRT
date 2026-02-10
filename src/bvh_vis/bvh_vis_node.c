@@ -6,21 +6,85 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 15:11:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/12 15:11:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 11:58:19 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bvh_vis.h"
 #include "minirt.h"
 #include "window.h"
-#include <stdio.h>
-#include <string.h>
+#include "utils.h"
+#include <stdlib.h>
 
+/**
+ * @brief Check whether a BVH node is a leaf.
+ *
+ * @param node BVH node to test.
+ * @return int 1 if leaf, 0 otherwise.
+ */
 int	is_leaf_node(t_bvh_node *node)
 {
 	return (node->left == NULL && node->right == NULL);
 }
 
+/**
+ * @brief Append a formatted vec3 to a buffer.
+ *
+ * @param buf Destination buffer.
+ * @param size Destination buffer size.
+ * @param v Vector to append.
+ * @param precision Decimal precision for components.
+ */
+static void	append_vec3_to_buf(char *buf, size_t size, t_vec3 v, int precision)
+{
+	char	num[32];
+
+	float_to_str(num, 32, v.x, precision);
+	ft_strlcat(buf, num, size);
+	ft_strlcat(buf, ", ", size);
+	float_to_str(num, 32, v.y, precision);
+	ft_strlcat(buf, num, size);
+	ft_strlcat(buf, ", ", size);
+	float_to_str(num, 32, v.z, precision);
+	ft_strlcat(buf, num, size);
+}
+
+/**
+ * @brief Format an AABB bounds string in compact or verbose form.
+ *
+ * @param bounds AABB to format.
+ * @param buf Destination buffer.
+ * @param size Destination buffer size.
+ * @param comp Non-zero for compact formatting.
+ */
+static void	format_bounds_str(t_aabb bounds, char *buf, size_t size, int comp)
+{
+	buf[0] = '\0';
+	if (comp)
+	{
+		ft_strlcpy(buf, "[", size);
+		append_vec3_to_buf(buf, size, bounds.min, 1);
+		ft_strlcat(buf, "]-[", size);
+		append_vec3_to_buf(buf, size, bounds.max, 1);
+		ft_strlcat(buf, "]", size);
+	}
+	else
+	{
+		ft_strlcpy(buf, "min(", size);
+		append_vec3_to_buf(buf, size, bounds.min, 2);
+		ft_strlcat(buf, ") max(", size);
+		append_vec3_to_buf(buf, size, bounds.max, 2);
+		ft_strlcat(buf, ")", size);
+	}
+}
+
+/**
+ * @brief Build formatted node info for visualization.
+ *
+ * @param node BVH node to format.
+ * @param config Visualization configuration (unused here).
+ * @return t_node_info Populated node info struct.
+ */
 t_node_info	format_node_info(t_bvh_node *node, t_vis_config *config)
 {
 	t_node_info	info;
@@ -28,63 +92,22 @@ t_node_info	format_node_info(t_bvh_node *node, t_vis_config *config)
 	(void)config;
 	info.depth = node->depth;
 	if (is_leaf_node(node))
-		strcpy(info.type, "Leaf");
+		ft_strlcpy(info.type, "Leaf", sizeof(info.type));
 	else
-		strcpy(info.type, "Internal");
-	snprintf(info.bounds, sizeof(info.bounds),
-		"min(%.2f, %.2f, %.2f) max(%.2f, %.2f, %.2f)",
-		node->bounds.min.x, node->bounds.min.y, node->bounds.min.z,
-		node->bounds.max.x, node->bounds.max.y, node->bounds.max.z);
+		ft_strlcpy(info.type, "Internal", sizeof(info.type));
+	format_bounds_str(node->bounds, info.bounds, sizeof(info.bounds), 0);
 	info.objects[0] = '\0';
 	return (info);
 }
 
+/**
+ * @brief Format a bounding box string for display.
+ *
+ * @param bounds AABB to format.
+ * @param buffer Destination buffer.
+ * @param compact Non-zero for compact format.
+ */
 void	format_bounding_box(t_aabb bounds, char *buffer, int compact)
 {
-	if (compact)
-		snprintf(buffer, 128, "[%.1f,%.1f,%.1f]-[%.1f,%.1f,%.1f]",
-			bounds.min.x, bounds.min.y, bounds.min.z,
-			bounds.max.x, bounds.max.y, bounds.max.z);
-	else
-		snprintf(buffer, 128, "min(%.2f, %.2f, %.2f) max(%.2f, %.2f, %.2f)",
-			bounds.min.x, bounds.min.y, bounds.min.z,
-			bounds.max.x, bounds.max.y, bounds.max.z);
-}
-
-void	format_object_list(t_object_ref *objects, int count, char *buffer,
-			void *scene_ptr)
-{
-	int			i;
-	char		*id;
-	t_scene		*scene;
-
-	scene = (t_scene *)scene_ptr;
-	strcpy(buffer, "Objects: [");
-	i = 0;
-	while (i < count)
-	{
-		id = NULL;
-		if (objects[i].type == OBJ_SPHERE)
-			id = scene->spheres[objects[i].index].id;
-		else if (objects[i].type == OBJ_PLANE)
-			id = scene->planes[objects[i].index].id;
-		else if (objects[i].type == OBJ_CYLINDER)
-			id = scene->cylinders[objects[i].index].id;
-		if (id)
-			strcat(buffer, id);
-		if (i < count - 1)
-			strcat(buffer, ", ");
-		i++;
-	}
-	strcat(buffer, "]");
-}
-
-void	format_node_compact(t_bvh_node *node, t_node_info *info)
-{
-	if (is_leaf_node(node))
-		strcpy(info->type, "L");
-	else
-		strcpy(info->type, "I");
-	snprintf(info->bounds, sizeof(info->bounds), "[d=%d]", node->depth);
-	info->objects[0] = '\0';
+	format_bounds_str(bounds, buffer, 128, compact);
 }

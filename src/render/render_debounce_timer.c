@@ -13,38 +13,63 @@
 #include "render_debounce.h"
 #include <stdlib.h>
 
-/*
-** debounce_timer_start - Start the debounce timer
-** Sets the timer to active and records the current time
-*/
+/**
+ * @brief Clear any pending cancel request for debounce rendering.
+ *
+ * Resets the cancel flag so subsequent render passes can proceed normally.
+ *
+ * @param state Debounce state to update.
+ */
+void	debounce_cancel(t_debounce_state *state)
+{
+	state->cancel_requested = 0;
+}
+
+/**
+ * @brief Start the debounce timer.
+ *
+ * Marks the timer active and records the current timestamp.
+ *
+ * @param timer Debounce timer to start.
+ */
 void	debounce_timer_start(t_debounce_timer *timer)
 {
 	gettimeofday(&timer->last_input_time, NULL);
 	timer->is_active = 1;
 }
 
-/*
-** debounce_timer_reset - Reset the timer to current time
-** Updates the last_input_time without changing active state
-*/
+/**
+ * @brief Reset the debounce timer timestamp.
+ *
+ * Updates last_input_time to the current time without changing active state.
+ *
+ * @param timer Debounce timer to reset.
+ */
 void	debounce_timer_reset(t_debounce_timer *timer)
 {
 	gettimeofday(&timer->last_input_time, NULL);
 }
 
-/*
-** debounce_timer_stop - Stop the debounce timer
-** Sets the timer to inactive
-*/
+/**
+ * @brief Stop the debounce timer.
+ *
+ * Marks the timer inactive so expiration checks fail until restarted.
+ *
+ * @param timer Debounce timer to stop.
+ */
 void	debounce_timer_stop(t_debounce_timer *timer)
 {
 	timer->is_active = 0;
 }
 
-/*
-** debounce_timer_expired - Check if the timer delay has elapsed
-** Returns 1 if delay_ms has passed since last_input_time, 0 otherwise
-*/
+/**
+ * @brief Check whether the debounce delay has elapsed.
+ *
+ * Computes elapsed time since last_input_time and compares it to delay_ms.
+ *
+ * @param timer Debounce timer to query.
+ * @return int 1 if expired, 0 otherwise.
+ */
 int	debounce_timer_expired(t_debounce_timer *timer)
 {
 	struct timeval	now;

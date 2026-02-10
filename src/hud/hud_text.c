@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 00:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/01/04 00:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include "hud.h"
 
 /**
- * @brief hud mark dirty 함수
+ * @brief Mark the HUD as needing a redraw.
  *
- * @param render 파라미터
+ * @param render Render context containing HUD state.
  */
 void	hud_mark_dirty(t_render *render)
 {
@@ -24,10 +24,10 @@ void	hud_mark_dirty(t_render *render)
 }
 
 /**
- * @brief hud render background row 함수 - 렌더링 수행
+ * @brief Render one row of the HUD background overlay.
  *
- * @param render 파라미터
- * @param y 파라미터
+ * @param render Render context containing image buffer.
+ * @param y Screen y coordinate of the row.
  */
 void	hud_render_background_row(t_render *render, int y)
 {
@@ -37,10 +37,11 @@ void	hud_render_background_row(t_render *render, int y)
 	t_pixel_params	params;
 
 	x = HUD_MARGIN_X;
-	params.img_data = render->img_data;
+	params.img_data = render->mlx.img.data;
 	params.y = y;
-	params.size_line = render->size_line;
-	params.bpp = render->bpp;
+	params.size_line = render->mlx.img.size_line;
+	params.bpp = render->mlx.img.bpp;
+	params.endian = render->mlx.img.endian;
 	while (x < HUD_MARGIN_X + HUD_WIDTH)
 	{
 		params.x = x;
@@ -52,9 +53,9 @@ void	hud_render_background_row(t_render *render, int y)
 }
 
 /**
- * @brief hud render background 함수 - 렌더링 수행
+ * @brief Render the full HUD background overlay.
  *
- * @param render 파라미터
+ * @param render Render context containing image buffer.
  */
 void	hud_render_background(t_render *render)
 {
@@ -68,6 +69,14 @@ void	hud_render_background(t_render *render)
 	}
 }
 
+/**
+ * @brief Format a labeled vec3 and render it on the HUD.
+ *
+ * @param render Render context containing MLX handles.
+ * @param y Current y position (in/out).
+ * @param label Label text to display.
+ * @param vec Vector to format and display.
+ */
 void	format_and_print_vec3(t_render *render, int *y,
 		char *label, t_vec3 vec)
 {
@@ -81,18 +90,17 @@ void	format_and_print_vec3(t_render *render, int *y,
 		buf[i++] = *label++;
 	buf[i] = '\0';
 	hud_format_vec3(buf + i, vec);
-	mlx_string_put(render->mlx, render->win, HUD_MARGIN_X + 10,
+	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
 		*y, HUD_COLOR_TEXT, buf);
 	*y += HUD_LINE_HEIGHT;
 }
 
 /**
- * @brief copy str to buf 함수
+ * @brief Copy a string into a buffer and return length copied.
  *
- * @param dst 파라미터
- * @param src 파라미터
- *
- * @return int 반환값
+ * @param dst Destination buffer.
+ * @param src Source string.
+ * @return int Number of characters copied.
  */
 int	copy_str_to_buf(char *dst, char *src)
 {

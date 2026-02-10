@@ -14,6 +14,16 @@
 #include "bvh_internal.h"
 #include <stdlib.h>
 
+/**
+ * @brief Create a leaf BVH node containing object references.
+ *
+ * Allocates the node, computes bounds, and copies object references.
+ *
+ * @param objects Array of object references.
+ * @param count Number of objects in the leaf.
+ * @param scene Pointer to the scene for bounds computation.
+ * @return t_bvh_node* Newly allocated leaf node or NULL on failure.
+ */
 t_bvh_node	*create_leaf_node(t_object_ref *objects, int count, void *scene)
 {
 	t_bvh_node	*node;
@@ -27,6 +37,7 @@ t_bvh_node	*create_leaf_node(t_object_ref *objects, int count, void *scene)
 	node->right = NULL;
 	node->object_count = count;
 	node->depth = 0;
+	node->split_axis = -1;
 	node->objects = malloc(sizeof(t_object_ref) * count);
 	if (!node->objects)
 	{
@@ -42,6 +53,17 @@ t_bvh_node	*create_leaf_node(t_object_ref *objects, int count, void *scene)
 	return (node);
 }
 
+/**
+ * @brief Recursively build a BVH subtree.
+ *
+ * Splits objects along the best axis until leaf criteria are met.
+ *
+ * @param objects Array of object references.
+ * @param count Number of objects in the current subset.
+ * @param scene Pointer to the scene for bounds computation.
+ * @param depth Current recursion depth.
+ * @return t_bvh_node* Root node of the constructed subtree.
+ */
 t_bvh_node	*bvh_build_recursive(t_object_ref *objects, int count,
 		void *scene, int depth)
 {
@@ -65,16 +87,19 @@ t_bvh_node	*bvh_build_recursive(t_object_ref *objects, int count,
 	sp.count = count;
 	sp.scene = scene;
 	sp.depth = depth;
+	sp.axis = axis;
 	return (create_split_node(&sp));
 }
 
 /**
- * @brief bvh build 함수 - 빌드 수행
+ * @brief Build or rebuild the BVH from object references.
  *
- * @param bvh 파라미터
- * @param objects 파라미터
- * @param count 파라미터
- * @param scene 파라미터
+ * Destroys any existing BVH tree and constructs a new one.
+ *
+ * @param bvh BVH structure to populate.
+ * @param objects Array of object references.
+ * @param count Number of objects.
+ * @param scene Pointer to the scene for bounds computation.
  */
 void	bvh_build(t_bvh *bvh, t_object_ref *objects, int count, void *scene)
 {

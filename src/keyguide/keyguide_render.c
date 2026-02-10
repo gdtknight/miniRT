@@ -15,129 +15,97 @@
 #include "window.h"
 
 /**
- * @brief keyguide render background 함수 - 렌더링 수행
+ * @brief Render the camera controls section in the key guide.
  *
- * @param render 파라미터
- */
-void	keyguide_render_background(t_render *render)
-{
-	int				x;
-	int				y;
-	int				scene_color;
-	int				blended;
-	t_pixel_params	params;
-
-	y = render->keyguide.y;
-	while (y < render->keyguide.y + KEYGUIDE_HEIGHT)
-	{
-		x = render->keyguide.x;
-		while (x < render->keyguide.x + KEYGUIDE_WIDTH)
-		{
-			params.img_data = render->img_data;
-			params.x = x;
-			params.y = y;
-			params.size_line = render->size_line;
-			params.bpp = render->bpp;
-			scene_color = get_pixel(&params);
-			blended = blend_colors(scene_color, KEYGUIDE_COLOR_BG,
-					KEYGUIDE_BG_ALPHA);
-			set_pixel(&params, blended);
-			x++;
-		}
-		y++;
-	}
-}
-
-/**
- * @brief keyguide render camera section 함수 - 렌더링 수행
- *
- * @param render 파라미터
- * @param y 파라미터
+ * @param render Render context containing key guide position.
+ * @param y Current y position (in/out) for text rendering.
  */
 static void	keyguide_render_camera_section(t_render *render, int *y)
 {
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 10, *y, KEYGUIDE_COLOR_TEXT, "Camera:");
 	*y += KEYGUIDE_LINE_HEIGHT;
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "W/X - Fwd/Back");
 	*y += KEYGUIDE_LINE_HEIGHT;
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "A/D - Left/Right");
 	*y += KEYGUIDE_LINE_HEIGHT;
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "Q/Z - Up/Down");
 	*y += KEYGUIDE_LINE_HEIGHT;
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "E/C - Pitch");
 	*y += KEYGUIDE_LINE_HEIGHT;
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "S - Reset");
 }
 
 /**
- * @brief keyguide render content 함수 - 렌더링 수행
+ * @brief Render the main key guide content (navigation + camera).
  *
- * @param render 파라미터
+ * @param render Render context containing key guide position.
  */
 void	keyguide_render_content(t_render *render)
 {
 	int	y;
 
 	y = render->keyguide.y + 20;
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 10, y, KEYGUIDE_COLOR_HEADING, "CONTROLS");
 	y += 30;
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 10, y, KEYGUIDE_COLOR_TEXT, "Navigation:");
 	y += KEYGUIDE_LINE_HEIGHT;
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 20, y, KEYGUIDE_COLOR_TEXT, "ESC - Exit");
 	y += KEYGUIDE_LINE_HEIGHT;
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 20, y, KEYGUIDE_COLOR_TEXT, "H - Toggle HUD");
 	y += KEYGUIDE_SECTION_GAP + KEYGUIDE_LINE_HEIGHT;
 	keyguide_render_camera_section(render, &y);
 }
 
 /**
- * @brief keyguide render content2 함수 - 렌더링 수행
+ * @brief Render the secondary key guide content (objects + display).
  *
- * @param render 파라미터
- * @param y 파라미터
+ * @param render Render context containing key guide position.
+ * @param y Current y position (in/out) for text rendering.
  */
 void	keyguide_render_content2(t_render *render, int *y)
 {
 	*y += KEYGUIDE_SECTION_GAP + KEYGUIDE_LINE_HEIGHT;
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 10, *y, KEYGUIDE_COLOR_TEXT, "Objects:");
 	*y += KEYGUIDE_LINE_HEIGHT;
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "TAB - Next");
 	*y += KEYGUIDE_LINE_HEIGHT;
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "[] - Select");
 	*y += KEYGUIDE_LINE_HEIGHT;
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "R/T - X axis");
 	*y += KEYGUIDE_LINE_HEIGHT;
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "F/G - Y axis");
 	*y += KEYGUIDE_LINE_HEIGHT;
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "V/B - Z axis");
 	*y += KEYGUIDE_SECTION_GAP + KEYGUIDE_LINE_HEIGHT;
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 10, *y, KEYGUIDE_COLOR_TEXT, "Display:");
 	*y += KEYGUIDE_LINE_HEIGHT;
-	mlx_string_put(render->mlx, render->win,
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "I - Info");
 }
 
 /**
- * @brief keyguide render 함수 - 렌더링 수행
+ * @brief Render the full key guide overlay.
  *
- * @param render 파라미터
+ * Draws all sections if the key guide is visible.
+ *
+ * @param render Render context containing key guide state.
  */
 void	keyguide_render(t_render *render)
 {
@@ -145,9 +113,9 @@ void	keyguide_render(t_render *render)
 
 	if (!render->keyguide.visible)
 		return ;
-	keyguide_render_background(render);
 	keyguide_render_content(render);
 	y = render->keyguide.y + 20 + 30 + KEYGUIDE_LINE_HEIGHT * 7
 		+ KEYGUIDE_SECTION_GAP + KEYGUIDE_LINE_HEIGHT * 3;
 	keyguide_render_content2(render, &y);
+	keyguide_render_extra(render, &y);
 }

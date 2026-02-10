@@ -16,10 +16,10 @@
 #include "hud_obj_render.h"
 
 /**
- * @brief render object header 함수 - 렌더링 수행
+ * @brief Render the object list header with page info.
  *
- * @param render 파라미터
- * @param y 파라미터
+ * @param render Render context containing HUD state.
+ * @param y Current y position (in/out).
  */
 static void	render_object_header(t_render *render, int *y)
 {
@@ -41,17 +41,19 @@ static void	render_object_header(t_render *render, int *y)
 		len++;
 	len += copy_str_to_buf(buf + len, ") ---");
 	buf[len] = '\0';
-	mlx_string_put(render->mlx, render->win, HUD_MARGIN_X + 10,
+	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
 		*y, HUD_COLOR_TEXT, buf);
 	*y += HUD_LINE_HEIGHT;
 }
 
 /**
- * @brief render object by index 함수 - 렌더링 수행
+ * @brief Render an object entry by global index.
  *
- * @param render 파라미터
- * @param g_idx 파라미터
- * @param y 파라미터
+ * Highlights the selected object entry.
+ *
+ * @param render Render context containing scene and selection.
+ * @param g_idx Global object index.
+ * @param y Current y position (in/out).
  */
 static void	render_object_by_index(t_render *render, int g_idx, int *y)
 {
@@ -60,22 +62,16 @@ static void	render_object_by_index(t_render *render, int g_idx, int *y)
 
 	hud_get_selection_from_global(&sel, g_idx, render->scene);
 	color = HUD_COLOR_TEXT;
-	if (sel.type == render->selection.type
-		&& sel.index == render->selection.index)
+	if (sel.index == render->selection.index)
 		color = HUD_COLOR_HIGHLIGHT;
-	if (sel.type == OBJ_SPHERE)
-		render_sphere_obj(render, sel.index, y, color);
-	else if (sel.type == OBJ_PLANE)
-		render_plane_obj(render, sel.index, y, color);
-	else if (sel.type == OBJ_CYLINDER)
-		render_cylinder_obj(render, sel.index, y, color);
+	render_object_entry(render, g_idx, y, color);
 }
 
 /**
- * @brief hud render objects 함수 - 렌더링 수행
+ * @brief Render the HUD object list for the current page.
  *
- * @param render 파라미터
- * @param y 파라미터
+ * @param render Render context containing HUD and scene.
+ * @param y Current y position (in/out).
  */
 void	hud_render_objects(t_render *render, int *y)
 {
@@ -84,8 +80,7 @@ void	hud_render_objects(t_render *render, int *y)
 	int	end_idx;
 	int	i;
 
-	total_objects = render->scene->sphere_count + render->scene->plane_count
-		+ render->scene->cylinder_count;
+	total_objects = render->scene->objects.count;
 	render->hud.total_pages = hud_calculate_total_pages(render->scene);
 	if (render->hud.current_page >= render->hud.total_pages)
 		render->hud.current_page = 0;

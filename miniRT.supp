@@ -1,0 +1,229 @@
+# miniRT Valgrind Suppression File
+# Suppresses "still reachable" leaks from X11, XCB, Xext, and MiniLibX
+# that cannot be freed by user code.
+
+# === X11 (libX11) ===
+
+{
+   x11_XOpenDisplay
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XOpenDisplay
+   ...
+}
+
+{
+   x11_XInternAtom
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XInternAtom
+   ...
+}
+
+{
+   x11_XCreateGC
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XCreateGC
+   ...
+}
+
+{
+   x11_ConnectXCB
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_XConnectXCB
+   ...
+}
+
+{
+   x11_XEnq_events
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_XEnq
+   ...
+}
+
+{
+   x11_XReadEvents
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_XReadEvents
+   ...
+}
+
+{
+   x11_XReply
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_XReply
+   ...
+}
+
+{
+   x11_PollfdCacheInit
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_XPollfdCacheInit
+   ...
+}
+
+# === XKB (keyboard extension) ===
+
+{
+   xkb_UseExtension
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XkbUseExtension
+   ...
+}
+
+{
+   xkb_GetMap
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XkbGetMap
+   ...
+}
+
+{
+   xkb_GetUpdatedMap
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XkbGetUpdatedMap
+   ...
+}
+
+{
+   xkb_AllocClientMap
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XkbAllocClientMap
+   ...
+}
+
+{
+   xkb_ReadGetMapReply
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_XkbReadGetMapReply
+   ...
+}
+
+{
+   xkb_KeycodeToKeysym
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XkbKeycodeToKeysym
+   ...
+}
+
+# === XCB ===
+
+{
+   xcb_connect_to_fd
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:xcb_connect_to_fd
+   ...
+}
+
+{
+   xcb_connect_to_display
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:xcb_connect_to_display_with_auth_info
+   ...
+}
+
+{
+   xcb_get_extension_data
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:xcb_get_extension_data
+   ...
+}
+
+# === Xext (shared memory extension) ===
+
+{
+   xext_AddDisplay
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XextAddDisplay
+   ...
+}
+
+{
+   xext_CreateExtension
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XextCreateExtension
+   ...
+}
+
+{
+   xext_ShmQueryVersion
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XShmQueryVersion
+   ...
+}
+
+# === MiniLibX ===
+
+{
+   mlx_init_context
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:mlx_init
+   ...
+}
+
+{
+   mlx_new_window_expose
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:mlx_int_wait_first_expose
+   ...
+}
+
+{
+   mlx_new_image_shm
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:mlx_int_new_xshm_image
+   ...
+}
+
+{
+   mlx_loop_keypress
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:mlx_int_param_KeyPress
+   ...
+}

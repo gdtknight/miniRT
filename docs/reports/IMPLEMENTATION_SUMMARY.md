@@ -109,7 +109,7 @@ Successfully implemented comprehensive interactive controls for miniRT ray trace
 ## Testing
 Manual testing required (GUI application):
 ```bash
-./miniRT scenes/test_all_objects.rt
+./miniRT scenes/perf/perf_all_objects.rt
 ```
 
 Expected behavior:
@@ -190,7 +190,7 @@ Created:
 make
 
 # Run with test scene
-./miniRT scenes/test_all_objects.rt
+./miniRT scenes/perf/perf_all_objects.rt
 
 # View control documentation
 cat docs/CONTROLS.md

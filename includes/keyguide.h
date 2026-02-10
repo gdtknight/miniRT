@@ -17,7 +17,7 @@
 
 /* Key guide dimensions (maximum allowed per FR-008) */
 # define KEYGUIDE_WIDTH 300
-# define KEYGUIDE_HEIGHT 400
+# define KEYGUIDE_HEIGHT 500
 
 /* Positioning margins from window edges */
 # define KEYGUIDE_MARGIN_X 20
@@ -40,7 +40,7 @@
 int		keyguide_init(t_keyguide_state *keyguide, void *mlx, void *win);
 void	keyguide_cleanup(t_keyguide_state *keyguide, void *mlx);
 void	keyguide_render(t_render *render);
-void	keyguide_render_background(t_render *render);
 void	keyguide_render_content(t_render *render);
+void	keyguide_render_extra(t_render *render, int *y);
 
 #endif

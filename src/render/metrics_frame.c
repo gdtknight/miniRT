@@ -6,103 +6,117 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 00:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/12 20:32:51 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "metrics.h"
 
 /**
- * @brief metrics init 함수 - 초기화 수행
+ * @brief Initialize frame timing history and counters.
  *
- * @param metrics 파라미터
+ * Clears timing statistics and zeroes the frame time history buffer.
+ *
+ * @param timing Frame timing structure to initialize.
  */
-void	metrics_init(t_metrics *metrics)
+static void	init_frame_timing(t_frame_timing *timing)
 {
 	int	i;
 
-	metrics->render_time_us = 0;
-	metrics->frame_count = 0;
-	metrics->fps = 0.0;
-	metrics->rays_traced = 0;
-	metrics->intersect_tests = 0;
-	metrics->bvh_nodes_visited = 0;
-	metrics->bvh_tests_skipped = 0;
-	metrics->quality_mode = 0;
+	timing->render_time_us = 0;
+	timing->frame_count = 0;
+	timing->fps = 0.0;
+	timing->frame_index = 0;
 	i = 0;
-	while (i < 60)
+	while (i < FRAME_HISTORY_SIZE)
 	{
-		metrics->frame_times_us[i] = 0;
+		timing->frame_times_us[i] = 0;
 		i++;
 	}
-	metrics->frame_index = 0;
 }
 
 /**
- * @brief metrics start frame 함수
+ * @brief Initialize all render metrics counters and timing.
  *
- * @param metrics 파라미터
+ * Resets timing history, ray and BVH counters, and quality mode.
+ *
+ * @param metrics Metrics structure to initialize.
+ */
+void	metrics_init(t_metrics *metrics)
+{
+	init_frame_timing(&metrics->timing);
+	metrics->ray.rays_traced = 0;
+	metrics->ray.intersect_tests = 0;
+	metrics->ray.shadow_intersect_tests = 0;
+	metrics->bvh.nodes_visited = 0;
+	metrics->bvh.tests_skipped = 0;
+	metrics->quality_mode = 0;
+}
+
+/**
+ * @brief Begin a new frame timing and reset per-frame counters.
+ *
+ * Resets ray/BVH counters and starts the frame timer.
+ *
+ * @param metrics Metrics structure to update.
  */
 void	metrics_start_frame(t_metrics *metrics)
 {
-	metrics->rays_traced = 0;
-	metrics->intersect_tests = 0;
-	metrics->bvh_nodes_visited = 0;
-	metrics->bvh_tests_skipped = 0;
-	metrics->bvh_box_tests = 0;
-	timer_start(&metrics->start_time);
+	metrics->ray.rays_traced = 0;
+	metrics->ray.intersect_tests = 0;
+	metrics->ray.shadow_intersect_tests = 0;
+	metrics->bvh.nodes_visited = 0;
+	metrics->bvh.tests_skipped = 0;
+	timer_start(&metrics->timing.start_time);
 }
 
 /**
- * @brief calculate fps internal 함수 - 계산 수행
+ * @brief Calculate FPS from recent frame time history.
  *
- * @param m 파라미터
+ * Computes the mean of valid frame times and converts to frames per second.
  *
- * @return double 반환값
+ * @param t Frame timing history.
+ * @return double Estimated FPS over the history window.
  */
-static double	calculate_fps_internal(t_metrics *m)
+static double	calculate_fps_internal(t_frame_timing *t)
 {
 	long	sum;
 	int		i;
-	int		valid_frames;
+	int		valid;
 
 	sum = 0;
+	valid = 0;
 	i = 0;
-	valid_frames = 0;
-	while (i < 60)
+	while (i < FRAME_HISTORY_SIZE)
 	{
-		if (m->frame_times_us[i] > 0)
+		if (t->frame_times_us[i] > 0)
 		{
-			sum += m->frame_times_us[i];
-			valid_frames++;
+			sum += t->frame_times_us[i];
+			valid++;
 		}
 		i++;
 	}
-	if (valid_frames == 0 || sum == 0)
+	if (valid == 0 || sum == 0)
 		return (0.0);
-	return (1000000.0 / (sum / (double)valid_frames));
+	return (1000000.0 / (sum / (double)valid));
 }
 
 /**
- * @brief metrics end frame 함수
+ * @brief Finalize frame timing and update FPS.
  *
- * @param metrics 파라미터
+ * Records the elapsed frame time, advances the history index, and updates
+ * the FPS estimate.
+ *
+ * @param metrics Metrics structure to update.
  */
 void	metrics_end_frame(t_metrics *metrics)
 {
-	metrics->render_time_us = timer_elapsed_us(&metrics->start_time);
-	metrics->frame_times_us[metrics->frame_index] = metrics->render_time_us;
-	metrics->frame_index = (metrics->frame_index + 1) % 60;
-	metrics->frame_count++;
-	metrics->fps = calculate_fps_internal(metrics);
-}
+	t_frame_timing	*t;
 
-/**
- * @brief metrics log render 함수 - 렌더링 수행
- *
- * @param metrics 파라미터
- */
-void	metrics_log_render(t_metrics *metrics)
-{
-	(void)metrics;
+	t = &metrics->timing;
+	t->render_time_us = timer_elapsed_us(&t->start_time);
+	t->frame_times_us[t->frame_index] = t->render_time_us;
+	t->frame_index = (t->frame_index + 1) % FRAME_HISTORY_SIZE;
+	t->frame_count++;
+	t->fps = calculate_fps_internal(t);
 }

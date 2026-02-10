@@ -23,6 +23,7 @@ typedef struct s_ray
 {
 	t_vec3	origin;
 	t_vec3	direction;
+	t_vec3	inv_dir;
 }	t_ray;
 
 /* Ray-object intersection result with hit point and surface info */
@@ -62,12 +63,9 @@ typedef struct s_intersect_params
 	t_hit			*hit;
 }	t_intersect_params;
 
-/* Function declarations */
-int		intersect_sphere(t_ray *ray, t_sphere *sphere, t_hit *hit);
-int		intersect_plane(t_ray *ray, t_plane *plane, t_hit *hit);
-int		intersect_cylinder(t_ray *ray, t_cylinder *cylinder, t_hit *hit);
-int		intersect_cylinder_body(t_ray *ray, t_cylinder *cyl, t_hit *hit);
-int		intersect_cylinder_cap(t_ray *ray, t_cylinder *cyl, t_hit *hit,
-			double cap_m);
+/* Intersection with unified object */
+int		intersect_object_new(t_ray *ray, t_object *obj, t_hit *hit);
+int		intersect_cylinder_new(t_ray *ray, t_cylinder_data *c, t_color color,
+			t_hit *hit);
 
 #endif

@@ -17,9 +17,11 @@
 #include "hud_objects.h"
 
 /**
- * @brief hud render content 함수 - 렌더링 수행
+ * @brief Render all HUD sections in order.
  *
- * @param render 파라미터
+ * Draws camera, ambient, light, object list, and performance sections.
+ *
+ * @param render Render context containing HUD and scene.
  */
 void	hud_render_content(t_render *render)
 {
@@ -40,15 +42,14 @@ void	hud_render_content(t_render *render)
 }
 
 /**
- * @brief hud render 함수 - 렌더링 수행
+ * @brief Render the HUD if visible.
  *
- * @param render 파라미터
+ * @param render Render context containing HUD state.
  */
 void	hud_render(t_render *render)
 {
 	if (!render->hud.visible)
 		return ;
-	hud_render_background(render);
 	hud_render_content(render);
 	render->hud.dirty = 0;
 }

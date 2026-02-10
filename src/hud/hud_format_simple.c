@@ -13,10 +13,10 @@
 #include "hud.h"
 
 /**
- * @brief hud format fps 함수
+ * @brief Format FPS value for HUD display.
  *
- * @param buf 파라미터
- * @param fps 파라미터
+ * @param buf Output buffer.
+ * @param fps Frames per second value.
  */
 void	hud_format_fps(char *buf, double fps)
 {
@@ -24,10 +24,10 @@ void	hud_format_fps(char *buf, double fps)
 }
 
 /**
- * @brief hud format time ms 함수
+ * @brief Format time in microseconds as milliseconds.
  *
- * @param buf 파라미터
- * @param time_us 파라미터
+ * @param buf Output buffer.
+ * @param time_us Time in microseconds.
  */
 void	hud_format_time_ms(char *buf, long time_us)
 {
@@ -38,10 +38,10 @@ void	hud_format_time_ms(char *buf, long time_us)
 }
 
 /**
- * @brief hud format bvh status 함수
+ * @brief Format BVH enabled state as "ON"/"OFF".
  *
- * @param buf 파라미터
- * @param enabled 파라미터
+ * @param buf Output buffer.
+ * @param enabled Non-zero if BVH is enabled.
  */
 void	hud_format_bvh_status(char *buf, int enabled)
 {

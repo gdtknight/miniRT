@@ -14,13 +14,14 @@
 #include "bvh_internal.h"
 
 /**
- * @brief compute bounds 함수 - 연산 수행
+ * @brief Compute the bounding box for a set of object references.
  *
- * @param objects 파라미터
- * @param count 파라미터
- * @param scene 파라미터
+ * Merges individual object bounds into a single AABB.
  *
- * @return t_aabb 반환값
+ * @param objects Array of object references.
+ * @param count Number of objects.
+ * @param scene Pointer to the scene for bounds lookup.
+ * @return t_aabb Combined bounds for the set.
  */
 t_aabb	compute_bounds(t_object_ref *objects, int count, void *scene)
 {
@@ -46,11 +47,12 @@ t_aabb	compute_bounds(t_object_ref *objects, int count, void *scene)
 }
 
 /**
- * @brief partition objects 함수
+ * @brief Partition objects around a split plane along an axis.
  *
- * @param params 파라미터
+ * Reorders the object array in-place and returns the split index.
  *
- * @return int 반환값
+ * @param params Partition parameters.
+ * @return int Index separating left/right partitions.
  */
 int	partition_objects(t_partition_params *params)
 {

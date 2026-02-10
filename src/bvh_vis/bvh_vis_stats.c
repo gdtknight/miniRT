@@ -13,6 +13,15 @@
 #include "bvh_vis.h"
 #include <stdio.h>
 
+/**
+ * @brief Recursively collect BVH statistics.
+ *
+ * Walks the tree to count nodes, leaves, and depth.
+ *
+ * @param node Current BVH node.
+ * @param stats Stats structure to update.
+ * @param depth Current traversal depth.
+ */
 void	collect_stats_recursive(t_bvh_node *node, t_bvh_stats *stats,
 			int depth)
 {
@@ -35,6 +44,12 @@ void	collect_stats_recursive(t_bvh_node *node, t_bvh_stats *stats,
 	}
 }
 
+/**
+ * @brief Initialize and compute BVH statistics from a tree.
+ *
+ * @param node Root node of the BVH.
+ * @param stats Stats structure to populate.
+ */
 void	bvh_collect_statistics(t_bvh_node *node, t_bvh_stats *stats)
 {
 	if (!stats)
@@ -52,6 +67,11 @@ void	bvh_collect_statistics(t_bvh_node *node, t_bvh_stats *stats)
 			/ stats->leaf_count;
 }
 
+/**
+ * @brief Print a summary of BVH statistics.
+ *
+ * @param stats Stats structure to print.
+ */
 void	print_statistics_summary(t_bvh_stats *stats)
 {
 	if (!stats)

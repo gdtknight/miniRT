@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:40:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/15 14:14:24 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,93 +15,21 @@
 #include "window_internal.h"
 #include "hud.h"
 
-/*
-** Cycle to previous object type when index goes negative.
-*/
 /**
- * @brief cycle type backward 함수
+ * @brief Handle object selection cycling keys.
  *
- * @param render 파라미터
- */
-static void	cycle_type_backward(t_render *render)
-{
-	if (render->selection.type == OBJ_SPHERE)
-		cycle_backward_sphere(render);
-	else if (render->selection.type == OBJ_PLANE)
-		cycle_backward_plane(render);
-}
-
-/*
-** Handle selection increment (right bracket key).
-*/
-/**
- * @brief select next object 함수
+ * Moves selection forward/backward through objects and marks the HUD dirty.
  *
- * @param render 파라미터
- */
-static void	select_next_object(t_render *render)
-{
-	if (render->selection.type == OBJ_NONE)
-		render->selection.type = OBJ_SPHERE;
-	else
-	{
-		render->selection.index++;
-		if ((render->selection.type == OBJ_SPHERE
-				&& render->selection.index >= render->scene->sphere_count)
-			|| (render->selection.type == OBJ_PLANE
-				&& render->selection.index >= render->scene->plane_count)
-			|| (render->selection.type == OBJ_CYLINDER
-				&& render->selection.index >= render->scene->cylinder_count))
-			cycle_type_forward(render);
-	}
-}
-
-/*
-** Handle selection decrement (left bracket key).
-*/
-/**
- * @brief select prev object 함수
- *
- * @param render 파라미터
- */
-static void	select_prev_object(t_render *render)
-{
-	if (render->selection.type == OBJ_NONE)
-		render->selection.type = OBJ_SPHERE;
-	else
-	{
-		render->selection.index--;
-		if (render->selection.index < 0)
-		{
-			if (render->selection.type == OBJ_CYLINDER)
-				cycle_backward_cylinder(render);
-			else
-				cycle_type_backward(render);
-		}
-	}
-}
-
-/*
-** Handle object selection with bracket keys.
-** Right bracket: next object, Left bracket: previous object
-*/
-/**
- * @brief handle object selection 함수
- *
- * @param render 파라미터
- * @param keycode 파라미터
+ * @param render Render context containing scene and HUD state.
+ * @param keycode Key code indicating selection direction.
  */
 void	handle_object_selection(t_render *render, int keycode)
 {
-	int	total;
-
-	total = render->scene->sphere_count + render->scene->plane_count
-		+ render->scene->cylinder_count;
-	if (total == 0)
+	if (render->scene->objects.count == 0)
 		return ;
 	if (keycode == KEY_BRACKET_RIGHT)
-		select_next_object(render);
+		hud_select_next(render);
 	else if (keycode == KEY_BRACKET_LEFT)
-		select_prev_object(render);
+		hud_select_prev(render);
 	hud_mark_dirty(render);
 }

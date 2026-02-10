@@ -37,6 +37,7 @@ typedef struct s_pixel_params
 	int		y;
 	int		size_line;
 	int		bpp;
+	int		endian;
 }	t_pixel_params;
 
 /* Performance text rendering parameters */
@@ -62,42 +63,30 @@ void	set_pixel(t_pixel_params *params, int color);
 /* ========================================================================== */
 
 /*
-** Initialize HUD state and create background overlay image.
-** 
+** Initialize HUD state with default values.
+**
 ** Parameters:
 **   hud: Pointer to HUD state structure to initialize
-**   mlx: MiniLibX connection pointer
-**   win: Window pointer for rendering context
+**   mlx: MiniLibX connection pointer (unused, kept for API consistency)
+**   win: Window pointer (unused, kept for API consistency)
 **
 ** Returns:
-**   0 on success, -1 on failure (image creation failed)
+**   0 on success
 **
 ** Side Effects:
-**   - Allocates background image buffer via mlx_new_image
 **   - Sets default values: visible=1, current_page=0, dirty=1
-**   - Pre-fills background buffer with semi-transparent dark overlay
-**
-** Memory:
-**   Background image must be freed later with hud_cleanup()
 */
 int		hud_init(t_hud_state *hud, void *mlx, void *win);
 
 /*
-** Clean up HUD resources and free background image.
+** Clean up HUD resources.
 **
 ** Parameters:
-**   hud: Pointer to HUD state structure
-**   mlx: MiniLibX connection pointer
+**   hud: Pointer to HUD state structure (unused, kept for API consistency)
+**   mlx: MiniLibX connection pointer (unused, kept for API consistency)
 **
 ** Returns:
 **   void
-**
-** Side Effects:
-**   - Destroys background image buffer via mlx_destroy_image
-**   - Sets bg_img and bg_data to NULL
-**
-** Safety:
-**   Safe to call even if hud_init failed (checks for NULL pointers)
 */
 void	hud_cleanup(t_hud_state *hud, void *mlx);
 
@@ -254,7 +243,7 @@ void	hud_get_selection_from_global(t_selection *sel, int idx,
 void	hud_format_float(char *buffer, double value);
 
 /*
-** Internal helper functions for formatting
+** Internal helper functions for formatting (implemented using libft)
 */
 void	ft_strcpy(char *dst, const char *src);
 int		ft_numlen(int n);
@@ -339,11 +328,5 @@ void	hud_render_objects(t_render *render, int *y);
 ** Called during init and when scene changes.
 */
 int		hud_calculate_total_pages(t_scene *scene);
-
-/*
-** Create and fill background overlay image buffer.
-** Called during hud_init().
-*/
-int		hud_create_background(t_hud_state *hud, void *mlx);
 
 #endif

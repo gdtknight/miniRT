@@ -13,12 +13,14 @@
 #include "spatial.h"
 
 /**
- * @brief update bounds 함수 - 업데이트 수행
+ * @brief Update ray slab intersection bounds for one axis.
  *
- * @param tmin 파라미터
- * @param tmax 파라미터
- * @param t0 파라미터
- * @param t1 파라미터
+ * Swaps and clamps tmin/tmax based on the current axis intersection values.
+ *
+ * @param tmin Current minimum t value (in/out).
+ * @param tmax Current maximum t value (in/out).
+ * @param t0 Intersection t for slab near plane.
+ * @param t1 Intersection t for slab far plane.
  */
 static void	update_bounds(double *tmin, double *tmax, double t0, double t1)
 {
@@ -35,32 +37,52 @@ static void	update_bounds(double *tmin, double *tmax, double t0, double t1)
 }
 
 /**
- * @brief aabb intersect 함수 - 교차 검사 수행
+ * @brief Compute slab intersection for one axis using precomputed inv_dir.
  *
- * @param box 파라미터
- * @param ray 파라미터
- * @param t_min 파라미터
- * @param t_max 파라미터
+ * Uses IEEE 754 infinity for parallel rays: when direction is zero,
+ * inv_dir is ±inf and the math naturally handles hit/miss cases.
  *
- * @return int 반환값
+ * @param ac Axis check parameters with precomputed inv_dir.
+ */
+static void	safe_slab_axis(t_axis_check *ac)
+{
+	double	t0;
+	double	t1;
+
+	t0 = (ac->box_min - ac->ray_origin) * ac->inv_dir;
+	t1 = (ac->box_max - ac->ray_origin) * ac->inv_dir;
+	update_bounds(ac->tmin, ac->tmax, t0, t1);
+}
+
+/**
+ * @brief Test a ray for intersection with an axis-aligned bounding box.
+ *
+ * Uses the slab method to compute intersection interval and updates
+ * t_min/t_max to the overlapping range. Handles zero direction components.
+ *
+ * @param box AABB to test.
+ * @param ray Ray to test.
+ * @param t_min Input/output minimum t value.
+ * @param t_max Input/output maximum t value.
+ * @return int 1 if the ray intersects the box, 0 otherwise.
  */
 int	aabb_intersect(t_aabb box, t_ray ray, double *t_min, double *t_max)
 {
-	double	t[2];
-	double	tmin;
-	double	tmax;
+	t_axis_check	ac;
+	double			tmin;
+	double			tmax;
 
 	tmin = *t_min;
 	tmax = *t_max;
-	t[0] = (box.min.x - ray.origin.x) / ray.direction.x;
-	t[1] = (box.max.x - ray.origin.x) / ray.direction.x;
-	update_bounds(&tmin, &tmax, t[0], t[1]);
-	t[0] = (box.min.y - ray.origin.y) / ray.direction.y;
-	t[1] = (box.max.y - ray.origin.y) / ray.direction.y;
-	update_bounds(&tmin, &tmax, t[0], t[1]);
-	t[0] = (box.min.z - ray.origin.z) / ray.direction.z;
-	t[1] = (box.max.z - ray.origin.z) / ray.direction.z;
-	update_bounds(&tmin, &tmax, t[0], t[1]);
+	ac = (t_axis_check){box.min.x, box.max.x, ray.origin.x,
+		ray.inv_dir.x, &tmin, &tmax};
+	safe_slab_axis(&ac);
+	ac = (t_axis_check){box.min.y, box.max.y, ray.origin.y,
+		ray.inv_dir.y, &tmin, &tmax};
+	safe_slab_axis(&ac);
+	ac = (t_axis_check){box.min.z, box.max.z, ray.origin.z,
+		ray.inv_dir.z, &tmin, &tmax};
+	safe_slab_axis(&ac);
 	*t_min = tmin;
 	*t_max = tmax;
 	return (tmax >= tmin && tmax > 0);

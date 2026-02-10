@@ -14,6 +14,11 @@
 #include "bvh_internal.h"
 #include <stdlib.h>
 
+/**
+ * @brief Allocate and initialize a BVH structure.
+ *
+ * @return t_bvh* Newly allocated BVH or NULL on failure.
+ */
 t_bvh	*bvh_create(void)
 {
 	t_bvh	*bvh;
@@ -26,13 +31,17 @@ t_bvh	*bvh_create(void)
 	bvh->total_nodes = 0;
 	bvh->max_depth = 0;
 	bvh->visualize = 0;
+	bvh->plane_refs.indices = NULL;
+	bvh->plane_refs.count = 0;
 	return (bvh);
 }
 
 /**
- * @brief bvh node destroy 함수 - 제거 및 메모리 해제 수행
+ * @brief Recursively destroy a BVH node and its children.
  *
- * @param node 파라미터
+ * Frees object references and all descendant nodes.
+ *
+ * @param node Node to destroy.
  */
 void	bvh_node_destroy(t_bvh_node *node)
 {
@@ -46,14 +55,16 @@ void	bvh_node_destroy(t_bvh_node *node)
 }
 
 /**
- * @brief bvh destroy 함수 - 제거 및 메모리 해제 수행
+ * @brief Destroy a BVH and free all resources.
  *
- * @param bvh 파라미터
+ * @param bvh BVH to destroy.
  */
 void	bvh_destroy(t_bvh *bvh)
 {
 	if (!bvh)
 		return ;
 	bvh_node_destroy(bvh->root);
+	if (bvh->plane_refs.indices)
+		free(bvh->plane_refs.indices);
 	free(bvh);
 }

@@ -15,11 +15,10 @@
 #include <stdlib.h>
 
 /**
- * @brief choose split axis 함수
+ * @brief Choose the split axis with the largest extent.
  *
- * @param bounds 파라미터
- *
- * @return int 반환값
+ * @param bounds Bounds of the current object set.
+ * @return int Axis index (0=x, 1=y, 2=z).
  */
 int	choose_split_axis(t_aabb bounds)
 {
@@ -38,12 +37,11 @@ int	choose_split_axis(t_aabb bounds)
 }
 
 /**
- * @brief calculate split position 함수 - 계산 수행
+ * @brief Calculate split position at the center of bounds along an axis.
  *
- * @param bounds 파라미터
- * @param axis 파라미터
- *
- * @return double 반환값
+ * @param bounds Bounds of the current object set.
+ * @param axis Axis index (0=x, 1=y, 2=z).
+ * @return double Split coordinate.
  */
 double	calculate_split_position(t_aabb bounds, int axis)
 {
@@ -55,6 +53,12 @@ double	calculate_split_position(t_aabb bounds, int axis)
 		return ((bounds.min.z + bounds.max.z) / 2.0);
 }
 
+/**
+ * @brief Create an internal BVH node and build child subtrees.
+ *
+ * @param sp Split parameters including object array and bounds.
+ * @return t_bvh_node* Newly allocated internal node or NULL on failure.
+ */
 t_bvh_node	*create_split_node(t_split_params *sp)
 {
 	t_bvh_node	*node;
@@ -66,6 +70,7 @@ t_bvh_node	*create_split_node(t_split_params *sp)
 	node->objects = NULL;
 	node->object_count = 0;
 	node->depth = sp->depth;
+	node->split_axis = sp->axis;
 	node->left = bvh_build_recursive(sp->objects, sp->mid,
 			sp->scene, sp->depth + 1);
 	node->right = bvh_build_recursive(sp->objects + sp->mid,

@@ -1,0 +1,8 @@
+# Test invalid number format (12..3, --1, etc.)
+A  0.2                          255,255,255
+
+C  0,0,-15         0,0,1       70
+L  0,8,-8                       0.7             255,255,255
+
+# Line 8 has invalid number format: 12..3
+sp 0,0,0                        12..3           255,0,0

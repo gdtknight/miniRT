@@ -6,77 +6,65 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 00:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/04 00:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/29 00:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "hud.h"
+#include "libft.h"
+#include <stdlib.h>
 
 /**
- * @brief ft strcpy 함수
+ * @brief Copy a string into a destination buffer.
  *
- * @param dst 파라미터
- * @param src 파라미터
+ * Uses ft_strlcpy to ensure the destination is null-terminated.
+ *
+ * @param dst Destination buffer.
+ * @param src Source string.
  */
 void	ft_strcpy(char *dst, const char *src)
 {
-	int	i;
-
-	i = 0;
-	while (src[i])
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	dst[i] = '\0';
+	ft_strlcpy(dst, src, ft_strlen(src) + 1);
 }
 
 /**
- * @brief ft numlen 함수
+ * @brief Return the length of an integer when printed in base 10.
  *
- * @param n 파라미터
- *
- * @return int 반환값
+ * @param n Integer to measure.
+ * @return int Number of characters needed to represent n.
  */
 int	ft_numlen(int n)
 {
-	int	len;
+	char	*str;
+	int		len;
 
-	len = 0;
-	if (n <= 0)
-		len = 1;
-	while (n)
-	{
-		n /= 10;
-		len++;
-	}
+	str = ft_itoa(n);
+	if (!str)
+		return (1);
+	len = ft_strlen(str);
+	free(str);
 	return (len);
 }
 
 /**
- * @brief ft itoa buf 함수
+ * @brief Convert an integer to string and write into a buffer.
  *
- * @param buf 파라미터
- * @param n 파라미터
+ * Writes "0" on allocation failure.
+ *
+ * @param buf Destination buffer.
+ * @param n Integer to format.
  */
 void	ft_itoa_buf(char *buf, int n)
 {
-	int		len;
-	long	num;
+	char	*str;
 
-	num = n;
-	if (num < 0)
+	str = ft_itoa(n);
+	if (!str)
 	{
-		buf[0] = '-';
-		num = -num;
+		buf[0] = '0';
+		buf[1] = '\0';
+		return ;
 	}
-	len = ft_numlen(n);
-	buf[len] = '\0';
-	while (len > 0 && num >= 0)
-	{
-		buf[--len] = (num % 10) + '0';
-		num /= 10;
-		if (n < 0 && len == 1)
-			break ;
-	}
+	ft_strlcpy(buf, str, ft_strlen(str) + 1);
+	free(str);
 }

@@ -6,144 +6,150 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:19:44 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/18 15:19:45 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "parser.h"
-#include "spatial.h"
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <string.h>
 
-/*
-** Read one line from file descriptor.
-** Reads until newline or EOF, returns dynamically allocated string.
-** Returns NULL on EOF or read error.
-*/
-static char	*read_line(int fd)
+/**
+ * @brief Parse a single scene line and dispatch to element parsers.
+ *
+ * Skips whitespace and comments and routes to the correct parser based on
+ * the element identifier.
+ *
+ * @param line Line content to parse.
+ * @param scene Scene to update.
+ * @param ctx Error context for reporting.
+ * @return int 1 on success, 0 on failure.
+ */
+static int	parse_line(char *line, t_scene *scene, t_error_context *ctx)
 {
-	char	*line;
-	char	buffer[1024];
-	int		bytes_read;
-	int		i;
+	t_parse_result	result;
 
-	bytes_read = read(fd, buffer, 1);
-	if (bytes_read <= 0)
-		return (NULL);
-	i = 0;
-	while (bytes_read > 0 && buffer[i] != '\n' && i < 1023)
+	ctx->element_type = NULL;
+	result = dispatch_element(line, scene, ctx);
+	if (result != PARSE_OK)
 	{
-		i++;
-		bytes_read = read(fd, &buffer[i], 1);
+		ctx->error_code = result;
+		error_context_print(ctx);
+		return (0);
 	}
-	buffer[i] = '\0';
-	line = malloc(i + 1);
-	if (!line)
-		return (NULL);
-	strcpy(line, buffer);
-	return (line);
+	return (1);
 }
 
-/*
-** Parse single line from scene file.
-** Identifies element type by prefix and calls appropriate parser.
-** Returns 1 on success, 0 on error. Skips empty lines and comments.
-*/
 /**
- * @brief parse line 함수 - 파싱 수행
+ * @brief Validate required scene elements after parsing.
  *
- * @param line 파라미터
- * @param scene 파라미터
+ * Ensures ambient light, camera, light source, and at least one object exist.
  *
- * @return int 반환값
+ * @param scene Scene to validate.
+ * @return int 1 if valid, 0 otherwise.
  */
-static int	parse_line(char *line, t_scene *scene)
+int	validate_scene(t_scene *scene)
 {
-	while (*line == ' ' || *line == '\t')
-		line++;
-	if (*line == '\0' || *line == '\n' || *line == '#')
+	if (!scene_has_ambient(scene))
+		return (error_print(ERR_PARSE_MISSING), 0);
+	if (!scene_has_camera(scene))
+		return (error_print(ERR_PARSE_MISSING), 0);
+	if (!scene_has_light(scene))
+		return (error_print(ERR_PARSE_MISSING), 0);
+	if (scene->objects.count == 0)
+		return (error_print(ERR_PARSE_MISSING), 0);
+	return (1);
+}
+
+/**
+ * @brief Check if line was too long and report error.
+ *
+ * @param reader Line reader.
+ * @param ctx Error context.
+ * @return int 1 if error occurred, 0 otherwise.
+ */
+static int	check_line_too_long(t_line_reader *reader, t_error_context *ctx)
+{
+	if (reader->line_too_long)
+	{
+		error_context_set_line(ctx, reader->line_num);
+		ctx->error_code = PARSE_ERR_LINE_TOO_LONG;
+		error_context_print(ctx);
 		return (1);
-	if (line[0] == 'A' && line[1] == ' ')
-		return (parse_ambient(line, scene));
-	else if (line[0] == 'C' && line[1] == ' ')
-		return (parse_camera(line, scene));
-	else if (line[0] == 'L' && line[1] == ' ')
-		return (parse_light(line, scene));
-	else if (line[0] == 's' && line[1] == 'p' && line[2] == ' ')
-		return (parse_sphere(line, scene));
-	else if (line[0] == 'p' && line[1] == 'l' && line[2] == ' ')
-		return (parse_plane(line, scene));
-	else if (line[0] == 'c' && line[1] == 'y' && line[2] == ' ')
-		return (parse_cylinder(line, scene));
-	return (print_error("Invalid element identifier"));
+	}
+	return (0);
 }
 
-/*
-** Parse scene description file and populate scene structure.
-** Opens file, reads line by line, and dispatches to element parsers.
-** Returns 1 on success, 0 on error.
-*/
 /**
- * @brief parse scene 함수 - 파싱 수행
+ * @brief Process lines from reader until EOF or error.
  *
- * @param filename 파라미터
- * @param scene 파라미터
- *
- * @return int 반환값
+ * @param reader Line reader.
+ * @param scene Scene to populate.
+ * @param ctx Error context.
+ * @return int 1 on success, 0 on failure.
  */
-int	parse_scene(const char *filename, t_scene *scene)
+static int	process_lines(t_line_reader *reader, t_scene *scene,
+	t_error_context *ctx)
 {
-	int		fd;
 	char	*line;
 	int		success;
 
-	fd = open(filename, O_RDONLY);
-	if (fd < 0)
-		return (print_error("Cannot open file"));
 	success = 1;
-	line = read_line(fd);
-	while (success && line != NULL)
+	line = line_reader_next(reader);
+	while (success)
 	{
-		success = parse_line(line, scene);
+		if (check_line_too_long(reader, ctx))
+			return (0);
+		if (line == NULL)
+			break ;
+		error_context_set_line(ctx, reader->line_num);
+		success = parse_line(line, scene, ctx);
 		free(line);
-		line = read_line(fd);
+		line = line_reader_next(reader);
 	}
-	if (line != NULL)
-		free(line);
-	close(fd);
-	if (success)
+	free(line);
+	if (reader->io_error)
 	{
-		success = validate_scene(scene);
-		if (success)
-			scene_build_bvh(scene);
+		ctx->error_code = PARSE_ERR_IO;
+		error_context_print(ctx);
+		return (0);
 	}
 	return (success);
 }
 
-/*
-** Validate that scene contains all required elements.
-** Checks for ambient light, camera, light source, and at least one object.
-*/
 /**
- * @brief validate scene 함수 - 검증 수행
+ * @brief Parse a scene file into a scene structure.
  *
- * @param scene 파라미터
+ * Validates the extension, reads each line, parses elements, and verifies
+ * required components are present.
  *
- * @return int 반환값
+ * @param filename Path to the scene file.
+ * @param scene Scene to populate.
+ * @return int 1 on success, 0 on failure.
  */
-int	validate_scene(t_scene *scene)
+int	parse_scene(const char *filename, t_scene *scene)
 {
-	if (!scene->has_ambient)
-		return (print_error("Missing ambient lighting (A)"));
-	if (!scene->has_camera)
-		return (print_error("Missing camera (C)"));
-	if (!scene->has_light)
-		return (print_error("Missing light (L)"));
-	if (scene->sphere_count == 0 && scene->plane_count == 0
-		&& scene->cylinder_count == 0)
-		return (print_error("No objects in scene"));
-	return (1);
+	int				fd;
+	t_line_reader	reader;
+	t_error_context	ctx;
+	int				success;
+
+	if (!validate_extension(filename))
+		return (error_print(ERR_FILE_EXT), 0);
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+		return (error_print(ERR_FILE_OPEN), 0);
+	error_context_init(&ctx);
+	if (!line_reader_init(&reader, fd))
+	{
+		close(fd);
+		return (error_print(ERR_MALLOC), 0);
+	}
+	success = process_lines(&reader, scene, &ctx);
+	close(fd);
+	if (success)
+		success = validate_scene(scene);
+	return (success);
 }

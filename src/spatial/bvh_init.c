@@ -6,114 +6,149 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 21:30:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/19 21:30:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "spatial.h"
 #include "minirt.h"
-#include "window.h"
 #include <stdlib.h>
 
 /**
- * @brief count objects 함수
+ * @brief Get the geometric center of an object referenced by index.
  *
- * @param scene 파라미터
- *
- * @return int 반환값
+ * @param ref Object reference containing index.
+ * @param scene_ptr Pointer to the scene.
+ * @return t_vec3 Center point of the object.
  */
-static int	count_objects(t_scene *scene)
+t_vec3	get_object_center(t_object_ref ref, void *scene_ptr)
 {
-	return (scene->sphere_count + scene->plane_count + scene->cylinder_count);
+	t_scene		*scene;
+	t_object	*obj;
+
+	scene = (t_scene *)scene_ptr;
+	obj = &scene->objects.items[ref.index];
+	if (obj->type == OBJ_SPHERE)
+		return (obj->data.sphere.center);
+	else if (obj->type == OBJ_CYLINDER)
+		return (obj->data.cylinder.center);
+	else
+		return (obj->data.plane.point);
 }
 
 /**
- * @brief fill spheres 함수
+ * @brief Count the number of plane objects in the scene.
  *
- * @param scene 파라미터
- * @param refs 파라미터
- * @param idx 파라미터
+ * @param scene Scene containing object list.
+ * @return int Number of plane objects.
  */
-static void	fill_spheres(t_scene *scene, t_object_ref *refs, int *idx)
-{
-	int	i;
-
-	i = 0;
-	while (i < scene->sphere_count)
-	{
-		refs[*idx].type = OBJ_SPHERE;
-		refs[*idx].index = i;
-		(*idx)++;
-		i++;
-	}
-}
-
-/**
- * @brief fill planes cylinders 함수
- *
- * @param scene 파라미터
- * @param refs 파라미터
- * @param idx 파라미터
- */
-static void	fill_planes_cylinders(t_scene *scene, t_object_ref *refs, int *idx)
+static int	count_planes(t_scene *scene)
 {
 	int	i;
+	int	count;
 
+	count = 0;
 	i = 0;
-	while (i < scene->plane_count)
+	while (i < scene->objects.count)
 	{
-		refs[*idx].type = OBJ_PLANE;
-		refs[*idx].index = i;
-		(*idx)++;
+		if (scene->objects.items[i].type == OBJ_PLANE)
+			count++;
 		i++;
 	}
-	i = 0;
-	while (i < scene->cylinder_count)
-	{
-		refs[*idx].type = OBJ_CYLINDER;
-		refs[*idx].index = i;
-		(*idx)++;
-		i++;
-	}
+	return (count);
 }
 
 /**
- * @brief fill object refs 함수
+ * @brief Separate plane indices and bounded object refs from scene.
  *
- * @param scene 파라미터
- * @param refs 파라미터
+ * Fills bvh->plane_refs.indices with plane object indices,
+ * and refs with non-plane (bounded) object references.
+ *
+ * @param scene Scene containing object list.
+ * @param refs Output array for bounded object refs (may be NULL).
  */
-static void	fill_object_refs(t_scene *scene, t_object_ref *refs)
+static void	fill_separated_refs(t_scene *scene, t_object_ref *refs)
 {
-	int	idx;
+	int	i;
+	int	bi;
+	int	pi;
 
-	idx = 0;
-	fill_spheres(scene, refs, &idx);
-	fill_planes_cylinders(scene, refs, &idx);
+	bi = 0;
+	pi = 0;
+	i = 0;
+	while (i < scene->objects.count)
+	{
+		if (scene->objects.items[i].type == OBJ_PLANE)
+			scene->bvh->plane_refs.indices[pi++] = i;
+		else
+			refs[bi++].index = i;
+		i++;
+	}
 }
 
 /**
- * @brief scene build bvh 함수 - 빌드 수행
+ * @brief Allocate plane indices and bounded object refs for BVH build.
  *
- * @param scene 파라미터
+ * Frees existing plane_refs.indices before reallocating (R2 leak fix).
+ * On malloc failure, cleans up partial allocations and returns 0 (R1).
+ *
+ * @param scene Scene with BVH to populate.
+ * @param refs Output pointer for bounded object refs.
+ * @param pc Plane count.
+ * @param bc Bounded object count.
+ * @return int 1 on success, 0 on allocation failure.
+ */
+static int	alloc_bvh_refs(t_scene *scene, t_object_ref **refs, int pc, int bc)
+{
+	free(scene->bvh->plane_refs.indices);
+	scene->bvh->plane_refs.count = 0;
+	scene->bvh->plane_refs.indices = NULL;
+	if (pc > 0)
+		scene->bvh->plane_refs.indices = malloc(sizeof(int) * pc);
+	*refs = NULL;
+	if (bc > 0)
+		*refs = malloc(sizeof(t_object_ref) * bc);
+	if (pc > 0 && !scene->bvh->plane_refs.indices)
+		return (0);
+	if (bc > 0 && !*refs)
+	{
+		free(scene->bvh->plane_refs.indices);
+		scene->bvh->plane_refs.indices = NULL;
+		return (0);
+	}
+	scene->bvh->plane_refs.count = pc;
+	return (1);
+}
+
+/**
+ * @brief Build or rebuild the BVH for the scene with plane separation.
+ *
+ * Separates planes from bounded objects, builds BVH with bounded
+ * objects only, and stores plane indices for separate intersection.
+ *
+ * @param scene Scene containing objects and BVH state.
  */
 void	scene_build_bvh(t_scene *scene)
 {
 	t_object_ref	*refs;
-	int				total_objects;
+	int				pc;
+	int				bc;
 
-	if (!scene->render_state.bvh_enabled)
+	if (!(scene->flags & SCENE_BVH_ENABLED) || scene->objects.count == 0)
 		return ;
-	total_objects = count_objects(scene);
-	if (total_objects == 0)
+	if (!scene->bvh)
+		scene->bvh = bvh_create();
+	if (!scene->bvh)
 		return ;
-	refs = malloc(sizeof(t_object_ref) * total_objects);
-	if (!refs)
+	pc = count_planes(scene);
+	bc = scene->objects.count - pc;
+	if (!alloc_bvh_refs(scene, &refs, pc, bc))
+	{
+		free(refs);
 		return ;
-	fill_object_refs(scene, refs);
-	if (!scene->render_state.bvh)
-		scene->render_state.bvh = bvh_create();
-	if (scene->render_state.bvh)
-		bvh_build(scene->render_state.bvh, refs, total_objects, scene);
+	}
+	fill_separated_refs(scene, refs);
+	if (bc > 0)
+		bvh_build(scene->bvh, refs, bc, scene);
 	free(refs);
 }

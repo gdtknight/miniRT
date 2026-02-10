@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:40:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/15 14:15:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 11:35:09 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,24 @@
 #include "window_internal.h"
 #include <math.h>
 
-/*
-** Handle camera movement based on WASDQZ keys.
-** W/X: Forward/Backward, A/D: Left/Right, Q/Z: Up/Down
-*/
+static t_vec3	rotate_dir(t_vec3 dir, t_vec3 axis, double cos_a, double sin_a)
+{
+	t_vec3	result;
+
+	result.x = dir.x * cos_a + (axis.y * dir.z - axis.z * dir.y) * sin_a;
+	result.y = dir.y * cos_a + (axis.z * dir.x - axis.x * dir.z) * sin_a;
+	result.z = dir.z * cos_a + (axis.x * dir.y - axis.y * dir.x) * sin_a;
+	return (result);
+}
+
 /**
- * @brief handle camera move 함수
+ * @brief Move the camera based on keyboard input.
  *
- * @param render 파라미터
- * @param keycode 파라미터
+ * Translates the camera position along forward/back, right/left, and up/down
+ * axes depending on the pressed key.
+ *
+ * @param render Render context containing the scene and camera.
+ * @param keycode Key code identifying the movement direction.
  */
 void	handle_camera_move(t_render *render, int keycode)
 {
@@ -50,25 +59,23 @@ void	handle_camera_move(t_render *render, int keycode)
 		return ;
 	render->scene->camera.position = vec3_add(render->scene->camera.position,
 			move);
+	render->scene->camera.cache.valid = 0;
 }
 
-/*
-** Handle camera pitch rotation based on E/C keys.
-** Rotates camera around the right vector.
-*/
 /**
- * @brief handle camera pitch 함수
+ * @brief Pitch the camera up or down.
  *
- * @param render 파라미터
- * @param keycode 파라미터
+ * Rotates the camera direction around its right vector using fixed step
+ * increments and keeps the direction normalized.
+ *
+ * @param render Render context containing the scene and camera.
+ * @param keycode Key code selecting pitch direction.
  */
 void	handle_camera_pitch(t_render *render, int keycode)
 {
 	t_vec3	right;
 	t_vec3	new_dir;
 	double	angle;
-	double	cos_a;
-	double	sin_a;
 
 	angle = 5.0 * M_PI / 180.0;
 	if (keycode == KEY_C)
@@ -77,30 +84,22 @@ void	handle_camera_pitch(t_render *render, int keycode)
 		return ;
 	right = vec3_normalize(vec3_cross(render->scene->camera.direction,
 				(t_vec3){0, 1, 0}));
-	cos_a = cos(angle);
-	sin_a = sin(angle);
-	new_dir.x = render->scene->camera.direction.x * cos_a
-		+ (right.y * render->scene->camera.direction.z
-			- right.z * render->scene->camera.direction.y) * sin_a;
-	new_dir.y = render->scene->camera.direction.y * cos_a
-		+ (right.z * render->scene->camera.direction.x
-			- right.x * render->scene->camera.direction.z) * sin_a;
-	new_dir.z = render->scene->camera.direction.z * cos_a
-		+ (right.x * render->scene->camera.direction.y
-			- right.y * render->scene->camera.direction.x) * sin_a;
+	new_dir = rotate_dir(render->scene->camera.direction, right,
+			cos(angle), sin(angle));
 	render->scene->camera.direction = vec3_normalize(new_dir);
+	render->scene->camera.cache.valid = 0;
 }
 
-/*
-** Reset camera to initial position and direction.
-*/
 /**
- * @brief handle camera reset 함수 - 설정 수행
+ * @brief Reset the camera to its initial position and direction.
  *
- * @param render 파라미터
+ * Restores the camera state captured at initialization.
+ *
+ * @param render Render context containing the scene and camera.
  */
 void	handle_camera_reset(t_render *render)
 {
 	render->scene->camera.position = render->scene->camera.initial_position;
 	render->scene->camera.direction = render->scene->camera.initial_direction;
+	render->scene->camera.cache.valid = 0;
 }

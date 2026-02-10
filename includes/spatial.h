@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 21:30:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/19 21:30:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,9 @@ typedef struct s_aabb
 	t_vec3	max;
 }	t_aabb;
 
-/* Reference to any object in the scene */
+/* Reference to object in unified object list (simplified) */
 typedef struct s_object_ref
 {
-	int	type;
 	int	index;
 }	t_object_ref;
 
@@ -43,16 +42,25 @@ typedef struct s_bvh_node
 	t_object_ref		*objects;
 	int					object_count;
 	int					depth;
+	int					split_axis;
 }	t_bvh_node;
+
+/* BVH plane reference list for separated plane intersection */
+typedef struct s_plane_refs
+{
+	int		*indices;
+	int		count;
+}	t_plane_refs;
 
 /* BVH tree root structure */
 typedef struct s_bvh
 {
-	t_bvh_node	*root;
-	int			enabled;
-	int			total_nodes;
-	int			max_depth;
-	int			visualize;
+	t_bvh_node		*root;
+	int				enabled;
+	int				total_nodes;
+	int				max_depth;
+	int				visualize;
+	t_plane_refs	plane_refs;
 }	t_bvh;
 
 /* Helper structure for BVH hit checking */
@@ -71,7 +79,7 @@ typedef struct s_axis_check
 	double	box_min;
 	double	box_max;
 	double	ray_origin;
-	double	ray_direction;
+	double	inv_dir;
 	double	*tmin;
 	double	*tmax;
 }	t_axis_check;
@@ -95,6 +103,7 @@ typedef struct s_split_params
 	int				count;
 	void			*scene;
 	int				depth;
+	int				axis;
 }	t_split_params;
 
 /* Helper functions */
@@ -104,10 +113,7 @@ double		max_double(double a, double b);
 /* AABB operations */
 t_aabb		aabb_create(t_vec3 min, t_vec3 max);
 t_aabb		aabb_merge(t_aabb a, t_aabb b);
-t_aabb		aabb_for_sphere(t_vec3 center, double radius);
-t_aabb		aabb_for_cylinder(t_vec3 center, t_vec3 axis, double radius,
-				double height);
-t_aabb		aabb_for_plane(t_vec3 point, t_vec3 normal);
+t_aabb		aabb_for_object(t_object *obj);
 int			aabb_intersect(t_aabb box, t_ray ray, double *t_min, double *t_max);
 double		aabb_surface_area(t_aabb box);
 
@@ -123,6 +129,8 @@ t_bvh_node	*bvh_build_recursive(t_object_ref *objects, int count,
 int			bvh_intersect(t_bvh *bvh, t_ray ray, t_hit_record *hit,
 				void *scene);
 int			bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
+				void *scene);
+int			bvh_intersect_any(t_bvh *bvh, t_ray ray, double max_dist,
 				void *scene);
 
 /* Object bounds calculation */

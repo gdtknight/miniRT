@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:19:56 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/18 15:19:56 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 11:33:02 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,53 +16,60 @@
 #include "ray.h"
 #include <math.h>
 
-/*
-** Initialize camera coordinate system (right and up vectors).
-** Creates orthonormal basis from camera direction.
-** Assumes world up is (0, 1, 0) for calculating right vector.
-*/
 /**
- * @brief init camera calc 함수 - 초기화 수행
+ * @brief Update camera basis cache if invalid.
  *
- * @param camera 파라미터
- * @param calc 파라미터
+ * Computes aspect ratio, field-of-view scaling, and orthonormal basis
+ * vectors (right/up) only when the cache is marked invalid.
+ *
+ * @param camera Camera with cache to update.
  */
-static void	init_camera_calc(t_camera *camera, t_cam_calc *calc)
+static void	update_camera_cache(t_camera *camera)
 {
-	calc->aspect_ratio = ASPECT_RATIO_NUM / ASPECT_RATIO_DEN;
-	calc->fov_scale = tan(camera->fov * 0.5 * M_PI / 180.0);
-	calc->right = vec3_normalize(vec3_cross(camera->direction,
-				(t_vec3){0, 1, 0}));
-	calc->up = vec3_normalize(vec3_cross(calc->right, camera->direction));
+	t_vec3	world_up;
+
+	if (camera->cache.valid)
+		return ;
+	camera->cache.aspect_ratio = ASPECT_RATIO_NUM / ASPECT_RATIO_DEN;
+	camera->cache.fov_scale = tan(camera->fov * 0.5 * M_PI / 180.0);
+	world_up = (t_vec3){0, 1, 0};
+	if (fabs(vec3_dot(camera->direction, world_up)) > 0.999)
+		world_up = (t_vec3){0, 0, 1};
+	camera->cache.right = vec3_normalize(vec3_cross(camera->direction,
+				world_up));
+	camera->cache.up = vec3_normalize(vec3_cross(camera->cache.right,
+				camera->direction));
+	camera->cache.valid = 1;
 }
 
-/*
-** Create camera ray for pixel at normalized coordinates (x, y).
-** x, y in range [-1, 1] where (0,0) is center of screen.
-** Calculates ray direction based on camera FOV and orientation.
-*/
 /**
- * @brief create camera ray 함수 - 생성 수행
+ * @brief Create a camera ray for normalized device coordinates.
  *
- * @param camera 파라미터
- * @param x 파라미터
- * @param y 파라미터
+ * Converts the normalized screen coordinate (x, y) into a ray direction
+ * based on the cached camera basis and FOV, then returns a ray originating
+ * at the camera position.
  *
- * @return t_ray 반환값
+ * @param camera Camera describing the view.
+ * @param x Normalized horizontal coordinate in [-1, 1].
+ * @param y Normalized vertical coordinate in [-1, 1].
+ * @return t_ray Ray originating at the camera through (x, y).
  */
 t_ray	create_camera_ray(t_camera *camera, double x, double y)
 {
-	t_ray		ray;
-	t_vec3		pixel_pos;
-	t_cam_calc	calc;
+	t_ray			ray;
+	t_vec3			pixel_pos;
+	t_camera_cache	*c;
 
-	init_camera_calc(camera, &calc);
+	update_camera_cache(camera);
+	c = &camera->cache;
 	pixel_pos = camera->direction;
-	pixel_pos = vec3_add(pixel_pos, vec3_multiply(calc.right,
-				x * calc.fov_scale * calc.aspect_ratio));
-	pixel_pos = vec3_add(pixel_pos, vec3_multiply(calc.up,
-				y * calc.fov_scale));
+	pixel_pos = vec3_add(pixel_pos, vec3_multiply(c->right,
+				x * c->fov_scale * c->aspect_ratio));
+	pixel_pos = vec3_add(pixel_pos, vec3_multiply(c->up, y * c->fov_scale));
 	ray.origin = camera->position;
 	ray.direction = vec3_normalize(pixel_pos);
+	ray.inv_dir.x = 1.0 / ray.direction.x;
+	ray.inv_dir.y = 1.0 / ray.direction.y;
+	ray.inv_dir.z = 1.0 / ray.direction.z;
 	return (ray);
 }

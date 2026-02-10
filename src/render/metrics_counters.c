@@ -6,63 +6,52 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 00:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/04 00:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "metrics.h"
 
 /**
- * @brief metrics add ray 함수 - 추가 수행
+ * @brief Increment the traced ray counter.
  *
- * @param metrics 파라미터
+ * @param metrics Metrics structure to update.
  */
 void	metrics_add_ray(t_metrics *metrics)
 {
 	if (metrics)
-		metrics->rays_traced++;
+		metrics->ray.rays_traced++;
 }
 
 /**
- * @brief metrics add intersect test 함수 - 추가 수행
+ * @brief Increment the intersection test counter.
  *
- * @param metrics 파라미터
+ * @param metrics Metrics structure to update.
  */
 void	metrics_add_intersect_test(t_metrics *metrics)
 {
 	if (metrics)
-		metrics->intersect_tests++;
+		metrics->ray.intersect_tests++;
 }
 
 /**
- * @brief metrics add bvh node visit 함수 - 추가 수행
+ * @brief Increment the BVH node visit counter.
  *
- * @param metrics 파라미터
+ * @param metrics Metrics structure to update.
  */
 void	metrics_add_bvh_node_visit(t_metrics *metrics)
 {
 	if (metrics)
-		metrics->bvh_nodes_visited++;
+		metrics->bvh.nodes_visited++;
 }
 
 /**
- * @brief metrics add bvh skip 함수 - 추가 수행
+ * @brief Increment the BVH skip counter.
  *
- * @param metrics 파라미터
+ * @param metrics Metrics structure to update.
  */
 void	metrics_add_bvh_skip(t_metrics *metrics)
 {
 	if (metrics)
-		metrics->bvh_tests_skipped++;
-}
-
-/**
- * @brief metrics add bvh box test 함수 - 추가 수행
- *
- * @param metrics 파라미터
- */
-void	metrics_add_bvh_box_test(t_metrics *metrics)
-{
-	if (metrics)
-		metrics->bvh_box_tests++;
+		metrics->bvh.tests_skipped++;
 }

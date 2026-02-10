@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:20:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/12 20:32:45 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 11:34:16 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,46 +16,37 @@
 #include "pixel_timing.h"
 #include "metrics.h"
 
-/*
-** Convert screen pixel coordinates to Normalized Device Coordinates.
-** NDC range: u in [-1, 1] (left to right), v in [-1, 1] (bottom to top).
-*/
-/*
-** Write color directly to image buffer for fast rendering.
-** Converts RGB color to packed integer and writes to memory.
-*/
 /**
- * @brief put pixel to buffer 함수
+ * @brief Write a single pixel color into the MLX image buffer.
  *
- * @param render 파라미터
- * @param x 파라미터
- * @param y 파라미터
- * @param color 파라미터
+ * Computes the byte offset for (x, y) within the image data, converts the
+ * RGB components to a packed integer, and stores it directly. Coordinates
+ * outside the render resolution are ignored.
+ *
+ * @param render Active render context containing the image buffer.
+ * @param x Pixel x coordinate in screen space.
+ * @param y Pixel y coordinate in screen space.
+ * @param color RGB color to write.
  */
 static void	put_pixel_to_buffer(t_render *render, int x, int y, t_color color)
 {
-	int		offset;
 	int		pixel_color;
 
-	if (x < 0 || x >= WINDOW_WIDTH || y < 0 || y >= WINDOW_HEIGHT)
-		return ;
-	offset = y * render->size_line + x * (render->bpp / 8);
 	pixel_color = (color.r << 16) | (color.g << 8) | color.b;
-	*(int *)(render->img_data + offset) = pixel_color;
+	mlx_img_put_pixel(&render->mlx.img, x, y, pixel_color);
 }
 
-/*
-** Render single pixel at screen coordinates (x, y).
-** Converts screen space to normalized device coordinates.
-** Creates camera ray, traces it, and writes resulting color to buffer.
-*/
 /**
- * @brief render pixel 함수 - 렌더링 수행
+ * @brief Render a single pixel by tracing a camera ray.
  *
- * @param scene 파라미터
- * @param render 파라미터
- * @param x 파라미터
- * @param y 파라미터
+ * Converts pixel coordinates to normalized device coordinates, generates
+ * a camera ray, traces it against the scene, records timing, and writes
+ * the resulting color to the image buffer.
+ *
+ * @param scene Scene to be rendered.
+ * @param render Render context for timing and output.
+ * @param x Pixel x coordinate in screen space.
+ * @param y Pixel y coordinate in screen space.
  */
 static void	render_pixel(t_scene *scene, t_render *render, int x, int y)
 {
@@ -68,23 +59,28 @@ static void	render_pixel(t_scene *scene, t_render *render, int x, int y)
 	u = (2.0 * x / (double)WINDOW_WIDTH) - 1.0;
 	v = 1.0 - (2.0 * y / (double)WINDOW_HEIGHT);
 	ray = create_camera_ray(&scene->camera, u, v);
-	timing[0] = get_time_ns();
-	color = trace_ray(scene, &ray);
-	timing[1] = get_time_ns();
-	pixel_timing_add_sample(&render->pixel_timing, timing[1] - timing[0]);
+	if (render_has_flag(render, RENDER_ENABLE_PIXEL_TIMING))
+	{
+		timing[0] = get_time_ns();
+		color = trace_ray(scene, &ray);
+		timing[1] = get_time_ns();
+		pixel_timing_add_sample(&render->pixel_timing, timing[1] - timing[0]);
+	}
+	else
+		color = trace_ray(scene, &ray);
 	put_pixel_to_buffer(render, x, y, color);
 }
 
-/*
-** Draw a 2x2 pixel block with the same color for low quality rendering.
-*/
 /**
- * @brief draw pixel block 함수 - 그리기 수행
+ * @brief Draw a 2x2 block for low-quality preview rendering.
  *
- * @param render 파라미터
- * @param x 파라미터
- * @param y 파라미터
- * @param color 파라미터
+ * Writes the given color to (x, y) and, if in bounds, to the three adjacent
+ * pixels that form a 2x2 block. This trades quality for speed.
+ *
+ * @param render Render context with image buffer.
+ * @param x Top-left x coordinate of the block.
+ * @param y Top-left y coordinate of the block.
+ * @param color RGB color to fill.
  */
 static void	draw_pixel_block(t_render *render, int x, int y, t_color color)
 {
@@ -99,15 +95,15 @@ static void	draw_pixel_block(t_render *render, int x, int y, t_color color)
 	}
 }
 
-/*
-** Render scene at reduced resolution for fast preview.
-** Uses 2x2 pixel blocks to achieve 4x speedup.
-*/
 /**
- * @brief render low quality 함수 - 렌더링 수행
+ * @brief Render the scene at reduced resolution for fast preview.
  *
- * @param scene 파라미터
- * @param render 파라미터
+ * Steps through the screen in 2-pixel increments, traces one ray per 2x2
+ * block, and fills the block with the same color. Aborts early if a debounce
+ * cancel is requested.
+ *
+ * @param scene Scene to be rendered.
+ * @param render Render context containing state and output buffer.
  */
 static void	render_low_quality(t_scene *scene, t_render *render)
 {
@@ -136,27 +132,27 @@ static void	render_low_quality(t_scene *scene, t_render *render)
 	}
 }
 
-/*
-** Render entire scene to image buffer.
-** Uses low quality mode if requested for faster preview.
-** Otherwise renders at full 800x600 resolution.
-*/
 /**
- * @brief render scene to buffer 함수 - 렌더링 수행
+ * @brief Render the full scene into the image buffer.
  *
- * @param scene 파라미터
- * @param render 파라미터
+ * Chooses low-quality or full-quality rendering based on render flags,
+ * iterates over all pixels, and records per-pixel timing statistics.
+ * Aborts early if a debounce cancel is requested.
+ *
+ * @param scene Scene to be rendered.
+ * @param render Render context containing output buffer and state.
  */
 void	render_scene_to_buffer(t_scene *scene, t_render *render)
 {
 	int		x;
 	int		y;
 
-	if (render->low_quality)
+	if (render_has_flag(render, RENDER_LOW_QUALITY))
 	{
 		render_low_quality(scene, render);
 		return ;
 	}
+	pixel_timing_reset(&render->pixel_timing);
 	y = 0;
 	while (y < WINDOW_HEIGHT)
 	{

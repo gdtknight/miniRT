@@ -13,10 +13,12 @@
 #include "hud.h"
 
 /**
- * @brief hud format float 함수
+ * @brief Format a floating-point value with two decimal places.
  *
- * @param buffer 파라미터
- * @param value 파라미터
+ * Writes the formatted value into the provided buffer.
+ *
+ * @param buffer Output buffer.
+ * @param value Value to format.
  */
 void	hud_format_float(char *buffer, double value)
 {
@@ -44,10 +46,10 @@ void	hud_format_float(char *buffer, double value)
 }
 
 /**
- * @brief hud format vec3 함수
+ * @brief Format a vec3 as "(x, y, z)" with two decimals each.
  *
- * @param buffer 파라미터
- * @param vec 파라미터
+ * @param buffer Output buffer.
+ * @param vec Vector to format.
  */
 void	hud_format_vec3(char *buffer, t_vec3 vec)
 {
@@ -73,10 +75,10 @@ void	hud_format_vec3(char *buffer, t_vec3 vec)
 }
 
 /**
- * @brief hud format color 함수
+ * @brief Format a color as "R:.. G:.. B:..".
  *
- * @param buffer 파라미터
- * @param color 파라미터
+ * @param buffer Output buffer.
+ * @param color Color to format.
  */
 void	hud_format_color(char *buffer, t_color color)
 {

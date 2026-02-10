@@ -17,12 +17,11 @@
 ** Returns new vector: (a.x + b.x, a.y + b.y, a.z + b.z)
 */
 /**
- * @brief vec3 add 함수 - 추가 수행
+ * @brief Add two vectors component-wise.
  *
- * @param a 파라미터
- * @param b 파라미터
- *
- * @return t_vec3 반환값
+ * @param a First vector.
+ * @param b Second vector.
+ * @return t_vec3 Sum vector.
  */
 t_vec3	vec3_add(t_vec3 a, t_vec3 b)
 {
@@ -39,12 +38,11 @@ t_vec3	vec3_add(t_vec3 a, t_vec3 b)
 ** Returns new vector: (a.x - b.x, a.y - b.y, a.z - b.z)
 */
 /**
- * @brief vec3 subtract 함수 - 뺄셈 수행
+ * @brief Subtract two vectors component-wise.
  *
- * @param a 파라미터
- * @param b 파라미터
- *
- * @return t_vec3 반환값
+ * @param a Minuend vector.
+ * @param b Subtrahend vector.
+ * @return t_vec3 Difference vector.
  */
 t_vec3	vec3_subtract(t_vec3 a, t_vec3 b)
 {
@@ -61,12 +59,11 @@ t_vec3	vec3_subtract(t_vec3 a, t_vec3 b)
 ** Returns new vector: (v.x * scalar, v.y * scalar, v.z * scalar)
 */
 /**
- * @brief vec3 multiply 함수
+ * @brief Multiply a vector by a scalar.
  *
- * @param v 파라미터
- * @param scalar 파라미터
- *
- * @return t_vec3 반환값
+ * @param v Input vector.
+ * @param scalar Scalar multiplier.
+ * @return t_vec3 Scaled vector.
  */
 t_vec3	vec3_multiply(t_vec3 v, double scalar)
 {

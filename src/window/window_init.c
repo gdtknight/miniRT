@@ -6,131 +6,120 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:40:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/12 20:31:05 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "window.h"
+#include "window_internal.h"
 #include "hud.h"
 #include "keyguide.h"
 #include "pixel_timing.h"
 #include <stdlib.h>
 
-/*
-** Initialize render structure fields with default values.
-*/
 /**
- * @brief init render state 함수 - 초기화 수행
+ * @brief Initialize render state fields and subsystems.
  *
- * @param render 파라미터
- * @param scene 파라미터
+ * Binds the scene, resets selection, sets initial render flags, and
+ * initializes timing/debounce subsystems.
+ *
+ * @param render Render context to initialize.
+ * @param scene Scene associated with the render context.
  */
 static void	init_render_state(t_render *render, t_scene *scene)
 {
 	render->scene = scene;
 	render->selection.type = OBJ_NONE;
 	render->selection.index = 0;
-	render->dirty = 1;
-	render->is_rendering = 0;
-	render->low_quality = 0;
-	render->shift_pressed = 0;
+	render->state_flags = RENDER_DIRTY | RENDER_ENABLE_METRICS_PRINT;
 	pixel_timing_init(&render->pixel_timing);
 	debounce_init(&render->debounce);
 }
 
-/*
-** Initialize HUD and keyguide components.
-** Returns -1 on failure.
-*/
 /**
- * @brief init ui components 함수 - 초기화 수행
+ * @brief Initialize HUD and key guide UI components.
  *
- * @param render 파라미터
- * @param scene 파라미터
+ * Initializes HUD and key guide state and precomputes pagination based
+ * on the scene. On failure, caller is responsible for cleaning up
+ * already-initialized resources via render_destroy.
  *
- * @return int 반환값
+ * @param render Render context containing UI state.
+ * @param scene Scene used to compute pagination info.
+ * @return int 0 on success, -1 on failure.
  */
 static int	init_ui_components(t_render *render, t_scene *scene)
 {
-	if (hud_init(&render->hud, render->mlx, render->win) == -1)
-	{
-		free(render);
+	if (hud_init(&render->hud, render->mlx.mlx, render->mlx.win) == -1)
 		return (-1);
-	}
-	if (keyguide_init(&render->keyguide, render->mlx, render->win) == -1)
-	{
-		hud_cleanup(&render->hud, render->mlx);
-		free(render);
+	if (keyguide_init(&render->keyguide, render->mlx.mlx,
+			render->mlx.win) == -1)
 		return (-1);
-	}
 	render->hud.total_pages = hud_calculate_total_pages(scene);
 	return (0);
 }
 
-/*
-** Register MLX event hooks for window events.
-*/
 /**
- * @brief register hooks 함수
+ * @brief Register MLX event hooks for input and rendering.
  *
- * @param render 파라미터
+ * Sets up key press/release, expose, close, and loop callbacks.
+ *
+ * @param render Render context passed to callbacks.
  */
 static void	register_hooks(t_render *render)
 {
-	mlx_hook(render->win, 17, 0, close_window, render);
-	mlx_hook(render->win, 2, 1L << 0, handle_key, render);
-	mlx_hook(render->win, 3, 1L << 1, handle_key_release, render);
-	mlx_loop_hook(render->mlx, render_loop, render);
+	mlx_hook(render->mlx.win, 17, 0, close_window, render);
+	mlx_hook(render->mlx.win, 2, 1L << 0, handle_key, render);
+	mlx_hook(render->mlx.win, 3, 1L << 1, handle_key_release, render);
+	mlx_hook(render->mlx.win, 12, 1L << 15, handle_expose, render);
+	mlx_loop_hook(render->mlx.mlx, render_loop, render);
 }
 
-/*
-** Initialize MLX connection and image buffer.
-** Returns 0 on success, -1 on failure.
-*/
 /**
- * @brief init mlx 함수 - 초기화 수행
+ * @brief Create and initialize a render context.
  *
- * @param render 파라미터
+ * Allocates the render context, sets up MLX window and buffers, initializes
+ * render state and UI components, and registers event hooks.
  *
- * @return int 반환값
+ * @param scene Scene to render.
+ * @return t_render* Newly created render context or NULL on failure.
  */
-static int	init_mlx(t_render *render)
-{
-	render->mlx = mlx_init();
-	if (!render->mlx)
-		return (-1);
-	render->win = mlx_new_window(render->mlx, WINDOW_WIDTH,
-			WINDOW_HEIGHT, "miniRT");
-	render->img = mlx_new_image(render->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
-	if (!render->win || !render->img)
-		return (-1);
-	render->img_data = mlx_get_data_addr(render->img, &render->bpp,
-			&render->size_line, &render->endian);
-	return (0);
-}
-
-/*
-** Initialize MLX window and set up event handlers.
-** Creates 800x600 window with image buffer for fast rendering.
-** Registers close/keyboard handlers and rendering loop.
-** Returns NULL on initialization failure.
-*/
-t_render	*init_window(t_scene *scene)
+t_render	*render_create(t_scene *scene)
 {
 	t_render	*render;
 
 	render = malloc(sizeof(t_render));
 	if (!render)
 		return (NULL);
-	if (init_mlx(render) == -1)
+	if (!mlx_context_init(&render->mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "miniRT"))
 	{
 		free(render);
 		return (NULL);
 	}
 	init_render_state(render, scene);
 	if (init_ui_components(render, scene) == -1)
+	{
+		render_destroy(render);
 		return (NULL);
+	}
 	register_hooks(render);
 	return (render);
+}
+
+/**
+ * @brief Destroy a render context and release all resources.
+ *
+ * Frees UI components, timing resources, MLX context, and the render struct.
+ *
+ * @param render Render context to destroy.
+ */
+void	render_destroy(t_render *render)
+{
+	if (!render)
+		return ;
+	hud_cleanup(&render->hud, render->mlx.mlx);
+	keyguide_cleanup(&render->keyguide, render->mlx.mlx);
+	pixel_timing_cleanup(&render->pixel_timing);
+	mlx_context_destroy(&render->mlx);
+	free(render);
 }

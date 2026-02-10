@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:19:13 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/18 15:19:14 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,102 +14,80 @@
 #include "minirt.h"
 #include "vec3.h"
 #include "ray.h"
+#include "metrics.h"
+#include "spatial.h"
 
-/*
-** Check if shadow ray intersects any sphere in the scene.
-** Returns 1 if intersection found, 0 otherwise.
-*/
 /**
- * @brief check sphere shadow 함수 - 확인 수행
+ * @brief Test shadow ray against all objects in the scene.
  *
- * @param scene 파라미터
- * @param ray 파라미터
- * @param hit 파라미터
+ * Iterates through all objects and returns as soon as any intersection is
+ * found within the ray range.
  *
- * @return int 반환값
+ * @param scene Scene containing objects.
+ * @param ray Shadow ray to test.
+ * @param hit Hit record used for intersection queries.
+ * @return int 1 if occluded, 0 if clear.
  */
-static int	check_sphere_shadow(t_scene *scene, t_ray *ray, t_hit *hit)
+static int	check_object_shadow(t_scene *scene, t_ray *ray, t_hit *hit)
 {
-	int	i;
+	int			i;
+	t_object	*obj;
 
 	i = 0;
-	while (i < scene->sphere_count)
+	while (i < scene->objects.count)
 	{
-		if (intersect_sphere(ray, &scene->spheres[i], hit))
+		obj = &scene->objects.items[i];
+		metrics_add_shadow_intersect(&scene->metrics);
+		if (intersect_object_new(ray, obj, hit))
 			return (1);
 		i++;
 	}
 	return (0);
 }
 
-/*
-** Check if shadow ray intersects any plane in the scene.
-** Returns 1 if intersection found, 0 otherwise.
-*/
 /**
- * @brief check plane shadow 함수 - 확인 수행
+ * @brief Test shadow ray against planes separated from BVH.
  *
- * @param scene 파라미터
- * @param ray 파라미터
- * @param hit 파라미터
+ * Iterates over plane indices in bvh->plane_refs and returns on first hit.
  *
- * @return int 반환값
+ * @param scene Scene containing objects and BVH with plane refs.
+ * @param ray Shadow ray to test.
+ * @param mag Maximum distance to light source.
+ * @return int 1 if any plane occludes the light, 0 otherwise.
  */
-static int	check_plane_shadow(t_scene *scene, t_ray *ray, t_hit *hit)
+static int	check_plane_shadow(t_scene *scene, t_ray *ray, double mag)
 {
-	int	i;
+	int			i;
+	t_hit		hit;
+	t_object	*obj;
 
+	if (!scene->bvh)
+		return (0);
 	i = 0;
-	while (i < scene->plane_count)
+	while (i < scene->bvh->plane_refs.count)
 	{
-		if (intersect_plane(ray, &scene->planes[i], hit))
+		obj = &scene->objects.items[scene->bvh->plane_refs.indices[i]];
+		hit.distance = mag;
+		metrics_add_shadow_intersect(&scene->metrics);
+		if (intersect_object_new(ray, obj, &hit))
 			return (1);
 		i++;
 	}
 	return (0);
 }
 
-/*
-** Check if shadow ray intersects any cylinder in the scene.
-** Returns 1 if intersection found, 0 otherwise.
-*/
 /**
- * @brief check cylinder shadow 함수 - 확인 수행
+ * @brief Determine whether a point is shadowed from a light.
  *
- * @param scene 파라미터
- * @param ray 파라미터
- * @param hit 파라미터
+ * Builds a shadow ray toward the light, applies a bias to avoid self-shadow,
+ * and tests for occlusion. Uses BVH for bounded objects plus separate plane
+ * testing when BVH is enabled.
  *
- * @return int 반환값
- */
-static int	check_cylinder_shadow(t_scene *scene, t_ray *ray, t_hit *hit)
-{
-	int	i;
-
-	i = 0;
-	while (i < scene->cylinder_count)
-	{
-		if (intersect_cylinder(ray, &scene->cylinders[i], hit))
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-/*
-** Test if point is occluded from light source.
-** Casts shadow ray from point toward light.
-** Returns 1 if any object blocks the light, 0 if fully lit.
-*/
-/**
- * @brief is in shadow 함수
- *
- * @param scene 파라미터
- * @param point 파라미터
- * @param light_pos 파라미터
- * @param bias 파라미터
- *
- * @return int 반환값
+ * @param scene Scene containing objects for occlusion tests.
+ * @param point Shaded point in world space.
+ * @param light_pos Light position in world space.
+ * @param bias Bias distance to offset the shadow ray origin.
+ * @return int 1 if the point is in shadow, 0 otherwise.
  */
 int	is_in_shadow(t_scene *scene, t_vec3 point, t_vec3 light_pos, double bias)
 {
@@ -117,17 +95,25 @@ int	is_in_shadow(t_scene *scene, t_vec3 point, t_vec3 light_pos, double bias)
 	t_hit	shadow_hit;
 	t_vec3	to_light;
 	t_vec3	light_dir;
+	double	mag;
 
 	to_light = vec3_subtract(light_pos, point);
-	shadow_hit.distance = vec3_magnitude(to_light);
-	light_dir = vec3_normalize(to_light);
+	mag = vec3_magnitude(to_light);
+	if (mag < 0.0001)
+		return (0);
+	shadow_hit.distance = mag;
+	light_dir = vec3_multiply(to_light, 1.0 / mag);
 	shadow_ray.origin = vec3_add(point, vec3_multiply(light_dir, bias));
 	shadow_ray.direction = light_dir;
-	if (check_sphere_shadow(scene, &shadow_ray, &shadow_hit))
-		return (1);
-	if (check_plane_shadow(scene, &shadow_ray, &shadow_hit))
-		return (1);
-	if (check_cylinder_shadow(scene, &shadow_ray, &shadow_hit))
-		return (1);
-	return (0);
+	shadow_ray.inv_dir.x = 1.0 / light_dir.x;
+	shadow_ray.inv_dir.y = 1.0 / light_dir.y;
+	shadow_ray.inv_dir.z = 1.0 / light_dir.z;
+	if (scene->bvh && scene->bvh->enabled && scene->bvh->root
+		&& scene->objects.count > SHADOW_BVH_THRESHOLD)
+	{
+		if (bvh_intersect_any(scene->bvh, shadow_ray, mag, scene))
+			return (1);
+		return (check_plane_shadow(scene, &shadow_ray, mag));
+	}
+	return (check_object_shadow(scene, &shadow_ray, &shadow_hit));
 }

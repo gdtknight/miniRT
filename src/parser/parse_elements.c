@@ -6,135 +6,148 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:19:28 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/18 15:19:29 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "parser.h"
 #include "vec3.h"
+#include "error.h"
 
-/*
-** Parse ambient lighting element from scene file.
-** Format: A <ratio> <R,G,B>
-** Validates ratio is in range [0.0, 1.0].
-*/
 /**
- * @brief parse ambient 함수 - 파싱 수행
+ * @brief Parse ambient light definition.
  *
- * @param line 파라미터
- * @param scene 파라미터
+ * Validates ratio and color, applies to the scene, and marks the ambient flag.
  *
- * @return int 반환값
+ * @param line Raw line from the scene file.
+ * @param scene Scene to update.
+ * @return t_parse_result PARSE_OK on success, error code on failure.
  */
-int	parse_ambient(char *line, t_scene *scene)
+t_parse_result	parse_ambient(char *line, t_scene *scene)
 {
-	char	*token;
-	double	ratio;
+	const char		*token;
+	double			ratio;
+	t_parse_result	result;
 
-	if (scene->has_ambient)
-		return (print_error("Ambient lighting declared multiple times"));
-	token = line + 2;
-	while (*token == ' ')
-		token++;
-	ratio = ft_atof(token);
+	if (scene_has_ambient(scene))
+		return (PARSE_ERR_DUPLICATE);
+	token = skip_whitespace(line + 2);
+	result = parse_double(token, &ratio, &token);
+	if (result != PARSE_OK)
+		return (result);
 	if (!in_range(ratio, 0.0, 1.0))
-		return (print_error("Ambient ratio must be in range [0.0, 1.0]"));
+		return (PARSE_ERR_RANGE);
 	scene->ambient.ratio = ratio;
-	while (*token && *token != ' ')
-		token++;
-	while (*token == ' ')
-		token++;
-	if (!parse_color(token, &scene->ambient.color))
-		return (0);
-	scene->has_ambient = 1;
-	return (1);
+	token = skip_whitespace(token);
+	result = parse_color_strict(token, &scene->ambient.color, &token);
+	if (result != PARSE_OK)
+		return (result);
+	if (!at_line_end(token))
+		return (PARSE_ERR_TRAILING_TOKEN);
+	scene_set_flag(scene, SCENE_HAS_AMBIENT);
+	return (PARSE_OK);
 }
 
-static char	*skip_to_next_token(char *token)
-{
-	while (*token && *token != ' ')
-		token++;
-	while (*token == ' ')
-		token++;
-	return (token);
-}
-
-/*
-** Parse camera element from scene file.
-** Format: C <x,y,z> <nx,ny,nz> <fov>
-** Normalizes direction vector and validates FOV range [0, 180].
-*/
 /**
- * @brief parse camera 함수 - 파싱 수행
+ * @brief Parse camera position and direction.
  *
- * @param line 파라미터
- * @param scene 파라미터
- *
- * @return int 반환값
+ * @param token Current token pointer.
+ * @param scene Scene to update.
+ * @return t_parse_result PARSE_OK on success, error code on failure.
  */
-int	parse_camera(char *line, t_scene *scene)
+static t_parse_result	parse_camera_vecs(const char **token, t_scene *scene)
 {
-	char	*token;
+	t_parse_result	result;
 
-	if (scene->has_camera)
-		return (print_error("Camera declared multiple times"));
-	token = line + 2;
-	while (*token == ' ')
-		token++;
-	if (!parse_vector(token, &scene->camera.position))
-		return (print_error("Invalid camera position"));
-	token = skip_to_next_token(token);
-	if (!parse_vector(token, &scene->camera.direction))
-		return (print_error("Invalid camera direction"));
+	result = parse_vector_strict(*token, &scene->camera.position, token);
+	if (result != PARSE_OK)
+		return (result);
+	*token = skip_whitespace(*token);
+	result = parse_vector_strict(*token, &scene->camera.direction, token);
+	if (result != PARSE_OK)
+		return (result);
+	result = validate_vector_range(&scene->camera.direction);
+	if (result != PARSE_OK)
+		return (result);
+	result = validate_direction_vector(&scene->camera.direction);
+	if (result != PARSE_OK)
+		return (result);
 	scene->camera.direction = vec3_normalize(scene->camera.direction);
-	token = skip_to_next_token(token);
-	scene->camera.fov = ft_atof(token);
-	if (!in_range(scene->camera.fov, 0, 180))
-		return (print_error("FOV must be in range [0, 180]"));
+	return (PARSE_OK);
+}
+
+/**
+ * @brief Parse camera definition.
+ *
+ * Extracts position, direction, and FOV, normalizes direction, and stores
+ * initial camera state for reset operations.
+ *
+ * @param line Raw line from the scene file.
+ * @param scene Scene to update.
+ * @return t_parse_result PARSE_OK on success, error code on failure.
+ */
+t_parse_result	parse_camera(char *line, t_scene *scene)
+{
+	const char		*token;
+	t_parse_result	result;
+	int				fov;
+
+	if (scene_has_camera(scene))
+		return (PARSE_ERR_DUPLICATE);
+	token = skip_whitespace(line + 2);
+	result = parse_camera_vecs(&token, scene);
+	if (result != PARSE_OK)
+		return (result);
+	token = skip_whitespace(token);
+	result = parse_int(token, &fov, &token);
+	if (result != PARSE_OK)
+		return (result);
+	if (!in_range(fov, 1, 179))
+		return (PARSE_ERR_RANGE);
+	scene->camera.fov = fov;
+	if (!at_line_end(token))
+		return (PARSE_ERR_TRAILING_TOKEN);
 	scene->camera.initial_position = scene->camera.position;
 	scene->camera.initial_direction = scene->camera.direction;
-	scene->has_camera = 1;
-	return (1);
+	scene->camera.cache.valid = 0;
+	scene_set_flag(scene, SCENE_HAS_CAMERA);
+	return (PARSE_OK);
 }
 
-/*
-** Parse light source element from scene file.
-** Format: L <x,y,z> <brightness> <R,G,B>
-** Validates brightness is in range [0.0, 1.0].
-*/
 /**
- * @brief parse light 함수 - 파싱 수행
+ * @brief Parse light source definition.
  *
- * @param line 파라미터
- * @param scene 파라미터
+ * Extracts position, brightness, and color, validates ranges, and marks the
+ * light flag in the scene.
  *
- * @return int 반환값
+ * @param line Raw line from the scene file.
+ * @param scene Scene to update.
+ * @return t_parse_result PARSE_OK on success, error code on failure.
  */
-int	parse_light(char *line, t_scene *scene)
+t_parse_result	parse_light(char *line, t_scene *scene)
 {
-	char	*token;
+	const char		*token;
+	t_parse_result	result;
 
-	if (scene->has_light)
-		return (print_error("Light declared multiple times"));
-	token = line + 2;
-	while (*token == ' ')
-		token++;
-	if (!parse_vector(token, &scene->light.position))
-		return (print_error("Invalid light position"));
-	while (*token && *token != ' ')
-		token++;
-	while (*token == ' ')
-		token++;
-	scene->light.brightness = ft_atof(token);
+	if (scene_has_light(scene))
+		return (PARSE_ERR_DUPLICATE);
+	token = skip_whitespace(line + 2);
+	result = parse_vector_strict(token, &scene->light.position, &token);
+	if (result != PARSE_OK)
+		return (result);
+	token = skip_whitespace(token);
+	result = parse_double(token, &scene->light.brightness, &token);
+	if (result != PARSE_OK)
+		return (result);
 	if (!in_range(scene->light.brightness, 0.0, 1.0))
-		return (print_error("Light brightness must be in range [0.0, 1.0]"));
-	while (*token && *token != ' ')
-		token++;
-	while (*token == ' ')
-		token++;
-	if (!parse_color(token, &scene->light.color))
-		return (0);
-	scene->has_light = 1;
-	return (1);
+		return (PARSE_ERR_RANGE);
+	token = skip_whitespace(token);
+	result = parse_color_strict(token, &scene->light.color, &token);
+	if (result != PARSE_OK)
+		return (result);
+	if (!at_line_end(token))
+		return (PARSE_ERR_TRAILING_TOKEN);
+	scene_set_flag(scene, SCENE_HAS_LIGHT);
+	return (PARSE_OK);
 }

@@ -246,9 +246,9 @@ The BVH (Bounding Volume Hierarchy) acceleration structure and performance metri
 - ✅ All dependencies available
 
 ### Scene Files ✅
-- ✅ `scenes/test_complex_scene.rt` - Primary test scene (13 objects)
-- ✅ `scenes/perf_test_20_spheres.rt` - Performance test (20 objects)
-- ✅ `scenes/perf_test_50_spheres.rt` - Stress test (50 objects)
+- ✅ `scenes/valid/valid_scene_complex.rt` - Primary test scene (13 objects)
+- ✅ `scenes/perf/perf_spheres_20.rt` - Performance test (20 objects)
+- ✅ `scenes/perf/perf_spheres_50.rt` - Stress test (50 objects)
 - ✅ Multiple validation scenes available
 
 ### Documentation ✅

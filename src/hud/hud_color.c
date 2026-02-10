@@ -13,13 +13,12 @@
 #include "hud.h"
 
 /**
- * @brief make color 함수
+ * @brief Pack RGB components into a single 0xRRGGBB integer.
  *
- * @param r 파라미터
- * @param g 파라미터
- * @param b 파라미터
- *
- * @return int 반환값
+ * @param r Red component (0-255).
+ * @param g Green component (0-255).
+ * @param b Blue component (0-255).
+ * @return int Packed color value.
  */
 int	make_color(int r, int g, int b)
 {
@@ -27,13 +26,12 @@ int	make_color(int r, int g, int b)
 }
 
 /**
- * @brief blend component 함수
+ * @brief Blend a single color component using alpha.
  *
- * @param bg 파라미터
- * @param fg 파라미터
- * @param alpha 파라미터
- *
- * @return int 반환값
+ * @param bg Background component value.
+ * @param fg Foreground component value.
+ * @param alpha Blend factor in [0, 1].
+ * @return int Blended component value.
  */
 static int	blend_component(int bg, int fg, double alpha)
 {
@@ -41,13 +39,12 @@ static int	blend_component(int bg, int fg, double alpha)
 }
 
 /**
- * @brief blend colors 함수
+ * @brief Blend two packed RGB colors with alpha.
  *
- * @param bg_color 파라미터
- * @param fg_color 파라미터
- * @param alpha 파라미터
- *
- * @return int 반환값
+ * @param bg_color Background packed color.
+ * @param fg_color Foreground packed color.
+ * @param alpha Blend factor in [0, 1].
+ * @return int Blended packed color.
  */
 int	blend_colors(int bg_color, int fg_color, double alpha)
 {

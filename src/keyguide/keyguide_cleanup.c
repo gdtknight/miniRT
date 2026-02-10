@@ -14,17 +14,13 @@
 #include "window.h"
 
 /**
- * @brief keyguide cleanup 함수 - 정리 수행
+ * @brief Clean up key guide resources.
  *
- * @param keyguide 파라미터
- * @param mlx 파라미터
+ * @param keyguide Key guide state to clean up.
+ * @param mlx MLX connection pointer (unused, kept for API consistency).
  */
 void	keyguide_cleanup(t_keyguide_state *keyguide, void *mlx)
 {
-	if (keyguide->bg_img)
-	{
-		mlx_destroy_image(mlx, keyguide->bg_img);
-		keyguide->bg_img = NULL;
-		keyguide->bg_data = NULL;
-	}
+	(void)keyguide;
+	(void)mlx;
 }

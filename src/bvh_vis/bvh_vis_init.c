@@ -14,6 +14,13 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 
+/**
+ * @brief Build a default configuration for BVH visualization.
+ *
+ * Initializes display options and captures current terminal width.
+ *
+ * @return t_vis_config Default visualization configuration.
+ */
 t_vis_config	bvh_vis_default_config(void)
 {
 	t_vis_config	config;
@@ -25,6 +32,13 @@ t_vis_config	bvh_vis_default_config(void)
 	return (config);
 }
 
+/**
+ * @brief Get the current terminal width in characters.
+ *
+ * Falls back to 80 columns if the query fails.
+ *
+ * @return int Terminal width in columns.
+ */
 int	bvh_vis_get_terminal_width(void)
 {
 	struct winsize	ws;
@@ -36,6 +50,14 @@ int	bvh_vis_get_terminal_width(void)
 	return (ws.ws_col);
 }
 
+/**
+ * @brief Check visualization edge cases and emit warnings.
+ *
+ * Warns about deep trees or narrow terminals when enabled.
+ *
+ * @param bvh BVH to visualize.
+ * @param config Visualization configuration.
+ */
 void	check_edge_cases(t_bvh *bvh, t_vis_config *config)
 {
 	if (!bvh || !bvh->root || !config)
@@ -52,6 +74,16 @@ void	check_edge_cases(t_bvh *bvh, t_vis_config *config)
 	}
 }
 
+/**
+ * @brief Visualize the BVH tree in the terminal.
+ *
+ * Applies defaults when configuration is NULL and prints the tree plus
+ * statistics if enabled.
+ *
+ * @param bvh BVH to visualize.
+ * @param config Visualization configuration (optional).
+ * @param scene Pointer to the scene used for object labels.
+ */
 void	bvh_visualize(t_bvh *bvh, t_vis_config *config, void *scene)
 {
 	t_prefix_state	prefix;

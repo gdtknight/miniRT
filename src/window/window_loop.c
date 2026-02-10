@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:40:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/15 15:32:41 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 11:35:49 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,63 @@
 #include "hud.h"
 #include "keyguide.h"
 #include "metrics.h"
+#include "spatial.h"
 
-/*
-** Main rendering loop hook.
-** Only re-renders when dirty flag is set.
-*/
-/*
-** Main rendering loop hook.
-** Only re-renders when dirty flag is set.
-*/
 /**
- * @brief render loop 함수 - 렌더링 수행
+ * @brief Rebuild the BVH if the dirty flag is set.
  *
- * @param param 파라미터
+ * Reconstructs the BVH and clears the corresponding render flag.
  *
- * @return int 반환값
+ * @param render Render context containing the scene and flags.
+ */
+static void	rebuild_bvh_if_dirty(t_render *render)
+{
+	if (render_has_flag(render, RENDER_BVH_DIRTY))
+	{
+		scene_build_bvh(render->scene);
+		render_clear_flag(render, RENDER_BVH_DIRTY);
+	}
+}
+
+/**
+ * @brief Execute a full render pass and present the framebuffer.
+ *
+ * Runs the renderer, updates metrics, handles debounce cancellation, and
+ * swaps the image buffer to the window on success.
+ *
+ * @param render Render context containing scene and buffers.
+ * @return int 1 if the render completed, 0 if canceled.
+ */
+static int	execute_render_pass(t_render *render)
+{
+	render_set_flag(render, RENDER_RENDERING);
+	metrics_start_frame(&render->scene->metrics);
+	render_scene_to_buffer(render->scene, render);
+	render_clear_flag(render, RENDER_RENDERING);
+	if (render->debounce.cancel_requested)
+	{
+		debounce_cancel(&render->debounce);
+		render_set_flag(render, RENDER_DIRTY);
+		return (0);
+	}
+	metrics_end_frame(&render->scene->metrics);
+	if (render_has_flag(render, RENDER_ENABLE_METRICS_PRINT))
+		metrics_print_summary(&render->scene->metrics,
+			render->scene->objects.count);
+	mlx_put_image_to_window(render->mlx.mlx, render->mlx.win,
+		render->mlx.img.img, 0, 0);
+	render_clear_flag(render, RENDER_DIRTY);
+	return (1);
+}
+
+/**
+ * @brief MLX loop hook for continuous rendering updates.
+ *
+ * Updates debounce state, rebuilds BVH if needed, renders when dirty, and
+ * draws HUD overlays when requested.
+ *
+ * @param param Pointer to the render context.
+ * @return int Always returns 0 for MLX loop hook.
  */
 int	render_loop(void *param)
 {
@@ -40,28 +82,9 @@ int	render_loop(void *param)
 	render = (t_render *)param;
 	rendered = 0;
 	debounce_update(&render->debounce, render);
-	if (render->dirty)
-	{
-		render->is_rendering = 1;
-		metrics_start_frame(&render->scene->render_state.metrics);
-		render_scene_to_buffer(render->scene, render);
-		render->is_rendering = 0;
-		if (render->debounce.cancel_requested)
-		{
-			debounce_cancel(&render->debounce);
-			render->dirty = 1;
-		}
-		else
-		{
-			metrics_end_frame(&render->scene->render_state.metrics);
-			mlx_put_image_to_window(
-				render->mlx,
-				render->win,
-				render->img, 0, 0);
-			render->dirty = 0;
-			rendered = 1;
-		}
-	}
+	rebuild_bvh_if_dirty(render);
+	if (render_has_flag(render, RENDER_DIRTY))
+		rendered = execute_render_pass(render);
 	if (render->hud.visible && (render->hud.dirty || rendered))
 	{
 		hud_render(render);

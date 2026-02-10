@@ -6,169 +6,151 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:19:34 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/18 15:19:34 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/01/30 12:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "parser.h"
 #include "vec3.h"
-#include <stdio.h>
+#include "utils.h"
 
-/*
-** Helper function to skip current token and advance to next.
-** Skips non-space characters, then skips spaces.
-*/
-static char	*skip_to_next_token(char *token)
+/**
+ * @brief Count objects of a specific type in the scene.
+ *
+ * @param scene Scene containing object list.
+ * @param type Object type to count.
+ * @return int Number of objects of the given type.
+ */
+static int	get_type_count(t_scene *scene, t_object_type type)
 {
-	while (*token && *token != ' ')
-		token++;
-	while (*token == ' ')
-		token++;
-	return (token);
+	int	i;
+	int	count;
+
+	count = 0;
+	i = 0;
+	while (i < scene->objects.count)
+	{
+		if (scene->objects.items[i].type == type)
+			count++;
+		i++;
+	}
+	return (count);
 }
 
-/*
-** Parse sphere object from scene file.
-** Format: sp <x,y,z> <diameter> <R,G,B>
-** Validates diameter is positive.
-*/
 /**
- * @brief parse sphere 함수 - 파싱 수행
+ * @brief Parse sphere dimensions and color.
  *
- * @param line 파라미터
- * @param scene 파라미터
- *
- * @return int 반환값
+ * @param token Current token pointer.
+ * @param obj Object to populate.
+ * @return t_parse_result PARSE_OK on success, error code on failure.
  */
-int	parse_sphere(char *line, t_scene *scene)
+static t_parse_result	parse_sphere_data(const char **token, t_object *obj)
 {
-	char		*token;
-	t_sphere	*sphere;
+	double			diameter;
+	t_parse_result	result;
 
-	if (scene->sphere_count >= 100)
-		return (print_error("Too many spheres"));
-	sphere = &scene->spheres[scene->sphere_count];
-	token = line + 3;
-	while (*token == ' ')
-		token++;
-	if (!parse_vector(token, &sphere->center))
-		return (print_error("Invalid sphere center"));
-	token = skip_to_next_token(token);
-	sphere->diameter = ft_atof(token);
-	if (sphere->diameter <= 0)
-		return (print_error("Sphere diameter must be positive"));
-	sphere->radius = sphere->diameter / 2.0;
-	sphere->radius_squared = sphere->radius * sphere->radius;
-	snprintf(sphere->id, 8, "sp-%d", scene->sphere_count + 1);
-	token = skip_to_next_token(token);
-	if (!parse_color(token, &sphere->color))
-		return (0);
-	scene->sphere_count++;
-	return (1);
+	result = parse_double(*token, &diameter, token);
+	if (result != PARSE_OK)
+		return (result);
+	if (diameter <= 0)
+		return (PARSE_ERR_RANGE);
+	obj->data.sphere.radius = diameter / 2.0;
+	obj->data.sphere.radius_sq = obj->data.sphere.radius
+		* obj->data.sphere.radius;
+	*token = skip_whitespace(*token);
+	result = parse_color_strict(*token, &obj->color, token);
+	return (result);
 }
 
-/*
-** Parse plane object from scene file.
-** Format: pl <x,y,z> <nx,ny,nz> <R,G,B>
-** Normalizes the normal vector.
-*/
 /**
- * @brief parse plane 함수 - 파싱 수행
+ * @brief Parse a sphere definition line into a scene object.
  *
- * @param line 파라미터
- * @param scene 파라미터
+ * Extracts center, diameter, and color, assigns an ID, and appends the
+ * sphere to the scene object list.
  *
- * @return int 반환값
+ * @param line Raw line from the scene file.
+ * @param scene Scene to update.
+ * @return t_parse_result PARSE_OK on success, error code on failure.
  */
-int	parse_plane(char *line, t_scene *scene)
+t_parse_result	parse_sphere(char *line, t_scene *scene)
 {
-	char		*token;
-	t_plane		*plane;
+	const char		*token;
+	t_object		obj;
+	t_parse_result	result;
 
-	if (scene->plane_count >= 100)
-		return (print_error("Too many planes"));
-	plane = &scene->planes[scene->plane_count];
-	token = line + 3;
-	while (*token == ' ')
-		token++;
-	if (!parse_vector(token, &plane->point))
-		return (print_error("Invalid plane point"));
-	token = skip_to_next_token(token);
-	if (!parse_vector(token, &plane->normal))
-		return (print_error("Invalid plane normal"));
-	plane->normal = vec3_normalize(plane->normal);
-	snprintf(plane->id, 8, "pl-%d", scene->plane_count + 1);
-	token = skip_to_next_token(token);
-	if (!parse_color(token, &plane->color))
-		return (0);
-	scene->plane_count++;
-	return (1);
+	obj.type = OBJ_SPHERE;
+	token = skip_whitespace(line + 3);
+	result = parse_vector_strict(token, &obj.data.sphere.center, &token);
+	if (result != PARSE_OK)
+		return (result);
+	token = skip_whitespace(token);
+	result = parse_sphere_data(&token, &obj);
+	if (result != PARSE_OK)
+		return (result);
+	if (!at_line_end(token))
+		return (PARSE_ERR_TRAILING_TOKEN);
+	format_id(obj.id, 8, "sp-", get_type_count(scene, OBJ_SPHERE) + 1);
+	if (!object_list_add(&scene->objects, &obj))
+		return (PARSE_ERR_FORMAT);
+	return (PARSE_OK);
 }
 
-/*
-** Parse cylinder diameter and height parameters.
-** Validates both dimensions are positive.
-** Computes precomputed cached values for optimization.
-*/
 /**
- * @brief parse cylinder params 함수 - 파싱 수행
+ * @brief Parse plane normal and color.
  *
- * @param token 파라미터
- * @param cylinder 파라미터
- *
- * @return int 반환값
+ * @param token Current token pointer.
+ * @param obj Object to populate.
+ * @return t_parse_result PARSE_OK on success, error code on failure.
  */
-static int	parse_cylinder_params(char *token, t_cylinder *cylinder)
+static t_parse_result	parse_plane_data(const char **token, t_object *obj)
 {
-	token = skip_to_next_token(token);
-	cylinder->diameter = ft_atof(token);
-	token = skip_to_next_token(token);
-	cylinder->height = ft_atof(token);
-	if (cylinder->diameter <= 0 || cylinder->height <= 0)
-		return (print_error("Cylinder dimensions must be positive"));
-	cylinder->radius = cylinder->diameter / 2.0;
-	cylinder->radius_squared = cylinder->radius * cylinder->radius;
-	cylinder->half_height = cylinder->height / 2.0;
-	return (1);
+	t_parse_result	result;
+
+	result = parse_vector_strict(*token, &obj->data.plane.normal, token);
+	if (result != PARSE_OK)
+		return (result);
+	result = validate_vector_range(&obj->data.plane.normal);
+	if (result != PARSE_OK)
+		return (result);
+	result = validate_direction_vector(&obj->data.plane.normal);
+	if (result != PARSE_OK)
+		return (result);
+	obj->data.plane.normal = vec3_normalize(obj->data.plane.normal);
+	*token = skip_whitespace(*token);
+	result = parse_color_strict(*token, &obj->color, token);
+	return (result);
 }
 
-/*
-** Parse cylinder object from scene file.
-** Format: cy <x,y,z> <nx,ny,nz> <diameter> <height> <R,G,B>
-** Normalizes the axis vector.
-*/
 /**
- * @brief parse cylinder 함수 - 파싱 수행
+ * @brief Parse a plane definition line into a scene object.
  *
- * @param line 파라미터
- * @param scene 파라미터
+ * Extracts point, normal, and color, assigns an ID, and appends the plane
+ * to the scene object list.
  *
- * @return int 반환값
+ * @param line Raw line from the scene file.
+ * @param scene Scene to update.
+ * @return t_parse_result PARSE_OK on success, error code on failure.
  */
-int	parse_cylinder(char *line, t_scene *scene)
+t_parse_result	parse_plane(char *line, t_scene *scene)
 {
-	char		*token;
-	t_cylinder	*cylinder;
+	const char		*token;
+	t_object		obj;
+	t_parse_result	result;
 
-	if (scene->cylinder_count >= 100)
-		return (print_error("Too many cylinders"));
-	cylinder = &scene->cylinders[scene->cylinder_count];
-	token = line + 3;
-	while (*token == ' ')
-		token++;
-	if (!parse_vector(token, &cylinder->center))
-		return (print_error("Invalid cylinder center"));
-	token = skip_to_next_token(token);
-	if (!parse_vector(token, &cylinder->axis))
-		return (print_error("Invalid cylinder axis"));
-	cylinder->axis = vec3_normalize(cylinder->axis);
-	snprintf(cylinder->id, 8, "cy-%d", scene->cylinder_count + 1);
-	if (!parse_cylinder_params(token, cylinder))
-		return (0);
-	token = skip_to_next_token(skip_to_next_token(token));
-	if (!parse_color(token, &cylinder->color))
-		return (0);
-	scene->cylinder_count++;
-	return (1);
+	obj.type = OBJ_PLANE;
+	token = skip_whitespace(line + 3);
+	result = parse_vector_strict(token, &obj.data.plane.point, &token);
+	if (result != PARSE_OK)
+		return (result);
+	token = skip_whitespace(token);
+	result = parse_plane_data(&token, &obj);
+	if (result != PARSE_OK)
+		return (result);
+	if (!at_line_end(token))
+		return (PARSE_ERR_TRAILING_TOKEN);
+	format_id(obj.id, 8, "pl-", get_type_count(scene, OBJ_PLANE) + 1);
+	if (!object_list_add(&scene->objects, &obj))
+		return (PARSE_ERR_FORMAT);
+	return (PARSE_OK);
 }

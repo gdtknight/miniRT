@@ -14,13 +14,16 @@
 #include "hud.h"
 
 /**
- * @brief hud toggle 함수
+ * @brief Toggle HUD visibility and sync key guide visibility.
  *
- * @param render 파라미터
+ * Marks the render as dirty to force a redraw.
+ *
+ * @param render Render context containing HUD and key guide state.
  */
 void	hud_toggle(t_render *render)
 {
 	render->hud.visible = !render->hud.visible;
 	render->keyguide.visible = render->hud.visible;
+	render_set_flag(render, RENDER_DIRTY);
 	render->hud.dirty = 1;
 }
