@@ -57,8 +57,8 @@ jobs:
           BRANCH="${{ github.head_ref }}"
           echo "Validating branch name: $BRANCH"
           
-          # Allow patterns: feature/*, fix/*, docs/*, NNN-description
-          if echo "$BRANCH" | grep -qE "^(feature|fix|docs|test|chore)/[a-z0-9-]+$|^[0-9]{3}-[a-z0-9-]+$"; then
+          # Allow patterns: feature/*, fix/*, docs/*, NNN-description, develop
+          if echo "$BRANCH" | grep -qE "^(feature|fix|docs|test|chore)/[a-z0-9-]+$|^[0-9]{3}-[a-z0-9-]+$|^develop$"; then
             echo "✓ Branch name is valid: $BRANCH"
           else
             echo "❌ Invalid branch name: $BRANCH"
