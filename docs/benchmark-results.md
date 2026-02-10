@@ -471,3 +471,178 @@ Objects:           18
 5. **누적 효과**: Baseline 대비 S4 총 개선율 = (27,173.7 - 25,583.8) / 27,173.7 = **5.9%**. P0+Phase A+P4 누적 효과.
 
 6. **다음 단계**: P1 (Shadow ray BVH)이 S4 병목 해소의 핵심. Shadow tests 369M을 BVH로 가속하면 대폭 개선 기대.
+
+---
+
+## Round 4: Phase B-2 — P1+P2+P5+P6+PA+PB (Performance Bottleneck Optimization)
+
+브랜치: `031-perf-bottleneck-optimization`
+변경 요약:
+- **Round 1 (P1+P2+P5+P6)**: inv_dir precompute, camera basis caching, BVH child ordering, shadow ray BVH any-hit
+- **Round 2 (PA+PB)**: Plane BVH 분리 (무한 오브젝트 제외), Shadow BVH threshold 20→5 하향
+
+> **측정 조건**: 1회 측정. 3개 구성을 비교 — (A) Round 1만, (B) Round 2 PA only (threshold=20), (C) Round 2 PA+PB (threshold=5, 최종).
+
+### Timing — 전체 비교
+
+| 씬 | Round 3 (ms) | (A) R1 only (ms) | (B) PA only (ms) | (C) PA+PB (ms) | vs Round 3 |
+|----|-------------|-------------------|-------------------|-----------------|------------|
+| S1* | 438.3 | 241.2 | 239.1 | 241.2 | — |
+| S2 | 1,122.9 | 942.0 | 959.7 | **1,218.5** | +8.5% |
+| S3 | 1,753.4 | 1,416.0 | 1,440.5 | **1,432.2** | -18.3% |
+| S4 | 25,583.8 | 25,192.0 | 24,402.9 | **6,066.8** | **-76.3%** |
+
+> *S1은 `perf_timing.rt` (3 objects)로 대체 측정. Round 3 S1은 `valid_smoke_simple.rt` (1 object)이므로 직접 비교 불가.
+
+### Shadow Tests
+
+| 씬 | Round 3 | (A) R1 only | (B) PA only | (C) PA+PB |
+|----|---------|-------------|-------------|-----------|
+| S1* | 865K | 634K | 634K | 634K |
+| S2 | 15.4M | 15.4M | 15.4M | **2.0M** |
+| S3 | 43.2M | 2.2M | 2.2M | **2.2M** |
+| S4 | 369.6M | 369.6M | 369.6M | **83.7M** |
+
+### BVH Skip Rate
+
+| 씬 | Round 3 | (A) R1 only | (B) PA only | (C) PA+PB |
+|----|---------|-------------|-------------|-----------|
+| S1* | 92.0% | 93.7% | 93.7% | 93.7% |
+| S2 | 58.8% | 59.0% | 59.0% | 46.3% |
+| S3 | 60.3% | 46.6% | 46.6% | 46.6% |
+| S4 | 32.9% | 33.0% | **77.2%** | **82.0%** |
+
+### Primary Tests/Ray
+
+| 씬 | Round 3 | (A) R1 only | (C) PA+PB | 비고 |
+|----|---------|-------------|-----------|------|
+| S1* | 0.1 | 0.1 | 0.1 | — |
+| S2 | 0.3 | 0.3 | 0.3 | — |
+| S3 | 0.3 | 0.2 | 0.2 | — |
+| S4 | 5.2 | 5.2 → 4.1 | **4.1** | plane 별도 테스트로 증가 |
+
+### Raw Output — 최종 구성 (C) PA+PB (threshold=5)
+
+#### S1* (perf_timing.rt — 3 objects, 0 planes)
+
+```
+=== Render Metrics ===
+Frame time:        241.2 ms
+FPS:               4.1457
+Rays traced:       1296000
+Primary tests:     72628
+Shadow tests:      634199
+Primary tests/ray: 0.1
+BVH nodes visited: 1395384
+BVH skip rate:     93.7%
+Objects:           3
+```
+
+#### S2 (perf_spheres_20.rt — 20 spheres, 0 planes)
+
+```
+=== Render Metrics ===
+Frame time:        1218.5 ms
+FPS:               0.8207
+Rays traced:       1296000
+Primary tests:     343289
+Shadow tests:      2039289
+Primary tests/ray: 0.3
+BVH nodes visited: 14813791
+BVH skip rate:     46.3%
+Objects:           20
+```
+
+#### S3 (perf_spheres_50.rt — 50 spheres, 0 planes)
+
+```
+=== Render Metrics ===
+Frame time:        1432.2 ms
+FPS:               0.6982
+Rays traced:       1296000
+Primary tests:     314930
+Shadow tests:      2205768
+Primary tests/ray: 0.2
+BVH nodes visited: 17753810
+BVH skip rate:     46.6%
+Objects:           50
+```
+
+#### S4 (perf_all_objects.rt — 7sp + 7cy + 4pl, threshold=5)
+
+```
+=== Render Metrics ===
+Frame time:        6066.8 ms
+FPS:               0.1648
+Rays traced:       1296000
+Primary tests:     5361665
+Shadow tests:      83668852
+Primary tests/ray: 4.1
+BVH nodes visited: 30229336
+BVH skip rate:     82.0%
+Objects:           18
+```
+
+### Raw Output — 참고 구성 (B) PA only (threshold=20)
+
+#### S4 (perf_all_objects.rt — threshold=20)
+
+```
+=== Render Metrics ===
+Frame time:        24402.9 ms
+FPS:               0.0410
+Rays traced:       1296000
+Primary tests:     5361665
+Shadow tests:      369636978
+Primary tests/ray: 4.1
+BVH nodes visited: 2043776
+BVH skip rate:     77.2%
+Objects:           18
+```
+
+### 분석
+
+#### 1. S4 76.3% 개선 — 목표 대폭 초과 달성
+
+S4 프레임 타임이 25.6s → 6.1s로 감소. 보수적 목표(20% 개선) 대비 3.8배 초과 달성.
+
+핵심 요인은 **PA(Plane BVH 분리) + PB(threshold 하향)의 조합**:
+- PA만 적용(threshold=20): shadow가 여전히 brute-force → 24.4s (-4.6%)
+- PA+PB(threshold=5): shadow가 BVH 사용 → 6.1s (-76.3%)
+
+PA 단독으로는 S4 shadow 경로에 영향을 주지 못함 (18 objects < threshold 20). PB가 BVH 활성화 게이트를 열어주어야 PA의 BVH 품질 개선 효과가 shadow 경로에도 전파됨.
+
+#### 2. S4 BVH skip rate: 32.9% → 82.0%
+
+Plane의 `[-1e6, 1e6]³` AABB가 BVH 트리에서 제거되면서 트리 품질이 극적으로 회복. Bounded 오브젝트(14개)만으로 구축된 BVH는 split axis 선택과 파티셔닝이 정상 동작하여 82%의 노드를 AABB 단계에서 skip.
+
+#### 3. S4 Shadow tests: 369.6M → 83.7M (-77.4%)
+
+Brute-force (18 objects × 16 samples × 1.3M pixels) → BVH any-hit (early exit + plane 별도 4개) 전환 효과. 나머지 83.7M은 BVH 리프 노드 intersection + plane 4개 전수 검사 비용.
+
+#### 4. S2 +8.5% regression — threshold 하향의 부작용
+
+S2(20 spheres, plane 없음)에서 threshold 20→5로 인해 shadow가 brute-force → BVH로 전환.
+- Shadow tests: 15.4M → 2.0M (87% 감소)
+- BVH nodes visited: 5.2M → 14.8M (184% 증가)
+- Frame time: 1,122.9ms → 1,218.5ms (+8.5%)
+
+BVH 순회 오버헤드(AABB 테스트, 재귀, 메모리 접근)가 intersection 절감보다 커서 20-object 규모에서는 brute-force가 더 효율적. 이는 BVH any-hit 순회의 구조적 한계: early exit이 첫 번째 hit에서 종료하더라도, 그 hit에 도달하기까지의 트리 순회 비용이 선형 탐색보다 클 수 있음.
+
+#### 5. S3 -18.3% 개선 — R1(P1+P5+P6)의 순수 효과
+
+S3(50 spheres)는 threshold 변경 영향이 없음 (50 > 20, 이미 BVH 사용). -18.3% 개선은 순수하게 Round 1 최적화(inv_dir, child ordering, shadow BVH any-hit) 효과.
+
+#### 6. 전체 누적 개선율 (Baseline → Round 4 최종)
+
+| 씬 | Baseline | Round 4 | 누적 개선율 |
+|----|----------|---------|-----------|
+| S2 | 1,835.7ms | 1,218.5ms | **33.6%** |
+| S3 | 3,366.0ms | 1,432.2ms | **57.4%** |
+| S4 | 27,173.7ms | 6,066.8ms | **77.7%** |
+
+#### 7. 향후 과제
+
+- **S2 regression 해소**: Shadow BVH any-hit의 소규모 씬 오버헤드 최적화 (iterative traversal, stack-based 등)
+- **S4 추가 개선 여지**: Shadow tests 83.7M 중 plane 4개 전수 검사(~83M) 비중이 큼. Plane shadow를 BVH 내부에서 처리하거나, plane normal 기반 early reject 적용 가능
+- **BVH 트리 품질**: SAH(Surface Area Heuristic) 기반 split으로 midpoint split 대체 시 추가 개선 기대
