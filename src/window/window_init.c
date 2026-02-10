@@ -32,7 +32,7 @@ static void	init_render_state(t_render *render, t_scene *scene)
 	render->scene = scene;
 	render->selection.type = OBJ_NONE;
 	render->selection.index = 0;
-	render->state_flags = RENDER_DIRTY;
+	render->state_flags = RENDER_DIRTY | RENDER_ENABLE_METRICS_PRINT;
 	pixel_timing_init(&render->pixel_timing);
 	debounce_init(&render->debounce);
 }
