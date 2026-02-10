@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:19:09 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/30 11:45:37 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/02/10 16:34:48 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,12 @@ int	validate_shadow_config(t_shadow_config *config)
  */
 void	set_shadow_samples(t_shadow_config *config, int samples)
 {
-	if (config && samples >= 1)
-		config->samples = samples;
+	if (!config || samples < 1)
+		return ;
+	free(config->offset_lut);
+	config->offset_lut = NULL;
+	config->samples = samples;
+	init_shadow_offset_lut(config);
 }
 
 /*

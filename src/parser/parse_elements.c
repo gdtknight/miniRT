@@ -103,7 +103,7 @@ t_parse_result	parse_camera(char *line, t_scene *scene)
 	result = parse_int(token, &fov, &token);
 	if (result != PARSE_OK)
 		return (result);
-	if (!in_range(fov, 0, 180))
+	if (!in_range(fov, 1, 179))
 		return (PARSE_ERR_RANGE);
 	scene->camera.fov = fov;
 	if (!at_line_end(token))
