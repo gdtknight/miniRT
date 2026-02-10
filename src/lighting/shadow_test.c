@@ -46,10 +46,42 @@ static int	check_object_shadow(t_scene *scene, t_ray *ray, t_hit *hit)
 }
 
 /**
+ * @brief Test shadow ray against planes separated from BVH.
+ *
+ * Iterates over plane indices in bvh->plane_refs and returns on first hit.
+ *
+ * @param scene Scene containing objects and BVH with plane refs.
+ * @param ray Shadow ray to test.
+ * @param mag Maximum distance to light source.
+ * @return int 1 if any plane occludes the light, 0 otherwise.
+ */
+static int	check_plane_shadow(t_scene *scene, t_ray *ray, double mag)
+{
+	int			i;
+	t_hit		hit;
+	t_object	*obj;
+
+	if (!scene->bvh)
+		return (0);
+	i = 0;
+	while (i < scene->bvh->plane_refs.count)
+	{
+		obj = &scene->objects.items[scene->bvh->plane_refs.indices[i]];
+		hit.distance = mag;
+		metrics_add_shadow_intersect(&scene->metrics);
+		if (intersect_object_new(ray, obj, &hit))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+/**
  * @brief Determine whether a point is shadowed from a light.
  *
  * Builds a shadow ray toward the light, applies a bias to avoid self-shadow,
- * and tests for occlusion by scene objects. Uses BVH acceleration if enabled.
+ * and tests for occlusion. Uses BVH for bounded objects plus separate plane
+ * testing when BVH is enabled.
  *
  * @param scene Scene containing objects for occlusion tests.
  * @param point Shaded point in world space.
@@ -78,6 +110,10 @@ int	is_in_shadow(t_scene *scene, t_vec3 point, t_vec3 light_pos, double bias)
 	shadow_ray.inv_dir.z = 1.0 / light_dir.z;
 	if (scene->bvh && scene->bvh->enabled && scene->bvh->root
 		&& scene->objects.count > SHADOW_BVH_THRESHOLD)
-		return (bvh_intersect_any(scene->bvh, shadow_ray, mag, scene));
+	{
+		if (bvh_intersect_any(scene->bvh, shadow_ray, mag, scene))
+			return (1);
+		return (check_plane_shadow(scene, &shadow_ray, mag));
+	}
 	return (check_object_shadow(scene, &shadow_ray, &shadow_hit));
 }
