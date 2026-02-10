@@ -96,6 +96,7 @@ static char	*finalize_line(char *line, int len)
 {
 	char	*result;
 
+	line[len] = '\0';
 	result = malloc(len + 1);
 	if (!result)
 		return (NULL);
