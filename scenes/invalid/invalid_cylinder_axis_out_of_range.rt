@@ -1,0 +1,8 @@
+# Test cylinder with axis vector component out of [-1,1] range
+A  0.2                          255,255,255
+
+C  0,0,-15         0,0,1       70
+L  0,8,-8                       0.7             255,255,255
+
+# Line 8: cylinder axis has x=5.0 which exceeds valid range [-1,1]
+cy 0,0,0           5,0,0       10  20          255,0,0

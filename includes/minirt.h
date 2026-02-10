@@ -49,6 +49,16 @@ typedef struct s_cam_calc
 	t_vec3	up;
 }	t_cam_calc;
 
+/* Camera basis cache with dirty flag for per-frame caching */
+typedef struct s_camera_cache
+{
+	t_vec3	right;
+	t_vec3	up;
+	double	aspect_ratio;
+	double	fov_scale;
+	int		valid;
+}	t_camera_cache;
+
 /* Floating point color for intermediate calculations (0.0 - 1.0+) */
 typedef struct s_color_f
 {
@@ -67,11 +77,12 @@ typedef struct s_ambient
 /* Camera defines viewpoint and field of view for rendering */
 typedef struct s_camera
 {
-	t_vec3	position;
-	t_vec3	direction;
-	t_vec3	initial_position;
-	t_vec3	initial_direction;
-	double	fov;
+	t_vec3			position;
+	t_vec3			direction;
+	t_vec3			initial_position;
+	t_vec3			initial_direction;
+	double			fov;
+	t_camera_cache	cache;
 }	t_camera;
 
 /* Point light source emitting from a single point in all directions */

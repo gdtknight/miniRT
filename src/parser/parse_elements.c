@@ -67,6 +67,9 @@ static t_parse_result	parse_camera_vecs(const char **token, t_scene *scene)
 	result = parse_vector_strict(*token, &scene->camera.direction, token);
 	if (result != PARSE_OK)
 		return (result);
+	result = validate_vector_range(&scene->camera.direction);
+	if (result != PARSE_OK)
+		return (result);
 	result = validate_direction_vector(&scene->camera.direction);
 	if (result != PARSE_OK)
 		return (result);
@@ -107,6 +110,7 @@ t_parse_result	parse_camera(char *line, t_scene *scene)
 		return (PARSE_ERR_TRAILING_TOKEN);
 	scene->camera.initial_position = scene->camera.position;
 	scene->camera.initial_direction = scene->camera.direction;
+	scene->camera.cache.valid = 0;
 	scene_set_flag(scene, SCENE_HAS_CAMERA);
 	return (PARSE_OK);
 }

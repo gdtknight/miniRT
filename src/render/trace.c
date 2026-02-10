@@ -52,10 +52,45 @@ static int	check_all_objects(t_scene *scene, t_ray *ray, t_hit *hit)
 }
 
 /**
+ * @brief Test ray against planes separated from BVH.
+ *
+ * Iterates over plane indices stored in bvh->plane_refs and tests
+ * each plane for intersection, tracking the closest hit.
+ *
+ * @param scene Scene containing objects and BVH with plane refs.
+ * @param ray Ray to test.
+ * @param hit In/out hit record.
+ * @return int 1 if any plane hit is found, 0 otherwise.
+ */
+static int	intersect_planes(t_scene *scene, t_ray *ray, t_hit *hit)
+{
+	int			i;
+	int			found;
+	t_hit		temp;
+	t_object	*obj;
+
+	found = 0;
+	i = 0;
+	while (i < scene->bvh->plane_refs.count)
+	{
+		obj = &scene->objects.items[scene->bvh->plane_refs.indices[i]];
+		temp.distance = hit->distance;
+		metrics_add_intersect_test(&scene->metrics);
+		if (intersect_object_new(ray, obj, &temp))
+		{
+			*hit = temp;
+			found = 1;
+		}
+		i++;
+	}
+	return (found);
+}
+
+/**
  * @brief Trace a ray through the scene and compute its color.
  *
- * When BVH is valid (enabled and root non-NULL), uses BVH traversal only.
- * Otherwise falls back to brute-force scan against all objects.
+ * When BVH is valid, uses BVH for bounded objects plus separate plane
+ * intersection. Otherwise falls back to brute-force scan.
  *
  * @param scene Scene containing geometry and lighting.
  * @param ray Ray to trace.
@@ -64,12 +99,18 @@ static int	check_all_objects(t_scene *scene, t_ray *ray, t_hit *hit)
 t_color	trace_ray(t_scene *scene, t_ray *ray)
 {
 	t_hit	hit;
+	int		found;
 
 	metrics_add_ray(&scene->metrics);
 	hit.distance = INFINITY;
+	found = 0;
 	if (scene->bvh && scene->bvh->enabled && scene->bvh->root)
 	{
 		if (bvh_intersect(scene->bvh, *ray, &hit, scene))
+			found = 1;
+		if (intersect_planes(scene, ray, &hit))
+			found = 1;
+		if (found)
 			return (apply_lighting(scene, &hit));
 		return ((t_color){0, 0, 0});
 	}

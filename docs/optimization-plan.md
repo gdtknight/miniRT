@@ -173,4 +173,4 @@ Primary + shadow 양쪽에 효과.
 | `optimization-metrics-collection-plan.md` | 측정 절차/지표 정의 | **활성** (모든 측정에 준수) |
 | `benchmark-baseline.md` | Baseline 데이터 + A/B 템플릿 | **활성** (재측정 대기) |
 | **`optimization-plan.md`** (본 문서) | 통합 실행 계획 | **활성** (이 문서 기준으로 진행) |
-| `benchmark-results.md` | 최적화별 A/B 결과 누적 | 미생성 (`docs/` 하위, Round 1부터 생성) |
+| `benchmark-results.md` | 최적화별 A/B 결과 누적 | Round 1–3 기록 완료 (`docs/` 하위), Round 4–5 예정 |

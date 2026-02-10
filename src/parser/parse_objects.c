@@ -110,6 +110,9 @@ static t_parse_result	parse_plane_data(const char **token, t_object *obj)
 	result = parse_vector_strict(*token, &obj->data.plane.normal, token);
 	if (result != PARSE_OK)
 		return (result);
+	result = validate_vector_range(&obj->data.plane.normal);
+	if (result != PARSE_OK)
+		return (result);
 	result = validate_direction_vector(&obj->data.plane.normal);
 	if (result != PARSE_OK)
 		return (result);

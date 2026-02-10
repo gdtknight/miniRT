@@ -75,6 +75,7 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/parser/parse_elements.c \
 			  $(SRC_DIR)/parser/parse_objects.c \
 			  $(SRC_DIR)/parser/parse_validation_strict.c \
+			  $(SRC_DIR)/parser/parse_vector_validation.c \
 			  $(SRC_DIR)/parser/parse_cylinder.c \
 			  $(SRC_DIR)/parser/parse_error.c \
 			  $(SRC_DIR)/parser/parse_error_msg.c \
@@ -107,6 +108,7 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/spatial/bvh_build_core.c \
 			  $(SRC_DIR)/spatial/bvh_init.c \
 			  $(SRC_DIR)/spatial/bvh_traverse.c \
+			  $(SRC_DIR)/spatial/bvh_any_hit.c \
 			  $(SRC_DIR)/utils/error.c \
 			  $(SRC_DIR)/utils/format_helpers.c \
 			  $(SRC_DIR)/utils/timer.c \

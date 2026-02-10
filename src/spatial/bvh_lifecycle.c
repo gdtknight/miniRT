@@ -31,6 +31,8 @@ t_bvh	*bvh_create(void)
 	bvh->total_nodes = 0;
 	bvh->max_depth = 0;
 	bvh->visualize = 0;
+	bvh->plane_refs.indices = NULL;
+	bvh->plane_refs.count = 0;
 	return (bvh);
 }
 
@@ -62,5 +64,7 @@ void	bvh_destroy(t_bvh *bvh)
 	if (!bvh)
 		return ;
 	bvh_node_destroy(bvh->root);
+	if (bvh->plane_refs.indices)
+		free(bvh->plane_refs.indices);
 	free(bvh);
 }

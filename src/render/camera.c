@@ -17,33 +17,37 @@
 #include <math.h>
 
 /**
- * @brief Initialize camera basis vectors and projection parameters.
+ * @brief Update camera basis cache if invalid.
  *
  * Computes aspect ratio, field-of-view scaling, and orthonormal basis
- * vectors (right/up) derived from the camera direction.
+ * vectors (right/up) only when the cache is marked invalid.
  *
- * @param camera Camera defining position, direction, and FOV.
- * @param calc Output structure populated with derived values.
+ * @param camera Camera with cache to update.
  */
-static void	init_camera_calc(t_camera *camera, t_cam_calc *calc)
+static void	update_camera_cache(t_camera *camera)
 {
 	t_vec3	world_up;
 
-	calc->aspect_ratio = ASPECT_RATIO_NUM / ASPECT_RATIO_DEN;
-	calc->fov_scale = tan(camera->fov * 0.5 * M_PI / 180.0);
+	if (camera->cache.valid)
+		return ;
+	camera->cache.aspect_ratio = ASPECT_RATIO_NUM / ASPECT_RATIO_DEN;
+	camera->cache.fov_scale = tan(camera->fov * 0.5 * M_PI / 180.0);
 	world_up = (t_vec3){0, 1, 0};
 	if (fabs(vec3_dot(camera->direction, world_up)) > 0.999)
 		world_up = (t_vec3){0, 0, 1};
-	calc->right = vec3_normalize(vec3_cross(camera->direction, world_up));
-	calc->up = vec3_normalize(vec3_cross(calc->right, camera->direction));
+	camera->cache.right = vec3_normalize(vec3_cross(camera->direction,
+				world_up));
+	camera->cache.up = vec3_normalize(vec3_cross(camera->cache.right,
+				camera->direction));
+	camera->cache.valid = 1;
 }
 
 /**
  * @brief Create a camera ray for normalized device coordinates.
  *
  * Converts the normalized screen coordinate (x, y) into a ray direction
- * based on the camera basis and FOV, then returns a ray originating at
- * the camera position.
+ * based on the cached camera basis and FOV, then returns a ray originating
+ * at the camera position.
  *
  * @param camera Camera describing the view.
  * @param x Normalized horizontal coordinate in [-1, 1].
@@ -52,17 +56,20 @@ static void	init_camera_calc(t_camera *camera, t_cam_calc *calc)
  */
 t_ray	create_camera_ray(t_camera *camera, double x, double y)
 {
-	t_ray		ray;
-	t_vec3		pixel_pos;
-	t_cam_calc	calc;
+	t_ray			ray;
+	t_vec3			pixel_pos;
+	t_camera_cache	*c;
 
-	init_camera_calc(camera, &calc);
+	update_camera_cache(camera);
+	c = &camera->cache;
 	pixel_pos = camera->direction;
-	pixel_pos = vec3_add(pixel_pos, vec3_multiply(calc.right,
-				x * calc.fov_scale * calc.aspect_ratio));
-	pixel_pos = vec3_add(pixel_pos, vec3_multiply(calc.up,
-				y * calc.fov_scale));
+	pixel_pos = vec3_add(pixel_pos, vec3_multiply(c->right,
+				x * c->fov_scale * c->aspect_ratio));
+	pixel_pos = vec3_add(pixel_pos, vec3_multiply(c->up, y * c->fov_scale));
 	ray.origin = camera->position;
 	ray.direction = vec3_normalize(pixel_pos);
+	ray.inv_dir.x = 1.0 / ray.direction.x;
+	ray.inv_dir.y = 1.0 / ray.direction.y;
+	ray.inv_dir.z = 1.0 / ray.direction.z;
 	return (ray);
 }

@@ -86,6 +86,9 @@ static t_parse_result	parse_cyl_vectors(const char **token, t_object *obj)
 	result = parse_vector_strict(*token, &obj->data.cylinder.axis, token);
 	if (result != PARSE_OK)
 		return (result);
+	result = validate_vector_range(&obj->data.cylinder.axis);
+	if (result != PARSE_OK)
+		return (result);
 	result = validate_direction_vector(&obj->data.cylinder.axis);
 	if (result != PARSE_OK)
 		return (result);

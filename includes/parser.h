@@ -114,6 +114,7 @@ t_parse_result	parse_vector_strict(const char *str, t_vec3 *vec,
 					const char **end);
 t_parse_result	parse_color_strict(const char *str, t_color *color,
 					const char **end);
+t_parse_result	validate_vector_range(const t_vec3 *vec);
 t_parse_result	validate_direction_vector(t_vec3 *vec);
 
 /*

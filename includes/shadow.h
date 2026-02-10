@@ -15,6 +15,8 @@
 
 # include "vec3.h"
 
+# define SHADOW_BVH_THRESHOLD 5
+
 /* Forward declaration */
 typedef struct s_scene	t_scene;
 

@@ -15,6 +15,15 @@
 #include "ray.h"
 #include "metrics.h"
 
+static int	ray_goes_positive(t_vec3 dir, int axis)
+{
+	if (axis == 0)
+		return (dir.x > 0);
+	if (axis == 1)
+		return (dir.y > 0);
+	return (dir.z > 0);
+}
+
 /**
  * @brief Intersect a ray with all objects in a BVH leaf node.
  *
@@ -56,36 +65,9 @@ static int	bvh_leaf_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 }
 
 /**
- * @brief Choose the closest hit among left and right child results.
+ * @brief Recurse into children with near/far ordering for early pruning.
  *
- * @param hc Hit check context with child hit results.
- * @return int 1 if any child hit is valid, 0 otherwise.
- */
-static int	check_child_hits(t_hit_check *hc)
-{
-	if (hc->hit_left && hc->hit_right)
-	{
-		if (hc->left_hit->distance < hc->right_hit->distance)
-			*hc->hit = *hc->left_hit;
-		else
-			*hc->hit = *hc->right_hit;
-		return (1);
-	}
-	if (hc->hit_left)
-	{
-		*hc->hit = *hc->left_hit;
-		return (1);
-	}
-	if (hc->hit_right)
-	{
-		*hc->hit = *hc->right_hit;
-		return (1);
-	}
-	return (0);
-}
-
-/**
- * @brief Recurse into both children and select the closest hit.
+ * Visits the child in the ray's direction first for better pruning.
  *
  * @param node Internal BVH node with left/right children.
  * @param ray Ray to test.
@@ -96,18 +78,29 @@ static int	check_child_hits(t_hit_check *hc)
 static int	traverse_children(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 		void *scene)
 {
-	t_hit_record	left_hit;
-	t_hit_record	right_hit;
-	t_hit_check		hc;
+	t_bvh_node		*near;
+	t_bvh_node		*far;
+	t_hit_record	th;
+	int				ret;
 
-	left_hit.distance = hit->distance;
-	right_hit.distance = hit->distance;
-	hc.hit_left = bvh_node_intersect(node->left, ray, &left_hit, scene);
-	hc.hit_right = bvh_node_intersect(node->right, ray, &right_hit, scene);
-	hc.left_hit = &left_hit;
-	hc.right_hit = &right_hit;
-	hc.hit = hit;
-	return (check_child_hits(&hc));
+	near = node->left;
+	far = node->right;
+	if (!ray_goes_positive(ray.direction, node->split_axis))
+	{
+		near = node->right;
+		far = node->left;
+	}
+	th.distance = hit->distance;
+	ret = bvh_node_intersect(near, ray, &th, scene);
+	if (ret)
+		*hit = th;
+	th.distance = hit->distance;
+	if (bvh_node_intersect(far, ray, &th, scene) && th.distance < hit->distance)
+	{
+		*hit = th;
+		ret = 1;
+	}
+	return (ret);
 }
 
 /**
@@ -131,7 +124,7 @@ int	bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 		return (0);
 	metrics_add_bvh_node_visit(&((t_scene *)scene)->metrics);
 	t_min = 0.001;
-	t_max = 1000000.0;
+	t_max = hit->distance;
 	if (!aabb_intersect(node->bounds, ray, &t_min, &t_max))
 	{
 		metrics_add_bvh_skip(&((t_scene *)scene)->metrics);

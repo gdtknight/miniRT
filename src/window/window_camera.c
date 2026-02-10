@@ -15,6 +15,16 @@
 #include "window_internal.h"
 #include <math.h>
 
+static t_vec3	rotate_dir(t_vec3 dir, t_vec3 axis, double cos_a, double sin_a)
+{
+	t_vec3	result;
+
+	result.x = dir.x * cos_a + (axis.y * dir.z - axis.z * dir.y) * sin_a;
+	result.y = dir.y * cos_a + (axis.z * dir.x - axis.x * dir.z) * sin_a;
+	result.z = dir.z * cos_a + (axis.x * dir.y - axis.y * dir.x) * sin_a;
+	return (result);
+}
+
 /**
  * @brief Move the camera based on keyboard input.
  *
@@ -49,6 +59,7 @@ void	handle_camera_move(t_render *render, int keycode)
 		return ;
 	render->scene->camera.position = vec3_add(render->scene->camera.position,
 			move);
+	render->scene->camera.cache.valid = 0;
 }
 
 /**
@@ -65,8 +76,6 @@ void	handle_camera_pitch(t_render *render, int keycode)
 	t_vec3	right;
 	t_vec3	new_dir;
 	double	angle;
-	double	cos_a;
-	double	sin_a;
 
 	angle = 5.0 * M_PI / 180.0;
 	if (keycode == KEY_C)
@@ -75,18 +84,10 @@ void	handle_camera_pitch(t_render *render, int keycode)
 		return ;
 	right = vec3_normalize(vec3_cross(render->scene->camera.direction,
 				(t_vec3){0, 1, 0}));
-	cos_a = cos(angle);
-	sin_a = sin(angle);
-	new_dir.x = render->scene->camera.direction.x * cos_a
-		+ (right.y * render->scene->camera.direction.z
-			- right.z * render->scene->camera.direction.y) * sin_a;
-	new_dir.y = render->scene->camera.direction.y * cos_a
-		+ (right.z * render->scene->camera.direction.x
-			- right.x * render->scene->camera.direction.z) * sin_a;
-	new_dir.z = render->scene->camera.direction.z * cos_a
-		+ (right.x * render->scene->camera.direction.y
-			- right.y * render->scene->camera.direction.x) * sin_a;
+	new_dir = rotate_dir(render->scene->camera.direction, right,
+			cos(angle), sin(angle));
 	render->scene->camera.direction = vec3_normalize(new_dir);
+	render->scene->camera.cache.valid = 0;
 }
 
 /**
@@ -100,4 +101,5 @@ void	handle_camera_reset(t_render *render)
 {
 	render->scene->camera.position = render->scene->camera.initial_position;
 	render->scene->camera.direction = render->scene->camera.initial_direction;
+	render->scene->camera.cache.valid = 0;
 }
