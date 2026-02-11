@@ -14,13 +14,6 @@
 #include "vec3.h"
 #include <math.h>
 
-static t_vec3	get_tangent(t_vec3 n)
-{
-	if (fabs(n.y) > 0.9)
-		return (vec3_normalize(vec3_cross(n, (t_vec3){1, 0, 0})));
-	return (vec3_normalize(vec3_cross(n, (t_vec3){0, 1, 0})));
-}
-
 static t_color	checker_plane(t_object *obj, t_hit *hit)
 {
 	t_vec3	tangent;

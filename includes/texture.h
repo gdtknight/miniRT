@@ -30,6 +30,9 @@ struct s_bump_map
 	int		endian;
 };
 
+/* Tangent vector utility for UV computation */
+t_vec3		get_tangent(t_vec3 n);
+
 /* Checkerboard pattern */
 t_color		checkerboard_color(t_object *obj, t_hit *hit);
 
