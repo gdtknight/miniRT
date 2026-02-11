@@ -15,6 +15,7 @@
 #include "window.h"
 #include "spatial.h"
 #include "bvh_vis.h"
+#include "texture.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -102,6 +103,13 @@ static int	init_render_ctx(t_scene *scene, t_render **render, int bvh_vis)
 	if (!*render)
 	{
 		error_print(ERR_WINDOW_INIT);
+		scene_destroy(scene);
+		return (0);
+	}
+	if (!load_all_bump_maps(scene, (*render)->mlx.mlx))
+	{
+		cleanup_all_bump_maps(scene, (*render)->mlx.mlx);
+		render_destroy(*render);
 		scene_destroy(scene);
 		return (0);
 	}

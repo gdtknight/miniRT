@@ -12,6 +12,7 @@
 
 #include "minirt.h"
 #include "window.h"
+#include "texture.h"
 #include <stdlib.h>
 
 /**
@@ -29,6 +30,7 @@ int	close_window(void *param)
 
 	render = (t_render *)param;
 	scene = render->scene;
+	cleanup_all_bump_maps(scene, render->mlx.mlx);
 	render_destroy(render);
 	scene_destroy(scene);
 	exit(0);
