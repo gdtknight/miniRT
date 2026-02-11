@@ -58,15 +58,15 @@ void	handle_camera_keys(t_render *render, int keycode)
  */
 static void	handle_resize_rotate_keys(t_render *render, int keycode)
 {
-	if (keycode == KEY_J || keycode == KEY_K
+	if (keycode == KEY_Y || keycode == KEY_U
 		|| keycode == KEY_N || keycode == KEY_M)
 	{
 		handle_object_resize(render, keycode);
 		hud_mark_dirty(render);
 	}
-	else if (keycode == KEY_U || keycode == KEY_O
-		|| keycode == KEY_Y || keycode == KEY_P
-		|| keycode == KEY_LEFT || keycode == KEY_RIGHT)
+	else if (keycode == KEY_I || keycode == KEY_J
+		|| keycode == KEY_O || keycode == KEY_K
+		|| keycode == KEY_P || keycode == KEY_L)
 	{
 		handle_object_rotate(render, keycode);
 		hud_mark_dirty(render);
@@ -91,9 +91,9 @@ void	handle_transform_keys(t_render *render, int keycode)
 		debounce_on_input(&render->debounce, render);
 		hud_mark_dirty(render);
 	}
-	else if (keycode == KEY_INSERT || keycode == KEY_HOME
-		|| keycode == KEY_PGUP || keycode == KEY_DELETE
-		|| keycode == KEY_END || keycode == KEY_PGDN)
+	else if (keycode == KEY_BRACKET_LEFT || keycode == KEY_BRACKET_RIGHT
+		|| keycode == KEY_SEMICOLON || keycode == KEY_QUOTE
+		|| keycode == KEY_COMMA || keycode == KEY_PERIOD)
 	{
 		handle_light_move(render, keycode);
 		debounce_on_input(&render->debounce, render);
@@ -117,12 +117,7 @@ void	handle_hud_keys(t_render *render, int keycode)
 	if (keycode == KEY_H)
 		hud_toggle(render);
 	else if (keycode == KEY_TAB)
-	{
-		if (render_has_flag(render, RENDER_SHIFT_HELD))
-			hud_select_prev(render);
-		else
-			hud_select_next(render);
-	}
+		hud_select_next(render);
 	else if (keycode == KEY_UP)
 		hud_change_page(render, -1);
 	else if (keycode == KEY_DOWN)

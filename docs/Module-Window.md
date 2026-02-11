@@ -78,8 +78,7 @@ init_window(scene)
 ### 오브젝트 선택
 | 키 | 동작 |
 |----|------|
-| \[ | 이전 오브젝트 |
-| \] | 다음 오브젝트 |
+| TAB | 다음 오브젝트 |
 
 ### 오브젝트 이동
 | 키 | 축 | 방향 |
@@ -91,21 +90,36 @@ init_window(scene)
 | V | Z | - |
 | B | Z | + |
 
+### 오브젝트 리사이즈
+| 키 | 대상 | 방향 |
+|----|------|------|
+| Y | 반지름 | - |
+| U | 반지름 | + |
+| N | 높이 (원기둥) | - |
+| M | 높이 (원기둥) | + |
+
+### 오브젝트 회전
+| 키 | 축 | 방향 |
+|----|------|------|
+| I / J | X | - / + |
+| O / K | Y | - / + |
+| P / L | Z | - / + |
+
 ### 광원 이동
 | 키 | 축 | 방향 |
 |----|----|------|
-| Insert | X | - |
-| Delete | X | + |
-| Home | Y | - |
-| End | Y | + |
-| PageUp | Z | - |
-| PageDown | Z | + |
+| \[ | X | - |
+| \] | X | + |
+| ; | Y | - |
+| ' | Y | + |
+| , | Z | - |
+| . | Z | + |
 
 ### UI
 | 키 | 동작 |
 |----|------|
 | H | HUD 표시/숨김 |
-| I | 성능 메트릭 토글 |
+| Up / Down | HUD 페이지 이동 |
 | ESC | 프로그램 종료 |
 
 ---
@@ -115,16 +129,19 @@ init_window(scene)
 ```
 handle_key(keycode, render)
  ├── ESC → close_window()
- ├── H/I → handle_hud_keys()
- ├── [ / ] → handle_object_selection()
+ ├── H/TAB/Up/Down → handle_hud_keys()
  ├── W/X/A/D/Q/Z/E/C/S → handle_camera_keys()
- └── R/T/F/G/V/B/Ins/Del/... → handle_transform_keys()
+ └── R/T/F/G/V/B/[/]/;/'/,/./Y/U/N/M/I/J/O/K/P/L → handle_transform_keys()
+      ├── R/T/F/G/V/B → handle_object_move()
+      ├── [/]/;/'/,/. → handle_light_move()
+      ├── Y/U/N/M → handle_object_resize()
+      └── I/J/O/K/P/L → handle_object_rotate()
 
 handle_key_release(keycode, render)
- └── is_movement_key() → 디바운스 full render 트리거
+ └── (no-op)
 ```
 
-키 누름 시 `RENDER_DIRTY` + `RENDER_LOW_QUALITY` 플래그를 설정하여 즉시 low quality 렌더링을 수행하고, 키 해제 시 디바운스 타이머를 시작합니다.
+키 누름 시 디바운스 FSM이 LQ preview를 트리거하고 (50ms throttle), 150ms 입력 없으면 full quality 렌더링을 수행합니다.
 
 ---
 

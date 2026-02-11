@@ -29,8 +29,6 @@
 # define RENDER_DIRTY       0x01
 # define RENDER_RENDERING   0x02
 # define RENDER_LOW_QUALITY 0x04
-# define RENDER_SHIFT_HELD  0x08
-# define RENDER_SHOW_INFO  0x10
 # define RENDER_BVH_DIRTY  0x20
 # define RENDER_ENABLE_PIXEL_TIMING  0x40
 # define RENDER_ENABLE_METRICS_PRINT 0x80
@@ -58,6 +56,7 @@ typedef struct s_keyguide_state
 	int		visible;
 	int		x;
 	int		y;
+	int		dirty;
 }	t_keyguide_state;
 
 /* Render context (refactored with legacy compatibility) */

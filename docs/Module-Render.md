@@ -28,22 +28,25 @@
 
 ```
 render_loop(render)
- ├── metrics_start_frame()
- ├── render_scene_to_buffer(scene, render)
- │    ├── [full quality] render_pixel() per pixel
- │    │    ├── create_camera_ray()
- │    │    ├── get_time_ns()         // 시작 시간
- │    │    ├── trace_ray()
- │    │    ├── get_time_ns()         // 종료 시간
- │    │    ├── pixel_timing_add_sample()
- │    │    └── put_pixel_to_buffer()
- │    └── [low quality] render_low_quality()
- │         ├── create_camera_ray()
- │         ├── trace_ray()
- │         └── draw_pixel_block()   // 블록 단위 채우기
- ├── mlx_put_image_to_window()
- ├── metrics_end_frame()
- ├── hud_render()
+ ├── debounce_update()              // FSM 상태 전이
+ ├── rebuild_bvh_if_dirty()         // BVH 재구축 (필요 시)
+ ├── [RENDER_DIRTY] execute_render_pass()
+ │    ├── metrics_start_frame()
+ │    ├── render_scene_to_buffer(scene, render)
+ │    │    ├── [full quality] render_pixel() per pixel
+ │    │    │    ├── create_camera_ray()
+ │    │    │    ├── get_time_ns()         // 시작 시간
+ │    │    │    ├── trace_ray()
+ │    │    │    ├── get_time_ns()         // 종료 시간
+ │    │    │    ├── pixel_timing_add_sample()
+ │    │    │    └── put_pixel_to_buffer()
+ │    │    └── [low quality] render_low_quality()
+ │    │         ├── create_camera_ray()
+ │    │         ├── trace_ray()
+ │    │         └── draw_pixel_block()   // 블록 단위 채우기
+ │    ├── metrics_end_frame()
+ │    └── mlx_put_image_to_window()
+ ├── [HUD visible & dirty] hud_render()
  └── keyguide_render()
 ```
 
@@ -88,18 +91,20 @@ t_color trace_ray(t_scene *scene, t_ray *ray)
 
 ## 디바운스 메커니즘
 
-상태 머신:
+4-상태 FSM:
 
 ```
-IDLE ─(키 입력)─→ ACTIVE ─(low quality 렌더 완료)─→ PREVIEW
-  ↑                                                      │
-  └──────────────(150ms 경과, full render 완료)──── FINAL ←┘
+IDLE ─(입력)─→ ACTIVE ─(150ms 만료)─→ FINAL ─(FQ 렌더 완료)─→ COOLDOWN ─(350ms)─→ IDLE
+                 ↑                                                                    │
+                 └────────────────────────(재입력 시)──────────────────────────────────┘
 ```
 
 - **IDLE**: 대기 상태
-- **ACTIVE**: 키 입력 감지, low quality 렌더 수행
-- **PREVIEW**: low quality 결과 표시 중, 타이머 대기
-- **FINAL**: 타이머 만료 후 full quality 렌더, 완료 시 IDLE 복귀
+- **ACTIVE**: 입력 감지, 디바운스 타이머 시작 (150ms). LQ preview를 50ms throttle로 표시
+- **FINAL**: 타이머 만료, full quality 렌더 트리거 (`RENDER_LOW_QUALITY` 해제)
+- **COOLDOWN**: FQ 렌더 완료 후 350ms 쿨다운. 재입력 시 ACTIVE로 복귀
+
+LQ preview throttle: `debounce_check_preview_throttle()`로 50ms 간격 제한
 
 ---
 
@@ -117,4 +122,4 @@ IDLE ─(키 입력)─→ ACTIVE ─(low quality 렌더 완료)─→ PREVIEW
 | BVH | `nodes_visited` | 방문한 BVH 노드 수 |
 | | `tests_skipped` | AABB 스킵된 테스트 수 |
 
-메트릭은 HUD에 실시간 표시되며, I 키로 콘솔 출력을 토글할 수 있습니다.
+메트릭은 HUD에 실시간 표시됩니다. `RENDER_ENABLE_METRICS_PRINT` 플래그 설정 시 콘솔에도 출력됩니다.

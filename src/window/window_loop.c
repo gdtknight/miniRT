@@ -49,12 +49,6 @@ static int	execute_render_pass(t_render *render)
 	metrics_start_frame(&render->scene->metrics);
 	render_scene_to_buffer(render->scene, render);
 	render_clear_flag(render, RENDER_RENDERING);
-	if (render->debounce.cancel_requested)
-	{
-		debounce_cancel(&render->debounce);
-		render_set_flag(render, RENDER_DIRTY);
-		return (0);
-	}
 	metrics_end_frame(&render->scene->metrics);
 	if (render_has_flag(render, RENDER_ENABLE_METRICS_PRINT))
 		metrics_print_summary(&render->scene->metrics,
@@ -85,6 +79,8 @@ int	render_loop(void *param)
 	rebuild_bvh_if_dirty(render);
 	if (render_has_flag(render, RENDER_DIRTY))
 		rendered = execute_render_pass(render);
+	if (rendered)
+		render->keyguide.dirty = 1;
 	if (render->hud.visible && (render->hud.dirty || rendered))
 	{
 		hud_render(render);

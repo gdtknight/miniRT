@@ -28,9 +28,9 @@ static void	resize_sphere(t_object *obj, int keycode)
 	double	step;
 
 	step = 1.0;
-	if (keycode == KEY_K)
+	if (keycode == KEY_Y)
 		step = -1.0;
-	else if (keycode != KEY_J)
+	else if (keycode != KEY_U)
 		return ;
 	if (obj->data.sphere.radius + step < 0.1)
 		return ;
@@ -53,9 +53,9 @@ static void	resize_cylinder(t_object *obj, int keycode)
 	double	step;
 
 	step = 1.0;
-	if (keycode == KEY_J || keycode == KEY_K)
+	if (keycode == KEY_Y || keycode == KEY_U)
 	{
-		if (keycode == KEY_K)
+		if (keycode == KEY_Y)
 			step = -1.0;
 		if (obj->data.cylinder.radius + step < 0.1)
 			return ;

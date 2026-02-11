@@ -34,15 +34,6 @@ int	handle_key(int keycode, void *param)
 	if (keycode == KEY_ESC)
 		close_window(param);
 	handle_hud_keys(render, keycode);
-	if (keycode == KEY_BRACKET_LEFT || keycode == KEY_BRACKET_RIGHT)
-		handle_object_selection(render, keycode);
-	else if (keycode == KEY_I)
-	{
-		render->state_flags ^= RENDER_SHOW_INFO;
-		render_set_flag(render, RENDER_DIRTY);
-	}
-	else if (keycode == KEY_SHIFT_L || keycode == KEY_SHIFT_R)
-		render_set_flag(render, RENDER_SHIFT_HELD);
 	handle_camera_keys(render, keycode);
 	handle_transform_keys(render, keycode);
 	return (0);
@@ -80,10 +71,7 @@ int	handle_expose(t_render *render)
  */
 int	handle_key_release(int keycode, void *param)
 {
-	t_render	*render;
-
-	render = (t_render *)param;
-	if (keycode == KEY_SHIFT_L || keycode == KEY_SHIFT_R)
-		render_clear_flag(render, RENDER_SHIFT_HELD);
+	(void)keycode;
+	(void)param;
 	return (0);
 }

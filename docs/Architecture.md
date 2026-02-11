@@ -15,13 +15,16 @@ main()
  ├── init_window()           # MiniLibX 윈도우/이미지/HUD 초기화
  └── mlx_loop()              # 이벤트 루프 진입
       └── render_loop()      # 매 프레임 콜백
-           ├── metrics_start_frame()
-           ├── render_scene_to_buffer()
-           │    ├── create_camera_ray()
-           │    ├── trace_ray()
-           │    └── put_pixel_to_buffer()
-           ├── mlx_put_image_to_window()
-           ├── metrics_end_frame()
+           ├── debounce_update()          # 디바운스 FSM 상태 전이
+           ├── rebuild_bvh_if_dirty()     # BVH 재구축 (필요 시)
+           ├── [RENDER_DIRTY] execute_render_pass()
+           │    ├── metrics_start_frame()
+           │    ├── render_scene_to_buffer()
+           │    │    ├── create_camera_ray()
+           │    │    ├── trace_ray()
+           │    │    └── put_pixel_to_buffer()
+           │    ├── metrics_end_frame()
+           │    └── mlx_put_image_to_window()
            ├── hud_render()
            └── keyguide_render()
 ```
@@ -95,9 +98,9 @@ trace_ray(scene, ray)
 
 ### 5. 디바운스
 
-입력 이벤트 발생 시 즉시 low quality 렌더링 후, 150ms 디바운스 타이머 경과 후 full quality 렌더링을 수행합니다.
+입력 이벤트 발생 시 디바운스 FSM이 LQ preview를 50ms 간격으로 트리거하고, 150ms 입력 없으면 full quality 렌더링을 수행합니다.
 
-상태 머신: `IDLE → ACTIVE → PREVIEW → FINAL`
+상태 머신: `IDLE → ACTIVE (150ms) → FINAL (FQ render) → COOLDOWN (350ms) → IDLE`
 
 ---
 
@@ -109,7 +112,7 @@ trace_ray(scene, ray)
 | render/ | 11 | 렌더 루프, 카메라, 메트릭 |
 | spatial/ | 8 | BVH 구축/순회, AABB |
 | lighting/ | 5 | Phong 조명, 그림자 |
-| hud/ | 14 | HUD 오버레이 |
+| hud/ | 15 | HUD 오버레이 |
 | window/ | 14 | 윈도우, 키 이벤트 |
 | ray/ | 2 | 교차 판정 |
 | math/ | 2 | 벡터 연산 |

@@ -30,5 +30,6 @@ int	keyguide_init(t_keyguide_state *keyguide, void *mlx, void *win)
 	keyguide->x = WINDOW_WIDTH - KEYGUIDE_WIDTH - KEYGUIDE_MARGIN_X;
 	keyguide->y = KEYGUIDE_MARGIN_Y;
 	keyguide->visible = 1;
+	keyguide->dirty = 1;
 	return (0);
 }

@@ -16,9 +16,9 @@
 # include <sys/time.h>
 
 /* Default configuration values */
-# define DEBOUNCE_DEFAULT_DELAY_MS		150
-# define DEBOUNCE_DEFAULT_PREVIEW		1
-# define DEBOUNCE_DEFAULT_AUTO_UPGRADE	1
+# define DEBOUNCE_DEFAULT_DELAY_MS			150
+# define DEBOUNCE_COOLDOWN_MS				350
+# define DEBOUNCE_PREVIEW_MIN_INTERVAL_MS	50
 
 /* Forward declaration */
 typedef struct s_render	t_render;
@@ -28,8 +28,8 @@ typedef enum e_debounce_state_enum
 {
 	DEBOUNCE_IDLE,
 	DEBOUNCE_ACTIVE,
-	DEBOUNCE_PREVIEW,
-	DEBOUNCE_FINAL
+	DEBOUNCE_FINAL,
+	DEBOUNCE_COOLDOWN
 }	t_debounce_state_enum;
 
 /* Debounce timer for tracking input delay */
@@ -45,9 +45,7 @@ typedef struct s_debounce_state
 {
 	t_debounce_state_enum	state;
 	t_debounce_timer		timer;
-	int						preview_enabled;
-	int						auto_upgrade;
-	int						cancel_requested;
+	struct timeval			last_preview_time;
 }	t_debounce_state;
 
 /* Initialization and cleanup */
@@ -59,13 +57,11 @@ void	debounce_on_input(t_debounce_state *state, t_render *render);
 /* State machine update */
 void	debounce_update(t_debounce_state *state, t_render *render);
 
-/* Render cancellation */
-void	debounce_cancel(t_debounce_state *state);
-
 /* Timer utilities */
 void	debounce_timer_start(t_debounce_timer *timer);
 void	debounce_timer_reset(t_debounce_timer *timer);
 void	debounce_timer_stop(t_debounce_timer *timer);
 int		debounce_timer_expired(t_debounce_timer *timer);
+int		debounce_check_preview_throttle(t_debounce_state *state);
 
 #endif

@@ -116,8 +116,6 @@ static void	render_low_quality(t_scene *scene, t_render *render)
 	y = 0;
 	while (y < WINDOW_HEIGHT)
 	{
-		if (render->debounce.cancel_requested)
-			return ;
 		x = 0;
 		while (x < WINDOW_WIDTH)
 		{
@@ -156,8 +154,6 @@ void	render_scene_to_buffer(t_scene *scene, t_render *render)
 	y = 0;
 	while (y < WINDOW_HEIGHT)
 	{
-		if (render->debounce.cancel_requested)
-			return ;
 		x = 0;
 		while (x < WINDOW_WIDTH)
 		{
@@ -167,5 +163,6 @@ void	render_scene_to_buffer(t_scene *scene, t_render *render)
 		y++;
 	}
 	pixel_timing_calculate_stats(&render->pixel_timing);
-	pixel_timing_print_stats(&render->pixel_timing);
+	if (render_has_flag(render, RENDER_ENABLE_PIXEL_TIMING))
+		pixel_timing_print_stats(&render->pixel_timing);
 }

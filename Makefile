@@ -118,7 +118,6 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/window/window_key_handlers.c \
 			  $(SRC_DIR)/window/window_loop.c \
 			  $(SRC_DIR)/window/window_camera.c \
-			  $(SRC_DIR)/window/window_selection.c \
 			  $(SRC_DIR)/window/window_objects.c \
 			  $(SRC_DIR)/window/window_resize.c \
 			  $(SRC_DIR)/window/window_rotate.c \

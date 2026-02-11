@@ -89,18 +89,18 @@ void	handle_light_move(t_render *render, int keycode)
 
 	step = 1.0;
 	move = (t_vec3){0, 0, 0};
-	if (keycode == KEY_INSERT)
-		move.x = step;
-	else if (keycode == KEY_DELETE)
+	if (keycode == KEY_BRACKET_LEFT)
 		move.x = -step;
-	else if (keycode == KEY_HOME)
-		move.y = step;
-	else if (keycode == KEY_END)
+	else if (keycode == KEY_BRACKET_RIGHT)
+		move.x = step;
+	else if (keycode == KEY_SEMICOLON)
 		move.y = -step;
-	else if (keycode == KEY_PGUP)
-		move.z = step;
-	else if (keycode == KEY_PGDN)
+	else if (keycode == KEY_QUOTE)
+		move.y = step;
+	else if (keycode == KEY_COMMA)
 		move.z = -step;
+	else if (keycode == KEY_PERIOD)
+		move.z = step;
 	else
 		return ;
 	render->scene->light.position = vec3_add(render->scene->light.position,
