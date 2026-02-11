@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "parser.h"
+#include <stdlib.h>
 
 static int	starts_with(const char *str, const char *prefix)
 {
@@ -72,7 +73,11 @@ t_parse_result	parse_bonus_options(const char **token, t_object *obj)
 		else if (starts_with(*token, "bump:"))
 			result = parse_bump_opt(*token, obj, token);
 		if (result != PARSE_OK)
+		{
+			free(obj->bump_path);
+			obj->bump_path = NULL;
 			return (result);
+		}
 		*token = skip_whitespace(*token);
 	}
 	return (PARSE_OK);

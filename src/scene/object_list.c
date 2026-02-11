@@ -42,10 +42,15 @@ int	object_list_init(t_object_list *list, int capacity)
  */
 void	object_list_destroy(t_object_list *list)
 {
+	int	i;
+
 	if (!list)
 		return ;
 	if (list->items)
 	{
+		i = -1;
+		while (++i < list->count)
+			free(list->items[i].bump_path);
 		free(list->items);
 		list->items = NULL;
 	}
