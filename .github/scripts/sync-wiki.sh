@@ -110,18 +110,18 @@ EOF
 clone_wiki() {
     local wiki_url="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.wiki.git"
     local wiki_dir="wiki-temp-$(date +%Y%m%d-%H%M%S)"
-    
+
     if [ -n "$WIKI_REPO" ]; then
         wiki_url="$WIKI_REPO"
     fi
-    
-    echo "Cloning wiki repository..."
-    if ! git clone "$wiki_url" "$wiki_dir" 2>&1; then
-        echo "::error::Failed to clone wiki repository"
-        echo "Check: Wiki is enabled, GITHUB_TOKEN has wiki write permissions"
+
+    echo "Cloning wiki repository..." >&2
+    if ! git clone "$wiki_url" "$wiki_dir" >&2 2>&1; then
+        echo "::error::Failed to clone wiki repository" >&2
+        echo "Check: Wiki is enabled, GITHUB_TOKEN has wiki write permissions" >&2
         return 1
     fi
-    
+
     echo "$wiki_dir"
 }
 
