@@ -128,20 +128,6 @@ t_vec3			generate_shadow_sample_offset(double radius,
  */
 double			calculate_shadow_factor(t_scene *scene, t_shadow_query query,
 					t_vec3 light_pos, t_shadow_config *config);
-
-/**
- * @brief Calculate distance-based shadow attenuation
- * 
- * Computes shadow softness based on distance from light source.
- * 
- * @param distance Distance from light
- * @param max_distance Maximum distance for attenuation
- * @param softness Softness factor
- * @return Attenuation factor (0.0-1.0)
- */
-double			calculate_shadow_attenuation(double distance,
-					double max_distance, double softness);
-
 /**
  * @brief Test if point is in shadow (single ray)
  * 

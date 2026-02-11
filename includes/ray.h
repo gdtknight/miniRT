@@ -29,7 +29,6 @@ typedef struct s_ray
 /* Ray-object intersection result with hit point and surface info */
 typedef struct s_hit
 {
-	bool		hit;
 	double		distance;
 	t_vec3		point;
 	t_vec3		normal;
@@ -49,20 +48,6 @@ typedef struct s_cyl_calc
 	double	t;
 	double	m;
 }	t_cyl_calc;
-
-/* Generic intersection function pointer type */
-typedef int		(*t_intersect_fn)(t_ray *ray, void *object, t_hit *hit);
-
-/* Helper structure for generic intersection checking */
-typedef struct s_intersect_params
-{
-	void			*objects;
-	int				count;
-	size_t			obj_size;
-	t_intersect_fn	intersect_fn;
-	t_ray			*ray;
-	t_hit			*hit;
-}	t_intersect_params;
 
 /* Intersection with unified object */
 int		intersect_object_new(t_ray *ray, t_object *obj, t_hit *hit);

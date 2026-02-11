@@ -91,7 +91,6 @@ double			parse_frac_part(const char **str, int *has_digits);
  */
 
 const char		*skip_whitespace(const char *str);
-const char		*next_token(const char *str, const char **end);
 int				at_line_end(const char *str);
 
 /*

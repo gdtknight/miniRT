@@ -68,7 +68,6 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/lighting/lighting.c \
 			  $(SRC_DIR)/lighting/lighting_utils.c \
 			  $(SRC_DIR)/lighting/shadow_calc.c \
-			  $(SRC_DIR)/lighting/shadow_attenuation.c \
 			  $(SRC_DIR)/lighting/shadow_config.c \
 			  $(SRC_DIR)/lighting/shadow_test.c \
 			  $(SRC_DIR)/math/vector.c \
@@ -132,7 +131,8 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/window/render_flags_set.c \
 			  $(SRC_DIR)/texture/checkerboard.c \
 			  $(SRC_DIR)/texture/bump_map_load.c \
-			  $(SRC_DIR)/texture/bump_map_perturb.c
+			  $(SRC_DIR)/texture/bump_map_perturb.c \
+			  $(SRC_DIR)/texture/texture_utils.c
 
 OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
