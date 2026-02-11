@@ -66,6 +66,7 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/keyguide/keyguide_render_extra.c \
 			  $(SRC_DIR)/keyguide/keyguide_cleanup.c \
 			  $(SRC_DIR)/lighting/lighting.c \
+			  $(SRC_DIR)/lighting/lighting_utils.c \
 			  $(SRC_DIR)/lighting/shadow_calc.c \
 			  $(SRC_DIR)/lighting/shadow_attenuation.c \
 			  $(SRC_DIR)/lighting/shadow_config.c \
@@ -85,9 +86,13 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/parser/parse_line_reader.c \
 			  $(SRC_DIR)/parser/parser.c \
 			  $(SRC_DIR)/parser/parser_dispatch.c \
+			  $(SRC_DIR)/parser/parse_cone.c \
+			  $(SRC_DIR)/parser/parse_bonus_options.c \
 			  $(SRC_DIR)/parser/parser_utils.c \
 			  $(SRC_DIR)/ray/intersect_object.c \
 			  $(SRC_DIR)/ray/intersect_cyl_new.c \
+			  $(SRC_DIR)/ray/intersect_cone_body.c \
+			  $(SRC_DIR)/ray/intersect_cone_cap.c \
 			  $(SRC_DIR)/render/camera.c \
 			  $(SRC_DIR)/render/metrics_frame.c \
 			  $(SRC_DIR)/render/metrics_counters.c \
@@ -124,7 +129,10 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/window/mlx_context.c \
 			  $(SRC_DIR)/window/mlx_pixel_codec.c \
 			  $(SRC_DIR)/window/mlx_pixel.c \
-			  $(SRC_DIR)/window/render_flags_set.c
+			  $(SRC_DIR)/window/render_flags_set.c \
+			  $(SRC_DIR)/texture/checkerboard.c \
+			  $(SRC_DIR)/texture/bump_map_load.c \
+			  $(SRC_DIR)/texture/bump_map_perturb.c
 
 OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
@@ -159,7 +167,9 @@ fclean: clean
 
 re: fclean all
 
+bonus: all
+
 norm:
 	@norminette $(SRC_DIR) $(INC_DIR)
 
-.PHONY: all clean fclean re norm
+.PHONY: all clean fclean re norm bonus
