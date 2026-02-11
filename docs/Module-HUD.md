@@ -16,7 +16,7 @@ HUD(Head-Up Display) 오버레이와 키가이드를 담당하는 모듈입니�
 | `hud_objects.c` | 오브젝트 목록 페이지네이션 |
 | `hud_obj_render.c` | 개별 오브젝트 정보 렌더링 |
 | `hud_performance.c` | 성능 메트릭 (FPS, 렌더 시간, BVH 통계) |
-| `hud_text.c` | 텍스트 렌더링 유틸리티 |
+| `hud_text.c` | HUD dirty 마킹, vec3 포맷 출력 |
 | `hud_format.c` | 숫자/벡터 포맷팅 |
 | `hud_format_helpers.c` | 포맷 헬퍼 |
 | `hud_format_simple.c` | 간단한 포맷 유틸리티 |
@@ -109,5 +109,5 @@ typedef struct s_hud_state
 전체 페이지: 5
 현재 페이지: 1/5
 
-[ / ] 키로 페이지 이동
+Up / Down 키로 페이지 이동
 ```

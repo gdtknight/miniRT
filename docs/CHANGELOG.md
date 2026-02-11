@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2026-02
+
+### Added
+- **Object Resize**: Y/U 키로 반지름, N/M 키로 원기둥 높이 조절
+- **Object Rotation**: I/J (X축), O/K (Y축), P/L (Z축) Rodrigues 회전
+- **LQ Preview Throttle**: 디바운스 중 50ms 간격 low quality 프리뷰
+
+### Changed
+- **Debounce FSM Redesign**: 4-상태 머신 IDLE → ACTIVE (150ms) → FINAL → COOLDOWN (350ms)으로 단순화. PREVIEW 상태 제거
+- **Keymap Overhaul**: 광원 이동 키를 `[`/`]`/`;`/`'`/`,`/`.`으로 변경, 오브젝트 선택을 TAB으로 통일, HUD 페이지를 Up/Down으로 변경
+- **Render Flags**: `RENDER_SHOW_INFO`, `RENDER_SHIFT_HELD` 제거
+
+### Removed
+- **Dead Code Cleanup**: I 키 정보 토글 핸들러, shift 키 핸들링, 미사용 키 정의 (Insert, Home, PgUp, Delete, End, PgDn, Left, Right) 제거
+
 ## [2.2.0] - 2026-02
 
 ### Added
@@ -38,7 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **BVH Acceleration**: 기본 활성화, 복잡한 씬에서 2~10배 렌더링 가속
-- **Debounced Rendering**: 150ms 디바운스 타이머, 4-상태 머신 (IDLE → ACTIVE → PREVIEW → FINAL)
+- **Debounced Rendering**: 150ms 디바운스 타이머 기반 렌더링 최적화
 - **BVH Tree Visualization**: `--bvh-vis` 플래그로 BVH 트리 구조 콘솔 출력
 - **Unified Object Identifiers**: 일관된 오브젝트 식별자 체계 (sp0, pl1, cy2)
 - `is_rendering` 플래그로 정확한 렌더 진행 추적

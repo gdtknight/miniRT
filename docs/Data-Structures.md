@@ -299,7 +299,16 @@ typedef struct s_render
 }   t_render;
 ```
 
-렌더 상태 플래그: `RENDER_DIRTY (0x01)`, `RENDER_RENDERING (0x02)`, `RENDER_LOW_QUALITY (0x04)` 등
+렌더 상태 플래그:
+
+| 플래그 | 값 | 설명 |
+|--------|------|------|
+| `RENDER_DIRTY` | 0x01 | 재렌더링 필요 |
+| `RENDER_RENDERING` | 0x02 | 렌더링 진행 중 |
+| `RENDER_LOW_QUALITY` | 0x04 | 저품질 프리뷰 모드 |
+| `RENDER_BVH_DIRTY` | 0x20 | BVH 재구축 필요 |
+| `RENDER_ENABLE_PIXEL_TIMING` | 0x40 | 픽셀 타이밍 측정 활성화 |
+| `RENDER_ENABLE_METRICS_PRINT` | 0x80 | 콘솔 메트릭 출력 활성화 |
 
 ---
 
