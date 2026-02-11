@@ -46,8 +46,10 @@ render_loop(render)
  │    │         └── draw_pixel_block()   // 블록 단위 채우기
  │    ├── metrics_end_frame()
  │    └── mlx_put_image_to_window()
- ├── [HUD visible & dirty] hud_render()
- └── keyguide_render()
+ ├── [rendered] keyguide.dirty = 1
+ └── [HUD visible && (dirty || rendered)]
+      ├── hud_render()
+      └── keyguide_render()
 ```
 
 ---
@@ -95,16 +97,18 @@ t_color trace_ray(t_scene *scene, t_ray *ray)
 
 ```
 IDLE ─(입력)─→ ACTIVE ─(150ms 만료)─→ FINAL ─(FQ 렌더 완료)─→ COOLDOWN ─(350ms)─→ IDLE
-                 ↑                                                                    │
-                 └────────────────────────(재입력 시)──────────────────────────────────┘
+                 ↑ ↺                     │                                          │
+                 │ (재입력: 타이머 리셋)   │                                          │
+                 │                       └──────────(재입력 시)──────────────────────┘
+                 └──────────────────────────(재입력 시)──────────────────────────────┘
 ```
 
 - **IDLE**: 대기 상태
-- **ACTIVE**: 입력 감지, 디바운스 타이머 시작 (150ms). LQ preview를 50ms throttle로 표시
-- **FINAL**: 타이머 만료, full quality 렌더 트리거 (`RENDER_LOW_QUALITY` 해제)
+- **ACTIVE**: 디바운스 타이머 시작 (150ms). 추가 입력 시 타이머 리셋하여 대기 연장
+- **FINAL**: FQ 렌더 대기 상태. ACTIVE→FINAL 전이 시 `RENDER_LOW_QUALITY` 해제 + `RENDER_DIRTY` 설정
 - **COOLDOWN**: FQ 렌더 완료 후 350ms 쿨다운. 재입력 시 ACTIVE로 복귀
 
-LQ preview throttle: `debounce_check_preview_throttle()`로 50ms 간격 제한
+LQ preview: `debounce_on_input()` 호출 시 상태와 무관하게 `debounce_check_preview_throttle()`로 50ms 간격 제한하여 LQ 프리뷰 트리거
 
 ---
 
