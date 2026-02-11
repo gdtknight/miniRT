@@ -73,6 +73,9 @@ static void	keyguide_render_light(t_render *render, int *y)
 	*y += KEYGUIDE_LINE_HEIGHT;
 	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, ", . - Move Z");
+	*y += KEYGUIDE_LINE_HEIGHT;
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
+		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "= - Next Light");
 }
 
 static void	keyguide_render_hud_page(t_render *render, int *y)
