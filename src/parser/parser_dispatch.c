@@ -61,6 +61,11 @@ static t_parse_result	dispatch_objects(char *line, t_scene *scene,
 		ctx->element_type = "Cylinder";
 		return (parse_cylinder(line, scene));
 	}
+	if (matches_prefix(line, "co", 2))
+	{
+		ctx->element_type = "Cone";
+		return (parse_cone(line, scene));
+	}
 	return (PARSE_ERR_UNKNOWN_ELEMENT);
 }
 

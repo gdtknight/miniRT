@@ -32,6 +32,8 @@ t_vec3	get_object_center(t_object_ref ref, void *scene_ptr)
 		return (obj->data.sphere.center);
 	else if (obj->type == OBJ_CYLINDER)
 		return (obj->data.cylinder.center);
+	else if (obj->type == OBJ_CONE)
+		return (obj->data.cone.center);
 	else
 		return (obj->data.plane.point);
 }

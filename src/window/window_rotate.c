@@ -95,6 +95,8 @@ static void	apply_rotation(t_object *obj, t_vec3 axis, double angle)
 
 	if (obj->type == OBJ_CYLINDER)
 		rotated = rodrigues_rotate(obj->data.cylinder.axis, axis, angle);
+	else if (obj->type == OBJ_CONE)
+		rotated = rodrigues_rotate(obj->data.cone.axis, axis, angle);
 	else
 		rotated = rodrigues_rotate(obj->data.plane.normal, axis, angle);
 	len = vec3_magnitude(rotated);
@@ -103,6 +105,8 @@ static void	apply_rotation(t_object *obj, t_vec3 axis, double angle)
 	rotated = vec3_normalize(rotated);
 	if (obj->type == OBJ_CYLINDER)
 		obj->data.cylinder.axis = rotated;
+	else if (obj->type == OBJ_CONE)
+		obj->data.cone.axis = rotated;
 	else
 		obj->data.plane.normal = rotated;
 }
@@ -129,7 +133,8 @@ void	handle_object_rotate(t_render *render, int keycode)
 	obj = &render->scene->objects.items[idx];
 	if (obj->type == OBJ_SPHERE)
 		return ;
-	if (obj->type != OBJ_CYLINDER && obj->type != OBJ_PLANE)
+	if (obj->type != OBJ_CYLINDER && obj->type != OBJ_PLANE
+		&& obj->type != OBJ_CONE)
 		return ;
 	rot_axis = get_rotation_axis(keycode, &angle);
 	apply_rotation(obj, rot_axis, angle);

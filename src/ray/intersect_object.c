@@ -102,12 +102,19 @@ static int	intersect_plane_new(t_ray *ray, t_plane_data *p, t_color color,
  */
 int	intersect_object_new(t_ray *ray, t_object *obj, t_hit_record *hit)
 {
+	int	result;
+
+	result = 0;
 	if (obj->type == OBJ_SPHERE)
-		return (intersect_sphere_new(ray, &obj->data.sphere, obj->color, hit));
+		result = intersect_sphere_new(ray, &obj->data.sphere, obj->color, hit);
 	else if (obj->type == OBJ_PLANE)
-		return (intersect_plane_new(ray, &obj->data.plane, obj->color, hit));
+		result = intersect_plane_new(ray, &obj->data.plane, obj->color, hit);
 	else if (obj->type == OBJ_CYLINDER)
-		return (intersect_cylinder_new(ray, &obj->data.cylinder, obj->color,
-				hit));
-	return (0);
+		result = intersect_cylinder_new(ray, &obj->data.cylinder, obj->color,
+				hit);
+	else if (obj->type == OBJ_CONE)
+		result = intersect_cone_new(ray, obj, hit);
+	if (result)
+		hit->obj = obj;
+	return (result);
 }
