@@ -57,7 +57,6 @@ typedef struct s_bvh
 {
 	t_bvh_node		*root;
 	int				enabled;
-	int				total_nodes;
 	int				max_depth;
 	int				visualize;
 	t_plane_refs	plane_refs;

@@ -54,6 +54,9 @@
 #  define KEY_O 31
 #  define KEY_Y 16
 #  define KEY_P 35
+#  define KEY_1 18
+#  define KEY_3 20
+#  define KEY_EQUAL 24
 # elif defined(__linux__)
 /* Linux/X11 KeySym values */
 #  define KEY_ESC 65307
@@ -92,12 +95,16 @@
 #  define KEY_O 111
 #  define KEY_Y 121
 #  define KEY_P 112
+#  define KEY_1 49
+#  define KEY_3 51
+#  define KEY_EQUAL 61
 # endif
 
 /* Camera control functions */
 void	handle_camera_move(t_render *render, int keycode);
 void	handle_camera_pitch(t_render *render, int keycode);
 void	handle_camera_reset(t_render *render);
+void	handle_camera_yaw(t_render *render, int keycode);
 
 /* Object control functions */
 void	handle_object_move(t_render *render, int keycode);

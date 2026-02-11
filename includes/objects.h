@@ -21,7 +21,8 @@ typedef enum e_object_type
 	OBJ_NONE = 0,
 	OBJ_SPHERE,
 	OBJ_PLANE,
-	OBJ_CYLINDER
+	OBJ_CYLINDER,
+	OBJ_CONE
 }	t_object_type;
 
 /* RGB color with integer components in range [0, 255] */
@@ -57,17 +58,35 @@ typedef struct s_cylinder_data
 	double	half_height;
 }	t_cylinder_data;
 
+/* Cone-specific data */
+typedef struct s_cone_data
+{
+	t_vec3	center;
+	t_vec3	axis;
+	double	radius;
+	double	radius_sq;
+	double	half_height;
+}	t_cone_data;
+
+/* Forward declaration for bump map */
+typedef struct s_bump_map	t_bump_map;
+
 /* Unified object structure using union */
 typedef struct s_object
 {
 	t_object_type	type;
 	t_color			color;
+	t_color			checker_color;
+	int				has_checker;
+	char			*bump_path;
+	t_bump_map		*bump_map;
 	char			id[8];
 	union u_object_data
 	{
 		t_sphere_data	sphere;
 		t_plane_data	plane;
 		t_cylinder_data	cylinder;
+		t_cone_data		cone;
 	}	data;
 }	t_object;
 

@@ -29,11 +29,12 @@ typedef struct s_ray
 /* Ray-object intersection result with hit point and surface info */
 typedef struct s_hit
 {
-	bool	hit;
-	double	distance;
-	t_vec3	point;
-	t_vec3	normal;
-	t_color	color;
+	bool		hit;
+	double		distance;
+	t_vec3		point;
+	t_vec3		normal;
+	t_color		color;
+	t_object	*obj;
 }	t_hit;
 
 typedef t_hit	t_hit_record;
@@ -67,5 +68,6 @@ typedef struct s_intersect_params
 int		intersect_object_new(t_ray *ray, t_object *obj, t_hit *hit);
 int		intersect_cylinder_new(t_ray *ray, t_cylinder_data *c, t_color color,
 			t_hit *hit);
+int		intersect_cone_new(t_ray *ray, t_object *obj, t_hit *hit);
 
 #endif

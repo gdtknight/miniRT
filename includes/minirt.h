@@ -31,11 +31,13 @@ typedef struct s_bvh	t_bvh;
 /* Scene flags (bit flags) */
 # define SCENE_HAS_AMBIENT  0x01
 # define SCENE_HAS_CAMERA   0x02
-# define SCENE_HAS_LIGHT    0x04
 # define SCENE_BVH_ENABLED  0x08
 
 /* Default object capacity */
 # define DEFAULT_OBJECT_CAPACITY 32
+
+/* Maximum number of light sources */
+# define MAX_LIGHTS 16
 
 /* Epsilon value for floating point comparison */
 # define EPSILON 0.0001
@@ -106,7 +108,9 @@ typedef struct s_scene
 {
 	t_ambient		ambient;
 	t_camera		camera;
-	t_light			light;
+	t_light			lights[MAX_LIGHTS];
+	int				light_count;
+	int				selected_light;
 	t_shadow_config	shadow_config;
 	t_object_list	objects;
 	int				flags;
@@ -127,7 +131,6 @@ int		object_list_grow(t_object_list *list);
 /* Scene flag helpers */
 int		scene_has_ambient(t_scene *scene);
 int		scene_has_camera(t_scene *scene);
-int		scene_has_light(t_scene *scene);
 void	scene_set_flag(t_scene *scene, int flag);
 void	scene_clear_flag(t_scene *scene, int flag);
 
@@ -136,5 +139,9 @@ void	render_scene_to_buffer(t_scene *scene, t_render *render);
 t_color	apply_lighting(t_scene *scene, t_hit *hit);
 t_ray	create_camera_ray(t_camera *camera, double x, double y);
 t_color	trace_ray(t_scene *scene, t_ray *ray);
+
+/* Lighting utilities */
+void	clamp_color(t_color *result);
+double	fast_pow32(double x);
 
 #endif

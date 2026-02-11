@@ -38,6 +38,7 @@ typedef enum e_parse_result
 	PARSE_ERR_NUMBER_FORMAT,
 	PARSE_ERR_MISSING_ELEMENT,
 	PARSE_ERR_IO,
+	PARSE_ERR_OVERFLOW,
 	PARSE_ERR_COUNT
 }	t_parse_result;
 
@@ -179,6 +180,8 @@ t_parse_result	parse_plane(char *line, t_scene *scene);
  * @return t_parse_result PARSE_OK on success, error code on failure
  */
 t_parse_result	parse_cylinder(char *line, t_scene *scene);
+t_parse_result	parse_cone(char *line, t_scene *scene);
+t_parse_result	parse_bonus_options(const char **token, t_object *obj);
 
 /**
  * @brief Validate scene has required elements
