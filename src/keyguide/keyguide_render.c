@@ -79,10 +79,7 @@ void	keyguide_render_content2(t_render *render, int *y)
 		render->keyguide.x + 10, *y, KEYGUIDE_COLOR_TEXT, "Objects:");
 	*y += KEYGUIDE_LINE_HEIGHT;
 	mlx_string_put(render->mlx.mlx, render->mlx.win,
-		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "TAB - Next");
-	*y += KEYGUIDE_LINE_HEIGHT;
-	mlx_string_put(render->mlx.mlx, render->mlx.win,
-		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "[] - Select");
+		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "TAB - Select");
 	*y += KEYGUIDE_LINE_HEIGHT;
 	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "R/T - X axis");
@@ -92,12 +89,6 @@ void	keyguide_render_content2(t_render *render, int *y)
 	*y += KEYGUIDE_LINE_HEIGHT;
 	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "V/B - Z axis");
-	*y += KEYGUIDE_SECTION_GAP + KEYGUIDE_LINE_HEIGHT;
-	mlx_string_put(render->mlx.mlx, render->mlx.win,
-		render->keyguide.x + 10, *y, KEYGUIDE_COLOR_TEXT, "Display:");
-	*y += KEYGUIDE_LINE_HEIGHT;
-	mlx_string_put(render->mlx.mlx, render->mlx.win,
-		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "I - Info");
 }
 
 /**
@@ -111,11 +102,12 @@ void	keyguide_render(t_render *render)
 {
 	int	y;
 
-	if (!render->keyguide.visible)
+	if (!render->keyguide.visible || !render->keyguide.dirty)
 		return ;
 	keyguide_render_content(render);
 	y = render->keyguide.y + 20 + 30 + KEYGUIDE_LINE_HEIGHT * 7
 		+ KEYGUIDE_SECTION_GAP + KEYGUIDE_LINE_HEIGHT * 3;
 	keyguide_render_content2(render, &y);
 	keyguide_render_extra(render, &y);
+	render->keyguide.dirty = 0;
 }

@@ -37,28 +37,23 @@
 #  define KEY_I 34
 #  define KEY_H 4
 #  define KEY_TAB 48
-#  define KEY_SHIFT_L 56
-#  define KEY_SHIFT_R 60
 #  define KEY_UP 126
 #  define KEY_DOWN 125
 #  define KEY_BRACKET_LEFT 33
 #  define KEY_BRACKET_RIGHT 30
-#  define KEY_INSERT 114
-#  define KEY_HOME 115
-#  define KEY_PGUP 116
-#  define KEY_DELETE 117
-#  define KEY_END 119
-#  define KEY_PGDN 121
+#  define KEY_SEMICOLON 41
+#  define KEY_QUOTE 39
+#  define KEY_COMMA 43
+#  define KEY_PERIOD 47
 #  define KEY_J 38
 #  define KEY_K 40
+#  define KEY_L 37
 #  define KEY_N 45
 #  define KEY_M 46
 #  define KEY_U 32
 #  define KEY_O 31
 #  define KEY_Y 16
 #  define KEY_P 35
-#  define KEY_LEFT 123
-#  define KEY_RIGHT 124
 # elif defined(__linux__)
 /* Linux/X11 KeySym values */
 #  define KEY_ESC 65307
@@ -80,28 +75,23 @@
 #  define KEY_I 105
 #  define KEY_H 104
 #  define KEY_TAB 65289
-#  define KEY_SHIFT_L 65505
-#  define KEY_SHIFT_R 65506
 #  define KEY_UP 65362
 #  define KEY_DOWN 65364
 #  define KEY_BRACKET_LEFT 91
 #  define KEY_BRACKET_RIGHT 93
-#  define KEY_INSERT 65379
-#  define KEY_HOME 65360
-#  define KEY_PGUP 65365
-#  define KEY_DELETE 65535
-#  define KEY_END 65367
-#  define KEY_PGDN 65366
+#  define KEY_SEMICOLON 59
+#  define KEY_QUOTE 39
+#  define KEY_COMMA 44
+#  define KEY_PERIOD 46
 #  define KEY_J 106
 #  define KEY_K 107
+#  define KEY_L 108
 #  define KEY_N 110
 #  define KEY_M 109
 #  define KEY_U 117
 #  define KEY_O 111
 #  define KEY_Y 121
 #  define KEY_P 112
-#  define KEY_LEFT 65361
-#  define KEY_RIGHT 65363
 # endif
 
 /* Camera control functions */
@@ -110,7 +100,6 @@ void	handle_camera_pitch(t_render *render, int keycode);
 void	handle_camera_reset(t_render *render);
 
 /* Object control functions */
-void	handle_object_selection(t_render *render, int keycode);
 void	handle_object_move(t_render *render, int keycode);
 void	handle_light_move(t_render *render, int keycode);
 

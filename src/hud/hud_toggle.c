@@ -26,4 +26,5 @@ void	hud_toggle(t_render *render)
 	render->keyguide.visible = render->hud.visible;
 	render_set_flag(render, RENDER_DIRTY);
 	render->hud.dirty = 1;
+	render->keyguide.dirty = 1;
 }

@@ -58,21 +58,21 @@ static t_vec3	get_rotation_axis(int keycode, double *angle)
 	double	step;
 
 	step = M_PI / 36.0;
-	if (keycode == KEY_U || keycode == KEY_O)
+	if (keycode == KEY_I || keycode == KEY_J)
 	{
-		if (keycode == KEY_O)
+		if (keycode == KEY_I)
 			step = -step;
 		*angle = step;
 		return ((t_vec3){1.0, 0.0, 0.0});
 	}
-	if (keycode == KEY_Y || keycode == KEY_P)
+	if (keycode == KEY_O || keycode == KEY_K)
 	{
-		if (keycode == KEY_P)
+		if (keycode == KEY_O)
 			step = -step;
 		*angle = step;
 		return ((t_vec3){0.0, 1.0, 0.0});
 	}
-	if (keycode == KEY_RIGHT)
+	if (keycode == KEY_P)
 		step = -step;
 	*angle = step;
 	return ((t_vec3){0.0, 0.0, 1.0});

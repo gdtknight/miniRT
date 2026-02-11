@@ -24,52 +24,6 @@ void	hud_mark_dirty(t_render *render)
 }
 
 /**
- * @brief Render one row of the HUD background overlay.
- *
- * @param render Render context containing image buffer.
- * @param y Screen y coordinate of the row.
- */
-void	hud_render_background_row(t_render *render, int y)
-{
-	int				x;
-	int				scene_color;
-	int				blended;
-	t_pixel_params	params;
-
-	x = HUD_MARGIN_X;
-	params.img_data = render->mlx.img.data;
-	params.y = y;
-	params.size_line = render->mlx.img.size_line;
-	params.bpp = render->mlx.img.bpp;
-	params.endian = render->mlx.img.endian;
-	while (x < HUD_MARGIN_X + HUD_WIDTH)
-	{
-		params.x = x;
-		scene_color = get_pixel(&params);
-		blended = blend_colors(scene_color, HUD_COLOR_BG, HUD_BG_ALPHA);
-		set_pixel(&params, blended);
-		x++;
-	}
-}
-
-/**
- * @brief Render the full HUD background overlay.
- *
- * @param render Render context containing image buffer.
- */
-void	hud_render_background(t_render *render)
-{
-	int	y;
-
-	y = HUD_MARGIN_Y;
-	while (y < HUD_MARGIN_Y + HUD_HEIGHT)
-	{
-		hud_render_background_row(render, y);
-		y++;
-	}
-}
-
-/**
  * @brief Format a labeled vec3 and render it on the HUD.
  *
  * @param render Render context containing MLX handles.

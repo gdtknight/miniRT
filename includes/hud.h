@@ -288,12 +288,6 @@ void	hud_format_bvh_status(char *buf, int enabled);
 void	hud_render_performance(t_render *render, int *y);
 
 /*
-** Render HUD background overlay (semi-transparent dark rectangle).
-** Called internally by hud_render().
-*/
-void	hud_render_background(t_render *render);
-
-/*
 ** Render HUD text content (camera, lights, objects).
 ** Called internally by hud_render().
 */

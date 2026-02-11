@@ -14,18 +14,6 @@
 #include <stdlib.h>
 
 /**
- * @brief Clear any pending cancel request for debounce rendering.
- *
- * Resets the cancel flag so subsequent render passes can proceed normally.
- *
- * @param state Debounce state to update.
- */
-void	debounce_cancel(t_debounce_state *state)
-{
-	state->cancel_requested = 0;
-}
-
-/**
  * @brief Start the debounce timer.
  *
  * Marks the timer active and records the current timestamp.
@@ -70,6 +58,17 @@ void	debounce_timer_stop(t_debounce_timer *timer)
  * @param timer Debounce timer to query.
  * @return int 1 if expired, 0 otherwise.
  */
+int	debounce_check_preview_throttle(t_debounce_state *state)
+{
+	struct timeval	now;
+	long			elapsed_ms;
+
+	gettimeofday(&now, NULL);
+	elapsed_ms = (now.tv_sec - state->last_preview_time.tv_sec) * 1000;
+	elapsed_ms += (now.tv_usec - state->last_preview_time.tv_usec) / 1000;
+	return (elapsed_ms >= DEBOUNCE_PREVIEW_MIN_INTERVAL_MS);
+}
+
 int	debounce_timer_expired(t_debounce_timer *timer)
 {
 	struct timeval	now;
