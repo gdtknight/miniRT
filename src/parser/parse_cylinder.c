@@ -125,8 +125,9 @@ t_parse_result	parse_cylinder(char *line, t_scene *scene)
 	result = parse_color_strict(token, &obj.color, &token);
 	if (result != PARSE_OK)
 		return (result);
-	if (!at_line_end(token))
-		return (PARSE_ERR_TRAILING_TOKEN);
+	result = parse_bonus_options(&token, &obj);
+	if (result != PARSE_OK)
+		return (result);
 	format_id(obj.id, 8, "cy-", get_cylinder_count(scene) + 1);
 	if (!object_list_add(&scene->objects, &obj))
 		return (PARSE_ERR_FORMAT);

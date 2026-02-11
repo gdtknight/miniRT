@@ -88,8 +88,9 @@ t_parse_result	parse_sphere(char *line, t_scene *scene)
 	result = parse_sphere_data(&token, &obj);
 	if (result != PARSE_OK)
 		return (result);
-	if (!at_line_end(token))
-		return (PARSE_ERR_TRAILING_TOKEN);
+	result = parse_bonus_options(&token, &obj);
+	if (result != PARSE_OK)
+		return (result);
 	format_id(obj.id, 8, "sp-", get_type_count(scene, OBJ_SPHERE) + 1);
 	if (!object_list_add(&scene->objects, &obj))
 		return (PARSE_ERR_FORMAT);
@@ -147,8 +148,9 @@ t_parse_result	parse_plane(char *line, t_scene *scene)
 	result = parse_plane_data(&token, &obj);
 	if (result != PARSE_OK)
 		return (result);
-	if (!at_line_end(token))
-		return (PARSE_ERR_TRAILING_TOKEN);
+	result = parse_bonus_options(&token, &obj);
+	if (result != PARSE_OK)
+		return (result);
 	format_id(obj.id, 8, "pl-", get_type_count(scene, OBJ_PLANE) + 1);
 	if (!object_list_add(&scene->objects, &obj))
 		return (PARSE_ERR_FORMAT);
