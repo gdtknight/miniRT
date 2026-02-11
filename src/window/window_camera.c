@@ -103,3 +103,25 @@ void	handle_camera_reset(t_render *render)
 	render->scene->camera.direction = render->scene->camera.initial_direction;
 	render->scene->camera.cache.valid = 0;
 }
+
+/**
+ * @brief Rotate the camera left or right around the Y axis (yaw).
+ *
+ * @param render Render context containing the scene and camera.
+ * @param keycode Key code selecting yaw direction.
+ */
+void	handle_camera_yaw(t_render *render, int keycode)
+{
+	t_vec3	new_dir;
+	double	angle;
+
+	angle = 5.0 * M_PI / 180.0;
+	if (keycode == KEY_1)
+		angle = -angle;
+	else if (keycode != KEY_3)
+		return ;
+	new_dir = rotate_dir(render->scene->camera.direction, (t_vec3){0, 1, 0},
+			cos(angle), sin(angle));
+	render->scene->camera.direction = vec3_normalize(new_dir);
+	render->scene->camera.cache.valid = 0;
+}
