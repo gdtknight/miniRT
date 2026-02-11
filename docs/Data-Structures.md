@@ -231,8 +231,8 @@ typedef struct s_bvh_node
 ```c
 typedef struct s_aabb
 {
-    t_vec3  min;  // 바운딩 박스 최솟값
-    t_vec3  max;  // 바운딩 박스 최댓값
+    t_vec3  min;  // 각 축 최솟값으로 구성된 대각선 꼭짓점
+    t_vec3  max;  // 각 축 최댓값으로 구성된 대각선 꼭짓점
 }   t_aabb;
 ```
 

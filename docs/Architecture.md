@@ -110,7 +110,7 @@ trace_ray(scene, ray)
 |------|--------|------|
 | parser/ | 14 | .rt 파일 파싱 |
 | render/ | 11 | 렌더 루프, 카메라, 메트릭 |
-| spatial/ | 8 | BVH 구축/순회, AABB |
+| spatial/ | 10 | BVH 구축/순회, AABB |
 | lighting/ | 5 | Phong 조명, 그림자 |
 | hud/ | 15 | HUD 오버레이 |
 | window/ | 14 | 윈도우, 키 이벤트 |
