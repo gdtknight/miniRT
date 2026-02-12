@@ -69,17 +69,18 @@ static int	copy_line_content(t_line_reader *reader, char *line, int *pos)
 		if (reader->buffer[reader->buf_pos] == '\n')
 		{
 			reader->buf_pos++;
+			if (reader->line_too_long)
+				return (-1);
 			return (1);
 		}
-		if (!append_char(line, pos, reader->buffer[reader->buf_pos], reader))
+		if (reader->line_too_long)
 		{
-			while (reader->buf_pos < reader->buf_len
-				&& reader->buffer[reader->buf_pos] != '\n')
-				reader->buf_pos++;
-			if (reader->buf_pos < reader->buf_len)
-				reader->buf_pos++;
-			return (-1);
+			reader->buf_pos++;
+			continue ;
 		}
+		if (!append_char(line, pos, reader->buffer[reader->buf_pos],
+				reader))
+			continue ;
 		reader->buf_pos++;
 	}
 	return (0);
@@ -137,7 +138,7 @@ char	*line_reader_next(t_line_reader *reader)
 		if (status == -1)
 			return (NULL);
 	}
-	if (pos > 0)
+	if (pos > 0 && !reader->line_too_long)
 		return (finalize_line(line, pos, reader));
 	return (NULL);
 }

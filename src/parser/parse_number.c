@@ -12,6 +12,7 @@
 
 #include "parser.h"
 #include <limits.h>
+#include <math.h>
 
 /**
  * @brief Parse double value with format validation.
@@ -39,7 +40,7 @@ t_parse_result	parse_double(const char *str, double *value, const char **end)
 	}
 	result = parse_int_part(&str, &has_digits);
 	result += parse_frac_part(&str, &has_digits);
-	if (!has_digits)
+	if (!has_digits || isinf(result))
 		return (PARSE_ERR_NUMBER_FORMAT);
 	if (*str == '.' || *str == 'e' || *str == 'E')
 		return (PARSE_ERR_NUMBER_FORMAT);

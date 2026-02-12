@@ -53,13 +53,13 @@ static int	parse_line(char *line, t_scene *scene, t_error_context *ctx)
 int	validate_scene(t_scene *scene)
 {
 	if (!scene_has_ambient(scene))
-		return (error_print(ERR_PARSE_MISSING), 0);
+		return (error_write_str("Error\nMissing ambient light (A)\n"), 0);
 	if (!scene_has_camera(scene))
-		return (error_print(ERR_PARSE_MISSING), 0);
+		return (error_write_str("Error\nMissing camera (C)\n"), 0);
 	if (scene->light_count == 0)
-		return (error_print(ERR_PARSE_MISSING), 0);
+		return (error_write_str("Error\nMissing light (L)\n"), 0);
 	if (scene->objects.count == 0)
-		return (error_print(ERR_PARSE_MISSING), 0);
+		return (error_write_str("Error\nMissing objects\n"), 0);
 	return (1);
 }
 
@@ -136,6 +136,8 @@ int	parse_scene(const char *filename, t_scene *scene)
 	t_error_context	ctx;
 	int				success;
 
+	if (!filename || !scene)
+		return (0);
 	if (!validate_extension(filename))
 		return (error_print(ERR_FILE_EXT), 0);
 	fd = open(filename, O_RDONLY);

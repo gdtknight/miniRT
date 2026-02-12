@@ -30,7 +30,8 @@ static t_parse_result	parse_checker_opt(const char *str, t_object *obj,
 {
 	t_parse_result	result;
 
-	result = parse_color_strict(str + 8, &obj->checker_color, end);
+	result = parse_color_strict(str + sizeof("checker:") - 1,
+			&obj->checker_color, end);
 	if (result != PARSE_OK)
 		return (result);
 	obj->has_checker = 1;
@@ -43,7 +44,7 @@ static t_parse_result	parse_bump_opt(const char *str, t_object *obj,
 	const char	*start;
 	int			len;
 
-	start = str + 5;
+	start = str + sizeof("bump:") - 1;
 	len = 0;
 	while (start[len] && start[len] != ' '
 		&& start[len] != '\t' && start[len] != '\n')
@@ -69,9 +70,9 @@ t_parse_result	parse_bonus_options(const char **token, t_object *obj)
 	while (!at_line_end(*token))
 	{
 		result = PARSE_ERR_TRAILING_TOKEN;
-		if (starts_with(*token, "checker:"))
+		if (starts_with(*token, "checker:") && !obj->has_checker)
 			result = parse_checker_opt(*token, obj, token);
-		else if (starts_with(*token, "bump:"))
+		else if (starts_with(*token, "bump:") && !obj->bump_path)
 			result = parse_bump_opt(*token, obj, token);
 		if (result != PARSE_OK)
 		{

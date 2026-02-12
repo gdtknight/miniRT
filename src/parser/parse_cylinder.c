@@ -129,7 +129,7 @@ t_parse_result	parse_cylinder(char *line, t_scene *scene)
 	result = parse_bonus_options(&token, &obj);
 	if (result != PARSE_OK)
 		return (result);
-	format_id(obj.id, 8, "cy-", get_cylinder_count(scene) + 1);
+	format_id(obj.id, 16, "cy-", get_cylinder_count(scene) + 1);
 	if (object_list_add(&scene->objects, &obj))
 		return (PARSE_OK);
 	free(obj.bump_path);

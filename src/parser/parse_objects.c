@@ -93,7 +93,7 @@ t_parse_result	parse_sphere(char *line, t_scene *scene)
 	result = parse_bonus_options(&token, &obj);
 	if (result != PARSE_OK)
 		return (result);
-	format_id(obj.id, 8, "sp-", get_type_count(scene, OBJ_SPHERE) + 1);
+	format_id(obj.id, 16, "sp-", get_type_count(scene, OBJ_SPHERE) + 1);
 	if (object_list_add(&scene->objects, &obj))
 		return (PARSE_OK);
 	free(obj.bump_path);
@@ -155,7 +155,7 @@ t_parse_result	parse_plane(char *line, t_scene *scene)
 	result = parse_bonus_options(&token, &obj);
 	if (result != PARSE_OK)
 		return (result);
-	format_id(obj.id, 8, "pl-", get_type_count(scene, OBJ_PLANE) + 1);
+	format_id(obj.id, 16, "pl-", get_type_count(scene, OBJ_PLANE) + 1);
 	if (object_list_add(&scene->objects, &obj))
 		return (PARSE_OK);
 	free(obj.bump_path);

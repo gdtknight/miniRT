@@ -59,7 +59,7 @@ int	validate_extension(const char *filename)
 	len = 0;
 	while (filename[len])
 		len++;
-	if (len < 3)
+	if (len < 4)
 		return (0);
 	if (filename[len - 3] != '.' || filename[len - 2] != 'r'
 		|| filename[len - 1] != 't')

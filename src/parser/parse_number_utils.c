@@ -55,18 +55,21 @@ double	parse_frac_part(const char **str, int *has_digits)
 {
 	double	result;
 	double	divisor;
+	int		digits;
 
 	result = 0.0;
 	divisor = 10.0;
+	digits = 0;
 	if (**str == '.')
 	{
 		(*str)++;
-		while (parse_is_digit(**str))
+		while (parse_is_digit(**str) && digits < 15)
 		{
 			result += (**str - '0') / divisor;
 			divisor *= 10.0;
 			(*str)++;
 			*has_digits = 1;
+			digits++;
 		}
 	}
 	return (result);

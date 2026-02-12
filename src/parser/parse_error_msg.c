@@ -20,11 +20,12 @@
  */
 void	error_write_str(const char *str)
 {
-	while (*str)
-	{
-		write(2, str, 1);
-		str++;
-	}
+	int	len;
+
+	len = 0;
+	while (str[len])
+		len++;
+	write(2, str, len);
 }
 
 /**
@@ -32,19 +33,28 @@ void	error_write_str(const char *str)
  *
  * @param n Integer to write.
  */
-void	error_write_int(int n)
+static void	write_uint(unsigned int n)
 {
 	char	c;
+
+	if (n >= 10)
+		write_uint(n / 10);
+	c = '0' + (n % 10);
+	write(2, &c, 1);
+}
+
+void	error_write_int(int n)
+{
+	unsigned int	u;
 
 	if (n < 0)
 	{
 		write(2, "-", 1);
-		n = -n;
+		u = -(unsigned int)n;
 	}
-	if (n >= 10)
-		error_write_int(n / 10);
-	c = '0' + (n % 10);
-	write(2, &c, 1);
+	else
+		u = (unsigned int)n;
+	write_uint(u);
 }
 
 /**
@@ -71,7 +81,7 @@ const char	*get_error_message(t_parse_result code)
 		"Maximum element count exceeded"
 	};
 
-	if (code < PARSE_ERR_COUNT)
+	if (code >= 0 && code < PARSE_ERR_COUNT)
 		return (msgs[code]);
 	return ("Unknown error");
 }

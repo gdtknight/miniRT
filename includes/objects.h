@@ -80,7 +80,7 @@ typedef struct s_object
 	int				has_checker;
 	char			*bump_path;
 	t_bump_map		*bump_map;
-	char			id[8];
+	char			id[16];
 	union u_object_data
 	{
 		t_sphere_data	sphere;
