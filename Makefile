@@ -24,15 +24,13 @@ OBJ_DIR		= build
 LIBFT_DIR	= lib/libft
 LIBFT		= $(LIBFT_DIR)/libft.a
 
-# OS-specific MLX configuration
+# OS-specific MLX configuration (macOS only)
 UNAME_S		:= $(shell uname -s)
-ifeq ($(UNAME_S),Linux)
-	MLX_DIR		= lib/minilibx-linux
-	LDFLAGS		= -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft -lXext -lX11 -lm
-endif
 ifeq ($(UNAME_S),Darwin)
 	MLX_DIR		= lib/minilibx-macos
 	LDFLAGS		= -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft -framework OpenGL -framework AppKit -lm
+else
+	$(error Unsupported OS: $(UNAME_S). This project targets macOS only.)
 endif
 
 SRCS		= $(SRC_DIR)/main.c \
@@ -64,7 +62,6 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/keyguide/keyguide_init.c \
 			  $(SRC_DIR)/keyguide/keyguide_render.c \
 			  $(SRC_DIR)/keyguide/keyguide_render_extra.c \
-			  $(SRC_DIR)/keyguide/keyguide_cleanup.c \
 			  $(SRC_DIR)/lighting/lighting.c \
 			  $(SRC_DIR)/lighting/lighting_utils.c \
 			  $(SRC_DIR)/lighting/shadow_calc.c \
@@ -141,9 +138,11 @@ all: $(NAME)
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR)
 
-$(NAME): $(LIBFT) $(OBJS)
+$(MLX_DIR)/libmlx.a:
+	@if [ -f "$(MLX_DIR)/Makefile" ]; then $(MAKE) -C $(MLX_DIR); fi
+
+$(NAME): $(LIBFT) $(MLX_DIR)/libmlx.a $(OBJS)
 	@echo "$(GREEN)Linking $(NAME)...$(RESET)"
-	@if [ -f "$(MLX_DIR)/Makefile" ]; then make -C $(MLX_DIR); fi
 	@$(CC) $(OBJS) $(LDFLAGS) -o $(NAME)
 	@echo "$(GREEN)✓ miniRT compiled successfully!$(RESET)"
 
@@ -155,18 +154,19 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 clean:
 	@echo "$(RED)Cleaning object files...$(RESET)"
 	@rm -rf $(OBJ_DIR)
-	@if [ -f "$(MLX_DIR)/Makefile" ]; then make -C $(MLX_DIR) clean; fi
-	@$(MAKE) -C $(LIBFT_DIR) clean
 	@echo "$(GREEN)✓ Object files cleaned$(RESET)"
 
 fclean: clean
 	@echo "$(RED)Removing $(NAME)...$(RESET)"
 	@rm -f $(NAME)
+	@if [ -f "$(MLX_DIR)/Makefile" ]; then $(MAKE) -C $(MLX_DIR) clean; fi
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 	@echo "$(GREEN)✓ Executable removed$(RESET)"
 
 re: fclean all
 
+# bonus features are compiled into the main binary; this target exists
+# for 42 evaluation compatibility (runs the same build as `all`).
 bonus: all
 
 norm:
