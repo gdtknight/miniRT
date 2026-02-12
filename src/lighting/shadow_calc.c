@@ -93,7 +93,9 @@ t_vec3	generate_shadow_sample_offset(double radius, int sample_index,
 static int	sample_shadow_ray(t_shadow_sample *params, int index)
 {
 	t_vec3	offset;
-	t_vec3	sample_light_pos;
+	t_vec3	light_dir;
+	t_vec3	tang;
+	t_vec3	bitang;
 	double	radius;
 
 	radius = params->config->softness * 2.0;
@@ -102,9 +104,16 @@ static int	sample_shadow_ray(t_shadow_sample *params, int index)
 	else
 		offset = generate_shadow_sample_offset(radius, index,
 				params->config->samples);
-	sample_light_pos = vec3_add(params->light_pos, offset);
-	return (is_in_shadow(params->scene, params->point,
-			sample_light_pos, params->bias));
+	light_dir = vec3_normalize(vec3_subtract(params->light_pos,
+				params->point));
+	if (fabs(light_dir.y) < 0.9)
+		tang = vec3_normalize(vec3_cross(light_dir, (t_vec3){0, 1, 0}));
+	else
+		tang = vec3_normalize(vec3_cross(light_dir, (t_vec3){1, 0, 0}));
+	bitang = vec3_cross(light_dir, tang);
+	return (is_in_shadow(params->scene, params->point, vec3_add(
+				params->light_pos, vec3_add(vec3_multiply(tang, offset.x),
+					vec3_multiply(bitang, offset.y))), params->bias));
 }
 
 /*
@@ -166,8 +175,14 @@ static double	calc_shadow_samples(t_scene *scene, t_shadow_query query,
 double	calculate_shadow_factor(t_scene *scene, t_shadow_query query,
 		t_vec3 light_pos, t_shadow_config *config)
 {
-	double	shadow_count;
+	double			shadow_count;
+	t_shadow_config	local;
 
-	shadow_count = calc_shadow_samples(scene, query, light_pos, config);
-	return (shadow_count / (double)config->samples);
+	local = *config;
+	if (scene->light_count > 1)
+		local.samples /= scene->light_count;
+	if (local.samples < 1)
+		local.samples = 1;
+	shadow_count = calc_shadow_samples(scene, query, light_pos, &local);
+	return (shadow_count / (double)local.samples);
 }

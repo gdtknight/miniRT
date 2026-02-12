@@ -105,9 +105,9 @@ int	is_in_shadow(t_scene *scene, t_vec3 point, t_vec3 light_pos, double bias)
 	light_dir = vec3_multiply(to_light, 1.0 / mag);
 	shadow_ray.origin = vec3_add(point, vec3_multiply(light_dir, bias));
 	shadow_ray.direction = light_dir;
-	shadow_ray.inv_dir.x = 1.0 / light_dir.x;
-	shadow_ray.inv_dir.y = 1.0 / light_dir.y;
-	shadow_ray.inv_dir.z = 1.0 / light_dir.z;
+	shadow_ray.inv_dir.x = 1.0 / (light_dir.x + (light_dir.x == 0) * 1e-15);
+	shadow_ray.inv_dir.y = 1.0 / (light_dir.y + (light_dir.y == 0) * 1e-15);
+	shadow_ray.inv_dir.z = 1.0 / (light_dir.z + (light_dir.z == 0) * 1e-15);
 	if (scene->bvh && scene->bvh->enabled && scene->bvh->root
 		&& scene->objects.count > SHADOW_BVH_THRESHOLD)
 	{

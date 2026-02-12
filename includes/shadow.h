@@ -22,19 +22,15 @@ typedef struct s_scene	t_scene;
 
 /**
  * @brief Shadow configuration structure
- * 
+ *
  * Controls shadow rendering quality and appearance.
  * samples: Number of shadow rays (1 = hard shadows, >1 = soft shadows)
  * softness: Shadow edge softness factor (0.0-1.0)
- * bias_scale: Shadow bias multiplier to prevent shadow acne
- * enable_ao: Enable ambient occlusion (not implemented yet)
  */
 typedef struct s_shadow_config
 {
 	int		samples;
 	double	softness;
-	double	bias_scale;
-	int		enable_ao;
 	t_vec3	*offset_lut;
 }	t_shadow_config;
 
@@ -61,30 +57,6 @@ typedef struct s_shadow_sample
  * @return Default shadow configuration
  */
 t_shadow_config	init_shadow_config(void);
-
-/**
- * @brief Validate shadow configuration parameters
- * 
- * @param config Shadow configuration to validate
- * @return 1 if valid, 0 if invalid
- */
-int				validate_shadow_config(t_shadow_config *config);
-
-/**
- * @brief Set number of shadow samples
- * 
- * @param config Shadow configuration
- * @param samples Number of samples (min 1)
- */
-void			set_shadow_samples(t_shadow_config *config, int samples);
-
-/**
- * @brief Set shadow softness factor
- * 
- * @param config Shadow configuration
- * @param softness Softness factor (0.0-1.0)
- */
-void			set_shadow_softness(t_shadow_config *config, double softness);
 
 /**
  * @brief Calculate adaptive shadow bias

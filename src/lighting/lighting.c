@@ -73,24 +73,11 @@ static void	accumulate_lights(t_scene *scene, t_hit *hit,
 	}
 }
 
-static int	adjust_samples(t_scene *scene)
-{
-	int	orig;
-
-	orig = scene->shadow_config.samples;
-	if (scene->light_count > 1)
-		scene->shadow_config.samples = orig / scene->light_count;
-	if (scene->shadow_config.samples < 1)
-		scene->shadow_config.samples = 1;
-	return (orig);
-}
-
 t_color	apply_lighting(t_scene *scene, t_hit *hit)
 {
 	t_vec3		view_dir;
 	t_color_f	acc;
 	t_color		result;
-	int			orig_samples;
 
 	acc = (t_color_f){0, 0, 0};
 	if (hit->obj && hit->obj->has_checker)
@@ -99,9 +86,7 @@ t_color	apply_lighting(t_scene *scene, t_hit *hit)
 		hit->normal = bump_perturb_normal(hit->obj, hit);
 	view_dir = vec3_normalize(vec3_subtract(scene->camera.position,
 				hit->point));
-	orig_samples = adjust_samples(scene);
 	accumulate_lights(scene, hit, view_dir, &acc);
-	scene->shadow_config.samples = orig_samples;
 	result.r = (hit->color.r / 255.0) * (scene->ambient.ratio
 			* (scene->ambient.color.r / 255.0) + acc.r) * 255.0;
 	result.g = (hit->color.g / 255.0) * (scene->ambient.ratio
