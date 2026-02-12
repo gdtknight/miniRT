@@ -52,7 +52,7 @@ sudo apt-get install libx11-dev libxext-dev libbsd-dev
 ```bash
 make        # 빌드
 make clean  # 오브젝트 파일 삭제
-make fclean # 오브젝트 + 실행 파일 삭제
+make fclean # 오브젝트 + 실행 파일 + 라이브러리 정리
 make re     # 전체 재빌드
 ```
 
