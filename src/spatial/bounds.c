@@ -54,7 +54,7 @@ static t_aabb	bounds_for_cylinder(t_cylinder_data *c)
 }
 
 /**
- * @brief Compute a large AABB approximation for a plane.
+ * @brief Compute AABB for a cone.
  *
  * @param p Plane data (unused in approximation).
  * @return t_aabb Large bounding box.

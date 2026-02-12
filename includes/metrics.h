@@ -57,7 +57,6 @@ typedef struct s_metrics
 void	timer_start(struct timeval *tv);
 long	timer_elapsed_us(struct timeval *start);
 double	timer_elapsed_ms(struct timeval *start);
-long	get_time_ns(void);
 
 /* Metrics operations */
 void	metrics_init(t_metrics *metrics);

@@ -21,6 +21,10 @@
  */
 double	min_double(double a, double b)
 {
+	if (a != a)
+		return (b);
+	if (b != b)
+		return (a);
 	if (a < b)
 		return (a);
 	return (b);
@@ -35,6 +39,10 @@ double	min_double(double a, double b)
  */
 double	max_double(double a, double b)
 {
+	if (a != a)
+		return (b);
+	if (b != b)
+		return (a);
 	if (a > b)
 		return (a);
 	return (b);

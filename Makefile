@@ -12,7 +12,7 @@
 
 NAME		= miniRT
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -I$(INC_DIR) -I$(MLX_DIR) -I$(LIBFT_DIR)/includes
+CFLAGS		= -Wall -Wextra -Werror -MMD -MP -I$(INC_DIR) -I$(MLX_DIR) -I$(LIBFT_DIR)/includes
 
 GREEN		= \033[0;32m
 RED			= \033[0;31m
@@ -171,5 +171,7 @@ bonus: all
 
 norm:
 	@norminette $(SRC_DIR) $(INC_DIR)
+
+-include $(OBJS:.o=.d)
 
 .PHONY: all clean fclean re norm bonus

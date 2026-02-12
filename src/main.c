@@ -78,6 +78,8 @@ static int	init_and_parse(char *filename, t_scene **scene)
 		return (0);
 	}
 	scene_build_bvh(*scene);
+	if ((*scene)->bvh && !(*scene)->bvh->root)
+		write(2, "Warning: BVH build failed, using brute force\n", 46);
 	return (1);
 }
 
