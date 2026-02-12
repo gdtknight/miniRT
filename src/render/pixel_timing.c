@@ -29,7 +29,7 @@ void	pixel_timing_init(t_pixel_timing *timing)
 	timing->min_time = LONG_MAX;
 	timing->max_time = 0;
 	timing->total_time = 0;
-	timing->enabled = 1;
+	timing->enabled = (timing->samples != NULL);
 }
 
 /**
@@ -67,12 +67,12 @@ void	pixel_timing_add_sample(t_pixel_timing *timing, long time_ns)
 	{
 		timing->samples[timing->count] = time_ns;
 		timing->count++;
+		timing->total_time += time_ns;
 	}
 	if (time_ns < timing->min_time)
 		timing->min_time = time_ns;
 	if (time_ns > timing->max_time)
 		timing->max_time = time_ns;
-	timing->total_time += time_ns;
 }
 
 /**

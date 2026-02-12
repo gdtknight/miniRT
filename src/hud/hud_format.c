@@ -34,6 +34,8 @@ void	hud_format_float(char *buffer, double value)
 	}
 	else
 		i = 0;
+	if (value > 999999.0)
+		value = 999999.0;
 	int_part = (int)value;
 	frac_part = (int)((value - int_part) * 100);
 	ft_itoa_buf(buffer + i, int_part);

@@ -14,6 +14,7 @@
 #include "parser.h"
 #include "vec3.h"
 #include "utils.h"
+#include <stdlib.h>
 
 /**
  * @brief Count existing cylinder objects in the scene.
@@ -112,6 +113,7 @@ t_parse_result	parse_cylinder(char *line, t_scene *scene)
 	t_object		obj;
 	t_parse_result	result;
 
+	ft_bzero(&obj, sizeof(t_object));
 	obj.type = OBJ_CYLINDER;
 	token = skip_whitespace(line + 3);
 	result = parse_cyl_vectors(&token, &obj);
@@ -121,15 +123,15 @@ t_parse_result	parse_cylinder(char *line, t_scene *scene)
 	result = parse_cylinder_dims(&token, &obj);
 	if (result != PARSE_OK)
 		return (result);
-	token = skip_whitespace(token);
-	result = parse_color_strict(token, &obj.color, &token);
+	result = parse_color_strict(skip_whitespace(token), &obj.color, &token);
 	if (result != PARSE_OK)
 		return (result);
 	result = parse_bonus_options(&token, &obj);
 	if (result != PARSE_OK)
 		return (result);
 	format_id(obj.id, 8, "cy-", get_cylinder_count(scene) + 1);
-	if (!object_list_add(&scene->objects, &obj))
-		return (PARSE_ERR_FORMAT);
-	return (PARSE_OK);
+	if (object_list_add(&scene->objects, &obj))
+		return (PARSE_OK);
+	free(obj.bump_path);
+	return (PARSE_ERR_FORMAT);
 }

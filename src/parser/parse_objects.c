@@ -14,6 +14,7 @@
 #include "parser.h"
 #include "vec3.h"
 #include "utils.h"
+#include <stdlib.h>
 
 /**
  * @brief Count objects of a specific type in the scene.
@@ -79,6 +80,7 @@ t_parse_result	parse_sphere(char *line, t_scene *scene)
 	t_object		obj;
 	t_parse_result	result;
 
+	ft_bzero(&obj, sizeof(t_object));
 	obj.type = OBJ_SPHERE;
 	token = skip_whitespace(line + 3);
 	result = parse_vector_strict(token, &obj.data.sphere.center, &token);
@@ -92,9 +94,10 @@ t_parse_result	parse_sphere(char *line, t_scene *scene)
 	if (result != PARSE_OK)
 		return (result);
 	format_id(obj.id, 8, "sp-", get_type_count(scene, OBJ_SPHERE) + 1);
-	if (!object_list_add(&scene->objects, &obj))
-		return (PARSE_ERR_FORMAT);
-	return (PARSE_OK);
+	if (object_list_add(&scene->objects, &obj))
+		return (PARSE_OK);
+	free(obj.bump_path);
+	return (PARSE_ERR_FORMAT);
 }
 
 /**
@@ -139,6 +142,7 @@ t_parse_result	parse_plane(char *line, t_scene *scene)
 	t_object		obj;
 	t_parse_result	result;
 
+	ft_bzero(&obj, sizeof(t_object));
 	obj.type = OBJ_PLANE;
 	token = skip_whitespace(line + 3);
 	result = parse_vector_strict(token, &obj.data.plane.point, &token);
@@ -152,7 +156,8 @@ t_parse_result	parse_plane(char *line, t_scene *scene)
 	if (result != PARSE_OK)
 		return (result);
 	format_id(obj.id, 8, "pl-", get_type_count(scene, OBJ_PLANE) + 1);
-	if (!object_list_add(&scene->objects, &obj))
-		return (PARSE_ERR_FORMAT);
-	return (PARSE_OK);
+	if (object_list_add(&scene->objects, &obj))
+		return (PARSE_OK);
+	free(obj.bump_path);
+	return (PARSE_ERR_FORMAT);
 }
