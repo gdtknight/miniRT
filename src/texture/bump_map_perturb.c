@@ -34,7 +34,7 @@ static void	get_surface_uv(t_object *obj, t_hit *hit, double *uv)
 		local = vec3_normalize(vec3_subtract(hit->point,
 					obj->data.sphere.center));
 		uv[0] = 0.5 + atan2(local.z, local.x) / (2.0 * M_PI);
-		uv[1] = 0.5 - asin(local.y) / M_PI;
+		uv[1] = 0.5 - asin(fmax(-1.0, fmin(1.0, local.y))) / M_PI;
 		return ;
 	}
 	tangent = get_tangent(hit->normal);
@@ -49,8 +49,8 @@ static void	compute_gradient(t_bump_map *bmap, double *uv, double *grad)
 	int		py;
 	double	h;
 
-	px = (int)(uv[0] * bmap->width) % bmap->width;
-	py = (int)(uv[1] * bmap->height) % bmap->height;
+	px = (int)floor(uv[0] * bmap->width) % bmap->width;
+	py = (int)floor(uv[1] * bmap->height) % bmap->height;
 	if (px < 0)
 		px += bmap->width;
 	if (py < 0)

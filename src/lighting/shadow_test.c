@@ -99,7 +99,7 @@ int	is_in_shadow(t_scene *scene, t_vec3 point, t_vec3 light_pos, double bias)
 
 	to_light = vec3_subtract(light_pos, point);
 	mag = vec3_magnitude(to_light);
-	if (mag < 0.0001)
+	if (mag < COEFF_EPSILON)
 		return (0);
 	shadow_hit.distance = mag;
 	light_dir = vec3_multiply(to_light, 1.0 / mag);

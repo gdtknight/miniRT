@@ -47,6 +47,8 @@ typedef struct s_cyl_calc
 	double	discriminant;
 	double	t;
 	double	m;
+	double	t2;
+	double	m2;
 }	t_cyl_calc;
 
 /* Intersection with unified object */

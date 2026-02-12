@@ -27,6 +27,12 @@ void	clamp_color(t_color *result)
 		result->g = 255;
 	if (result->b > 255)
 		result->b = 255;
+	if (result->r < 0)
+		result->r = 0;
+	if (result->g < 0)
+		result->g = 0;
+	if (result->b < 0)
+		result->b = 0;
 }
 
 /**

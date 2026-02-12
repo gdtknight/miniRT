@@ -42,9 +42,9 @@ static int	calc_cyl_intersect(t_ray *ray, t_cylinder_data *c, t_cyl_calc *calc)
 	if (calc->discriminant < 0 || calc->a < EPSILON)
 		return (0);
 	calc->t = (-calc->b - sqrt(calc->discriminant)) / (2.0 * calc->a);
-	if (calc->t < 0.001)
-		calc->t = (-calc->b + sqrt(calc->discriminant)) / (2.0 * calc->a);
+	calc->t2 = (-calc->b + sqrt(calc->discriminant)) / (2.0 * calc->a);
 	calc->m = dir_axis * calc->t + oc_axis;
+	calc->m2 = dir_axis * calc->t2 + oc_axis;
 	return (1);
 }
 
@@ -72,7 +72,7 @@ static int	intersect_cyl_cap_new(t_ray *ray, t_cylinder_data *c, t_hit *hit,
 		return (0);
 	cap_center = vec3_add(c->center, vec3_multiply(c->axis, cap_m));
 	t = vec3_dot(vec3_subtract(cap_center, ray->origin), c->axis) / denom;
-	if (t < 0.001 || t > hit->distance)
+	if (t < RAY_T_MIN || t > hit->distance)
 		return (0);
 	p = vec3_add(ray->origin, vec3_multiply(ray->direction, t));
 	if (vec3_dot(vec3_subtract(p, cap_center),
@@ -104,10 +104,17 @@ static int	intersect_cyl_body_new(t_ray *ray, t_cylinder_data *c, t_hit *hit)
 
 	if (!calc_cyl_intersect(ray, c, &calc))
 		return (0);
-	if (calc.t < 0.001 || calc.t > hit->distance)
+	if (calc.t < RAY_T_MIN || calc.t > hit->distance)
 		return (0);
 	if (calc.m < -c->half_height || calc.m > c->half_height)
-		return (0);
+	{
+		calc.t = calc.t2;
+		calc.m = calc.m2;
+		if (calc.t < RAY_T_MIN || calc.t > hit->distance)
+			return (0);
+		if (calc.m < -c->half_height || calc.m > c->half_height)
+			return (0);
+	}
 	hit->distance = calc.t;
 	hit->point = vec3_add(ray->origin, vec3_multiply(ray->direction, calc.t));
 	axis_pt = vec3_add(c->center, vec3_multiply(c->axis, calc.m));

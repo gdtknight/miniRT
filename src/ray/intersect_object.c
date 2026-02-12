@@ -12,6 +12,7 @@
 
 #include "ray.h"
 #include "vec3.h"
+#include "minirt.h"
 #include <math.h>
 
 /**
@@ -44,9 +45,9 @@ static int	intersect_sphere_new(t_ray *ray, t_sphere_data *s, t_color color,
 		return (0);
 	c = sqrt(d);
 	d = (-b - c) / (2.0 * a);
-	if (d < 0.001)
+	if (d < RAY_T_MIN)
 		d = (-b + c) / (2.0 * a);
-	if (d < 0.001 || d > hit->distance)
+	if (d < RAY_T_MIN || d > hit->distance)
 		return (0);
 	hit->distance = d;
 	hit->point = vec3_add(ray->origin, vec3_multiply(ray->direction, d));
@@ -75,11 +76,11 @@ static int	intersect_plane_new(t_ray *ray, t_plane_data *p, t_color color,
 	t_vec3	p0l0;
 
 	denom = vec3_dot(p->normal, ray->direction);
-	if (fabs(denom) < 0.0001)
+	if (fabs(denom) < COEFF_EPSILON)
 		return (0);
 	p0l0 = vec3_subtract(p->point, ray->origin);
 	t = vec3_dot(p0l0, p->normal) / denom;
-	if (t < 0.001 || t > hit->distance)
+	if (t < RAY_T_MIN || t > hit->distance)
 		return (0);
 	hit->distance = t;
 	hit->point = vec3_add(ray->origin, vec3_multiply(ray->direction, t));

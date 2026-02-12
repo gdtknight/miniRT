@@ -39,7 +39,7 @@ static t_color	checker_sphere(t_object *obj, t_hit *hit)
 	local = vec3_normalize(vec3_subtract(hit->point,
 				obj->data.sphere.center));
 	u = 0.5 + atan2(local.z, local.x) / (2.0 * M_PI);
-	v = 0.5 - asin(local.y) / M_PI;
+	v = 0.5 - asin(fmax(-1.0, fmin(1.0, local.y))) / M_PI;
 	pattern = (int)floor(u * 8.0) + (int)floor(v * 8.0);
 	if (pattern & 1)
 		return (obj->checker_color);

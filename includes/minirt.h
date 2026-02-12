@@ -41,6 +41,8 @@ typedef struct s_bvh	t_bvh;
 
 /* Epsilon value for floating point comparison */
 # define EPSILON 0.0001
+# define RAY_T_MIN     0.001
+# define COEFF_EPSILON 0.0001
 
 /* Helper structure for camera ray calculations */
 typedef struct s_cam_calc
