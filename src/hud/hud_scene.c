@@ -102,6 +102,8 @@ void	hud_render_light(t_render *render, int *y)
 	char	buf[128];
 	int		i;
 
+	if (render->scene->light_count == 0)
+		return ;
 	i = 0;
 	buf[i++] = 'L';
 	ft_itoa_buf(buf + i, render->scene->selected_light + 1);
@@ -131,6 +133,8 @@ void	render_light_bright(t_render *render, int *y)
 	char	buf[128];
 	int		i;
 
+	if (render->scene->light_count == 0)
+		return ;
 	i = 0;
 	while (i < 8)
 		buf[i++] = ' ';

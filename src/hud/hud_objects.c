@@ -62,7 +62,8 @@ static void	render_object_by_index(t_render *render, int g_idx, int *y)
 
 	hud_get_selection_from_global(&sel, g_idx, render->scene);
 	color = HUD_COLOR_TEXT;
-	if (sel.index == render->selection.index)
+	if (sel.index == render->selection.index
+		&& sel.type == render->selection.type)
 		color = HUD_COLOR_HIGHLIGHT;
 	render_object_entry(render, g_idx, y, color);
 }

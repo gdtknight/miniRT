@@ -14,19 +14,6 @@
 #include "hud.h"
 
 /**
- * @brief Convert selection to a global object index.
- *
- * @param sel Current selection.
- * @param scene Scene containing objects (unused for now).
- * @return int Global index of the selected object.
- */
-int	hud_get_global_index(t_selection sel, t_scene *scene)
-{
-	(void)scene;
-	return (sel.index);
-}
-
-/**
  * @brief Convert a global index to a selection struct.
  *
  * @param sel Output selection to populate.
@@ -109,5 +96,4 @@ void	hud_change_page(t_render *render, int direction)
 		render->hud.current_page = (render->hud.current_page - 1
 				+ render->hud.total_pages) % render->hud.total_pages;
 	render->hud.dirty = 1;
-	render_set_flag(render, RENDER_DIRTY);
 }

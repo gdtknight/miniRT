@@ -76,19 +76,7 @@ void	set_pixel(t_pixel_params *params, int color);
 ** Side Effects:
 **   - Sets default values: visible=1, current_page=0, dirty=1
 */
-int		hud_init(t_hud_state *hud, void *mlx, void *win);
-
-/*
-** Clean up HUD resources.
-**
-** Parameters:
-**   hud: Pointer to HUD state structure (unused, kept for API consistency)
-**   mlx: MiniLibX connection pointer (unused, kept for API consistency)
-**
-** Returns:
-**   void
-*/
-void	hud_cleanup(t_hud_state *hud, void *mlx);
+int		hud_init(t_hud_state *hud);
 
 /*
 ** Render HUD overlay on top of rendered scene.
@@ -218,12 +206,6 @@ void	hud_change_page(t_render *render, int direction);
 /*                          INTERNAL HELPER FUNCTIONS                         */
 /*                      (Not part of public API contract)                     */
 /* ========================================================================== */
-
-/*
-** Convert selection (type, index) to global linear index.
-** Used internally for Tab navigation logic.
-*/
-int		hud_get_global_index(t_selection sel, t_scene *scene);
 
 /*
 ** Convert global linear index to selection (type, index).

@@ -37,29 +37,12 @@ int	hud_calculate_total_pages(t_scene *scene)
  * Sets initial state values for visibility, pagination, and dirty flag.
  *
  * @param hud HUD state to initialize.
- * @param mlx MLX connection pointer (unused, kept for API consistency).
- * @param win Window pointer (unused, kept for API consistency).
  * @return int 0 on success.
  */
-int	hud_init(t_hud_state *hud, void *mlx, void *win)
+int	hud_init(t_hud_state *hud)
 {
-	(void)mlx;
-	(void)win;
 	hud->visible = 1;
 	hud->current_page = 0;
-	hud->objects_per_page = HUD_OBJECTS_PER_PAGE;
 	hud->dirty = 1;
 	return (0);
-}
-
-/**
- * @brief Clean up HUD resources.
- *
- * @param hud HUD state to clean up.
- * @param mlx MLX connection pointer (unused, kept for API consistency).
- */
-void	hud_cleanup(t_hud_state *hud, void *mlx)
-{
-	(void)hud;
-	(void)mlx;
 }

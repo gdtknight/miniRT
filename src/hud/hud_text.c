@@ -40,7 +40,7 @@ void	format_and_print_vec3(t_render *render, int *y,
 	i = 0;
 	while (i < 8)
 		buf[i++] = ' ';
-	while (*label && i < 90)
+	while (*label && i < 80)
 		buf[i++] = *label++;
 	buf[i] = '\0';
 	hud_format_vec3(buf + i, vec);
@@ -51,6 +51,9 @@ void	format_and_print_vec3(t_render *render, int *y,
 
 /**
  * @brief Copy a string into a buffer and return length copied.
+ *
+ * The caller must ensure dst has enough room and must NUL-terminate
+ * after appending additional content: dst[returned_len] is not set to '\\0'.
  *
  * @param dst Destination buffer.
  * @param src Source string.

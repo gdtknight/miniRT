@@ -44,7 +44,7 @@ static void	fill_obj_id(char *buf, int *i, t_object *obj)
 	int	j;
 
 	j = 0;
-	while (obj->id[j])
+	while (obj->id[j] && j < 15)
 		buf[(*i)++] = obj->id[j++];
 	buf[(*i)++] = ':';
 	buf[(*i)++] = ' ';
