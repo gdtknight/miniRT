@@ -26,17 +26,13 @@
  */
 static void	update_camera_cache(t_camera *camera)
 {
-	t_vec3	world_up;
-
 	if (camera->cache.valid)
 		return ;
 	camera->cache.aspect_ratio = ASPECT_RATIO_NUM / ASPECT_RATIO_DEN;
 	camera->cache.fov_scale = tan(camera->fov * 0.5 * M_PI / 180.0);
-	world_up = (t_vec3){0, 1, 0};
-	if (fabs(vec3_dot(camera->direction, world_up)) > 0.999)
-		world_up = (t_vec3){0, 0, 1};
-	camera->cache.right = vec3_normalize(vec3_cross(camera->direction,
-				world_up));
+	camera->cache.right.x = -cos(camera->yaw);
+	camera->cache.right.y = 0;
+	camera->cache.right.z = sin(camera->yaw);
 	camera->cache.up = vec3_normalize(vec3_cross(camera->cache.right,
 				camera->direction));
 	camera->cache.valid = 1;

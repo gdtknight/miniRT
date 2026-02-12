@@ -86,6 +86,8 @@ typedef struct s_camera
 	t_vec3			initial_position;
 	t_vec3			initial_direction;
 	double			fov;
+	double			pitch;
+	double			yaw;
 	t_camera_cache	cache;
 }	t_camera;
 

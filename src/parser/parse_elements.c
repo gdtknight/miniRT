@@ -14,6 +14,7 @@
 #include "parser.h"
 #include "vec3.h"
 #include "error.h"
+#include <math.h>
 
 /**
  * @brief Parse ambient light definition.
@@ -87,6 +88,16 @@ static t_parse_result	parse_camera_vecs(const char **token, t_scene *scene)
  * @param scene Scene to update.
  * @return t_parse_result PARSE_OK on success, error code on failure.
  */
+static void	init_camera_state(t_scene *scene)
+{
+	scene->camera.initial_position = scene->camera.position;
+	scene->camera.initial_direction = scene->camera.direction;
+	scene->camera.pitch = asin(scene->camera.direction.y);
+	scene->camera.yaw = atan2(scene->camera.direction.x,
+			scene->camera.direction.z);
+	scene->camera.cache.valid = 0;
+}
+
 t_parse_result	parse_camera(char *line, t_scene *scene)
 {
 	const char		*token;
@@ -108,9 +119,7 @@ t_parse_result	parse_camera(char *line, t_scene *scene)
 	scene->camera.fov = fov;
 	if (!at_line_end(token))
 		return (PARSE_ERR_TRAILING_TOKEN);
-	scene->camera.initial_position = scene->camera.position;
-	scene->camera.initial_direction = scene->camera.direction;
-	scene->camera.cache.valid = 0;
+	init_camera_state(scene);
 	scene_set_flag(scene, SCENE_HAS_CAMERA);
 	return (PARSE_OK);
 }
