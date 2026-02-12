@@ -76,6 +76,8 @@ typedef struct s_camera
     t_vec3          initial_position;   // 리셋용 초기 위치
     t_vec3          initial_direction;  // 리셋용 초기 방향
     double          fov;                // 시야각 (1~179, 정수 파싱)
+    double          pitch;              // Euler 피치 (라디안)
+    double          yaw;                // Euler 요 (라디안)
     t_camera_cache  cache;              // basis 벡터 캐시
 }   t_camera;
 ```
