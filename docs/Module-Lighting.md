@@ -24,15 +24,14 @@ Phong 조명 모델과 그림자 시스템을 담당하는 모듈입니다.
 1. 체커보드 hook: has_checker → checkerboard_color()로 hit->color 교체
 2. 범프맵 hook: bump_map → bump_perturb_normal()로 hit->normal 교란
 3. view_dir = normalize(camera.position - hit.point)
-4. adjust_samples(): 광원 수에 따라 소프트 섀도 샘플 동적 조절
-5. for each light in lights[0..light_count-1]:
+4. for each light in lights[0..light_count-1]:
    a. light_dir = normalize(light.position - hit.point)
    b. diffuse = max(0, dot(normal, light_dir))
    c. shadow_factor = calculate_shadow_factor(...)
+      (내부에서 samples / light_count 로 광원 수 비례 조절)
    d. specular = pow(max(0, dot(reflect_dir, view_dir)), 32) × 0.5
    e. acc += (diffuse + specular) × (1 - shadow_factor) × brightness × light_color
-6. 원본 샘플 수 복원
-7. final_color = clamp(object.color × (ambient + acc), 0, 255)
+5. final_color = clamp(object.color × (ambient + acc), 0, 255)
 ```
 
 ### Specular 최적화

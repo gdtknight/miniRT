@@ -96,8 +96,8 @@ make re     # 전체 재빌드
 | 타겟 | 설명 |
 |------|------|
 | `all` | libft → MiniLibX → miniRT 순차 빌드 |
-| `clean` | 오브젝트 파일 삭제 (build/, MiniLibX, libft) |
-| `fclean` | clean + 실행 파일 삭제 |
+| `clean` | 오브젝트 파일 삭제 (build/) |
+| `fclean` | clean + 실행 파일 + MiniLibX/libft 정리 |
 | `re` | fclean → all |
 | `norm` | norminette 검사 (src/ + includes/) |
 
