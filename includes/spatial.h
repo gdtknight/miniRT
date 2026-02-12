@@ -62,16 +62,6 @@ typedef struct s_bvh
 	t_plane_refs	plane_refs;
 }	t_bvh;
 
-/* Helper structure for BVH hit checking */
-typedef struct s_hit_check
-{
-	int				hit_left;
-	int				hit_right;
-	t_hit_record	*left_hit;
-	t_hit_record	*right_hit;
-	t_hit_record	*hit;
-}	t_hit_check;
-
 /* Axis intersection check parameters */
 typedef struct s_axis_check
 {
@@ -131,6 +121,9 @@ int			bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 				void *scene);
 int			bvh_intersect_any(t_bvh *bvh, t_ray ray, double max_dist,
 				void *scene);
+
+/* Ray direction helper */
+int			ray_goes_positive(t_vec3 dir, int axis);
 
 /* Object bounds calculation */
 t_aabb		get_object_bounds(t_object_ref ref, void *scene);

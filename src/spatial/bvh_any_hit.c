@@ -15,15 +15,6 @@
 #include "ray.h"
 #include "metrics.h"
 
-static int	ray_goes_positive(t_vec3 dir, int axis)
-{
-	if (axis == 0)
-		return (dir.x > 0);
-	if (axis == 1)
-		return (dir.y > 0);
-	return (dir.z > 0);
-}
-
 static void	get_near_far(t_bvh_node *node, t_ray ray,
 		t_bvh_node **near, t_bvh_node **far)
 {
@@ -89,7 +80,7 @@ static int	node_any_hit(t_bvh_node *node, t_ray ray, double max_dist,
 	if (!node)
 		return (0);
 	metrics_add_bvh_node_visit(&((t_scene *)scene)->metrics);
-	t_min = 0.001;
+	t_min = RAY_T_MIN;
 	t_max = max_dist;
 	if (!aabb_intersect(node->bounds, ray, &t_min, &t_max))
 	{

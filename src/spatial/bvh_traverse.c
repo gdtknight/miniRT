@@ -15,7 +15,7 @@
 #include "ray.h"
 #include "metrics.h"
 
-static int	ray_goes_positive(t_vec3 dir, int axis)
+int	ray_goes_positive(t_vec3 dir, int axis)
 {
 	if (axis == 0)
 		return (dir.x > 0);

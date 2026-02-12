@@ -13,7 +13,10 @@
 #include "spatial.h"
 
 /**
- * @brief Return the smaller of two doubles.
+ * @brief Return the smaller of two doubles (NaN-safe).
+ *
+ * If either operand is NaN (detected via self-comparison), the other
+ * operand is returned.  This avoids propagating NaN through AABB merges.
  *
  * @param a First value.
  * @param b Second value.
@@ -31,7 +34,10 @@ double	min_double(double a, double b)
 }
 
 /**
- * @brief Return the larger of two doubles.
+ * @brief Return the larger of two doubles (NaN-safe).
+ *
+ * If either operand is NaN (detected via self-comparison), the other
+ * operand is returned.  This avoids propagating NaN through AABB merges.
  *
  * @param a First value.
  * @param b Second value.
