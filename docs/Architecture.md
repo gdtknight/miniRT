@@ -72,7 +72,7 @@ main()
 ```
 trace_ray(scene, ray)
  ├── BVH 활성화 → bvh_intersect() + plane 별도 테스트
- │    └── bvh_node_intersect() → aabb_intersect() → intersect_object()
+ │    └── bvh_node_intersect() → aabb_intersect() → intersect_object_new()
  └── BVH 비활성화 → brute-force (모든 오브젝트 순회)
  └── hit 발생 → apply_lighting()
 ```
