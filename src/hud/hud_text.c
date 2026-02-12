@@ -40,7 +40,7 @@ void	format_and_print_vec3(t_render *render, int *y,
 	i = 0;
 	while (i < 8)
 		buf[i++] = ' ';
-	while (*label)
+	while (*label && i < 90)
 		buf[i++] = *label++;
 	buf[i] = '\0';
 	hud_format_vec3(buf + i, vec);
@@ -56,7 +56,7 @@ void	format_and_print_vec3(t_render *render, int *y,
  * @param src Source string.
  * @return int Number of characters copied.
  */
-int	copy_str_to_buf(char *dst, char *src)
+int	copy_str_to_buf(char *dst, const char *src)
 {
 	int	i;
 

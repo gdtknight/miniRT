@@ -84,7 +84,7 @@ make re     # 전체 재빌드
 
 ### MiniLibX
 
-`lib/minilibx-linux/` (Linux) 또는 `lib/minilibx-macos/` (macOS)에 포함.
+`lib/minilibx-macos/` (macOS)에 포함. Linux 빌드 시 별도로 minilibx-linux를 배치해야 합니다.
 
 - Linux: X11 기반 그래픽 라이브러리
 - macOS: AppKit/OpenGL 기반 그래픽 라이브러리
@@ -111,7 +111,7 @@ make re     # 전체 재빌드
 
 ## CI
 
-`.github/workflows/` 에 3개의 워크플로가 설정되어 있습니다:
+`.github/workflows/` 에 4개의 워크플로가 설정되어 있습니다:
 
 | 워크플로 | 트리거 | 설명 |
 |---------|--------|------|

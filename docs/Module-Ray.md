@@ -10,6 +10,8 @@
 |------|------|
 | `intersect_object.c` | `intersect_object_new` — 통합 교차 디스패치 + 구/평면 교차 |
 | `intersect_cyl_new.c` | `intersect_cylinder_new` — 원기둥 교차 (측면 + 캡) |
+| `intersect_cone_body.c` | `intersect_cone_body` — 원뿔 측면 교차 |
+| `intersect_cone_cap.c` | `intersect_cone_new` — 원뿔 통합 (측면 + 밑면 캡) |
 
 ---
 
@@ -86,10 +88,12 @@ m = (D·A)×t + (oc·A)
 
 ### 캡 교차
 
-양쪽 캡은 축 방향으로 `±half_height` 위치의 평면-원 교차로 판정합니다.
+양쪽 캡(상단/하단)을 각각 판정합니다.
 
 ```
-cap_center = center ± half_height × axis
+상단 캡: cap_center = center + half_height × axis
+하단 캡: cap_center = center - half_height × axis
+
 t = ((cap_center - O) · axis) / (D · axis)
 hit_point = O + t × D
 |hit_point - cap_center|² <= r² → 유효
@@ -97,8 +101,36 @@ hit_point = O + t × D
 
 ### 법선 계산
 
-- **측면**: `normalize(hit_point - (center + m × axis))`
-- **캡**: `±axis` (상단/하단 구분)
+- **측면**: `normalize(hit_point - (center + m × axis))`, `dot(ray.dir, normal) > 0`이면 반전
+- **캡**: 초기값 `axis`, `dot(ray.direction, normal) > 0`이면 반전
+
+---
+
+## 원뿔 교차 (Cone)
+
+원뿔은 측면(테이퍼된 곡면)과 밑면 캡(원형 디스크)을 개별 판정합니다. 꼭짓점은 점이므로 apex 캡은 없습니다.
+
+### 측면 교차
+
+apex 기준 이차방정식으로 교차를 판정합니다.
+
+```
+apex = center + axis × half_height
+d = O - apex (레이 원점에서 apex까지)
+k = radius / (2 × half_height)  (기울기)
+k2 = 1 + k²
+
+a = D·D - k2 × (D·A)²
+b = 2(D·d - k2 × (D·A)(d·A))
+c = d·d - k2 × (d·A)²
+
+높이 검증: m ∈ [-2×half_height, 0]
+```
+
+### 법선 계산
+
+- **측면**: `normalize((P - apex) - m × (1 + k²) × axis)`
+- **밑면 캡**: 초기값 `-axis`, `dot(ray.direction, normal) > 0`이면 반전하여 레이 반대 방향 보장
 
 ---
 
@@ -107,12 +139,10 @@ hit_point = O + t × D
 `intersect_object_new(ray, obj, hit)`:
 
 ```c
-switch (obj->type)
-{
-    case OBJ_SPHERE:   → 구 교차
-    case OBJ_PLANE:    → 평면 교차
-    case OBJ_CYLINDER: → 원기둥 교차
-}
+if (obj->type == OBJ_SPHERE)    → 구 교차
+if (obj->type == OBJ_PLANE)     → 평면 교차
+if (obj->type == OBJ_CYLINDER)  → 원기둥 교차
+if (obj->type == OBJ_CONE)      → 원뿔 교차
 ```
 
-모든 교차 함수는 가장 가까운 양의 `t` 값(EPSILON 이상)을 찾아 `t_hit` 구조체에 기록합니다.
+모든 교차 함수는 가장 가까운 양의 `t` 값(EPSILON 이상)을 찾아 `t_hit` 구조체에 기록합니다. 교차 성공 시 `hit->obj`에 오브젝트 포인터가 설정됩니다.

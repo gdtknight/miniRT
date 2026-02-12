@@ -92,14 +92,17 @@ static int	copy_line_content(t_line_reader *reader, char *line, int *pos)
  * @param len Length of line.
  * @return char* Allocated string or NULL on error.
  */
-static char	*finalize_line(char *line, int len)
+static char	*finalize_line(char *line, int len, t_line_reader *reader)
 {
 	char	*result;
 
 	line[len] = '\0';
 	result = malloc(len + 1);
 	if (!result)
+	{
+		reader->io_error = 1;
 		return (NULL);
+	}
 	ft_strlcpy(result, line, len + 1);
 	return (result);
 }
@@ -130,11 +133,11 @@ char	*line_reader_next(t_line_reader *reader)
 		}
 		status = copy_line_content(reader, line, &pos);
 		if (status == 1)
-			return (finalize_line(line, pos));
+			return (finalize_line(line, pos, reader));
 		if (status == -1)
 			return (NULL);
 	}
 	if (pos > 0)
-		return (finalize_line(line, pos));
+		return (finalize_line(line, pos, reader));
 	return (NULL);
 }

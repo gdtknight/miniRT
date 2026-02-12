@@ -214,8 +214,6 @@ void	hud_change_page(t_render *render, int direction);
 **   - Object properties modified
 **   - Any scene data displayed in HUD changed
 */
-void	hud_mark_dirty(t_render *render);
-
 /* ========================================================================== */
 /*                          INTERNAL HELPER FUNCTIONS                         */
 /*                      (Not part of public API contract)                     */
@@ -293,29 +291,7 @@ void	hud_render_performance(t_render *render, int *y);
 */
 void	hud_render_content(t_render *render);
 
-/*
-** Render camera information section.
-** Called internally by hud_render_content().
-*/
-void	hud_render_camera(t_render *render, int *y);
-
-/*
-** Render ambient light information section.
-** Called internally by hud_render_content().
-*/
-void	hud_render_ambient(t_render *render, int *y);
-
-/*
-** Render light source information section.
-** Called internally by hud_render_content().
-*/
-void	hud_render_light(t_render *render, int *y);
-
-/*
-** Render object list with pagination.
-** Called internally by hud_render_content().
-*/
-void	hud_render_objects(t_render *render, int *y);
+/* Scene and object rendering declared in hud_scene.h and hud_objects.h */
 
 /*
 ** Calculate total number of pages based on object count.

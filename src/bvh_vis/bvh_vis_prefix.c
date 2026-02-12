@@ -58,10 +58,10 @@ int	prefix_push(t_prefix_state *state, int is_last)
 	char		*new_buffer;
 
 	if (is_last)
-		prefix = "    ";
+		prefix = "      ";
 	else
 		prefix = "│   ";
-	new_len = state->length + 4;
+	new_len = state->length + 6;
 	if (new_len >= state->capacity)
 	{
 		new_buffer = malloc(state->capacity * 2);
@@ -72,7 +72,7 @@ int	prefix_push(t_prefix_state *state, int is_last)
 		state->buffer = new_buffer;
 		state->capacity *= 2;
 	}
-	ft_memcpy(state->buffer + state->length, prefix, 4);
+	ft_memcpy(state->buffer + state->length, prefix, 6);
 	state->length = new_len;
 	state->buffer[state->length] = '\0';
 	state->level++;
@@ -86,9 +86,9 @@ int	prefix_push(t_prefix_state *state, int is_last)
  */
 void	prefix_pop(t_prefix_state *state)
 {
-	if (state->length >= 4)
+	if (state->length >= 6)
 	{
-		state->length -= 4;
+		state->length -= 6;
 		state->buffer[state->length] = '\0';
 	}
 	if (state->level > 0)
@@ -113,7 +113,9 @@ void	prefix_print(t_prefix_state *state)
  */
 void	prefix_destroy(t_prefix_state *state)
 {
-	if (state && state->buffer)
+	if (!state)
+		return ;
+	if (state->buffer)
 	{
 		free(state->buffer);
 		state->buffer = NULL;

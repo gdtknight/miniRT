@@ -27,6 +27,8 @@ static t_vec3	get_object_position(t_object *obj)
 		return (obj->data.plane.point);
 	else if (obj->type == OBJ_CYLINDER)
 		return (obj->data.cylinder.center);
+	else if (obj->type == OBJ_CONE)
+		return (obj->data.cone.center);
 	return ((t_vec3){0, 0, 0});
 }
 

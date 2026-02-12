@@ -38,6 +38,8 @@ static void	move_selected_object(t_render *render, t_vec3 move)
 		obj->data.plane.point = vec3_add(obj->data.plane.point, move);
 	else if (obj->type == OBJ_CYLINDER)
 		obj->data.cylinder.center = vec3_add(obj->data.cylinder.center, move);
+	else if (obj->type == OBJ_CONE)
+		obj->data.cone.center = vec3_add(obj->data.cone.center, move);
 }
 
 /**
@@ -103,6 +105,10 @@ void	handle_light_move(t_render *render, int keycode)
 		move.z = step;
 	else
 		return ;
-	render->scene->light.position = vec3_add(render->scene->light.position,
+	if (!render->scene->light_count)
+		return ;
+	render->scene->lights[render->scene->selected_light].position
+		= vec3_add(
+			render->scene->lights[render->scene->selected_light].position,
 			move);
 }

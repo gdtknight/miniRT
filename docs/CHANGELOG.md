@@ -55,8 +55,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BVH Acceleration**: 기본 활성화, 복잡한 씬에서 2~10배 렌더링 가속
 - **Debounced Rendering**: 150ms 디바운스 타이머 기반 렌더링 최적화
 - **BVH Tree Visualization**: `--bvh-vis` 플래그로 BVH 트리 구조 콘솔 출력
-- **Unified Object Identifiers**: 일관된 오브젝트 식별자 체계 (sp0, pl1, cy2)
-- `is_rendering` 플래그로 정확한 렌더 진행 추적
+- **Unified Object Identifiers**: 일관된 오브젝트 식별자 체계 (sp-1, pl-1, cy-1)
+- `RENDER_RENDERING` 비트 플래그로 정확한 렌더 진행 추적
 
 ### Changed
 - 100% Norminette 준수 달성

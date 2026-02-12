@@ -42,14 +42,15 @@ HUD(Head-Up Display) 오버레이와 키가이드를 담당하는 모듈입니�
 ```
 hud_render(render)
  ├── [visible 아님] → return
- ├── hud_render_background()     // 반투명 배경
- ├── hud_render_scene_info()     // 씬 정보 (카메라, 조명)
- ├── hud_render_objects()        // 오브젝트 목록 (현재 페이지)
- │    └── render_object_by_index()
- │         ├── render_sphere_obj()
- │         ├── render_plane_obj()
- │         └── render_cylinder_obj()
- └── hud_render_performance()    // 성능 메트릭
+ ├── hud_render_content()
+ │    ├── hud_render_camera()        // 카메라 위치, 방향
+ │    ├── render_camera_fov()        // FOV 값
+ │    ├── hud_render_ambient()       // 환경광
+ │    ├── hud_render_light()         // 광원 위치
+ │    ├── render_light_bright()      // 광원 밝기
+ │    ├── hud_render_objects()       // 오브젝트 목록 (현재 페이지)
+ │    └── hud_render_performance()   // 성능 메트릭
+ └── hud.dirty = 0
 ```
 
 ---
@@ -84,8 +85,7 @@ typedef struct s_hud_state
 ### 성능 메트릭
 - FPS
 - 프레임 렌더 시간 (ms)
-- 레이 수, 교차 테스트 수
-- BVH 노드 방문 수, 스킵률
+- BVH 상태 (ON/OFF)
 
 ---
 
@@ -94,8 +94,7 @@ typedef struct s_hud_state
 키가이드는 화면에 현재 사용 가능한 키 바인딩을 오버레이로 표시합니다.
 
 - H 키로 HUD와 함께 토글
-- 카메라, 오브젝트, 광원 조작 키 목록 표시
-- 현재 선택된 오브젝트에 따라 관련 키 강조
+- 카메라, 오브젝트, 광원 조작 키 목록 표시 (정적 텍스트)
 
 ---
 

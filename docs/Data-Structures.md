@@ -10,7 +10,7 @@ miniRT의 핵심 자료구조 정의와 관계를 설명합니다.
 flowchart TD
     A[t_scene] --> B[t_object_list]
     A --> C[t_camera]
-    A --> D[t_light]
+    A --> D[t_light x MAX_LIGHTS]
     A --> E[t_ambient]
     A --> F[t_shadow_config]
     A --> G[t_bvh]
@@ -21,6 +21,7 @@ flowchart TD
     I --> K[t_sphere_data]
     I --> L[t_plane_data]
     I --> M[t_cylinder_data]
+    I --> M2[t_cone_data]
 
     G --> N[t_bvh_node]
     N --> O[t_aabb]
@@ -36,6 +37,7 @@ flowchart TD
     R --> W[t_mlx_img]
     X[t_ray] --> Y[t_hit]
     Y --> J
+    Y --> I
 ```
 
 ---
@@ -49,18 +51,20 @@ flowchart TD
 ```c
 typedef struct s_scene
 {
-    t_ambient       ambient;        // 환경광
-    t_camera        camera;         // 카메라
-    t_light         light;          // 점광원
-    t_shadow_config shadow_config;  // 그림자 설정
-    t_object_list   objects;        // 오브젝트 동적 배열
-    int             flags;          // 씬 상태 비트 플래그
-    t_bvh           *bvh;           // BVH 트리 포인터
-    t_metrics       metrics;        // 성능 메트릭
+    t_ambient       ambient;              // 환경광
+    t_camera        camera;               // 카메라
+    t_light         lights[MAX_LIGHTS];   // 광원 배열 (최대 16)
+    int             light_count;          // 현재 광원 수
+    int             selected_light;       // 조작 대상 광원 인덱스
+    t_shadow_config shadow_config;        // 그림자 설정
+    t_object_list   objects;              // 오브젝트 동적 배열
+    int             flags;                // 씬 상태 비트 플래그
+    t_bvh           *bvh;                 // BVH 트리 포인터
+    t_metrics       metrics;              // 성능 메트릭
 }   t_scene;
 ```
 
-플래그: `SCENE_HAS_AMBIENT (0x01)`, `SCENE_HAS_CAMERA (0x02)`, `SCENE_HAS_LIGHT (0x04)`, `SCENE_BVH_ENABLED (0x08)`
+플래그: `SCENE_HAS_AMBIENT (0x01)`, `SCENE_HAS_CAMERA (0x02)`, `SCENE_BVH_ENABLED (0x08)`
 
 ### `t_camera` (includes/minirt.h)
 
@@ -71,7 +75,7 @@ typedef struct s_camera
     t_vec3          direction;          // 시선 방향 (정규화)
     t_vec3          initial_position;   // 리셋용 초기 위치
     t_vec3          initial_direction;  // 리셋용 초기 방향
-    double          fov;                // 시야각 (0~180)
+    double          fov;                // 시야각 (1~179, 정수 파싱)
     t_camera_cache  cache;              // basis 벡터 캐시
 }   t_camera;
 ```
@@ -108,14 +112,19 @@ typedef struct s_ambient
 ```c
 typedef struct s_object
 {
-    t_object_type   type;    // OBJ_SPHERE, OBJ_PLANE, OBJ_CYLINDER
-    t_color         color;   // RGB 색상
-    char            id[8];   // 식별자 (예: "sp0", "cy2")
+    t_object_type   type;           // OBJ_SPHERE, OBJ_PLANE, OBJ_CYLINDER, OBJ_CONE
+    t_color         color;          // RGB 색상
+    t_color         checker_color;  // 체커보드 보조 색상
+    int             has_checker;    // 체커보드 활성화 여부
+    char            *bump_path;     // 범프맵 XPM 파일 경로
+    t_bump_map      *bump_map;      // 범프맵 데이터 (지연 로드)
+    char            id[8];          // 식별자 (예: "sp-1", "cy-2")
     union u_object_data
     {
         t_sphere_data   sphere;
         t_plane_data    plane;
         t_cylinder_data cylinder;
+        t_cone_data     cone;
     }   data;
 }   t_object;
 ```
@@ -154,6 +163,19 @@ typedef struct s_cylinder_data
 }   t_cylinder_data;
 ```
 
+### `t_cone_data`
+
+```c
+typedef struct s_cone_data
+{
+    t_vec3  center;       // 원뿔 중심 (높이 중앙)
+    t_vec3  axis;         // 축 방향 (정규화, center→apex)
+    double  radius;       // 밑면 반지름
+    double  radius_sq;    // 반지름^2 (캐싱)
+    double  half_height;  // 높이/2
+}   t_cone_data;
+```
+
 ### `t_object_list` (includes/minirt.h)
 
 ```c
@@ -185,11 +207,11 @@ typedef struct s_ray
 ```c
 typedef struct s_hit
 {
-    bool    hit;       // 교차 여부
-    double  distance;  // 교차 거리 (t값)
-    t_vec3  point;     // 교차점 좌표
-    t_vec3  normal;    // 교차점 법선
-    t_color color;     // 오브젝트 색상
+    double      distance;  // 교차 거리 (t값)
+    t_vec3      point;     // 교차점 좌표
+    t_vec3      normal;    // 교차점 법선
+    t_color     color;     // 오브젝트 색상
+    t_object    *obj;      // 교차된 오브젝트 포인터 (체커보드/범프맵 접근용)
 }   t_hit;
 ```
 
@@ -204,7 +226,6 @@ typedef struct s_bvh
 {
     t_bvh_node      *root;         // 트리 루트
     int             enabled;       // 활성화 여부
-    int             total_nodes;   // 전체 노드 수
     int             max_depth;     // 최대 깊이
     int             visualize;     // 시각화 플래그
     t_plane_refs    plane_refs;    // 분리된 plane 인덱스
@@ -231,8 +252,8 @@ typedef struct s_bvh_node
 ```c
 typedef struct s_aabb
 {
-    t_vec3  min;  // 바운딩 박스 최솟값
-    t_vec3  max;  // 바운딩 박스 최댓값
+    t_vec3  min;  // 각 축 최솟값으로 구성된 대각선 꼭짓점
+    t_vec3  max;  // 각 축 최댓값으로 구성된 대각선 꼭짓점
 }   t_aabb;
 ```
 

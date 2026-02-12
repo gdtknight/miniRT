@@ -39,31 +39,6 @@ const char	*skip_whitespace(const char *str)
 }
 
 /**
- * @brief Get next space-separated token.
- *
- * Skips leading whitespace, then finds the end of the token.
- *
- * @param str Current position.
- * @param end Set to character after token.
- * @return const char* Pointer to token start, or NULL if at end.
- */
-const char	*next_token(const char *str, const char **end)
-{
-	const char	*start;
-
-	if (!str || !end)
-		return (NULL);
-	str = skip_whitespace(str);
-	if (*str == '\0' || *str == '\n' || *str == '#')
-		return (NULL);
-	start = str;
-	while (*str && !is_whitespace(*str) && *str != '\n' && *str != '#')
-		str++;
-	*end = str;
-	return (start);
-}
-
-/**
  * @brief Check if at end of meaningful content.
  *
  * Returns 1 if the current position is whitespace, null terminator,

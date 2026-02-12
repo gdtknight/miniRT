@@ -29,16 +29,16 @@ BVH(Bounding Volume Hierarchy) 공간 가속 구조를 담당하는 모듈입니
 
 - Plane의 AABB는 `[-1e6, 1e6]³`으로 극도로 넓어 BVH 트리 품질을 저하
 - Plane 인덱스를 `t_plane_refs`에 별도 저장
-- Bounded 오브젝트(sphere, cylinder)만 BVH 트리 구축
+- Bounded 오브젝트(sphere, cylinder, cone)만 BVH 트리 구축
 
-### 2. Median Split
+### 2. Spatial Midpoint Split
 
 ```
 bvh_build_recursive(objects, count, scene, depth)
- ├── count <= leaf threshold → create_leaf_node()
+ ├── count <= 2 || depth > 20 → create_leaf_node()
  ├── compute_bounds()         // 전체 오브젝트 AABB 합산
  ├── choose_split_axis()      // 가장 긴 축 선택
- ├── calculate_split_position() // 중앙값 기준 분할점
+ ├── calculate_split_position() // AABB 중심점 기준 분할점
  ├── partition_objects()      // 분할점 기준 좌/우 분리
  └── create_split_node()
       ├── bvh_build_recursive(left, ...)
@@ -46,15 +46,16 @@ bvh_build_recursive(objects, count, scene, depth)
 ```
 
 - **Split axis**: AABB의 가장 긴 축 (x/y/z)
-- **Split position**: 중앙값 (median) 기준
-- **Leaf threshold**: 오브젝트 수 ≤ 임계값이면 리프 노드 생성
+- **Split position**: AABB 중심점 기준 `(bounds.min + bounds.max) / 2.0`
+- **Leaf threshold**: 오브젝트 수 ≤ 2 또는 깊이 > 20이면 리프 노드 생성
 
 ### 3. AABB 계산
 
 | 오브젝트 | AABB |
 |---------|------|
 | Sphere | center ± radius |
-| Cylinder | center ± (radius, half_height, radius) + 축 보정 |
+| Cylinder | center ± (radius + \|half_axis\|) 각 축별 |
+| Cone | center ± (radius + \|half_axis\|) 각 축별 (cylinder와 동일 패턴) |
 | Plane | 제외 (별도 관리) |
 
 ---
@@ -66,9 +67,9 @@ int aabb_intersect(t_aabb box, t_ray ray, double *t_min, double *t_max)
 ```
 
 Slab method 사용:
-1. 각 축(x, y, z)별 `t_near`, `t_far` 계산
+1. 각 축(x, y, z)별 `t0`, `t1` 계산 (`safe_slab_axis`)
 2. `inv_dir` (사전 계산)로 나눗셈 대체
-3. 모든 축의 `[t_near, t_far]` 교집합이 비어있지 않으면 교차
+3. 모든 축의 `[t0, t1]`을 `tmin`, `tmax`에 누적하여 교집합이 비어있지 않으면 교차
 
 ---
 
@@ -94,9 +95,8 @@ bvh_node_intersect(node, ray, hit, scene)
 
 ```
 bvh_intersect_any(bvh, ray, max_dist, scene)
- ├── BVH 순회
- ├── 첫 번째 hit 발견 시 즉시 return 1 (early exit)
- └── plane 별도 루프
+ ├── BVH 순회 (bounded 오브젝트만)
+ └── 첫 번째 hit 발견 시 즉시 return 1 (early exit)
 ```
 
 - Any-hit 모드: 그림자 판정은 "차폐 여부"만 필요하므로 가장 가까운 교차가 아닌 아무 교차에서 즉시 종료
@@ -130,8 +130,8 @@ Plane의 `[-1e6, 1e6]³` AABB가 BVH 트리의 모든 분할을 무력화했기 
 ```
 BVH Tree (depth=0, axis=X)
 ├── [L] depth=1, axis=Y, bounds=[...]
-│   ├── [L] LEAF: sp0, sp1
-│   └── [R] LEAF: sp2
+│   ├── [L] LEAF: sp-1, sp-2
+│   └── [R] LEAF: sp-3
 └── [R] depth=1, axis=Z
-    └── LEAF: cy0, cy1
+    └── LEAF: cy-1, cy-2
 ```

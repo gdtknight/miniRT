@@ -39,19 +39,6 @@ int	scene_has_camera(t_scene *scene)
 }
 
 /**
- * @brief Check if the scene has a light definition.
- *
- * @param scene Scene to query.
- * @return int 1 if light flag is set, 0 otherwise.
- */
-int	scene_has_light(t_scene *scene)
-{
-	if (!scene)
-		return (0);
-	return ((scene->flags & SCENE_HAS_LIGHT) != 0);
-}
-
-/**
  * @brief Set a scene flag bit.
  *
  * @param scene Scene to update.

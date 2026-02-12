@@ -102,20 +102,22 @@ void	hud_render_light(t_render *render, int *y)
 	char	buf[128];
 	int		i;
 
-	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
-		*y, HUD_COLOR_TEXT, "Light:");
-	*y += HUD_LINE_HEIGHT;
 	i = 0;
-	while (i < 8)
-		buf[i++] = ' ';
-	buf[i++] = 'p';
-	buf[i++] = 'o';
-	buf[i++] = 's';
+	buf[i++] = 'L';
+	ft_itoa_buf(buf + i, render->scene->selected_light + 1);
+	while (buf[i])
+		i++;
+	buf[i++] = '/';
+	ft_itoa_buf(buf + i, render->scene->light_count);
+	while (buf[i])
+		i++;
+	buf[i++] = ':';
 	buf[i] = '\0';
-	hud_format_vec3(buf + i, render->scene->light.position);
 	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
 		*y, HUD_COLOR_TEXT, buf);
 	*y += HUD_LINE_HEIGHT;
+	format_and_print_vec3(render, y, "pos",
+		render->scene->lights[render->scene->selected_light].position);
 }
 
 /**
@@ -140,12 +142,14 @@ void	render_light_bright(t_render *render, int *y)
 	buf[i++] = 't';
 	buf[i++] = ':';
 	buf[i] = '\0';
-	hud_format_float(buf + i, render->scene->light.brightness);
+	hud_format_float(buf + i,
+		render->scene->lights[render->scene->selected_light].brightness);
 	while (buf[i])
 		i++;
 	buf[i++] = ' ';
 	buf[i] = '\0';
-	hud_format_color(buf + i, render->scene->light.color);
+	hud_format_color(buf + i,
+		render->scene->lights[render->scene->selected_light].color);
 	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
 		*y, HUD_COLOR_TEXT, buf);
 	*y += HUD_LINE_HEIGHT;

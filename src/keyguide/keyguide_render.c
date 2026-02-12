@@ -39,6 +39,9 @@ static void	keyguide_render_camera_section(t_render *render, int *y)
 	*y += KEYGUIDE_LINE_HEIGHT;
 	mlx_string_put(render->mlx.mlx, render->mlx.win,
 		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "S - Reset");
+	*y += KEYGUIDE_LINE_HEIGHT;
+	mlx_string_put(render->mlx.mlx, render->mlx.win,
+		render->keyguide.x + 20, *y, KEYGUIDE_COLOR_TEXT, "1/3 - Yaw");
 }
 
 /**
@@ -105,7 +108,7 @@ void	keyguide_render(t_render *render)
 	if (!render->keyguide.visible || !render->keyguide.dirty)
 		return ;
 	keyguide_render_content(render);
-	y = render->keyguide.y + 20 + 30 + KEYGUIDE_LINE_HEIGHT * 7
+	y = render->keyguide.y + 20 + 30 + KEYGUIDE_LINE_HEIGHT * 8
 		+ KEYGUIDE_SECTION_GAP + KEYGUIDE_LINE_HEIGHT * 3;
 	keyguide_render_content2(render, &y);
 	keyguide_render_extra(render, &y);

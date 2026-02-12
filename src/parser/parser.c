@@ -56,7 +56,7 @@ int	validate_scene(t_scene *scene)
 		return (error_print(ERR_PARSE_MISSING), 0);
 	if (!scene_has_camera(scene))
 		return (error_print(ERR_PARSE_MISSING), 0);
-	if (!scene_has_light(scene))
+	if (scene->light_count == 0)
 		return (error_print(ERR_PARSE_MISSING), 0);
 	if (scene->objects.count == 0)
 		return (error_print(ERR_PARSE_MISSING), 0);

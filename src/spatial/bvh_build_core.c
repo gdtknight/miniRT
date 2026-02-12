@@ -110,5 +110,4 @@ void	bvh_build(t_bvh *bvh, t_object_ref *objects, int count, void *scene)
 	bvh->root = bvh_build_recursive(objects, count, scene, 0);
 	if (bvh->root)
 		bvh->root->depth = 0;
-	bvh->total_nodes = 1;
 }

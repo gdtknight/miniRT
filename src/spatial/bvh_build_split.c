@@ -75,9 +75,14 @@ t_bvh_node	*create_split_node(t_split_params *sp)
 			sp->scene, sp->depth + 1);
 	node->right = bvh_build_recursive(sp->objects + sp->mid,
 			sp->count - sp->mid, sp->scene, sp->depth + 1);
-	if (node->left)
-		node->left->depth = sp->depth + 1;
-	if (node->right)
-		node->right->depth = sp->depth + 1;
+	if (!node->left || !node->right)
+	{
+		bvh_node_destroy(node->left);
+		bvh_node_destroy(node->right);
+		free(node);
+		return (NULL);
+	}
+	node->left->depth = sp->depth + 1;
+	node->right->depth = sp->depth + 1;
 	return (node);
 }

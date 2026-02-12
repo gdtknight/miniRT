@@ -68,7 +68,7 @@ t_vec3	generate_shadow_sample_offset(double radius, int sample_index,
 	grid_size = (int)sqrt((double)total_samples);
 	if (grid_size < 1)
 		grid_size = 1;
-	angle = 2.0 * 3.14159265358979323846 * (sample_index % grid_size)
+	angle = 2.0 * M_PI * (sample_index % grid_size)
 		/ (double)grid_size;
 	r = radius * (sample_index / (double)grid_size + 0.5) / (double)grid_size;
 	offset.x = r * cos(angle);

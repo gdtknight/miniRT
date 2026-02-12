@@ -73,15 +73,31 @@ static void	resize_cylinder(t_object *obj, int keycode)
 	}
 }
 
-/**
- * @brief Handle object resize keys for the selected object.
- *
- * Applies resize operations to spheres and cylinders, marks BVH dirty, and
- * triggers debounce for re-rendering.
- *
- * @param render Render context containing selection and scene.
- * @param keycode Key code indicating resize action.
- */
+static void	resize_cone(t_object *obj, int keycode)
+{
+	double	step;
+
+	step = 1.0;
+	if (keycode == KEY_Y || keycode == KEY_U)
+	{
+		if (keycode == KEY_Y)
+			step = -1.0;
+		if (obj->data.cone.radius + step < 0.1)
+			return ;
+		obj->data.cone.radius += step;
+		obj->data.cone.radius_sq = obj->data.cone.radius
+			* obj->data.cone.radius;
+	}
+	else if (keycode == KEY_N || keycode == KEY_M)
+	{
+		if (keycode == KEY_M)
+			step = -1.0;
+		if (obj->data.cone.half_height + step < 0.1)
+			return ;
+		obj->data.cone.half_height += step;
+	}
+}
+
 void	handle_object_resize(t_render *render, int keycode)
 {
 	t_object	*obj;
@@ -95,6 +111,8 @@ void	handle_object_resize(t_render *render, int keycode)
 		resize_sphere(obj, keycode);
 	else if (obj->type == OBJ_CYLINDER)
 		resize_cylinder(obj, keycode);
+	else if (obj->type == OBJ_CONE)
+		resize_cone(obj, keycode);
 	else
 		return ;
 	render_set_flag(render, RENDER_BVH_DIRTY);

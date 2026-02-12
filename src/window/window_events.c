@@ -48,8 +48,11 @@ int	handle_key(int keycode, void *param)
  * @param render Render context containing image buffer and HUD state.
  * @return int Always returns 0 for MLX event handling.
  */
-int	handle_expose(t_render *render)
+int	handle_expose(void *param)
 {
+	t_render	*render;
+
+	render = (t_render *)param;
 	mlx_put_image_to_window(render->mlx.mlx, render->mlx.win,
 		render->mlx.img.img, 0, 0);
 	if (render->hud.visible)

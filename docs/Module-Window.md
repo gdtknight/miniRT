@@ -15,7 +15,6 @@ MiniLibX 윈도우 초기화, 이벤트 핸들링, 키 바인딩을 담당하는
 | `window_loop.c` | `render_loop` — 프레임 루프 콜백 |
 | `window_camera.c` | 카메라 이동/회전/리셋 |
 | `window_objects.c` | 오브젝트 이동 처리 |
-| `window_selection.c` | 오브젝트 선택 (이전/다음 순환) |
 | `window_resize.c` | 오브젝트 리사이즈 처리 |
 | `window_rotate.c` | 오브젝트 회전 처리 |
 | `mlx_context.c` | MiniLibX 초기화 (`mlx_init`, `mlx_new_window`) |
@@ -28,15 +27,16 @@ MiniLibX 윈도우 초기화, 이벤트 핸들링, 키 바인딩을 담당하는
 ## MiniLibX 초기화
 
 ```
-init_window(scene)
+render_create(scene)
  ├── malloc(t_render)
- ├── init_mlx()
+ ├── mlx_context_init()
  │    ├── mlx_init()
  │    ├── mlx_new_window(1440, 900, "miniRT")
  │    ├── mlx_new_image()
  │    └── mlx_get_data_addr()
  ├── init_render_state()
- │    └── pixel_timing_init()
+ │    ├── pixel_timing_init()
+ │    └── debounce_init()
  ├── init_ui_components()
  │    ├── hud_init()
  │    ├── keyguide_init()
@@ -45,6 +45,7 @@ init_window(scene)
       ├── mlx_hook(close_window)       // 윈도우 닫기
       ├── mlx_hook(handle_key)         // 키 누름
       ├── mlx_hook(handle_key_release) // 키 해제
+      ├── mlx_hook(handle_expose)      // 윈도우 노출 시 재렌더링
       └── mlx_loop_hook(render_loop)   // 프레임 루프
 ```
 
@@ -69,6 +70,8 @@ init_window(scene)
 |----|------|
 | E | 피치 위 (고개 올림) |
 | C | 피치 아래 (고개 내림) |
+| 1 | 요 좌 (좌회전) |
+| 3 | 요 우 (우회전) |
 
 ### 카메라 리셋
 | 키 | 동작 |
@@ -93,10 +96,10 @@ init_window(scene)
 ### 오브젝트 리사이즈
 | 키 | 대상 | 방향 |
 |----|------|------|
-| Y | 반지름 | - |
-| U | 반지름 | + |
-| N | 높이 (원기둥) | - |
-| M | 높이 (원기둥) | + |
+| Y | 반지름 (구/원기둥/원뿔) | - |
+| U | 반지름 (구/원기둥/원뿔) | + |
+| N | 높이 (원기둥/원뿔) | - |
+| M | 높이 (원기둥/원뿔) | + |
 
 ### 오브젝트 회전
 | 키 | 축 | 방향 |
@@ -115,6 +118,11 @@ init_window(scene)
 | , | Z | - |
 | . | Z | + |
 
+### 광원 선택
+| 키 | 동작 |
+|----|------|
+| = | 다음 광원 선택 (순환) |
+
 ### UI
 | 키 | 동작 |
 |----|------|
@@ -129,8 +137,8 @@ init_window(scene)
 ```
 handle_key(keycode, render)
  ├── ESC → close_window()
- ├── H/TAB/Up/Down → handle_hud_keys()
- ├── W/X/A/D/Q/Z/E/C/S → handle_camera_keys()
+ ├── H/TAB/Up/Down/= → handle_hud_keys()
+ ├── W/X/A/D/Q/Z/E/C/S/1/3 → handle_camera_keys()
  └── R/T/F/G/V/B/[/]/;/'/,/./Y/U/N/M/I/J/O/K/P/L → handle_transform_keys()
       ├── R/T/F/G/V/B → handle_object_move()
       ├── [/]/;/'/,/. → handle_light_move()
@@ -149,12 +157,17 @@ handle_key_release(keycode, render)
 
 ```
 close_window(render)
- ├── pixel_timing_cleanup()
- ├── keyguide_cleanup()
- ├── hud_cleanup()
- ├── mlx_destroy_image()
- ├── cleanup_scene()
+ ├── cleanup_all_bump_maps()    // 범프맵 XPM 리소스 해제
+ ├── render_destroy(render)
+ │    ├── hud_cleanup()
+ │    ├── keyguide_cleanup()
+ │    ├── pixel_timing_cleanup()
+ │    ├── mlx_context_destroy()  // mlx_destroy_image + mlx_destroy_window
+ │    └── free(render)
+ ├── scene_destroy(scene)
+ │    ├── object_list_destroy()
  │    ├── bvh_destroy()
+ │    ├── free_shadow_offset_lut()
  │    └── free(scene)
  └── exit(0)
 ```

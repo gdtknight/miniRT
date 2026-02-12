@@ -118,11 +118,14 @@ int	float_to_str(char *buf, size_t size, double value, int precision)
 	buf[0] = '\0';
 	if (!handle_negative(buf, size, &value))
 		return (0);
-	mult = 10;
-	if (precision == 2)
-		mult = 100;
+	mult = 10 + 90 * (precision == 2);
 	int_part = (int)value;
 	frac_part = (int)((value - int_part) * mult + 0.5);
+	if (frac_part >= mult)
+	{
+		frac_part = 0;
+		int_part++;
+	}
 	int_str = ft_itoa(int_part);
 	if (!int_str)
 		return (0);

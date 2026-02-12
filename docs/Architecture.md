@@ -9,10 +9,8 @@ miniRT의 전체 아키텍처와 렌더링 파이프라인을 설명합니다.
 ```
 main()
  ├── parse_args()           # 인자 파싱 (파일명, --bvh-vis)
- ├── init_scene()            # 씬 구조체 초기화
- ├── parse_scene()           # .rt 파일 파싱 → 씬 데이터 구축
- ├── scene_build_bvh()       # BVH 트리 구축 (plane 분리 포함)
- ├── init_window()           # MiniLibX 윈도우/이미지/HUD 초기화
+ ├── init_and_parse()        # scene_create + parse_scene + scene_build_bvh
+ ├── init_render_ctx()       # render_create + load_all_bump_maps
  └── mlx_loop()              # 이벤트 루프 진입
       └── render_loop()      # 매 프레임 콜백
            ├── debounce_update()          # 디바운스 FSM 상태 전이
@@ -86,10 +84,14 @@ trace_ray(scene, ray)
 ### 3. 조명 계산 (`apply_lighting`)
 
 각 hit point에 대해 Phong 모델 적용:
-1. Ambient: 균일 환경광
-2. Shadow factor: 소프트 섀도우 (스토캐스틱 샘플링)
-3. Diffuse: Lambert 반사 (`dot(N, L)`)
-4. Specular: Phong 반사 (`pow(dot(R, V), 32)`)
+1. 체커보드 색상 교체 (활성화 시)
+2. 범프맵 법선 교란 (활성화 시)
+3. 다중 광원 루프: 각 광원별 독립 계산
+   - Shadow factor: 소프트 섀도우 (동적 샘플 조절)
+   - Diffuse: Lambert 반사 (`dot(N, L)`)
+   - Specular: Phong 반사 (`pow(dot(R, V), 32) × 0.5`)
+4. Ambient: 균일 환경광 + 광원 기여 합산
+5. 최종 RGB 클램핑 [0, 255]
 
 ### 4. 품질 모드
 
@@ -108,14 +110,15 @@ trace_ray(scene, ray)
 
 | 모듈 | 파일 수 | 역할 |
 |------|--------|------|
-| parser/ | 14 | .rt 파일 파싱 |
+| parser/ | 16 | .rt 파일 파싱 (bonus options, cone 포함) |
 | render/ | 11 | 렌더 루프, 카메라, 메트릭 |
-| spatial/ | 8 | BVH 구축/순회, AABB |
-| lighting/ | 5 | Phong 조명, 그림자 |
+| spatial/ | 10 | BVH 구축/순회, AABB |
+| lighting/ | 5 | Phong 조명, 그림자 (다중 광원) |
 | hud/ | 15 | HUD 오버레이 |
-| window/ | 14 | 윈도우, 키 이벤트 |
-| ray/ | 2 | 교차 판정 |
+| window/ | 13 | 윈도우, 키 이벤트 |
+| ray/ | 4 | 교차 판정 (sphere, plane, cylinder, cone) |
 | math/ | 2 | 벡터 연산 |
+| texture/ | 4 | 체커보드, 범프맵 |
 | bvh_vis/ | 7 | BVH 시각화 |
 | scene/ | 3 | 씬 관리 |
 | keyguide/ | 4 | 키가이드 |

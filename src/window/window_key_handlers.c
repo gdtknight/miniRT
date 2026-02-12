@@ -14,6 +14,7 @@
 #include "window.h"
 #include "window_internal.h"
 #include "hud.h"
+#include "hud_text.h"
 
 /**
  * @brief Handle camera-related keys and trigger re-rendering.
@@ -42,6 +43,12 @@ void	handle_camera_keys(t_render *render, int keycode)
 	else if (keycode == KEY_S)
 	{
 		handle_camera_reset(render);
+		debounce_on_input(&render->debounce, render);
+		hud_mark_dirty(render);
+	}
+	else if (keycode == KEY_1 || keycode == KEY_3)
+	{
+		handle_camera_yaw(render, keycode);
 		debounce_on_input(&render->debounce, render);
 		hud_mark_dirty(render);
 	}
@@ -122,4 +129,10 @@ void	handle_hud_keys(t_render *render, int keycode)
 		hud_change_page(render, -1);
 	else if (keycode == KEY_DOWN)
 		hud_change_page(render, 1);
+	else if (keycode == KEY_EQUAL && render->scene->light_count > 0)
+	{
+		render->scene->selected_light = (render->scene->selected_light + 1)
+			% render->scene->light_count;
+		hud_mark_dirty(render);
+	}
 }
