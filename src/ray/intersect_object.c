@@ -41,7 +41,7 @@ static int	intersect_sphere_new(t_ray *ray, t_sphere_data *s, t_color color,
 	b = 2.0 * vec3_dot(oc, ray->direction);
 	c = vec3_dot(oc, oc) - s->radius_sq;
 	d = b * b - 4 * a * c;
-	if (d < 0)
+	if (d < 0 || a < EPSILON)
 		return (0);
 	c = sqrt(d);
 	d = (-b - c) / (2.0 * a);

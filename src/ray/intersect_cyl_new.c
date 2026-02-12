@@ -39,7 +39,7 @@ static int	calc_cyl_intersect(t_ray *ray, t_cylinder_data *c, t_cyl_calc *calc)
 	calc->b = 2.0 * (vec3_dot(ray->direction, oc) - dir_axis * oc_axis);
 	calc->c = vec3_dot(oc, oc) - oc_axis * oc_axis - c->radius_sq;
 	calc->discriminant = calc->b * calc->b - 4 * calc->a * calc->c;
-	if (calc->discriminant < 0 || calc->a < EPSILON)
+	if (calc->discriminant < 0 || fabs(calc->a) < EPSILON)
 		return (0);
 	calc->t = (-calc->b - sqrt(calc->discriminant)) / (2.0 * calc->a);
 	calc->t2 = (-calc->b + sqrt(calc->discriminant)) / (2.0 * calc->a);
@@ -104,9 +104,8 @@ static int	intersect_cyl_body_new(t_ray *ray, t_cylinder_data *c, t_hit *hit)
 
 	if (!calc_cyl_intersect(ray, c, &calc))
 		return (0);
-	if (calc.t < RAY_T_MIN || calc.t > hit->distance)
-		return (0);
-	if (calc.m < -c->half_height || calc.m > c->half_height)
+	if (calc.t < RAY_T_MIN || calc.t > hit->distance
+		|| calc.m < -c->half_height || calc.m > c->half_height)
 	{
 		calc.t = calc.t2;
 		calc.m = calc.m2;

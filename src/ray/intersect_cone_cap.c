@@ -30,7 +30,7 @@ static int	intersect_cone_cap(t_ray *ray, t_cone_data *c, t_hit *hit)
 	cap_center = vec3_subtract(c->center,
 			vec3_multiply(c->axis, c->half_height));
 	t = vec3_dot(vec3_subtract(cap_center, ray->origin), c->axis) / denom;
-	if (t < 0.001 || t > hit->distance)
+	if (t < RAY_T_MIN || t > hit->distance)
 		return (0);
 	p = vec3_add(ray->origin, vec3_multiply(ray->direction, t));
 	if (vec3_dot(vec3_subtract(p, cap_center),
