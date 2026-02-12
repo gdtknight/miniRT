@@ -46,6 +46,13 @@ static t_color	checker_sphere(t_object *obj, t_hit *hit)
 	return (obj->color);
 }
 
+static double	get_body_radius(t_object *obj)
+{
+	if (obj->type == OBJ_CYLINDER)
+		return (obj->data.cylinder.radius);
+	return (obj->data.cone.radius);
+}
+
 static t_color	checker_body(t_object *obj, t_hit *hit)
 {
 	t_vec3	axis;
@@ -65,7 +72,8 @@ static t_color	checker_body(t_object *obj, t_hit *hit)
 		d = vec3_subtract(hit->point, obj->data.cone.center);
 	h = vec3_dot(d, axis) / CHECKER_SCALE;
 	pattern = (int)floor(atan2(vec3_dot(d, vec3_cross(axis, tangent)),
-				vec3_dot(d, tangent)) * 4.0 / M_PI);
+				vec3_dot(d, tangent))
+			* get_body_radius(obj) / CHECKER_SCALE);
 	pattern += (int)floor(h);
 	if (pattern & 1)
 		return (obj->checker_color);
@@ -78,5 +86,7 @@ t_color	checkerboard_color(t_object *obj, t_hit *hit)
 		return (checker_plane(obj, hit));
 	if (obj->type == OBJ_SPHERE)
 		return (checker_sphere(obj, hit));
-	return (checker_body(obj, hit));
+	if (obj->type == OBJ_CYLINDER || obj->type == OBJ_CONE)
+		return (checker_body(obj, hit));
+	return (obj->color);
 }

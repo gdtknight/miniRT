@@ -37,9 +37,14 @@ static void	get_surface_uv(t_object *obj, t_hit *hit, double *uv)
 		uv[1] = 0.5 - asin(fmax(-1.0, fmin(1.0, local.y))) / M_PI;
 		return ;
 	}
+	local = hit->point;
+	if (obj->type == OBJ_CYLINDER)
+		local = vec3_subtract(hit->point, obj->data.cylinder.center);
+	else if (obj->type == OBJ_CONE)
+		local = vec3_subtract(hit->point, obj->data.cone.center);
 	tangent = get_tangent(hit->normal);
-	uv[0] = vec3_dot(hit->point, tangent) * 0.5;
-	uv[1] = vec3_dot(hit->point,
+	uv[0] = vec3_dot(local, tangent) * 0.5;
+	uv[1] = vec3_dot(local,
 			vec3_cross(hit->normal, tangent)) * 0.5;
 }
 
@@ -68,6 +73,8 @@ t_vec3	bump_perturb_normal(t_object *obj, t_hit *hit)
 	t_vec3	bitangent;
 	t_vec3	perturb;
 
+	if (obj->bump_map->bpp != 32)
+		return (hit->normal);
 	get_surface_uv(obj, hit, uv);
 	compute_gradient(obj->bump_map, uv, grad);
 	tangent = get_tangent(hit->normal);
