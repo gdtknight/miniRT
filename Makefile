@@ -24,13 +24,16 @@ OBJ_DIR		= build
 LIBFT_DIR	= lib/libft
 LIBFT		= $(LIBFT_DIR)/libft.a
 
-# OS-specific MLX configuration (macOS only)
+# OS-specific MLX configuration
 UNAME_S		:= $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
 	MLX_DIR		= lib/minilibx-macos
 	LDFLAGS		= -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft -framework OpenGL -framework AppKit -lm
+else ifeq ($(UNAME_S),Linux)
+	MLX_DIR		= lib/minilibx-linux
+	LDFLAGS		= -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft -lXext -lX11 -lm
 else
-	$(error Unsupported OS: $(UNAME_S). This project targets macOS only.)
+	$(error Unsupported OS: $(UNAME_S). Supported: Darwin, Linux.)
 endif
 
 SRCS		= $(SRC_DIR)/main.c \
