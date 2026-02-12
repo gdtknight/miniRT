@@ -16,7 +16,7 @@
 # include <sys/time.h>
 # include <stddef.h>
 
-# define MAX_PIXEL_SAMPLES 480000
+# define MAX_PIXEL_SAMPLES (1440 * 900)
 
 typedef struct s_pixel_timing
 {

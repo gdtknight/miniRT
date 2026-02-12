@@ -97,6 +97,8 @@ int	object_list_add(t_object_list *list, t_object *obj)
 {
 	if (!list || !obj)
 		return (0);
+	if (list->count >= 10000)
+		return (0);
 	if (list->count >= list->capacity)
 	{
 		if (!object_list_grow(list))

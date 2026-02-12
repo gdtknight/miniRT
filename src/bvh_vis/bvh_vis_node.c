@@ -12,7 +12,6 @@
 
 #include "bvh_vis.h"
 #include "minirt.h"
-#include "window.h"
 #include "utils.h"
 #include <stdlib.h>
 
@@ -82,14 +81,11 @@ static void	format_bounds_str(t_aabb bounds, char *buf, size_t size, int comp)
  * @brief Build formatted node info for visualization.
  *
  * @param node BVH node to format.
- * @param config Visualization configuration (unused here).
  * @return t_node_info Populated node info struct.
  */
-t_node_info	format_node_info(t_bvh_node *node, t_vis_config *config)
+t_node_info	format_node_info(t_bvh_node *node)
 {
 	t_node_info	info;
-
-	(void)config;
 	info.depth = node->depth;
 	if (is_leaf_node(node))
 		ft_strlcpy(info.type, "Leaf", sizeof(info.type));

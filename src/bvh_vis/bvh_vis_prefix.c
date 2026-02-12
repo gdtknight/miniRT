@@ -14,6 +14,7 @@
 #include "utils.h"
 #include "libft.h"
 #include <stdlib.h>
+#include <limits.h>
 #include <stdio.h>
 
 /**
@@ -61,9 +62,11 @@ int	prefix_push(t_prefix_state *state, int is_last)
 		prefix = "      ";
 	else
 		prefix = "│   ";
-	new_len = state->length + 6;
+	new_len = state->length + PREFIX_SEGMENT_LEN;
 	if (new_len >= state->capacity)
 	{
+		if (state->capacity > INT_MAX / 2)
+			return (0);
 		new_buffer = malloc(state->capacity * 2);
 		if (!new_buffer)
 			return (0);
@@ -72,7 +75,7 @@ int	prefix_push(t_prefix_state *state, int is_last)
 		state->buffer = new_buffer;
 		state->capacity *= 2;
 	}
-	ft_memcpy(state->buffer + state->length, prefix, 6);
+	ft_memcpy(state->buffer + state->length, prefix, PREFIX_SEGMENT_LEN);
 	state->length = new_len;
 	state->buffer[state->length] = '\0';
 	state->level++;
@@ -86,9 +89,9 @@ int	prefix_push(t_prefix_state *state, int is_last)
  */
 void	prefix_pop(t_prefix_state *state)
 {
-	if (state->length >= 6)
+	if (state->length >= PREFIX_SEGMENT_LEN)
 	{
-		state->length -= 6;
+		state->length -= PREFIX_SEGMENT_LEN;
 		state->buffer[state->length] = '\0';
 	}
 	if (state->level > 0)

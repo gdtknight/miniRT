@@ -26,6 +26,7 @@
 /* Text layout spacing */
 # define KEYGUIDE_LINE_HEIGHT 16
 # define KEYGUIDE_SECTION_GAP 8
+# define KEYGUIDE_CONTENT1_LINES 8
 
 /* Text colors (0xRRGGBB format) */
 # define KEYGUIDE_COLOR_TEXT 0xFFFFFF
@@ -37,8 +38,7 @@
 
 /* Key guide state structure defined in window.h */
 
-int		keyguide_init(t_keyguide_state *keyguide, void *mlx, void *win);
-void	keyguide_cleanup(t_keyguide_state *keyguide, void *mlx);
+int		keyguide_init(t_keyguide_state *keyguide);
 void	keyguide_render(t_render *render);
 void	keyguide_render_content(t_render *render);
 void	keyguide_render_extra(t_render *render, int *y);

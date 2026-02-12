@@ -15,6 +15,9 @@
 
 # include "spatial.h"
 
+/* Prefix segment length (bytes per tree-drawing indent level) */
+# define PREFIX_SEGMENT_LEN 6
+
 /* Visualization configuration */
 typedef struct s_vis_config
 {
@@ -74,7 +77,7 @@ void			bvh_visualize_tree(t_bvh_node *node, t_traverse_ctx *ctx,
 					t_bvh_stats *stats);
 
 /* Node formatting */
-t_node_info		format_node_info(t_bvh_node *node, t_vis_config *config);
+t_node_info		format_node_info(t_bvh_node *node);
 int				is_leaf_node(t_bvh_node *node);
 void			format_bounding_box(t_aabb bounds, char *buffer, int compact);
 void			format_object_list(t_object_ref *objects, int count,

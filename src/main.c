@@ -150,5 +150,8 @@ int	main(int argc, char **argv)
 	if (!init_render_ctx(scene, &render, bvh_vis))
 		return (1);
 	mlx_loop(render->mlx.mlx);
+	cleanup_all_bump_maps(scene, render->mlx.mlx);
+	render_destroy(render);
+	scene_destroy(scene);
 	return (0);
 }

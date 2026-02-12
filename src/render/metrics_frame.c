@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "metrics.h"
+#include "libft.h"
 
 /**
  * @brief Initialize frame timing history and counters.
@@ -23,6 +24,7 @@ static void	init_frame_timing(t_frame_timing *timing)
 {
 	int	i;
 
+	ft_bzero(&timing->start_time, sizeof(struct timeval));
 	timing->render_time_us = 0;
 	timing->frame_count = 0;
 	timing->fps = 0.0;
@@ -50,7 +52,6 @@ void	metrics_init(t_metrics *metrics)
 	metrics->ray.shadow_intersect_tests = 0;
 	metrics->bvh.nodes_visited = 0;
 	metrics->bvh.tests_skipped = 0;
-	metrics->quality_mode = 0;
 }
 
 /**

@@ -19,14 +19,10 @@
  * Computes the on-screen position and sets initial visibility.
  *
  * @param keyguide Key guide state to initialize.
- * @param mlx MLX connection pointer (unused, kept for API consistency).
- * @param win Window pointer (unused, kept for API consistency).
  * @return int 0 on success.
  */
-int	keyguide_init(t_keyguide_state *keyguide, void *mlx, void *win)
+int	keyguide_init(t_keyguide_state *keyguide)
 {
-	(void)mlx;
-	(void)win;
 	keyguide->x = WINDOW_WIDTH - KEYGUIDE_WIDTH - KEYGUIDE_MARGIN_X;
 	keyguide->y = KEYGUIDE_MARGIN_Y;
 	keyguide->visible = 1;

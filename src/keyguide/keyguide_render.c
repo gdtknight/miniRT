@@ -108,7 +108,8 @@ void	keyguide_render(t_render *render)
 	if (!render->keyguide.visible || !render->keyguide.dirty)
 		return ;
 	keyguide_render_content(render);
-	y = render->keyguide.y + 20 + 30 + KEYGUIDE_LINE_HEIGHT * 8
+	y = render->keyguide.y + 20 + 30
+		+ KEYGUIDE_LINE_HEIGHT * KEYGUIDE_CONTENT1_LINES
 		+ KEYGUIDE_SECTION_GAP + KEYGUIDE_LINE_HEIGHT * 3;
 	keyguide_render_content2(render, &y);
 	keyguide_render_extra(render, &y);

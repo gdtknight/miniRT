@@ -30,7 +30,7 @@ static void	traverse_recursive(t_bvh_node *node, t_traverse_ctx *ctx,
 
 	if (!node)
 		return ;
-	info = format_node_info(node, ctx->config);
+	info = format_node_info(node);
 	if (is_leaf_node(node))
 		format_object_list(node->objects, node->object_count, info.objects,
 			ctx->scene);

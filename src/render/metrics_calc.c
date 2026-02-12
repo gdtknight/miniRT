@@ -14,29 +14,16 @@
 #include <stdio.h>
 
 /**
- * @brief Return the current FPS estimate.
- *
- * @param m Metrics structure containing timing data.
- * @return double FPS value.
- */
-double	calculate_fps(t_metrics *m)
-{
-	return (m->timing.fps);
-}
-
-/**
  * @brief Calculate BVH skip rate as a percentage.
  *
  * Returns the ratio of skipped nodes to total visited nodes, expressed
  * as a percentage. Higher values indicate more effective early-out.
  *
  * @param m Metrics structure containing BVH traversal counts.
- * @param object_count Number of objects in the scene (unused, kept for API).
  * @return double Skip rate percentage in [0, 100].
  */
-double	calculate_bvh_efficiency(t_metrics *m, int object_count)
+double	calculate_bvh_efficiency(t_metrics *m)
 {
-	(void)object_count;
 	if (m->bvh.nodes_visited == 0)
 		return (0.0);
 	return ((double)m->bvh.tests_skipped / m->bvh.nodes_visited * 100.0);
@@ -84,7 +71,7 @@ void	metrics_print_summary(t_metrics *m, int object_count)
 	double	bvh_eff;
 
 	tests_per_ray = calculate_avg_tests_per_ray(m);
-	bvh_eff = calculate_bvh_efficiency(m, object_count);
+	bvh_eff = calculate_bvh_efficiency(m);
 	printf("\n=== Render Metrics ===\n");
 	printf("Frame time:        %.1f ms\n", m->timing.render_time_us / 1000.0);
 	printf("FPS:               %.4f\n", m->timing.fps);

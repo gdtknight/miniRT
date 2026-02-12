@@ -44,15 +44,6 @@ typedef struct s_bvh	t_bvh;
 # define RAY_T_MIN     0.001
 # define COEFF_EPSILON 0.0001
 
-/* Helper structure for camera ray calculations */
-typedef struct s_cam_calc
-{
-	double	aspect_ratio;
-	double	fov_scale;
-	t_vec3	right;
-	t_vec3	up;
-}	t_cam_calc;
-
 /* Camera basis cache with dirty flag for per-frame caching */
 typedef struct s_camera_cache
 {

@@ -50,7 +50,6 @@ typedef struct s_metrics
 	t_frame_timing	timing;
 	t_ray_metrics	ray;
 	t_bvh_metrics	bvh;
-	int				quality_mode;
 }	t_metrics;
 
 /* Timer utilities */
@@ -72,8 +71,7 @@ void	metrics_add_bvh_skip(t_metrics *metrics);
 void	metrics_reset_bvh(t_bvh_metrics *bvh);
 
 /* Metrics calculations */
-double	calculate_fps(t_metrics *m);
-double	calculate_bvh_efficiency(t_metrics *m, int object_count);
+double	calculate_bvh_efficiency(t_metrics *m);
 double	calculate_avg_tests_per_ray(t_metrics *m);
 void	metrics_print_summary(t_metrics *m, int object_count);
 

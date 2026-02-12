@@ -31,19 +31,19 @@ void	format_object_list(t_object_ref *objects, int count, char *buffer,
 	t_object	*obj;
 
 	scene = (t_scene *)scene_ptr;
-	ft_strlcpy(buffer, "Objects: [", 64);
+	ft_strlcpy(buffer, "Objects: [", 256);
 	i = 0;
 	while (i < count)
 	{
 		obj = &scene->objects.items[objects[i].index];
 		id = obj->id;
 		if (id)
-			ft_strlcat(buffer, id, 64);
+			ft_strlcat(buffer, id, 256);
 		if (i < count - 1)
-			ft_strlcat(buffer, ", ", 64);
+			ft_strlcat(buffer, ", ", 256);
 		i++;
 	}
-	ft_strlcat(buffer, "]", 64);
+	ft_strlcat(buffer, "]", 256);
 }
 
 /**
