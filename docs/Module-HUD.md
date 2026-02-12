@@ -33,7 +33,6 @@ HUD(Head-Up Display) 오버레이와 키가이드를 담당하는 모듈입니�
 | `keyguide_init.c` | 키가이드 초기화 |
 | `keyguide_render.c` | 키가이드 오버레이 렌더링 |
 | `keyguide_render_extra.c` | 추가 키 정보 렌더링 |
-| `keyguide_cleanup.c` | 키가이드 리소스 해제 |
 
 ---
 

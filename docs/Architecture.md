@@ -121,5 +121,5 @@ trace_ray(scene, ray)
 | texture/ | 4 | 체커보드, 범프맵 |
 | bvh_vis/ | 7 | BVH 시각화 |
 | scene/ | 3 | 씬 관리 |
-| keyguide/ | 4 | 키가이드 |
+| keyguide/ | 3 | 키가이드 |
 | utils/ | 3 | 에러, 타이머 |

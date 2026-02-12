@@ -159,8 +159,6 @@ handle_key_release(keycode, render)
 close_window(render)
  ├── cleanup_all_bump_maps()    // 범프맵 XPM 리소스 해제
  ├── render_destroy(render)
- │    ├── hud_cleanup()
- │    ├── keyguide_cleanup()
  │    ├── pixel_timing_cleanup()
  │    ├── mlx_context_destroy()  // mlx_destroy_image + mlx_destroy_window
  │    └── free(render)

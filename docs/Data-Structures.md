@@ -120,7 +120,7 @@ typedef struct s_object
     int             has_checker;    // 체커보드 활성화 여부
     char            *bump_path;     // 범프맵 XPM 파일 경로
     t_bump_map      *bump_map;      // 범프맵 데이터 (지연 로드)
-    char            id[8];          // 식별자 (예: "sp-1", "cy-2")
+    char            id[16];         // 식별자 (예: "sp-1", "cy-2")
     union u_object_data
     {
         t_sphere_data   sphere;
@@ -280,8 +280,6 @@ typedef struct s_shadow_config
 {
     int     samples;      // 그림자 샘플 수 (1=hard, >1=soft)
     double  softness;     // 소프트니스 (0.0~1.0)
-    double  bias_scale;   // shadow bias 배수
-    int     enable_ao;    // AO 활성화 (미구현)
     t_vec3  *offset_lut;  // 사전 계산된 offset LUT
 }   t_shadow_config;
 ```
@@ -298,7 +296,6 @@ typedef struct s_metrics
     t_frame_timing  timing;        // 프레임 시간 측정
     t_ray_metrics   ray;           // 레이/교차 카운터
     t_bvh_metrics   bvh;           // BVH 노드 방문/스킵 카운터
-    int             quality_mode;  // 품질 모드
 }   t_metrics;
 ```
 
