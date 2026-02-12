@@ -14,6 +14,7 @@
 #include "window.h"
 #include "window_internal.h"
 #include "hud.h"
+#include "hud_text.h"
 
 /**
  * @brief Handle camera-related keys and trigger re-rendering.

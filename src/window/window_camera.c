@@ -15,14 +15,14 @@
 #include "window_internal.h"
 #include <math.h>
 
-static t_vec3	rotate_dir(t_vec3 dir, t_vec3 axis, double cos_a, double sin_a)
+static t_vec3	get_camera_right(t_vec3 dir)
 {
-	t_vec3	result;
+	t_vec3	up;
 
-	result.x = dir.x * cos_a + (axis.y * dir.z - axis.z * dir.y) * sin_a;
-	result.y = dir.y * cos_a + (axis.z * dir.x - axis.x * dir.z) * sin_a;
-	result.z = dir.z * cos_a + (axis.x * dir.y - axis.y * dir.x) * sin_a;
-	return (result);
+	up = (t_vec3){0, 1, 0};
+	if (fabs(vec3_dot(dir, up)) > 0.99)
+		up = (t_vec3){0, 0, 1};
+	return (vec3_normalize(vec3_cross(dir, up)));
 }
 
 /**
@@ -41,8 +41,7 @@ void	handle_camera_move(t_render *render, int keycode)
 	double	step;
 
 	step = 1.0;
-	right = vec3_normalize(vec3_cross(render->scene->camera.direction,
-				(t_vec3){0, 1, 0}));
+	right = get_camera_right(render->scene->camera.direction);
 	if (keycode == KEY_W)
 		move = vec3_multiply(render->scene->camera.direction, step);
 	else if (keycode == KEY_X)
@@ -82,10 +81,8 @@ void	handle_camera_pitch(t_render *render, int keycode)
 		angle = -angle;
 	else if (keycode != KEY_E)
 		return ;
-	right = vec3_normalize(vec3_cross(render->scene->camera.direction,
-				(t_vec3){0, 1, 0}));
-	new_dir = rotate_dir(render->scene->camera.direction, right,
-			cos(angle), sin(angle));
+	right = get_camera_right(render->scene->camera.direction);
+	new_dir = rodrigues_rotate(render->scene->camera.direction, right, angle);
 	render->scene->camera.direction = vec3_normalize(new_dir);
 	render->scene->camera.cache.valid = 0;
 }
@@ -120,8 +117,8 @@ void	handle_camera_yaw(t_render *render, int keycode)
 		angle = -angle;
 	else if (keycode != KEY_3)
 		return ;
-	new_dir = rotate_dir(render->scene->camera.direction, (t_vec3){0, 1, 0},
-			cos(angle), sin(angle));
+	new_dir = rodrigues_rotate(render->scene->camera.direction,
+			(t_vec3){0, 1, 0}, angle);
 	render->scene->camera.direction = vec3_normalize(new_dir);
 	render->scene->camera.cache.valid = 0;
 }

@@ -105,6 +105,8 @@ void	handle_light_move(t_render *render, int keycode)
 		move.z = step;
 	else
 		return ;
+	if (!render->scene->light_count)
+		return ;
 	render->scene->lights[render->scene->selected_light].position
 		= vec3_add(
 			render->scene->lights[render->scene->selected_light].position,

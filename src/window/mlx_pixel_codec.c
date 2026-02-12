@@ -14,6 +14,13 @@
 
 static void	decode_rgb(const char *src, int bpp, int endian, unsigned char *rgb)
 {
+	if (bpp < 24)
+	{
+		rgb[0] = 0;
+		rgb[1] = 0;
+		rgb[2] = 0;
+		return ;
+	}
 	if (bpp == 24 && endian == 1)
 	{
 		rgb[0] = (unsigned char)src[0];
