@@ -15,9 +15,9 @@
 
 ---
 
-## 필수 요소 (각 1개)
+## 필수 요소
 
-### A — 주변광 (Ambient Light)
+### A — 주변광 (Ambient Light) (정확히 1개)
 
 ```
 A  <ratio>  <R,G,B>
@@ -30,7 +30,7 @@ A  <ratio>  <R,G,B>
 
 예시: `A  0.2  255,255,255`
 
-### C — 카메라 (Camera)
+### C — 카메라 (Camera) (정확히 1개)
 
 ```
 C  <x,y,z>  <nx,ny,nz>  <fov>
@@ -40,14 +40,14 @@ C  <x,y,z>  <nx,ny,nz>  <fov>
 |---------|------|------|------|
 | x,y,z | double,double,double | 제한 없음 | 카메라 위치 |
 | nx,ny,nz | double,double,double | -1.0 ~ 1.0 각 성분 | 시선 방향 (정규화됨) |
-| fov | double | 0 < fov < 180 | 수평 시야각 (도) |
+| fov | int | 1 ~ 179 | 수평 시야각 (도) |
 
 예시: `C  0,0,-15  0,0,1  70`
 
 - 방향 벡터는 자동 정규화
 - 영벡터 (0,0,0)는 에러
 
-### L — 조명 (Light)
+### L — 조명 (Light) (1개 이상, 최대 MAX_LIGHTS개)
 
 ```
 L  <x,y,z>  <brightness>  <R,G,B>
@@ -61,9 +61,12 @@ L  <x,y,z>  <brightness>  <R,G,B>
 
 예시: `L  -10,10,10  0.7  255,255,255`
 
+- 다중 광원 지원 (최소 1개, 최대 `MAX_LIGHTS`개)
+- 초과 시 `PARSE_ERR_OVERFLOW`
+
 ---
 
-## 선택 요소 (0개 이상)
+## 오브젝트 요소 (1개 이상)
 
 ### sp — 구 (Sphere)
 
@@ -108,6 +111,51 @@ cy  <x,y,z>  <nx,ny,nz>  <diameter>  <height>  <R,G,B>
 | R,G,B | int,int,int | 0 ~ 255 | 색상 |
 
 예시: `cy  0,0,0  0,1,0  5  10  0,255,0`
+
+### co — 원뿔 (Cone)
+
+```
+co  <x,y,z>  <nx,ny,nz>  <diameter>  <height>  <R,G,B>
+```
+
+| 파라미터 | 타입 | 범위 | 설명 |
+|---------|------|------|------|
+| x,y,z | double,double,double | 제한 없음 | 중심 (높이 중앙) |
+| nx,ny,nz | double,double,double | -1.0 ~ 1.0 각 성분 | 축 방향 (정규화됨, center→apex) |
+| diameter | double | > 0 | 밑면 지름 |
+| height | double | > 0 | 높이 |
+| R,G,B | int,int,int | 0 ~ 255 | 색상 |
+
+예시: `co  0,0,0  0,1,0  4  8  255,128,0`
+
+---
+
+## 보너스 옵션
+
+오브젝트(sp, pl, cy, co)의 색상 뒤에 선택적으로 추가할 수 있습니다.
+
+### checker: — 체커보드 패턴
+
+```
+sp  0,0,0  6  255,0,0  checker:0,0,0
+```
+
+- `checker:R,G,B` 형식으로 보조 색상 지정
+- 오브젝트 표면에 체커보드 패턴 적용
+
+### bump: — 범프맵
+
+```
+sp  0,0,0  6  255,0,0  bump:texture.xpm
+```
+
+- `bump:파일경로` 형식으로 XPM 범프맵 지정
+- 법선 교란으로 표면 요철 효과 적용
+
+두 옵션은 동시 사용 가능:
+```
+sp  0,0,0  6  255,0,0  checker:0,0,0  bump:texture.xpm
+```
 
 ---
 
@@ -163,7 +211,7 @@ cy  0,-2,5  0,1,0  2  6  255,255,0
 
 ---
 
-## 제공되는 테스트 씬 (29개)
+## 제공되는 테스트 씬 (35개)
 
 `scenes/valid/` 디렉토리에 다양한 테스트 씬이 포함되어 있습니다:
 
