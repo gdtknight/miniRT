@@ -15,7 +15,7 @@ HUD(Head-Up Display) 오버레이와 키가이드를 담당하는 모듈입니�
 | `hud_scene.c` | 씬 정보 (카메라, 조명, 오브젝트 수) |
 | `hud_objects.c` | 오브젝트 목록 페이지네이션 |
 | `hud_obj_render.c` | 개별 오브젝트 정보 렌더링 |
-| `hud_performance.c` | 성능 메트릭 (FPS, 렌더 시간, BVH 통계) |
+| `hud_performance.c` | 성능 메트릭 (FPS, 렌더 시간, BVH 상태) |
 | `hud_text.c` | HUD dirty 마킹, vec3 포맷 출력 |
 | `hud_format.c` | 숫자/벡터 포맷팅 |
 | `hud_format_helpers.c` | 포맷 헬퍼 |
@@ -75,7 +75,7 @@ typedef struct s_hud_state
 ### 씬 정보
 - 카메라 위치, 방향, FOV
 - 조명 위치, 밝기
-- 오브젝트 수 (sphere/plane/cylinder 별)
+- 오브젝트 총 수
 
 ### 오브젝트 목록
 - 타입, ID, 위치, 크기/반지름

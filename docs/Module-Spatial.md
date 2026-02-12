@@ -100,7 +100,7 @@ bvh_intersect_any(bvh, ray, max_dist, scene)
 ```
 
 - Any-hit 모드: 그림자 판정은 "차폐 여부"만 필요하므로 가장 가까운 교차가 아닌 아무 교차에서 즉시 종료
-- **Shadow BVH threshold** (`SHADOW_BVH_THRESHOLD = 5`): 오브젝트 5개 이상이면 BVH 사용
+- **Shadow BVH threshold** (`SHADOW_BVH_THRESHOLD = 5`): 오브젝트 5개 초과이면 BVH 사용
 
 ---
 

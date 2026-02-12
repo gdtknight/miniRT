@@ -60,9 +60,9 @@ calculate_shadow_factor(scene, query, light_pos, config)
       │    └── offset_lut == NULL → generate_shadow_sample_offset() 폴백
       ├── sample_pos = light_pos + offset
       └── is_in_shadow(scene, biased_point, sample_pos, bias)
-           ├── BVH any-hit (objects >= threshold)
+           ├── BVH any-hit (objects > threshold)
            │    └── bvh_intersect_any()
-           └── brute-force (objects < threshold)
+           └── brute-force (objects <= threshold)
                 └── 모든 오브젝트 순회
 ```
 
