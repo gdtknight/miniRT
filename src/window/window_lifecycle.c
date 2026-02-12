@@ -34,5 +34,4 @@ int	close_window(void *param)
 	render_destroy(render);
 	scene_destroy(scene);
 	exit(0);
-	return (0);
 }

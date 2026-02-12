@@ -18,8 +18,13 @@
 static void	camera_rebuild_dir(t_camera *cam)
 {
 	double	cos_p;
+	double	limit;
 
-	cam->pitch = fmod(cam->pitch, 2.0 * M_PI);
+	limit = M_PI / 2.0 - 0.01;
+	if (cam->pitch > limit)
+		cam->pitch = limit;
+	if (cam->pitch < -limit)
+		cam->pitch = -limit;
 	cam->yaw = fmod(cam->yaw, 2.0 * M_PI);
 	cos_p = cos(cam->pitch);
 	cam->direction.x = cos_p * sin(cam->yaw);
@@ -78,7 +83,7 @@ void	handle_camera_reset(t_render *render)
 	cam = &render->scene->camera;
 	cam->position = cam->initial_position;
 	cam->direction = cam->initial_direction;
-	cam->pitch = asin(cam->initial_direction.y);
+	cam->pitch = asin(fmax(-1.0, fmin(1.0, cam->initial_direction.y)));
 	cam->yaw = atan2(cam->initial_direction.x, cam->initial_direction.z);
 	cam->cache.valid = 0;
 }

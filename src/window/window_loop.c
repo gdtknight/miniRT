@@ -83,6 +83,9 @@ int	render_loop(void *param)
 		render->keyguide.dirty = 1;
 	if (render->hud.visible && (render->hud.dirty || rendered))
 	{
+		if (!rendered)
+			mlx_put_image_to_window(render->mlx.mlx, render->mlx.win,
+				render->mlx.img.img, 0, 0);
 		hud_render(render);
 		keyguide_render(render);
 	}

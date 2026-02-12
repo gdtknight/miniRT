@@ -31,7 +31,7 @@ static void	init_render_state(t_render *render, t_scene *scene)
 {
 	render->scene = scene;
 	render->selection.type = OBJ_NONE;
-	render->selection.index = 0;
+	render->selection.index = -1;
 	render->state_flags = RENDER_DIRTY | RENDER_ENABLE_METRICS_PRINT;
 	pixel_timing_init(&render->pixel_timing);
 	debounce_init(&render->debounce);
@@ -50,10 +50,9 @@ static void	init_render_state(t_render *render, t_scene *scene)
  */
 static int	init_ui_components(t_render *render, t_scene *scene)
 {
-	if (hud_init(&render->hud, render->mlx.mlx, render->mlx.win) == -1)
+	if (hud_init(&render->hud) == -1)
 		return (-1);
-	if (keyguide_init(&render->keyguide, render->mlx.mlx,
-			render->mlx.win) == -1)
+	if (keyguide_init(&render->keyguide) == -1)
 		return (-1);
 	render->hud.total_pages = hud_calculate_total_pages(scene);
 	return (0);
@@ -117,8 +116,6 @@ void	render_destroy(t_render *render)
 {
 	if (!render)
 		return ;
-	hud_cleanup(&render->hud, render->mlx.mlx);
-	keyguide_cleanup(&render->keyguide, render->mlx.mlx);
 	pixel_timing_cleanup(&render->pixel_timing);
 	mlx_context_destroy(&render->mlx);
 	free(render);

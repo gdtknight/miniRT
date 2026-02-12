@@ -64,8 +64,8 @@ t_ray	create_camera_ray(t_camera *camera, double x, double y)
 	pixel_pos = vec3_add(pixel_pos, vec3_multiply(c->up, y * c->fov_scale));
 	ray.origin = camera->position;
 	ray.direction = vec3_normalize(pixel_pos);
-	ray.inv_dir.x = 1.0 / ray.direction.x;
-	ray.inv_dir.y = 1.0 / ray.direction.y;
-	ray.inv_dir.z = 1.0 / ray.direction.z;
+	ray.inv_dir.x = 1.0 / (ray.direction.x + (ray.direction.x == 0) * 1e-15);
+	ray.inv_dir.y = 1.0 / (ray.direction.y + (ray.direction.y == 0) * 1e-15);
+	ray.inv_dir.z = 1.0 / (ray.direction.z + (ray.direction.z == 0) * 1e-15);
 	return (ray);
 }

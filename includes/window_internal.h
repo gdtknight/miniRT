@@ -98,6 +98,8 @@
 #  define KEY_1 49
 #  define KEY_3 51
 #  define KEY_EQUAL 61
+# else
+#  error "Unsupported platform: define key codes for your OS"
 # endif
 
 /* Camera control functions */

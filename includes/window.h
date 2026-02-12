@@ -29,6 +29,7 @@
 # define RENDER_DIRTY       0x01
 # define RENDER_RENDERING   0x02
 # define RENDER_LOW_QUALITY 0x04
+/* 0x08 and 0x10 reserved for future use */
 # define RENDER_BVH_DIRTY  0x20
 # define RENDER_ENABLE_PIXEL_TIMING  0x40
 # define RENDER_ENABLE_METRICS_PRINT 0x80
@@ -45,7 +46,6 @@ typedef struct s_hud_state
 {
 	int		visible;
 	int		current_page;
-	int		objects_per_page;
 	int		total_pages;
 	int		dirty;
 }	t_hud_state;

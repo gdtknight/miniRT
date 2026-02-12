@@ -103,6 +103,7 @@ void	mlx_context_destroy(t_mlx_context *ctx)
 	mlx_img_destroy(&ctx->img, ctx->mlx);
 	if (ctx->win && ctx->mlx)
 		mlx_destroy_window(ctx->mlx, ctx->win);
+	/* macOS MiniLibX has no mlx_destroy_display; handle freed at exit */
 	ctx->mlx = NULL;
 	ctx->win = NULL;
 }
