@@ -35,10 +35,10 @@ render_loop(render)
  │    ├── render_scene_to_buffer(scene, render)
  │    │    ├── [full quality] render_pixel() per pixel
  │    │    │    ├── create_camera_ray()
- │    │    │    ├── get_time_ns()         // 시작 시간
+ │    │    │    ├── [PIXEL_TIMING 활성] get_time_ns()  // 시작
  │    │    │    ├── trace_ray()
- │    │    │    ├── get_time_ns()         // 종료 시간
- │    │    │    ├── pixel_timing_add_sample()
+ │    │    │    ├── [PIXEL_TIMING 활성] get_time_ns()  // 종료
+ │    │    │    ├── [PIXEL_TIMING 활성] pixel_timing_add_sample()
  │    │    │    └── put_pixel_to_buffer()
  │    │    └── [low quality] render_low_quality()
  │    │         ├── create_camera_ray()
@@ -84,7 +84,7 @@ t_color trace_ray(t_scene *scene, t_ray *ray)
 
 | 모드 | 조건 | 설명 |
 |------|------|------|
-| Full quality | `RENDER_LOW_QUALITY` 플래그 없음 | 픽셀 개별 렌더링, timing 측정 |
+| Full quality | `RENDER_LOW_QUALITY` 플래그 없음 | 픽셀 개별 렌더링, timing 측정 (`RENDER_ENABLE_PIXEL_TIMING` 시) |
 | Low quality | `RENDER_LOW_QUALITY` 플래그 있음 | 블록 단위 렌더링, timing 미측정 |
 
 인터랙션(키 입력) 시 low quality로 전환하여 빠른 피드백을 제공하고, 디바운스 타이머 후 full quality로 재렌더링합니다.

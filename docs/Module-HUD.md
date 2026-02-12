@@ -85,8 +85,7 @@ typedef struct s_hud_state
 ### 성능 메트릭
 - FPS
 - 프레임 렌더 시간 (ms)
-- 레이 수, 교차 테스트 수
-- BVH 노드 방문 수, 스킵률
+- BVH 상태 (ON/OFF)
 
 ---
 
