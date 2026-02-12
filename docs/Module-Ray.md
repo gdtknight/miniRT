@@ -55,7 +55,7 @@ Ray: P(t) = O + tD
 t = ((P₀ - O) · N) / (D · N)
 
 D · N ≈ 0 → 평행 (교차 없음)
-t > EPSILON → 유효한 교차
+t >= RAY_T_MIN → 유효한 교차
 ```
 
 - 법선 방향 보정: `dot(ray.direction, normal) > 0`이면 법선 반전 (양면 렌더링)
@@ -145,4 +145,4 @@ if (obj->type == OBJ_CYLINDER)  → 원기둥 교차
 if (obj->type == OBJ_CONE)      → 원뿔 교차
 ```
 
-모든 교차 함수는 가장 가까운 양의 `t` 값(EPSILON 이상)을 찾아 `t_hit` 구조체에 기록합니다. 교차 성공 시 `hit->obj`에 오브젝트 포인터가 설정됩니다.
+모든 교차 함수는 가장 가까운 양의 `t` 값(RAY_T_MIN 이상)을 찾아 `t_hit` 구조체에 기록합니다. 교차 성공 시 `hit->obj`에 오브젝트 포인터가 설정됩니다.
