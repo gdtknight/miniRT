@@ -50,6 +50,8 @@ t_aabb	compute_bounds(t_object_ref *objects, int count, void *scene)
  * @brief Partition objects around a split plane along an axis.
  *
  * Reorders the object array in-place and returns the split index.
+ * When all objects share the same center on the split axis, the midpoint
+ * fallback guarantees both children are non-empty (count >= 3 at this point).
  *
  * @param params Partition parameters.
  * @return int Index separating left/right partitions.
