@@ -59,12 +59,12 @@ void	format_and_print_vec3(t_render *render, int *y,
  * @param src Source string.
  * @return int Number of characters copied.
  */
-int	copy_str_to_buf(char *dst, const char *src)
+int	copy_str_to_buf(char *dst, const char *src, int max)
 {
 	int	i;
 
 	i = 0;
-	while (src[i])
+	while (src[i] && i < max)
 	{
 		dst[i] = src[i];
 		i++;

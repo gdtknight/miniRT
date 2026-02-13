@@ -18,6 +18,6 @@
 void	hud_mark_dirty(t_render *render);
 void	format_and_print_vec3(t_render *render, int *y,
 			char *label, t_vec3 vec);
-int		copy_str_to_buf(char *dst, const char *src);
+int		copy_str_to_buf(char *dst, const char *src, int max);
 
 #endif

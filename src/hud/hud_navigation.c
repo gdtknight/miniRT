@@ -73,6 +73,8 @@ void	hud_select_prev(t_render *render)
 		return ;
 	idx = render->selection.index;
 	idx = (idx - 1 + total) % total;
+	if (idx < 0 || idx >= total)
+		idx = 0;
 	hud_get_selection_from_global(&render->selection, idx, render->scene);
 	render->hud.dirty = 1;
 }

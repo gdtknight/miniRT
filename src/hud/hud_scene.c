@@ -104,6 +104,8 @@ void	hud_render_light(t_render *render, int *y)
 
 	if (render->scene->light_count == 0)
 		return ;
+	if (render->scene->selected_light >= render->scene->light_count)
+		return ;
 	i = 0;
 	buf[i++] = 'L';
 	ft_itoa_buf(buf + i, render->scene->selected_light + 1);
@@ -133,18 +135,12 @@ void	render_light_bright(t_render *render, int *y)
 	char	buf[128];
 	int		i;
 
-	if (render->scene->light_count == 0)
+	if (render->scene->light_count == 0
+		|| render->scene->selected_light >= render->scene->light_count)
 		return ;
-	i = 0;
-	while (i < 8)
-		buf[i++] = ' ';
-	buf[i++] = 'b';
-	buf[i++] = 'r';
-	buf[i++] = 'i';
-	buf[i++] = 'g';
-	buf[i++] = 'h';
-	buf[i++] = 't';
-	buf[i++] = ':';
+	ft_memset(buf, ' ', 8);
+	ft_memcpy(buf + 8, "bright:", 7);
+	i = 15;
 	buf[i] = '\0';
 	hud_format_float(buf + i,
 		render->scene->lights[render->scene->selected_light].brightness);

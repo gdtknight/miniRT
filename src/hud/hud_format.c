@@ -12,6 +12,22 @@
 
 #include "hud.h"
 
+static int	hud_float_start(char *buffer, double *value)
+{
+	if (*value != *value || *value > 1e15 || *value < -1e15)
+	{
+		ft_strcpy(buffer, "---");
+		return (-1);
+	}
+	if (*value < 0)
+	{
+		buffer[0] = '-';
+		*value = -*value;
+		return (1);
+	}
+	return (0);
+}
+
 /**
  * @brief Format a floating-point value with two decimal places.
  *
@@ -26,14 +42,9 @@ void	hud_format_float(char *buffer, double value)
 	int		frac_part;
 	int		i;
 
-	if (value < 0)
-	{
-		buffer[0] = '-';
-		value = -value;
-		i = 1;
-	}
-	else
-		i = 0;
+	i = hud_float_start(buffer, &value);
+	if (i < 0)
+		return ;
 	if (value > 999999.0)
 		value = 999999.0;
 	int_part = (int)value;
