@@ -28,7 +28,7 @@ Phong 조명 모델과 그림자 시스템을 담당하는 모듈입니다.
    a. light_dir = normalize(light.position - hit.point)
    b. diffuse = max(0, dot(normal, light_dir))
    c. shadow_factor = calculate_shadow_factor(...)
-      (내부에서 samples / light_count 로 광원 수 비례 조절)
+      (내부에서 ceil(samples / light_count) 로 광원 수 비례 조절)
    d. specular = pow(max(0, dot(reflect_dir, view_dir)), 32) × 0.5
    e. acc += (diffuse + specular) × (1 - shadow_factor) × brightness × light_color
 5. final_color = clamp(object.color × (ambient + acc), 0, 255)
