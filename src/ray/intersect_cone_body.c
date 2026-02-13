@@ -23,6 +23,8 @@ static int	calc_cone_intersect(t_ray *ray, t_cone_data *c, t_cyl_calc *calc)
 	double	k2;
 
 	k2 = c->radius / (2.0 * c->half_height);
+	if (k2 > 1000.0)
+		k2 = 1000.0;
 	k2 = 1.0 + k2 * k2;
 	d = vec3_subtract(ray->origin, vec3_add(c->center,
 				vec3_multiply(c->axis, c->half_height)));
@@ -57,6 +59,8 @@ static int	set_cone_hit(t_ray *ray, t_cone_data *c,
 	k = c->radius / (2.0 * c->half_height);
 	normal = vec3_subtract(normal,
 			vec3_multiply(c->axis, calc->m * (1.0 + k * k)));
+	if (vec3_dot(normal, normal) < EPSILON * EPSILON)
+		return (0);
 	hit->normal = vec3_normalize(normal);
 	if (vec3_dot(ray->direction, hit->normal) > 0)
 		hit->normal = vec3_multiply(hit->normal, -1.0);

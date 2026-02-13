@@ -100,7 +100,6 @@ static int	intersect_cyl_cap_new(t_ray *ray, t_cylinder_data *c, t_hit *hit,
 static int	intersect_cyl_body_new(t_ray *ray, t_cylinder_data *c, t_hit *hit)
 {
 	t_cyl_calc	calc;
-	t_vec3		axis_pt;
 
 	if (!calc_cyl_intersect(ray, c, &calc))
 		return (0);
@@ -109,15 +108,17 @@ static int	intersect_cyl_body_new(t_ray *ray, t_cylinder_data *c, t_hit *hit)
 	{
 		calc.t = calc.t2;
 		calc.m = calc.m2;
-		if (calc.t < RAY_T_MIN || calc.t > hit->distance)
-			return (0);
-		if (calc.m < -c->half_height || calc.m > c->half_height)
+		if (calc.t < RAY_T_MIN || calc.t > hit->distance
+			|| calc.m < -c->half_height || calc.m > c->half_height)
 			return (0);
 	}
 	hit->distance = calc.t;
 	hit->point = vec3_add(ray->origin, vec3_multiply(ray->direction, calc.t));
-	axis_pt = vec3_add(c->center, vec3_multiply(c->axis, calc.m));
-	hit->normal = vec3_normalize(vec3_subtract(hit->point, axis_pt));
+	hit->normal = vec3_subtract(hit->point,
+			vec3_add(c->center, vec3_multiply(c->axis, calc.m)));
+	if (vec3_dot(hit->normal, hit->normal) < EPSILON * EPSILON)
+		return (0);
+	hit->normal = vec3_normalize(hit->normal);
 	if (vec3_dot(ray->direction, hit->normal) > 0)
 		hit->normal = vec3_multiply(hit->normal, -1.0);
 	return (1);
