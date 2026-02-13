@@ -180,7 +180,8 @@ double	calculate_shadow_factor(t_scene *scene, t_shadow_query query,
 
 	local = *config;
 	if (scene->light_count > 1)
-		local.samples /= scene->light_count;
+		local.samples = (config->samples + scene->light_count - 1)
+			/ scene->light_count;
 	if (local.samples < 1)
 		local.samples = 1;
 	shadow_count = calc_shadow_samples(scene, query, light_pos, &local);
