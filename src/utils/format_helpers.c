@@ -95,6 +95,25 @@ static int	handle_negative(char *buf, size_t size, double *value)
 	return (1);
 }
 
+static int	prep_float_str(char *buf, size_t size, double *val, int *prec)
+{
+	if (size == 0)
+		return (-1);
+	buf[0] = '\0';
+	if (*val != *val || *val > 1e15 || *val < -1e15)
+	{
+		ft_strlcpy(buf, "---", size);
+		return (0);
+	}
+	if (!handle_negative(buf, size, val))
+		return (-1);
+	if (*prec < 1)
+		*prec = 1;
+	if (*prec > 2)
+		*prec = 2;
+	return (1);
+}
+
 /**
  * @brief Format a floating-point number into a buffer.
  *
@@ -113,11 +132,9 @@ int	float_to_str(char *buf, size_t size, double value, int precision)
 	int		mult;
 	char	*int_str;
 
-	if (size == 0)
-		return (0);
-	buf[0] = '\0';
-	if (!handle_negative(buf, size, &value))
-		return (0);
+	mult = prep_float_str(buf, size, &value, &precision);
+	if (mult <= 0)
+		return (mult == 0);
 	mult = 10 + 90 * (precision == 2);
 	int_part = (int)value;
 	frac_part = (int)((value - int_part) * mult + 0.5);

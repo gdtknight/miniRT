@@ -13,6 +13,15 @@
 #include "bvh_vis.h"
 #include <stdio.h>
 
+static void	handle_node_display(t_bvh_node *node, t_traverse_ctx *ctx,
+				t_node_info *info, int is_last)
+{
+	if (is_leaf_node(node))
+		format_object_list(node->objects, node->object_count, info->objects,
+			ctx->scene);
+	print_node_line(ctx->prefix, info, is_last);
+}
+
 /**
  * @brief Recursively traverse the BVH and print each node.
  *
@@ -31,21 +40,20 @@ static void	traverse_recursive(t_bvh_node *node, t_traverse_ctx *ctx,
 	if (!node)
 		return ;
 	info = format_node_info(node);
-	if (is_leaf_node(node))
-		format_object_list(node->objects, node->object_count, info.objects,
-			ctx->scene);
-	print_node_line(ctx->prefix, &info, is_last);
+	handle_node_display(node, ctx, &info, is_last);
 	if (!is_leaf_node(node))
 	{
 		if (node->left)
 		{
-			prefix_push(ctx->prefix, is_last);
+			if (!prefix_push(ctx->prefix, is_last))
+				return ;
 			traverse_recursive(node->left, ctx, !node->right);
 			prefix_pop(ctx->prefix);
 		}
 		if (node->right)
 		{
-			prefix_push(ctx->prefix, is_last);
+			if (!prefix_push(ctx->prefix, is_last))
+				return ;
 			traverse_recursive(node->right, ctx, 1);
 			prefix_pop(ctx->prefix);
 		}
