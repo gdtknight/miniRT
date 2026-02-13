@@ -61,10 +61,10 @@ typedef struct s_hud_state
 {
     int     visible;          // 표시 여부
     int     current_page;     // 현재 페이지
-    int     objects_per_page; // 페이지당 오브젝트 수
     int     total_pages;      // 전체 페이지 수
     int     dirty;            // 재렌더링 필요 여부
 }   t_hud_state;
+// 페이지당 오브젝트 수: #define HUD_OBJECTS_PER_PAGE 8 (hud.h)
 ```
 
 ---
@@ -99,7 +99,7 @@ typedef struct s_hud_state
 
 ## 페이지네이션
 
-오브젝트 수가 `objects_per_page`를 초과하면 페이지 단위로 분할합니다:
+오브젝트 수가 `HUD_OBJECTS_PER_PAGE` (8)를 초과하면 페이지 단위로 분할합니다:
 
 ```
 전체 오브젝트: 40개
