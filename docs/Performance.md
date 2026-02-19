@@ -43,7 +43,7 @@
 
 **변경**:
 - `pow(spec, 32.0)` → `fast_pow32()` (곱셈 5회)
-- Sphere sqrt 캐싱 — `sqrt(discriminant)` 저장 후 재사용
+- Sphere sqrt 1회 계산 — `sqrt(discriminant)` 결과를 2회 사용 (t1, t2 계산)
 - Shadow magnitude/normalize 통합 — sqrt 1회로 통합
 
 | 씬 | Round 1 (ms) | Optimized (ms) | 개선율 |
@@ -133,4 +133,4 @@ miniRT는 프레임마다 다음 메트릭을 자동 수집합니다:
 
 1. **S2 regression 해소**: Shadow BVH any-hit의 소규모 씬 오버헤드 최적화 (iterative traversal)
 2. **Plane shadow 최적화**: S4의 83.7M shadow tests 중 plane 4개 전수 검사 비중이 큼. Normal 기반 early reject 가능
-3. **SAH 기반 split**: 현재 median split → Surface Area Heuristic으로 전환 시 트리 품질 개선 기대
+3. **SAH 기반 split**: 현재 midpoint split → Surface Area Heuristic으로 전환 시 트리 품질 개선 기대

@@ -82,7 +82,6 @@ for (i = 0; i < samples; i++)
 - Grid 기반 층화 샘플링으로 균일한 분포 보장
 - 매 shadow sample에서 삼각함수 호출 제거
 - `scene_destroy()` 시 LUT 메모리 해제
-- `set_shadow_samples()` 호출 시 LUT 재생성
 
 ---
 

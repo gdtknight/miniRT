@@ -82,6 +82,34 @@ typedef struct s_camera
 }   t_camera;
 ```
 
+### `t_camera_cache` (includes/minirt.h)
+
+카메라 basis 벡터를 프레임당 1회만 계산하여 캐싱합니다.
+
+```c
+typedef struct s_camera_cache
+{
+    t_vec3  right;          // 카메라 우측 방향
+    t_vec3  up;             // 카메라 상향 방향
+    double  aspect_ratio;   // 화면 종횡비
+    double  fov_scale;      // FOV 스케일 팩터
+    int     valid;          // 캐시 유효성 (dirty flag)
+}   t_camera_cache;
+```
+
+### `t_color_f` (includes/minirt.h)
+
+조명 계산 시 중간 결과 저장용 부동소수점 색상.
+
+```c
+typedef struct s_color_f
+{
+    double  r;
+    double  g;
+    double  b;
+}   t_color_f;
+```
+
 ### `t_light` (includes/minirt.h)
 
 ```c
@@ -106,6 +134,19 @@ typedef struct s_ambient
 ---
 
 ## 오브젝트 관련
+
+### `t_object_type` (includes/objects.h)
+
+```c
+typedef enum e_object_type
+{
+    OBJ_NONE = 0,
+    OBJ_SPHERE,
+    OBJ_PLANE,
+    OBJ_CYLINDER,
+    OBJ_CONE
+}   t_object_type;
+```
 
 ### `t_object` (includes/objects.h)
 
@@ -217,9 +258,38 @@ typedef struct s_hit
 }   t_hit;
 ```
 
+### `t_cyl_calc` (includes/ray.h)
+
+원기둥 교차 계산용 헬퍼 구조체.
+
+```c
+typedef struct s_cyl_calc
+{
+    double  a;
+    double  b;
+    double  c;
+    double  discriminant;
+    double  t;
+    double  m;
+    double  t2;
+    double  m2;
+}   t_cyl_calc;
+```
+
 ---
 
 ## BVH 관련
+
+### `t_object_ref` (includes/spatial.h)
+
+오브젝트 리스트 내 인덱스 참조.
+
+```c
+typedef struct s_object_ref
+{
+    int  index;
+}   t_object_ref;
+```
 
 ### `t_bvh` (includes/spatial.h)
 
@@ -269,6 +339,54 @@ typedef struct s_plane_refs
 }   t_plane_refs;
 ```
 
+### `t_axis_check` (includes/spatial.h)
+
+AABB 교차 검사 시 축별 파라미터.
+
+```c
+typedef struct s_axis_check
+{
+    double  box_min;
+    double  box_max;
+    double  ray_origin;
+    double  inv_dir;
+    double  *tmin;
+    double  *tmax;
+}   t_axis_check;
+```
+
+### `t_partition_params` (includes/spatial.h)
+
+BVH 오브젝트 파티션 파라미터.
+
+```c
+typedef struct s_partition_params
+{
+    t_object_ref  *objects;
+    int            count;
+    int            axis;
+    double         split;
+    void          *scene;
+}   t_partition_params;
+```
+
+### `t_split_params` (includes/spatial.h)
+
+BVH 분할 노드 생성 파라미터.
+
+```c
+typedef struct s_split_params
+{
+    t_aabb        bounds;
+    t_object_ref  *objects;
+    int            mid;
+    int            count;
+    void          *scene;
+    int            depth;
+    int            axis;
+}   t_split_params;
+```
+
 ---
 
 ## 그림자 관련
@@ -284,9 +402,71 @@ typedef struct s_shadow_config
 }   t_shadow_config;
 ```
 
+### `t_shadow_query` (includes/shadow.h)
+
+Shadow factor 계산 시 표면 정보 전달용.
+
+```c
+typedef struct s_shadow_query
+{
+    t_vec3  point;   // 표면 위치
+    t_vec3  normal;  // 표면 법선 (bias 계산용)
+}   t_shadow_query;
+```
+
+### `t_shadow_sample` (includes/shadow.h)
+
+Shadow 샘플링 파라미터.
+
+```c
+typedef struct s_shadow_sample
+{
+    t_scene          *scene;
+    t_vec3           point;
+    t_vec3           light_pos;
+    t_shadow_config  *config;
+    double           bias;
+}   t_shadow_sample;
+```
+
 ---
 
 ## 메트릭 관련
+
+### `t_bvh_metrics` (includes/metrics.h)
+
+```c
+typedef struct s_bvh_metrics
+{
+    long  nodes_visited;   // 방문한 BVH 노드 수
+    long  tests_skipped;   // AABB에서 스킵된 테스트 수
+}   t_bvh_metrics;
+```
+
+### `t_ray_metrics` (includes/metrics.h)
+
+```c
+typedef struct s_ray_metrics
+{
+    long  rays_traced;              // 추적된 전체 레이 수
+    long  intersect_tests;          // primary 교차 테스트 수
+    long  shadow_intersect_tests;   // shadow 교차 테스트 수
+}   t_ray_metrics;
+```
+
+### `t_frame_timing` (includes/metrics.h)
+
+```c
+typedef struct s_frame_timing
+{
+    struct timeval  start_time;                        // 프레임 시작 시각
+    long            render_time_us;                    // 렌더링 소요 시간 (μs)
+    long            frame_times_us[FRAME_HISTORY_SIZE]; // 60-프레임 히스토리
+    int             frame_index;                       // 히스토리 인덱스
+    long            frame_count;                       // 누적 프레임 수
+    double          fps;                               // 초당 프레임
+}   t_frame_timing;
+```
 
 ### `t_metrics` (includes/metrics.h)
 
@@ -302,6 +482,103 @@ typedef struct s_metrics
 ---
 
 ## 렌더 컨텍스트
+
+### `t_mlx_img` (includes/mlx_context.h)
+
+```c
+typedef struct s_mlx_img
+{
+    void  *img;        // MLX 이미지 포인터
+    char  *data;       // 픽셀 데이터 버퍼
+    int    bpp;        // bits per pixel
+    int    size_line;  // 한 줄의 바이트 수
+    int    endian;     // 엔디안
+    int    width;      // 이미지 너비
+    int    height;     // 이미지 높이
+}   t_mlx_img;
+```
+
+### `t_mlx_context` (includes/mlx_context.h)
+
+```c
+typedef struct s_mlx_context
+{
+    void       *mlx;  // MLX 인스턴스
+    void       *win;  // 윈도우 포인터
+    t_mlx_img  img;   // 이미지 데이터
+}   t_mlx_context;
+```
+
+### `t_selection` (includes/window.h)
+
+```c
+typedef struct s_selection
+{
+    t_object_type  type;   // 선택된 오브젝트 타입
+    int            index;  // 선택된 오브젝트 인덱스
+}   t_selection;
+```
+
+### `t_keyguide_state` (includes/window.h)
+
+```c
+typedef struct s_keyguide_state
+{
+    int  visible;  // 표시 여부
+    int  x;        // 렌더 위치 X
+    int  y;        // 렌더 위치 Y
+    int  dirty;    // 재렌더링 필요 여부
+}   t_keyguide_state;
+```
+
+### `t_pixel_timing` (includes/pixel_timing.h)
+
+```c
+typedef struct s_pixel_timing
+{
+    long    *samples;    // 픽셀 렌더 시간 샘플 배열
+    size_t  count;       // 수집된 샘플 수
+    size_t  capacity;    // 배열 용량 (MAX_PIXEL_SAMPLES)
+    long    min_time;    // 최소 렌더 시간 (ns)
+    long    max_time;    // 최대 렌더 시간 (ns)
+    long    total_time;  // 총 렌더 시간 (ns)
+    int     enabled;     // 활성화 여부
+}   t_pixel_timing;
+```
+
+### `t_debounce_state_enum` (includes/render_debounce.h)
+
+```c
+typedef enum e_debounce_state_enum
+{
+    DEBOUNCE_IDLE,       // 대기 상태
+    DEBOUNCE_ACTIVE,     // 입력 감지 (150ms 대기)
+    DEBOUNCE_FINAL,      // Full quality 렌더링
+    DEBOUNCE_COOLDOWN    // 쿨다운 (350ms)
+}   t_debounce_state_enum;
+```
+
+### `t_debounce_timer` (includes/render_debounce.h)
+
+```c
+typedef struct s_debounce_timer
+{
+    struct timeval  last_input_time;  // 마지막 입력 시각
+    int             is_active;        // 타이머 활성 여부
+    long            delay_ms;         // 대기 시간 (ms)
+}   t_debounce_timer;
+```
+
+### `t_debounce_state` (includes/render_debounce.h)
+
+```c
+typedef struct s_debounce_state
+{
+    t_debounce_state_enum  state;             // FSM 현재 상태
+    t_debounce_timer       timer;             // 입력 지연 타이머
+    struct timeval         last_preview_time;  // 마지막 LQ 프리뷰 시각
+}   t_debounce_state;
+```
 
 ### `t_render` (includes/window.h)
 
