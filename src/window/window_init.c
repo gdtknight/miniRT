@@ -15,7 +15,6 @@
 #include "window_internal.h"
 #include "hud.h"
 #include "keyguide.h"
-#include "pixel_timing.h"
 #include <stdlib.h>
 
 /**
@@ -33,7 +32,6 @@ static void	init_render_state(t_render *render, t_scene *scene)
 	render->selection.type = OBJ_NONE;
 	render->selection.index = -1;
 	render->state_flags = RENDER_DIRTY | RENDER_ENABLE_METRICS_PRINT;
-	pixel_timing_init(&render->pixel_timing);
 	debounce_init(&render->debounce);
 }
 
@@ -116,7 +114,6 @@ void	render_destroy(t_render *render)
 {
 	if (!render)
 		return ;
-	pixel_timing_cleanup(&render->pixel_timing);
 	mlx_context_destroy(&render->mlx);
 	free(render);
 }

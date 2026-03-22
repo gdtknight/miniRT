@@ -16,7 +16,6 @@
 # include "minirt.h"
 # include "mlx.h"
 # include "mlx_context.h"
-# include "pixel_timing.h"
 # include "render_debounce.h"
 
 /* Window resolution constants */
@@ -31,7 +30,6 @@
 # define RENDER_LOW_QUALITY 0x04
 /* 0x08 and 0x10 reserved for future use */
 # define RENDER_BVH_DIRTY  0x20
-# define RENDER_ENABLE_PIXEL_TIMING  0x40
 # define RENDER_ENABLE_METRICS_PRINT 0x80
 
 /* Selected object information */
@@ -68,7 +66,6 @@ typedef struct s_render
 	int					state_flags;
 	t_hud_state			hud;
 	t_keyguide_state	keyguide;
-	t_pixel_timing		pixel_timing;
 	t_debounce_state	debounce;
 }	t_render;
 

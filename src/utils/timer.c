@@ -11,22 +11,6 @@
 /* ************************************************************************** */
 
 #include "metrics.h"
-#include <time.h>
-
-/**
- * @brief Return the current time in nanoseconds.
- *
- * Uses CLOCK_MONOTONIC to provide a steady time source.
- *
- * @return long Time in nanoseconds.
- */
-long	get_time_ns(void)
-{
-	struct timespec	ts;
-
-	clock_gettime(CLOCK_MONOTONIC, &ts);
-	return (ts.tv_sec * 1000000000L + ts.tv_nsec);
-}
 
 /**
  * @brief Store the current time in a timeval.

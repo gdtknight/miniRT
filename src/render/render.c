@@ -13,7 +13,6 @@
 #include "minirt.h"
 #include "ray.h"
 #include "window.h"
-#include "pixel_timing.h"
 #include "metrics.h"
 
 /**
@@ -54,20 +53,11 @@ static void	render_pixel(t_scene *scene, t_render *render, int x, int y)
 	t_color	color;
 	double	u;
 	double	v;
-	long	timing[2];
 
 	u = (2.0 * x / (double)WINDOW_WIDTH) - 1.0;
 	v = 1.0 - (2.0 * y / (double)WINDOW_HEIGHT);
 	ray = create_camera_ray(&scene->camera, u, v);
-	if (render_has_flag(render, RENDER_ENABLE_PIXEL_TIMING))
-	{
-		timing[0] = get_time_ns();
-		color = trace_ray(scene, &ray);
-		timing[1] = get_time_ns();
-		pixel_timing_add_sample(&render->pixel_timing, timing[1] - timing[0]);
-	}
-	else
-		color = trace_ray(scene, &ray);
+	color = trace_ray(scene, &ray);
 	put_pixel_to_buffer(render, x, y, color);
 }
 
@@ -150,7 +140,6 @@ void	render_scene_to_buffer(t_scene *scene, t_render *render)
 		render_low_quality(scene, render);
 		return ;
 	}
-	pixel_timing_reset(&render->pixel_timing);
 	y = 0;
 	while (y < WINDOW_HEIGHT)
 	{
@@ -162,7 +151,4 @@ void	render_scene_to_buffer(t_scene *scene, t_render *render)
 		}
 		y++;
 	}
-	pixel_timing_calculate_stats(&render->pixel_timing);
-	if (render_has_flag(render, RENDER_ENABLE_PIXEL_TIMING))
-		pixel_timing_print_stats(&render->pixel_timing);
 }
