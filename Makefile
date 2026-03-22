@@ -47,11 +47,8 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/bvh_vis/bvh_vis_stats.c \
 			  $(SRC_DIR)/bvh_vis/bvh_vis_prefix.c \
 			  $(SRC_DIR)/bvh_vis/bvh_vis_print.c \
-			  $(SRC_DIR)/hud/hud_color.c \
-			  $(SRC_DIR)/hud/hud_color_extract.c \
 			  $(SRC_DIR)/hud/hud_format.c \
 			  $(SRC_DIR)/hud/hud_format_helpers.c \
-			  $(SRC_DIR)/hud/hud_format_simple.c \
 			  $(SRC_DIR)/hud/hud_init.c \
 			  $(SRC_DIR)/hud/hud_navigation.c \
 			  $(SRC_DIR)/hud/hud_performance.c \
@@ -61,7 +58,6 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/hud/hud_objects.c \
 			  $(SRC_DIR)/hud/hud_obj_render.c \
 			  $(SRC_DIR)/hud/hud_toggle.c \
-			  $(SRC_DIR)/hud/hud_transparency.c \
 			  $(SRC_DIR)/keyguide/keyguide_init.c \
 			  $(SRC_DIR)/keyguide/keyguide_render.c \
 			  $(SRC_DIR)/keyguide/keyguide_render_extra.c \
@@ -97,8 +93,6 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/render/metrics_counters.c \
 			  $(SRC_DIR)/render/metrics_calc.c \
 			  $(SRC_DIR)/render/metrics_shadow.c \
-			  $(SRC_DIR)/render/pixel_timing.c \
-			  $(SRC_DIR)/render/pixel_timing_print.c \
 			  $(SRC_DIR)/render/render.c \
 			  $(SRC_DIR)/render/render_debounce.c \
 			  $(SRC_DIR)/render/render_debounce_timer.c \
@@ -119,12 +113,12 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/window/window_init.c \
 			  $(SRC_DIR)/window/window_lifecycle.c \
 			  $(SRC_DIR)/window/window_events.c \
-			  $(SRC_DIR)/window/window_key_handlers.c \
-			  $(SRC_DIR)/window/window_loop.c \
-			  $(SRC_DIR)/window/window_camera.c \
-			  $(SRC_DIR)/window/window_objects.c \
-			  $(SRC_DIR)/window/window_resize.c \
-			  $(SRC_DIR)/window/window_rotate.c \
+			  $(SRC_DIR)/window/input_dispatch.c \
+			  $(SRC_DIR)/window/render_loop.c \
+			  $(SRC_DIR)/window/input_camera.c \
+			  $(SRC_DIR)/window/input_objects.c \
+			  $(SRC_DIR)/window/input_resize.c \
+			  $(SRC_DIR)/window/input_rotate.c \
 			  $(SRC_DIR)/window/mlx_context.c \
 			  $(SRC_DIR)/window/mlx_pixel_codec.c \
 			  $(SRC_DIR)/window/mlx_pixel.c \
