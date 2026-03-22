@@ -23,14 +23,14 @@
  * @param render Render context containing selection and scene.
  * @param move Translation vector to apply.
  */
-static void	move_selected_object(t_render *render, t_vec3 move)
+static int	move_selected_object(t_render *render, t_vec3 move)
 {
 	t_object	*obj;
 	int			idx;
 
 	idx = render->selection.index;
 	if (idx < 0 || idx >= render->scene->objects.count)
-		return ;
+		return (0);
 	obj = &render->scene->objects.items[idx];
 	if (obj->type == OBJ_SPHERE)
 		obj->data.sphere.center = vec3_add(obj->data.sphere.center, move);
@@ -40,6 +40,9 @@ static void	move_selected_object(t_render *render, t_vec3 move)
 		obj->data.cylinder.center = vec3_add(obj->data.cylinder.center, move);
 	else if (obj->type == OBJ_CONE)
 		obj->data.cone.center = vec3_add(obj->data.cone.center, move);
+	else
+		return (0);
+	return (1);
 }
 
 /**
@@ -72,8 +75,10 @@ void	handle_object_move(t_render *render, int keycode)
 		move.z = step;
 	else
 		return ;
-	move_selected_object(render, move);
+	if (!move_selected_object(render, move))
+		return ;
 	render_set_flag(render, RENDER_BVH_DIRTY);
+	debounce_on_input(&render->debounce, render);
 }
 
 /**
@@ -87,22 +92,20 @@ void	handle_object_move(t_render *render, int keycode)
 void	handle_light_move(t_render *render, int keycode)
 {
 	t_vec3	move;
-	double	step;
 
-	step = 1.0;
 	move = (t_vec3){0, 0, 0};
 	if (keycode == KEY_BRACKET_LEFT)
-		move.x = -step;
+		move.x = -1.0;
 	else if (keycode == KEY_BRACKET_RIGHT)
-		move.x = step;
+		move.x = 1.0;
 	else if (keycode == KEY_SEMICOLON)
-		move.y = -step;
+		move.y = -1.0;
 	else if (keycode == KEY_QUOTE)
-		move.y = step;
+		move.y = 1.0;
 	else if (keycode == KEY_COMMA)
-		move.z = -step;
+		move.z = -1.0;
 	else if (keycode == KEY_PERIOD)
-		move.z = step;
+		move.z = 1.0;
 	else
 		return ;
 	if (!render->scene->light_count)
@@ -111,4 +114,5 @@ void	handle_light_move(t_render *render, int keycode)
 		= vec3_add(
 			render->scene->lights[render->scene->selected_light].position,
 			move);
+	debounce_on_input(&render->debounce, render);
 }

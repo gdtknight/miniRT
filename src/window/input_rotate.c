@@ -88,7 +88,7 @@ static t_vec3	get_rotation_axis(int keycode, double *angle)
  * @param axis Rotation axis.
  * @param angle Rotation angle in radians.
  */
-static void	apply_rotation(t_object *obj, t_vec3 axis, double angle)
+static int	apply_rotation(t_object *obj, t_vec3 axis, double angle)
 {
 	t_vec3	rotated;
 	double	len;
@@ -101,7 +101,7 @@ static void	apply_rotation(t_object *obj, t_vec3 axis, double angle)
 		rotated = rodrigues_rotate(obj->data.plane.normal, axis, angle);
 	len = vec3_magnitude(rotated);
 	if (len < EPSILON)
-		return ;
+		return (0);
 	rotated = vec3_normalize(rotated);
 	if (obj->type == OBJ_CYLINDER)
 		obj->data.cylinder.axis = rotated;
@@ -109,6 +109,7 @@ static void	apply_rotation(t_object *obj, t_vec3 axis, double angle)
 		obj->data.cone.axis = rotated;
 	else
 		obj->data.plane.normal = rotated;
+	return (1);
 }
 
 /**
@@ -137,7 +138,8 @@ void	handle_object_rotate(t_render *render, int keycode)
 		&& obj->type != OBJ_CONE)
 		return ;
 	rot_axis = get_rotation_axis(keycode, &angle);
-	apply_rotation(obj, rot_axis, angle);
+	if (!apply_rotation(obj, rot_axis, angle))
+		return ;
 	render_set_flag(render, RENDER_BVH_DIRTY);
 	debounce_on_input(&render->debounce, render);
 }

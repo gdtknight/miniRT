@@ -14,16 +14,7 @@
 #include "window.h"
 #include "window_internal.h"
 
-/**
- * @brief Resize a sphere by adjusting its radius.
- *
- * Applies a fixed step based on key input, clamps to a minimum radius,
- * and updates the cached radius squared value.
- *
- * @param obj Sphere object to resize.
- * @param keycode Key code indicating resize direction.
- */
-static void	resize_sphere(t_object *obj, int keycode)
+static int	resize_sphere(t_object *obj, int keycode)
 {
 	double	step;
 
@@ -31,24 +22,16 @@ static void	resize_sphere(t_object *obj, int keycode)
 	if (keycode == KEY_Y)
 		step = -1.0;
 	else if (keycode != KEY_U)
-		return ;
+		return (0);
 	if (obj->data.sphere.radius + step < 0.1)
-		return ;
+		return (0);
 	obj->data.sphere.radius += step;
 	obj->data.sphere.radius_sq = obj->data.sphere.radius
 		* obj->data.sphere.radius;
+	return (1);
 }
 
-/**
- * @brief Resize a cylinder by adjusting radius or height.
- *
- * Uses key input to change radius (J/K) or half-height (N/M), clamps to a
- * minimum size, and updates cached radius squared when needed.
- *
- * @param obj Cylinder object to resize.
- * @param keycode Key code indicating resize direction.
- */
-static void	resize_cylinder(t_object *obj, int keycode)
+static int	resize_cylinder(t_object *obj, int keycode)
 {
 	double	step;
 
@@ -58,22 +41,21 @@ static void	resize_cylinder(t_object *obj, int keycode)
 		if (keycode == KEY_Y)
 			step = -1.0;
 		if (obj->data.cylinder.radius + step < 0.1)
-			return ;
+			return (0);
 		obj->data.cylinder.radius += step;
 		obj->data.cylinder.radius_sq = obj->data.cylinder.radius
 			* obj->data.cylinder.radius;
+		return (1);
 	}
-	else if (keycode == KEY_N || keycode == KEY_M)
-	{
-		if (keycode == KEY_M)
-			step = -1.0;
-		if (obj->data.cylinder.half_height + step < 0.1)
-			return ;
-		obj->data.cylinder.half_height += step;
-	}
+	if (keycode == KEY_M)
+		step = -1.0;
+	if (obj->data.cylinder.half_height + step < 0.1)
+		return (0);
+	obj->data.cylinder.half_height += step;
+	return (1);
 }
 
-static void	resize_cone(t_object *obj, int keycode)
+static int	resize_cone(t_object *obj, int keycode)
 {
 	double	step;
 
@@ -83,37 +65,38 @@ static void	resize_cone(t_object *obj, int keycode)
 		if (keycode == KEY_Y)
 			step = -1.0;
 		if (obj->data.cone.radius + step < 0.1)
-			return ;
+			return (0);
 		obj->data.cone.radius += step;
 		obj->data.cone.radius_sq = obj->data.cone.radius
 			* obj->data.cone.radius;
+		return (1);
 	}
-	else if (keycode == KEY_N || keycode == KEY_M)
-	{
-		if (keycode == KEY_M)
-			step = -1.0;
-		if (obj->data.cone.half_height + step < 0.1)
-			return ;
-		obj->data.cone.half_height += step;
-	}
+	if (keycode == KEY_M)
+		step = -1.0;
+	if (obj->data.cone.half_height + step < 0.1)
+		return (0);
+	obj->data.cone.half_height += step;
+	return (1);
 }
 
 void	handle_object_resize(t_render *render, int keycode)
 {
 	t_object	*obj;
 	int			idx;
+	int			changed;
 
 	idx = render->selection.index;
 	if (idx < 0 || idx >= render->scene->objects.count)
 		return ;
 	obj = &render->scene->objects.items[idx];
+	changed = 0;
 	if (obj->type == OBJ_SPHERE)
-		resize_sphere(obj, keycode);
+		changed = resize_sphere(obj, keycode);
 	else if (obj->type == OBJ_CYLINDER)
-		resize_cylinder(obj, keycode);
+		changed = resize_cylinder(obj, keycode);
 	else if (obj->type == OBJ_CONE)
-		resize_cone(obj, keycode);
-	else
+		changed = resize_cone(obj, keycode);
+	if (!changed)
 		return ;
 	render_set_flag(render, RENDER_BVH_DIRTY);
 	debounce_on_input(&render->debounce, render);

@@ -60,7 +60,6 @@ void	handle_camera_move(t_render *render, int keycode)
 		return ;
 	render->scene->camera.position = vec3_add(render->scene->camera.position,
 			move);
-	render->scene->camera.cache.valid = 0;
 }
 
 void	handle_camera_pitch(t_render *render, int keycode)

@@ -95,7 +95,6 @@ void	handle_transform_keys(t_render *render, int keycode)
 		|| keycode == KEY_G || keycode == KEY_V || keycode == KEY_B)
 	{
 		handle_object_move(render, keycode);
-		debounce_on_input(&render->debounce, render);
 		hud_mark_dirty(render);
 	}
 	else if (keycode == KEY_BRACKET_LEFT || keycode == KEY_BRACKET_RIGHT
@@ -103,7 +102,6 @@ void	handle_transform_keys(t_render *render, int keycode)
 		|| keycode == KEY_COMMA || keycode == KEY_PERIOD)
 	{
 		handle_light_move(render, keycode);
-		debounce_on_input(&render->debounce, render);
 		hud_mark_dirty(render);
 	}
 	else
