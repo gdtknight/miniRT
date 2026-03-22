@@ -29,35 +29,6 @@
 # define HUD_COLOR_BG 0x000000
 # define HUD_BG_ALPHA 0.65
 
-/* Pixel operations parameters */
-typedef struct s_pixel_params
-{
-	char	*img_data;
-	int		x;
-	int		y;
-	int		size_line;
-	int		bpp;
-	int		endian;
-}	t_pixel_params;
-
-/* Performance text rendering parameters */
-typedef struct s_perf_text
-{
-	char	*prefix;
-	char	*value;
-	char	*suffix;
-	int		*y;
-}	t_perf_text;
-
-/* Alpha blending utilities */
-int		blend_colors(int bg_color, int fg_color, double alpha);
-int		get_red(int color);
-int		get_green(int color);
-int		get_blue(int color);
-int		make_color(int r, int g, int b);
-int		get_pixel(t_pixel_params *params);
-void	set_pixel(t_pixel_params *params, int color);
-
 /* ========================================================================== */
 /*                            PUBLIC API FUNCTIONS                            */
 /* ========================================================================== */
@@ -149,24 +120,6 @@ void	hud_toggle(t_render *render);
 void	hud_select_next(t_render *render);
 
 /*
-** Select previous object in scene (Shift+Tab key navigation).
-**
-** Parameters:
-**   render: Render context with selection and scene data
-**
-** Returns:
-**   void
-**
-** Behavior:
-**   - Same as hud_select_next but decrements index
-**   - Handles wraparound in reverse (first sphere -> last cylinder)
-**
-** Key Binding:
-**   Called from handle_key() on Shift+Tab key press
-*/
-void	hud_select_prev(t_render *render);
-
-/*
 ** Navigate to next page of objects (Down arrow or PgDown).
 **
 ** Parameters:
@@ -226,7 +179,6 @@ void	hud_format_float(char *buffer, double value);
 ** Internal helper functions for formatting (implemented using libft)
 */
 void	ft_strcpy(char *dst, const char *src);
-int		ft_numlen(int n);
 void	ft_itoa_buf(char *buf, int n);
 
 /*
@@ -246,20 +198,6 @@ void	hud_format_color(char *buffer, t_color color);
 ** Format FPS value to string with 1 decimal place.
 ** Buffer must be at least 16 bytes.
 */
-void	hud_format_fps(char *buf, double fps);
-
-/*
-** Format time in microseconds to milliseconds with 1 decimal.
-** Buffer must be at least 16 bytes.
-*/
-void	hud_format_time_ms(char *buf, long time_us);
-
-/*
-** Format BVH enabled status to "ON" or "OFF".
-** Buffer must be at least 4 bytes.
-*/
-void	hud_format_bvh_status(char *buf, int enabled);
-
 /*
 ** Render performance metrics section in HUD.
 ** Shows FPS, frame time, and BVH status.

@@ -28,25 +28,6 @@ void	ft_strcpy(char *dst, const char *src)
 }
 
 /**
- * @brief Return the length of an integer when printed in base 10.
- *
- * @param n Integer to measure.
- * @return int Number of characters needed to represent n.
- */
-int	ft_numlen(int n)
-{
-	char	*str;
-	int		len;
-
-	str = ft_itoa(n);
-	if (!str)
-		return (1);
-	len = ft_strlen(str);
-	free(str);
-	return (len);
-}
-
-/**
  * @brief Convert an integer to string and write into a buffer.
  *
  * Writes "0" on allocation failure.

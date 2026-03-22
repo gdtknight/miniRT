@@ -56,28 +56,6 @@ void	hud_select_next(t_render *render)
 	render->hud.dirty = 1;
 }
 
-/**
- * @brief Move selection to the previous object.
- *
- * Wraps around at the start of the object list and marks HUD dirty.
- *
- * @param render Render context containing selection and HUD state.
- */
-void	hud_select_prev(t_render *render)
-{
-	int	total;
-	int	idx;
-
-	total = render->scene->objects.count;
-	if (total == 0)
-		return ;
-	idx = render->selection.index;
-	idx = (idx - 1 + total) % total;
-	if (idx < 0 || idx >= total)
-		idx = 0;
-	hud_get_selection_from_global(&render->selection, idx, render->scene);
-	render->hud.dirty = 1;
-}
 
 /**
  * @brief Change HUD object list page.
