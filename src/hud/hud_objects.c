@@ -31,7 +31,7 @@ static void	render_object_header(t_render *render, int *y)
 	buf[len++] = '-';
 	buf[len++] = '-';
 	buf[len++] = ' ';
-	len += copy_str_to_buf(buf + len, "Objects (Page ", 64 - len);
+	len += hud_append(buf + len, "Objects (Page ", 64 - len);
 	ft_itoa_buf(buf + len, render->hud.current_page + 1);
 	while (buf[len])
 		len++;
@@ -39,11 +39,9 @@ static void	render_object_header(t_render *render, int *y)
 	ft_itoa_buf(buf + len, render->hud.total_pages);
 	while (buf[len])
 		len++;
-	len += copy_str_to_buf(buf + len, ") ---", 64 - len);
+	len += hud_append(buf + len, ") ---", 64 - len);
 	buf[len] = '\0';
-	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
-		*y, HUD_COLOR_TEXT, buf);
-	*y += HUD_LINE_HEIGHT;
+	hud_print_line(render, y, HUD_COLOR_TEXT, buf);
 }
 
 /**

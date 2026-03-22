@@ -13,24 +13,18 @@
 #include "window.h"
 #include "hud.h"
 
-/**
- * @brief Mark the HUD as needing a redraw.
- *
- * @param render Render context containing HUD state.
- */
 void	hud_mark_dirty(t_render *render)
 {
 	render->hud.dirty = 1;
 }
 
-/**
- * @brief Format a labeled vec3 and render it on the HUD.
- *
- * @param render Render context containing MLX handles.
- * @param y Current y position (in/out).
- * @param label Label text to display.
- * @param vec Vector to format and display.
- */
+void	hud_print_line(t_render *r, int *y, int color, char *text)
+{
+	mlx_string_put(r->mlx.mlx, r->mlx.win,
+		HUD_MARGIN_X + 10, *y, color, text);
+	*y += HUD_LINE_HEIGHT;
+}
+
 void	format_and_print_vec3(t_render *render, int *y,
 		char *label, t_vec3 vec)
 {
@@ -44,22 +38,10 @@ void	format_and_print_vec3(t_render *render, int *y,
 		buf[i++] = *label++;
 	buf[i] = '\0';
 	hud_format_vec3(buf + i, vec);
-	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
-		*y, HUD_COLOR_TEXT, buf);
-	*y += HUD_LINE_HEIGHT;
+	hud_print_line(render, y, HUD_COLOR_TEXT, buf);
 }
 
-/**
- * @brief Copy a string into a buffer and return length copied.
- *
- * The caller must ensure dst has enough room and must NUL-terminate
- * after appending additional content: dst[returned_len] is not set to '\\0'.
- *
- * @param dst Destination buffer.
- * @param src Source string.
- * @return int Number of characters copied.
- */
-int	copy_str_to_buf(char *dst, const char *src, int max)
+int	hud_append(char *dst, const char *src, int max)
 {
 	int	i;
 

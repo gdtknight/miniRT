@@ -24,9 +24,7 @@
  */
 void	hud_render_camera(t_render *render, int *y)
 {
-	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
-		*y, HUD_COLOR_TEXT, "Camera:");
-	*y += HUD_LINE_HEIGHT;
+	hud_print_line(render, y, HUD_COLOR_TEXT, "Camera:");
 	format_and_print_vec3(render, y, "pos", render->scene->camera.position);
 	format_and_print_vec3(render, y, "dir", render->scene->camera.direction);
 }
@@ -51,9 +49,7 @@ void	render_camera_fov(t_render *render, int *y)
 	buf[i++] = ':';
 	buf[i] = '\0';
 	hud_format_float(buf + i, render->scene->camera.fov);
-	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
-		*y, HUD_COLOR_TEXT, buf);
-	*y += HUD_LINE_HEIGHT;
+	hud_print_line(render, y, HUD_COLOR_TEXT, buf);
 }
 
 /**
@@ -67,9 +63,7 @@ void	hud_render_ambient(t_render *render, int *y)
 	char	buf[128];
 	int		i;
 
-	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
-		*y, HUD_COLOR_TEXT, "Ambient:");
-	*y += HUD_LINE_HEIGHT;
+	hud_print_line(render, y, HUD_COLOR_TEXT, "Ambient:");
 	i = 0;
 	while (i < 8)
 		buf[i++] = ' ';
@@ -86,9 +80,7 @@ void	hud_render_ambient(t_render *render, int *y)
 	buf[i++] = ' ';
 	buf[i] = '\0';
 	hud_format_color(buf + i, render->scene->ambient.color);
-	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
-		*y, HUD_COLOR_TEXT, buf);
-	*y += HUD_LINE_HEIGHT;
+	hud_print_line(render, y, HUD_COLOR_TEXT, buf);
 }
 
 /**
@@ -117,9 +109,7 @@ void	hud_render_light(t_render *render, int *y)
 		i++;
 	buf[i++] = ':';
 	buf[i] = '\0';
-	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
-		*y, HUD_COLOR_TEXT, buf);
-	*y += HUD_LINE_HEIGHT;
+	hud_print_line(render, y, HUD_COLOR_TEXT, buf);
 	format_and_print_vec3(render, y, "pos",
 		render->scene->lights[render->scene->selected_light].position);
 }
@@ -150,7 +140,5 @@ void	render_light_bright(t_render *render, int *y)
 	buf[i] = '\0';
 	hud_format_color(buf + i,
 		render->scene->lights[render->scene->selected_light].color);
-	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
-		*y, HUD_COLOR_TEXT, buf);
-	*y += HUD_LINE_HEIGHT;
+	hud_print_line(render, y, HUD_COLOR_TEXT, buf);
 }

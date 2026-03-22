@@ -12,6 +12,7 @@
 
 #include "window.h"
 #include "hud.h"
+#include "hud_text.h"
 
 /**
  * @brief Get the position of an object for HUD display.
@@ -74,7 +75,5 @@ void	render_object_entry(t_render *render, int idx, int *y, int color)
 	i = 0;
 	fill_obj_id(buf, &i, obj);
 	hud_format_vec3(buf + i, get_object_position(obj));
-	mlx_string_put(render->mlx.mlx, render->mlx.win, HUD_MARGIN_X + 10,
-		*y, color, buf);
-	*y += HUD_LINE_HEIGHT;
+	hud_print_line(render, y, color, buf);
 }

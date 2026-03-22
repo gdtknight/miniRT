@@ -16,8 +16,9 @@
 # include "minirt.h"
 
 void	hud_mark_dirty(t_render *render);
+void	hud_print_line(t_render *r, int *y, int color, char *text);
 void	format_and_print_vec3(t_render *render, int *y,
 			char *label, t_vec3 vec);
-int		copy_str_to_buf(char *dst, const char *src, int max);
+int		hud_append(char *dst, const char *src, int max);
 
 #endif
