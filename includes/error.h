@@ -40,8 +40,10 @@ typedef enum e_error_code
 }	t_error_code;
 
 /* Error handling functions */
+void		error_write_str(const char *str);
 int			error_print(t_error_code code);
 const char	*error_get_message(t_error_code code);
 void		error_exit(t_error_code code);
+void		error_print_ctx(const char *prefix, const char *detail);
 
 #endif

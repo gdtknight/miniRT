@@ -14,21 +14,6 @@
 #include <unistd.h>
 
 /**
- * @brief Write a string to stderr.
- *
- * @param str String to write.
- */
-void	error_write_str(const char *str)
-{
-	int	len;
-
-	len = 0;
-	while (str[len])
-		len++;
-	write(2, str, len);
-}
-
-/**
  * @brief Write an integer to stderr.
  *
  * @param n Integer to write.

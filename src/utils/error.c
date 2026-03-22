@@ -11,16 +11,19 @@
 /* ************************************************************************** */
 
 #include "error.h"
-#include "libft.h"
 #include <stdlib.h>
 #include <unistd.h>
 
-/**
- * @brief Return a human-readable error message for a code.
- *
- * @param code Error code to translate.
- * @return const char* Error message string.
- */
+void	error_write_str(const char *str)
+{
+	int	len;
+
+	len = 0;
+	while (str[len])
+		len++;
+	write(2, str, len);
+}
+
 const char	*error_get_message(t_error_code code)
 {
 	static const char	*error_messages[ERR_COUNT] = {
@@ -49,33 +52,30 @@ const char	*error_get_message(t_error_code code)
 	return ("Unknown error");
 }
 
-/**
- * @brief Print an error message for a code to stderr.
- *
- * @param code Error code to print.
- * @return int Always returns 1 for convenience.
- */
 int	error_print(t_error_code code)
 {
 	const char	*msg;
 
-	write(2, "Error\n", 6);
+	error_write_str("Error\n");
 	msg = error_get_message(code);
 	if (msg)
 	{
-		write(2, msg, ft_strlen(msg));
-		write(2, "\n", 1);
+		error_write_str(msg);
+		error_write_str("\n");
 	}
 	return (1);
 }
 
-/**
- * @brief Print an error message and exit the program.
- *
- * @param code Error code to print.
- */
 void	error_exit(t_error_code code)
 {
 	error_print(code);
 	exit(EXIT_FAILURE);
+}
+
+void	error_print_ctx(const char *prefix, const char *detail)
+{
+	error_write_str("Error\n");
+	error_write_str(prefix);
+	error_write_str(detail);
+	error_write_str("\n");
 }

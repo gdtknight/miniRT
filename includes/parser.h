@@ -102,7 +102,6 @@ void			error_context_set_line(t_error_context *ctx, int line);
 void			error_context_set_element(t_error_context *ctx,
 					const char *type);
 void			error_context_print(t_error_context *ctx);
-void			error_write_str(const char *str);
 void			error_write_int(int n);
 const char		*get_error_message(t_parse_result code);
 

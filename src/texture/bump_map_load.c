@@ -12,10 +12,9 @@
 
 #include "texture.h"
 #include "minirt.h"
-#include "libft.h"
+#include "error.h"
 #include "mlx.h"
 #include <stdlib.h>
-#include <unistd.h>
 
 t_bump_map	*bump_map_load(void *mlx, char *filepath)
 {
@@ -67,9 +66,7 @@ int	load_all_bump_maps(void *scene_ptr, void *mlx)
 			obj->bump_map = bump_map_load(mlx, obj->bump_path);
 			if (!obj->bump_map)
 			{
-				write(2, "Error: bump map: ", 17);
-				write(2, obj->bump_path, ft_strlen(obj->bump_path));
-				write(2, "\n", 1);
+				error_print_ctx("bump map: ", obj->bump_path);
 				return (0);
 			}
 		}

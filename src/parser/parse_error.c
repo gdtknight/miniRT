@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "error.h"
 
 /**
  * @brief Initialize error context with default values.

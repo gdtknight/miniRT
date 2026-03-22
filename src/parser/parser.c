@@ -12,6 +12,7 @@
 
 #include "minirt.h"
 #include "parser.h"
+#include "error.h"
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -53,13 +54,13 @@ static int	parse_line(char *line, t_scene *scene, t_error_context *ctx)
 int	validate_scene(t_scene *scene)
 {
 	if (!scene_has_ambient(scene))
-		return (error_write_str("Error\nMissing ambient light (A)\n"), 0);
+		return (error_print_ctx("Missing element: ", "ambient light (A)"), 0);
 	if (!scene_has_camera(scene))
-		return (error_write_str("Error\nMissing camera (C)\n"), 0);
+		return (error_print_ctx("Missing element: ", "camera (C)"), 0);
 	if (scene->light_count == 0)
-		return (error_write_str("Error\nMissing light (L)\n"), 0);
+		return (error_print_ctx("Missing element: ", "light (L)"), 0);
 	if (scene->objects.count == 0)
-		return (error_write_str("Error\nMissing objects\n"), 0);
+		return (error_print_ctx("Missing element: ", "objects"), 0);
 	return (1);
 }
 
