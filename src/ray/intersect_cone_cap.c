@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 12:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/02/10 12:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/03/22 16:23:18 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include "vec3.h"
 #include "minirt.h"
 #include <math.h>
-
-int	intersect_cone_body(t_ray *ray, t_cone_data *c, t_hit *hit);
 
 static int	intersect_cone_cap(t_ray *ray, t_cone_data *c, t_hit *hit)
 {

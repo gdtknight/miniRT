@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:18:33 by yoshin            #+#    #+#             */
-/*   Updated: 2025/12/18 15:18:34 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/03/22 16:24:09 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,6 @@ int		intersect_object_new(t_ray *ray, t_object *obj, t_hit *hit);
 int		intersect_cylinder_new(t_ray *ray, t_cylinder_data *c, t_color color,
 			t_hit *hit);
 int		intersect_cone_new(t_ray *ray, t_object *obj, t_hit *hit);
+int		intersect_cone_body(t_ray *ray, t_cone_data *c, t_hit *hit);
 
 #endif
