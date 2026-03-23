@@ -5,14 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.3.0] - 2026-02
+## [2.4.0] - 2026-03
 
 ### Refactored
 - **Input module split**: `input_dispatch.c`, `input_camera.c`, `input_objects.c`, `input_resize.c`, `input_rotate.c` moved from `src/window/` to `src/input/`
-- **Render consolidation**: `render_loop.c`, `render_flags_set.c` moved to `src/render/`
-- **Dead code removal**: Removed unused `handle_key_release` handler
+- **Metrics module split**: `metrics_*.c` moved from `src/render/` to `src/metrics/`
+- **File renames**: `trace.c` → `render_trace.c`, `camera.c` → `render_camera.c`, `intersect_cyl_new.c` → `intersect_cylinder.c`, `vector.c` → `vec3.c`, `bounds.c` → `aabb_bounds.c`
+- **Dead code removal**: Removed pixel_timing module, unused `handle_key_release`, dead HUD files
 - **Main refactoring**: Extracted `init_scene` and `load_bump_maps` helpers
-- **Makefile update**: Updated for all file renames and directory moves
+
+### Fixed
+- **Linux cleanup**: Added `mlx_destroy_display` call for proper X11 cleanup
+- **Shadow sampling**: Fixed ceiling division for per-light sample adjustment
+- **Safety guards**: NaN guards in utils/bvh_vis, buffer overflow fixes in HUD, zero-normal safety in cylinder/cone intersection
+
+### Docs
+- Updated all docs/ module pages for file renames and module splits
+- Updated all wiki/ pages: key bindings, debounce FSM, resolution, multi-light, cone, bonus options
+
+## [2.3.0] - 2026-02
 
 ### Added
 - **Object Resize**: Y/U 키로 반지름, N/M 키로 원기둥 높이 조절

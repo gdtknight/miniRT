@@ -2,9 +2,10 @@
 
 이 디렉토리는 GitHub Wiki의 소스 파일을 포함합니다.
 
-**최신 버전**: v2.3.0 (2026-03)
+**최신 버전**: v2.4.0 (2026-03)
 
 **주요 변경사항**:
+- **v2.4.0**: 모듈 리팩토링 (input/metrics 분리), 파일 리네이밍, dead code 제거, 버그 수정, 문서 전면 갱신
 - **v2.3.0**: Object Resize/Rotation, Debounce FSM 재설계 (PREVIEW 제거), Keymap 변경, Input 모듈 분리
 - **v2.2.0**: Plane BVH 분리, Shadow BVH Any-Hit, fast_pow32, inv_dir 사전 계산, S4 성능 77.7% 개선
 - **v2.1.0**: BVH 가속 구조로 2-10배 렌더링 속도 향상, 디바운싱 렌더링, 100% Norminette 준수
@@ -169,4 +170,4 @@ git push
 
 **Maintained by**: miniRT Team  
 **Last Updated**: 2026-03
-**Version**: 2.3.0
+**Version**: 2.4.0

@@ -108,4 +108,4 @@ make
 ---
 
 **Last Updated**: 2026-03
-**Version**: 2.3.0
+**Version**: 2.4.0
