@@ -111,15 +111,17 @@ trace_ray(scene, ray)
 | 모듈 | 파일 수 | 역할 |
 |------|--------|------|
 | parser/ | 16 | .rt 파일 파싱 (bonus options, cone 포함) |
-| render/ | 11 | 렌더 루프, 카메라, 메트릭 |
+| render/ | 7 | 렌더 루프, 카메라, 디바운스 |
 | spatial/ | 10 | BVH 구축/순회, AABB |
 | lighting/ | 5 | Phong 조명, 그림자 (다중 광원) |
-| hud/ | 15 | HUD 오버레이 |
-| window/ | 13 | 윈도우, 키 이벤트 |
+| hud/ | 11 | HUD 오버레이 |
+| keyguide/ | 3 | 키가이드 |
+| input/ | 5 | 키 입력 디스패치, 카메라/오브젝트/광원 조작 |
+| window/ | 6 | 윈도우, 이벤트 |
 | ray/ | 4 | 교차 판정 (sphere, plane, cylinder, cone) |
 | math/ | 2 | 벡터 연산 |
 | texture/ | 4 | 체커보드, 범프맵 |
 | bvh_vis/ | 7 | BVH 시각화 |
 | scene/ | 3 | 씬 관리 |
-| keyguide/ | 3 | 키가이드 |
-| utils/ | 3 | 에러, 타이머 |
+| metrics/ | 4 | 프레임 시간, 레이/BVH 카운터 |
+| utils/ | 3 | 에러, 포맷 헬퍼, 타이머 |

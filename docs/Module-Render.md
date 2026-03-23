@@ -6,19 +6,26 @@
 
 ## 소스 파일
 
+### Render (`src/render/`)
+
 | 파일 | 역할 |
 |------|------|
 | `render.c` | 렌더 루프 (`render_scene_to_buffer`) |
-| `trace.c` | `trace_ray` — BVH/brute-force 분기 및 조명 적용 |
-| `camera.c` | 카메라 레이 생성 (`create_camera_ray`) |
-| `metrics_frame.c` | 프레임 시간 측정 (`metrics_start_frame`, `metrics_end_frame`) |
-| `metrics_counters.c` | 레이/교차/BVH 카운터 갱신 |
-| `metrics_calc.c` | FPS, BVH 효율, 테스트/레이 평균 계산 |
-| `metrics_shadow.c` | shadow 교차 테스트 카운터 |
-| `pixel_timing.c` | 픽셀 단위 시간 샘플링 (`pixel_timing_add_sample`) |
-| `pixel_timing_print.c` | 픽셀 타이밍 통계 출력 (min/max/avg/p95/p99) |
+| `render_trace.c` | `trace_ray` — BVH/brute-force 분기 및 조명 적용 |
+| `render_camera.c` | 카메라 레이 생성 (`create_camera_ray`) |
 | `render_debounce.c` | 디바운스 상태 머신 |
 | `render_debounce_timer.c` | 디바운스 타이머 유틸리티 |
+| `render_loop.c` | `render_loop` — 프레임 루프 콜백 |
+| `render_flags_set.c` | 렌더 상태 플래그 헬퍼 |
+
+### Metrics (`src/metrics/`)
+
+| 파일 | 역할 |
+|------|------|
+| `metrics_frame.c` | 프레임 시간 측정 |
+| `metrics_counters.c` | 레이/교차/BVH 카운터 갱신 |
+| `metrics_calc.c` | FPS, BVH 효율 계산 |
+| `metrics_shadow.c` | shadow 교차 테스트 카운터 |
 
 ---
 
@@ -35,10 +42,7 @@ render_loop(render)
  │    ├── render_scene_to_buffer(scene, render)
  │    │    ├── [full quality] render_pixel() per pixel
  │    │    │    ├── create_camera_ray()
- │    │    │    ├── [PIXEL_TIMING 활성] get_time_ns()  // 시작
  │    │    │    ├── trace_ray()
- │    │    │    ├── [PIXEL_TIMING 활성] get_time_ns()  // 종료
- │    │    │    ├── [PIXEL_TIMING 활성] pixel_timing_add_sample()
  │    │    │    └── put_pixel_to_buffer()
  │    │    └── [low quality] render_low_quality()
  │    │         ├── create_camera_ray()
@@ -84,8 +88,8 @@ t_color trace_ray(t_scene *scene, t_ray *ray)
 
 | 모드 | 조건 | 설명 |
 |------|------|------|
-| Full quality | `RENDER_LOW_QUALITY` 플래그 없음 | 픽셀 개별 렌더링, timing 측정 (`RENDER_ENABLE_PIXEL_TIMING` 시) |
-| Low quality | `RENDER_LOW_QUALITY` 플래그 있음 | 블록 단위 렌더링, timing 미측정 |
+| Full quality | `RENDER_LOW_QUALITY` 플래그 없음 | 픽셀 개별 렌더링 |
+| Low quality | `RENDER_LOW_QUALITY` 플래그 있음 | 블록 단위 렌더링 |
 
 인터랙션(키 입력) 시 low quality로 전환하여 빠른 피드백을 제공하고, 디바운스 타이머 후 full quality로 재렌더링합니다.
 

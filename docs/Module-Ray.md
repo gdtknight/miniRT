@@ -9,7 +9,7 @@
 | 파일 | 역할 |
 |------|------|
 | `intersect_object.c` | `intersect_object_new` — 통합 교차 디스패치 + 구/평면 교차 |
-| `intersect_cyl_new.c` | `intersect_cylinder_new` — 원기둥 교차 (측면 + 캡) |
+| `intersect_cylinder.c` | `intersect_cylinder` — 원기둥 교차 (측면 + 캡) |
 | `intersect_cone_body.c` | `intersect_cone_body` — 원뿔 측면 교차 |
 | `intersect_cone_cap.c` | `intersect_cone_new` — 원뿔 통합 (측면 + 밑면 캡) |
 

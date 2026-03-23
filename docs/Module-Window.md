@@ -6,21 +6,26 @@ MiniLibX 윈도우 초기화, 이벤트 핸들링, 키 바인딩을 담당하는
 
 ## 소스 파일
 
+### Window (`src/window/`)
+
 | 파일 | 역할 |
 |------|------|
 | `window_init.c` | 윈도우/이미지/UI 초기화, 훅 등록 |
 | `window_lifecycle.c` | `close_window` — 리소스 정리 및 종료 |
-| `window_events.c` | `handle_key`, `handle_key_release` — 키 이벤트 분기 |
-| `window_key_handlers.c` | HUD, 오브젝트 선택, 변환 키 처리 |
-| `window_loop.c` | `render_loop` — 프레임 루프 콜백 |
-| `window_camera.c` | 카메라 이동/회전/리셋 |
-| `window_objects.c` | 오브젝트 이동 처리 |
-| `window_resize.c` | 오브젝트 리사이즈 처리 |
-| `window_rotate.c` | 오브젝트 회전 처리 |
+| `window_events.c` | `handle_key` — 키 이벤트 분기 |
 | `mlx_context.c` | MiniLibX 초기화 (`mlx_init`, `mlx_new_window`) |
 | `mlx_pixel.c` | 픽셀 쓰기 (`put_pixel_to_buffer`) |
 | `mlx_pixel_codec.c` | 픽셀 형식 변환 |
-| `render_flags_set.c` | 렌더 상태 플래그 헬퍼 |
+
+### Input (`src/input/`)
+
+| 파일 | 역할 |
+|------|------|
+| `input_dispatch.c` | 키 디스패치 (`handle_hud_keys`, `handle_camera_keys`, `handle_transform_keys`) |
+| `input_camera.c` | 카메라 이동/회전/리셋 |
+| `input_objects.c` | 오브젝트 이동 처리 |
+| `input_resize.c` | 오브젝트 리사이즈 처리 (Y/U 반지름, N/M 높이) |
+| `input_rotate.c` | 오브젝트 회전 처리 (I/J X축, O/K Y축, P/L Z축) |
 
 ---
 
@@ -35,7 +40,6 @@ render_create(scene)
  │    ├── mlx_new_image()
  │    └── mlx_get_data_addr()
  ├── init_render_state()
- │    ├── pixel_timing_init()
  │    └── debounce_init()
  ├── init_ui_components()
  │    ├── hud_init()
@@ -44,7 +48,6 @@ render_create(scene)
  └── register_hooks()
       ├── mlx_hook(close_window)       // 윈도우 닫기
       ├── mlx_hook(handle_key)         // 키 누름
-      ├── mlx_hook(handle_key_release) // 키 해제
       ├── mlx_hook(handle_expose)      // 윈도우 노출 시 재렌더링
       └── mlx_loop_hook(render_loop)   // 프레임 루프
 ```
@@ -145,8 +148,6 @@ handle_key(keycode, render)
       ├── Y/U/N/M → handle_object_resize()
       └── I/J/O/K/P/L → handle_object_rotate()
 
-handle_key_release(keycode, render)
- └── (no-op)
 ```
 
 키 누름 시 디바운스 FSM이 LQ preview를 트리거하고 (50ms throttle), 150ms 입력 없으면 full quality 렌더링을 수행합니다.
@@ -159,7 +160,6 @@ handle_key_release(keycode, render)
 close_window(render)
  ├── cleanup_all_bump_maps()    // 범프맵 XPM 리소스 해제
  ├── render_destroy(render)
- │    ├── pixel_timing_cleanup()
  │    ├── mlx_context_destroy()  // mlx_destroy_image + mlx_destroy_window
  │    └── free(render)
  ├── scene_destroy(scene)

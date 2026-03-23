@@ -19,10 +19,6 @@ HUD(Head-Up Display) 오버레이와 키가이드를 담당하는 모듈입니�
 | `hud_text.c` | HUD dirty 마킹, vec3 포맷 출력 |
 | `hud_format.c` | 숫자/벡터 포맷팅 |
 | `hud_format_helpers.c` | 포맷 헬퍼 |
-| `hud_format_simple.c` | 간단한 포맷 유틸리티 |
-| `hud_color.c` | HUD 배경/텍스트 색상 |
-| `hud_color_extract.c` | 색상 추출 유틸리티 |
-| `hud_transparency.c` | 반투명 배경 렌더링 |
 | `hud_toggle.c` | HUD 토글 (H 키) |
 | `hud_navigation.c` | 페이지 네비게이션 |
 

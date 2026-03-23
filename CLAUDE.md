@@ -13,9 +13,29 @@ make bonus          # Same as `make` (bonus features are compiled into the main 
 make norm           # Run norminette on src/ and includes/
 ```
 
+**Linux dependencies**: `sudo apt-get install libx11-dev libxext-dev libbsd-dev`
+
 Run: `./miniRT scenes/valid/valid_smoke_simple.rt` (simplest scene) or `./miniRT <scene.rt> --bvh-vis` for BVH tree visualization.
 
 There is no formal test framework. Manual test files exist in `tests/` and test scenes in `scenes/valid/`.
+
+### Validation & Test Scripts
+
+```bash
+bash scripts/validate_norminette.sh    # Norminette check (scripted)
+bash scripts/test_miniRT.sh            # Basic runtime tests
+bash scripts/test_scenes.sh            # Run all test scenes
+bash scripts/test/test_controls.sh     # Interactive control tests
+bash scripts/test/test_progress.sh     # Progress tracking tests
+```
+
+Note: Some scripts require a GUI/display environment to run.
+
+## Git Workflow
+
+- Branch model: `main` → `develop` → feature branches (`NNN-feature-name`)
+- Feature specs live in `specs/NNN-feature-name/` (speckit workflow)
+- PRs target `develop`; `main` receives merges from `develop`
 
 ## 42 Norm v4.1 — Critical Rules
 
@@ -50,17 +70,21 @@ main.c → parse .rt file → build BVH → mlx_loop()
 
 | Directory | Purpose |
 |-----------|---------|
-| `src/render/` | Render loop, camera ray generation, ray tracing dispatcher, debounce FSM, performance metrics |
+| `src/render/` | Render loop, camera ray generation, ray tracing dispatcher, debounce FSM |
 | `src/spatial/` | BVH construction (midpoint split, depth limit 20), traversal, any-hit shadow optimization, AABB ops |
 | `src/lighting/` | Phong model, soft shadows (stratified sampling), shadow offset LUT, `fast_pow32()` specular |
 | `src/ray/` | Ray-object intersection: sphere (quadratic), plane (linear), cylinder, cone (body + caps) |
 | `src/parser/` | `.rt` file parsing with strict validation, bonus options (checker, bump map) |
-| `src/window/` | MiniLibX window setup, keyboard event handlers, camera/object/light manipulation |
+| `src/input/` | Keyboard input dispatch, camera/object/light manipulation handlers |
+| `src/window/` | MiniLibX window setup, lifecycle, event registration, pixel buffer operations |
 | `src/hud/` | HUD overlay (scene info, FPS, object list) with pagination |
+| `src/keyguide/` | On-screen keyboard shortcut guide rendering |
+| `src/metrics/` | Frame timing, shadow/intersection counters, performance calculation |
 | `src/math/` | Vec3 operations (add, sub, dot, cross, normalize) |
 | `src/scene/` | Scene lifecycle, object list (dynamic array), bit flags |
 | `src/texture/` | Checkerboard patterns, XPM bump map loading and normal perturbation |
 | `src/bvh_vis/` | Console BVH tree dump (`--bvh-vis` flag) |
+| `src/utils/` | Error handling, format helpers, timer utilities |
 
 ### Key Design Decisions
 
@@ -78,6 +102,32 @@ main.c → parse .rt file → build BVH → mlx_loop()
 - `includes/window.h` — `t_render` context (MLX, scene ref, HUD state, selection, debounce)
 - `includes/shadow.h` — Shadow config, offset LUT
 
+### Norm-Capacity Warnings
+
+These files are at the 5-function Norm limit — adding functions requires splitting into a new file:
+- `src/render/render_debounce.c` + `src/render/render_debounce_timer.c`
+- `src/keyguide/keyguide_render.c` + `src/keyguide/keyguide_render_extra.c`
+
+### Scene File Format (`.rt`)
+
+```
+A  <ratio>  <R,G,B>                           # Ambient (required, exactly 1)
+C  <x,y,z>  <nx,ny,nz>  <fov>                 # Camera (required, exactly 1)
+L  <x,y,z>  <brightness>  <R,G,B>             # Light (required, 1+)
+sp <x,y,z>  <diameter>  <R,G,B>               # Sphere
+pl <x,y,z>  <nx,ny,nz>  <R,G,B>               # Plane
+cy <x,y,z>  <nx,ny,nz>  <d>  <h>  <R,G,B>     # Cylinder
+co <x,y,z>  <nx,ny,nz>  <d>  <h>  <R,G,B>     # Cone (bonus)
+```
+
+Bonus options can follow object definitions: `checker` (checkerboard texture), `bump <file.xpm>` (bump map).
+
 ### Platform Support
 
 macOS (OpenGL + AppKit) and Linux (X11 + Xext). OS detection is automatic in the Makefile. On Linux, `mlx_destroy_display()` is called for cleanup.
+
+### Key Platform-Specific Code
+
+- Key codes: `includes/window_internal.h` — dual `#ifdef __APPLE__` / `__linux__` sections
+- MLX cleanup: Linux requires `mlx_destroy_display()` (not available on macOS)
+- Makefile auto-detects OS via `uname -s` for link flags

@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.3.0] - 2026-02
 
+### Refactored
+- **Input module split**: `input_dispatch.c`, `input_camera.c`, `input_objects.c`, `input_resize.c`, `input_rotate.c` moved from `src/window/` to `src/input/`
+- **Render consolidation**: `render_loop.c`, `render_flags_set.c` moved to `src/render/`
+- **Dead code removal**: Removed unused `handle_key_release` handler
+- **Main refactoring**: Extracted `init_scene` and `load_bump_maps` helpers
+- **Makefile update**: Updated for all file renames and directory moves
+
 ### Added
 - **Object Resize**: Y/U 키로 반지름, N/M 키로 원기둥 높이 조절
 - **Object Rotation**: I/J (X축), O/K (Y축), P/L (Z축) Rodrigues 회전
