@@ -67,7 +67,6 @@ static void	register_hooks(t_render *render)
 {
 	mlx_hook(render->mlx.win, 17, 0, close_window, render);
 	mlx_hook(render->mlx.win, 2, 1L << 0, handle_key, render);
-	mlx_hook(render->mlx.win, 3, 1L << 1, handle_key_release, render);
 	mlx_hook(render->mlx.win, 12, 1L << 15, handle_expose, render);
 	mlx_loop_hook(render->mlx.mlx, render_loop, render);
 }

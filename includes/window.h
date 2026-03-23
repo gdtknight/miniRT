@@ -81,7 +81,6 @@ void		render_clear_flag(t_render *render, int flag);
 /* Window event handlers */
 int			close_window(void *param);
 int			handle_key(int keycode, void *param);
-int			handle_key_release(int keycode, void *param);
 int			render_loop(void *param);
 
 #endif

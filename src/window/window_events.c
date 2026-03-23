@@ -62,19 +62,3 @@ int	handle_expose(void *param)
 	}
 	return (0);
 }
-
-/**
- * @brief Handle key release events.
- *
- * Updates render flags when modifier keys are released.
- *
- * @param keycode Key code of the released key.
- * @param param Pointer to the render context.
- * @return int Always returns 0 for MLX event handling.
- */
-int	handle_key_release(int keycode, void *param)
-{
-	(void)keycode;
-	(void)param;
-	return (0);
-}
