@@ -66,8 +66,8 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/lighting/shadow_calc.c \
 			  $(SRC_DIR)/lighting/shadow_config.c \
 			  $(SRC_DIR)/lighting/shadow_test.c \
-			  $(SRC_DIR)/math/vector.c \
-			  $(SRC_DIR)/math/vector_ops.c \
+			  $(SRC_DIR)/math/vec3.c \
+			  $(SRC_DIR)/math/vec3_ops.c \
 			  $(SRC_DIR)/parser/parse_elements.c \
 			  $(SRC_DIR)/parser/parse_objects.c \
 			  $(SRC_DIR)/parser/parse_validation_strict.c \
@@ -85,21 +85,21 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/parser/parse_bonus_options.c \
 			  $(SRC_DIR)/parser/parser_utils.c \
 			  $(SRC_DIR)/ray/intersect_object.c \
-			  $(SRC_DIR)/ray/intersect_cyl_new.c \
+			  $(SRC_DIR)/ray/intersect_cylinder.c \
 			  $(SRC_DIR)/ray/intersect_cone_body.c \
 			  $(SRC_DIR)/ray/intersect_cone_cap.c \
-			  $(SRC_DIR)/render/camera.c \
-			  $(SRC_DIR)/render/metrics_frame.c \
-			  $(SRC_DIR)/render/metrics_counters.c \
-			  $(SRC_DIR)/render/metrics_calc.c \
-			  $(SRC_DIR)/render/metrics_shadow.c \
+			  $(SRC_DIR)/render/render_camera.c \
 			  $(SRC_DIR)/render/render.c \
 			  $(SRC_DIR)/render/render_debounce.c \
 			  $(SRC_DIR)/render/render_debounce_timer.c \
-			  $(SRC_DIR)/render/trace.c \
+			  $(SRC_DIR)/render/render_trace.c \
+			  $(SRC_DIR)/metrics/metrics_frame.c \
+			  $(SRC_DIR)/metrics/metrics_counters.c \
+			  $(SRC_DIR)/metrics/metrics_calc.c \
+			  $(SRC_DIR)/metrics/metrics_shadow.c \
 			  $(SRC_DIR)/spatial/aabb.c \
 			  $(SRC_DIR)/spatial/aabb_basic.c \
-			  $(SRC_DIR)/spatial/bounds.c \
+			  $(SRC_DIR)/spatial/aabb_bounds.c \
 			  $(SRC_DIR)/spatial/bvh_lifecycle.c \
 			  $(SRC_DIR)/spatial/bvh_build_partition.c \
 			  $(SRC_DIR)/spatial/bvh_build_split.c \
@@ -113,16 +113,16 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/window/window_init.c \
 			  $(SRC_DIR)/window/window_lifecycle.c \
 			  $(SRC_DIR)/window/window_events.c \
-			  $(SRC_DIR)/window/input_dispatch.c \
-			  $(SRC_DIR)/window/render_loop.c \
-			  $(SRC_DIR)/window/input_camera.c \
-			  $(SRC_DIR)/window/input_objects.c \
-			  $(SRC_DIR)/window/input_resize.c \
-			  $(SRC_DIR)/window/input_rotate.c \
+			  $(SRC_DIR)/render/render_loop.c \
+			  $(SRC_DIR)/input/input_dispatch.c \
+			  $(SRC_DIR)/input/input_camera.c \
+			  $(SRC_DIR)/input/input_objects.c \
+			  $(SRC_DIR)/input/input_resize.c \
+			  $(SRC_DIR)/input/input_rotate.c \
 			  $(SRC_DIR)/window/mlx_context.c \
 			  $(SRC_DIR)/window/mlx_pixel_codec.c \
 			  $(SRC_DIR)/window/mlx_pixel.c \
-			  $(SRC_DIR)/window/render_flags_set.c \
+			  $(SRC_DIR)/render/render_flags_set.c \
 			  $(SRC_DIR)/texture/checkerboard.c \
 			  $(SRC_DIR)/texture/bump_map_load.c \
 			  $(SRC_DIR)/texture/bump_map_perturb.c \
