@@ -24,8 +24,6 @@
  * @brief Parse CLI arguments and extract options/scene filename.
  *
  * Scans argv for the optional "--bvh-vis" flag and a single scene file path.
- * Returns failure if an unknown option is provided or if multiple scene files
- * are passed. On success, updates filename and bvh_vis output parameters.
  *
  * @param argc Argument count from main.
  * @param argv Argument vector from main.
@@ -55,52 +53,40 @@ static int	parse_args(int argc, char **argv, char **filename, int *bvh_vis)
 }
 
 /**
- * @brief Create a scene, parse it from file, and build the BVH.
+ * @brief Create a scene and parse it from a file.
  *
- * Allocates a new scene, parses the given .rt file into it, and builds
- * acceleration structures. On failure, cleans up and reports errors.
+ * Allocates a new scene and parses the given .rt file into it.
+ * On failure, cleans up and reports errors.
  *
  * @param filename Path to the scene file.
  * @param scene Output pointer receiving the created scene.
  * @return int 1 on success, 0 on failure.
  */
-static int	init_and_parse(char *filename, t_scene **scene)
+static int	init_scene(char *filename, t_scene **scene)
 {
 	*scene = scene_create();
 	if (!*scene)
-	{
-		error_print(ERR_MALLOC);
-		return (0);
-	}
+		return (error_print(ERR_MALLOC), 0);
 	if (!parse_scene(filename, *scene))
 	{
 		scene_destroy(*scene);
 		return (0);
 	}
-	scene_build_bvh(*scene);
-	if ((*scene)->bvh && !(*scene)->bvh->root)
-		write(2, "Warning: BVH build failed, using brute force\n", 46);
 	return (1);
 }
 
 /**
- * @brief Initialize rendering context and optional BVH visualization.
+ * @brief Create the render context for a scene.
  *
- * Enables BVH visualization on the scene if requested and available,
- * then creates the render context tied to the given scene.
+ * Initializes the MLX window and image tied to the given scene.
+ * On failure, destroys the scene and reports errors.
  *
  * @param scene Parsed scene used for rendering.
  * @param render Output pointer receiving the render context.
- * @param bvh_vis Non-zero to enable BVH visualization.
  * @return int 1 on success, 0 on failure.
  */
-static int	init_render_ctx(t_scene *scene, t_render **render, int bvh_vis)
+static int	init_render(t_scene *scene, t_render **render)
 {
-	if (bvh_vis && scene->bvh)
-	{
-		scene->bvh->visualize = 1;
-		bvh_visualize(scene->bvh, NULL, scene);
-	}
 	*render = render_create(scene);
 	if (!*render)
 	{
@@ -108,10 +94,24 @@ static int	init_render_ctx(t_scene *scene, t_render **render, int bvh_vis)
 		scene_destroy(scene);
 		return (0);
 	}
-	if (!load_all_bump_maps(scene, (*render)->mlx.mlx))
+	return (1);
+}
+
+/**
+ * @brief Load bump map textures for all scene objects.
+ *
+ * Loads XPM bump maps via MLX. On failure, cleans up all resources.
+ *
+ * @param scene Scene containing objects with bump map paths.
+ * @param render Render context providing the MLX handle.
+ * @return int 1 on success, 0 on failure.
+ */
+static int	load_textures(t_scene *scene, t_render *render)
+{
+	if (!load_all_bump_maps(scene, render->mlx.mlx))
 	{
-		cleanup_all_bump_maps(scene, (*render)->mlx.mlx);
-		render_destroy(*render);
+		cleanup_all_bump_maps(scene, render->mlx.mlx);
+		render_destroy(render);
 		scene_destroy(scene);
 		return (0);
 	}
@@ -121,8 +121,8 @@ static int	init_render_ctx(t_scene *scene, t_render **render, int bvh_vis)
 /**
  * @brief Program entry point for miniRT.
  *
- * Validates CLI arguments, loads the scene, initializes the render context,
- * and starts the MLX event loop. Returns a non-zero exit code on failure.
+ * Parses CLI arguments, loads the scene, builds the BVH, initializes
+ * the render context, loads textures, and starts the MLX event loop.
  *
  * @param argc Argument count.
  * @param argv Argument vector.
@@ -135,19 +135,17 @@ int	main(int argc, char **argv)
 	char		*filename;
 	int			bvh_vis;
 
-	if (argc < 2)
-	{
-		printf("Usage: %s <scene_file.rt> [--bvh-vis]\n", argv[0]);
-		return (1);
-	}
 	if (!parse_args(argc, argv, &filename, &bvh_vis))
-	{
-		printf("Usage: %s <scene_file.rt> [--bvh-vis]\n", argv[0]);
+		return (printf("Usage: %s <scene.rt> [--bvh-vis]\n", argv[0]), 1);
+	if (!init_scene(filename, &scene))
 		return (1);
-	}
-	if (!init_and_parse(filename, &scene))
+	scene_build_bvh(scene);
+	if (bvh_vis && scene->bvh)
+		scene->bvh->visualize = 1;
+	bvh_visualize(scene->bvh, NULL, scene);
+	if (!init_render(scene, &render))
 		return (1);
-	if (!init_render_ctx(scene, &render, bvh_vis))
+	if (!load_textures(scene, render))
 		return (1);
 	mlx_loop(render->mlx.mlx);
 	cleanup_all_bump_maps(scene, render->mlx.mlx);
