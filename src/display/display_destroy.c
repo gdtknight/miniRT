@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mlx_context_destroy.c                              :+:      :+:    :+:   */
+/*   display_destroy.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,6 +13,26 @@
 #include "mlx_context.h"
 #include "mlx.h"
 #include <stdlib.h>
+
+/**
+ * @brief Destroy an MLX image and reset image fields.
+ *
+ * Frees the MLX image resource if present and clears cached pointers.
+ *
+ * @param img Image structure to destroy.
+ * @param mlx MLX connection pointer.
+ */
+void	mlx_img_destroy(t_mlx_img *img, void *mlx)
+{
+	if (!img || !mlx)
+		return ;
+	if (img->img)
+	{
+		mlx_destroy_image(mlx, img->img);
+		img->img = NULL;
+	}
+	img->data = NULL;
+}
 
 #ifdef __linux__
 

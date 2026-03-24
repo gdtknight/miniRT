@@ -49,9 +49,6 @@ int		mlx_img_init(t_mlx_img *img, void *mlx, int width, int height);
 void	mlx_img_destroy(t_mlx_img *img, void *mlx);
 
 /* Pixel operations */
-void	mlx_encode_pixel_bytes(char *dst, int bpp, int endian, int color);
-int		mlx_decode_pixel_bytes(const char *src, int bpp, int endian);
 void	mlx_img_put_pixel(t_mlx_img *img, int x, int y, int color);
-int		mlx_img_get_pixel(t_mlx_img *img, int x, int y);
 
 #endif

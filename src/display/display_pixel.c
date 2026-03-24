@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mlx_pixel.c                                        :+:      :+:    :+:   */
+/*   display_pixel.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,11 +12,19 @@
 
 #include "mlx_context.h"
 
+static void	encode_pixel_bytes(char *dst, int color)
+{
+	dst[0] = (char)(color & 0xFF);
+	dst[1] = (char)((color >> 8) & 0xFF);
+	dst[2] = (char)((color >> 16) & 0xFF);
+	dst[3] = 0;
+}
+
 /**
  * @brief Write a pixel value into the MLX image buffer.
  *
  * Computes the byte offset for the (x, y) coordinate and writes the packed
- * color value directly into the image data buffer.
+ * color value in BGRA little-endian format.
  *
  * @param img Image buffer to modify.
  * @param x Pixel x coordinate.
@@ -32,28 +40,5 @@ void	mlx_img_put_pixel(t_mlx_img *img, int x, int y, int color)
 	if (x < 0 || x >= img->width || y < 0 || y >= img->height)
 		return ;
 	dst = img->data + (y * img->size_line + x * (img->bpp / 8));
-	mlx_encode_pixel_bytes(dst, img->bpp, img->endian, color);
-}
-
-/**
- * @brief Read a pixel value from the MLX image buffer.
- *
- * Computes the byte offset for the (x, y) coordinate and returns the packed
- * color value stored at that location.
- *
- * @param img Image buffer to read from.
- * @param x Pixel x coordinate.
- * @param y Pixel y coordinate.
- * @return int Packed color value (0xRRGGBB) or 0 on invalid input.
- */
-int	mlx_img_get_pixel(t_mlx_img *img, int x, int y)
-{
-	char	*src;
-
-	if (!img || !img->data)
-		return (0);
-	if (x < 0 || x >= img->width || y < 0 || y >= img->height)
-		return (0);
-	src = img->data + (y * img->size_line + x * (img->bpp / 8));
-	return (mlx_decode_pixel_bytes(src, img->bpp, img->endian));
+	encode_pixel_bytes(dst, color);
 }
