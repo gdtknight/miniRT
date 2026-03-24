@@ -46,6 +46,7 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/bvh_vis/bvh_vis_format.c \
 			  $(SRC_DIR)/bvh_vis/bvh_vis_stats.c \
 			  $(SRC_DIR)/bvh_vis/bvh_vis_prefix.c \
+			  $(SRC_DIR)/bvh_vis/bvh_vis_prefix_push.c \
 			  $(SRC_DIR)/bvh_vis/bvh_vis_print.c \
 			  $(SRC_DIR)/hud/hud_format.c \
 			  $(SRC_DIR)/hud/hud_format_helpers.c \
@@ -110,8 +111,7 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/utils/error.c \
 			  $(SRC_DIR)/utils/format_helpers.c \
 			  $(SRC_DIR)/utils/timer.c \
-			  $(SRC_DIR)/window/window_init.c \
-			  $(SRC_DIR)/window/window_lifecycle.c \
+			  $(SRC_DIR)/render/render_init.c \
 			  $(SRC_DIR)/window/window_events.c \
 			  $(SRC_DIR)/render/render_loop.c \
 			  $(SRC_DIR)/input/input_dispatch.c \
@@ -119,7 +119,10 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/input/input_objects.c \
 			  $(SRC_DIR)/input/input_resize.c \
 			  $(SRC_DIR)/input/input_rotate.c \
+			  $(SRC_DIR)/input/input_key_binds.c \
+			  $(SRC_DIR)/input/input_key_binds_extra.c \
 			  $(SRC_DIR)/window/mlx_context.c \
+			  $(SRC_DIR)/window/mlx_context_destroy.c \
 			  $(SRC_DIR)/window/mlx_pixel_codec.c \
 			  $(SRC_DIR)/window/mlx_pixel.c \
 			  $(SRC_DIR)/render/render_flags_set.c \
