@@ -45,30 +45,3 @@ void	format_object_list(t_object_ref *objects, int count, char *buffer,
 	}
 	ft_strlcat(buffer, "]", 64);
 }
-
-/**
- * @brief Format node info in compact mode.
- *
- * Uses short type labels and depth-only bounds display.
- *
- * @param node BVH node to describe.
- * @param info Output node info structure.
- */
-void	format_node_compact(t_bvh_node *node, t_node_info *info)
-{
-	char	*num;
-
-	if (is_leaf_node(node))
-		ft_strlcpy(info->type, "L", sizeof(info->type));
-	else
-		ft_strlcpy(info->type, "I", sizeof(info->type));
-	ft_strlcpy(info->bounds, "[d=", sizeof(info->bounds));
-	num = ft_itoa(node->depth);
-	if (num)
-	{
-		ft_strlcat(info->bounds, num, sizeof(info->bounds));
-		free(num);
-	}
-	ft_strlcat(info->bounds, "]", sizeof(info->bounds));
-	info->objects[0] = '\0';
-}

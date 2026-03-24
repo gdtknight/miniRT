@@ -62,11 +62,6 @@ void	check_edge_cases(t_bvh *bvh, t_vis_config *config)
 {
 	if (!bvh || !bvh->root || !config)
 		return ;
-	if (bvh->max_depth > 20)
-	{
-		if (config->show_warnings)
-			print_warning_message("BVH tree is very deep (>20 levels)");
-	}
 	if (config->terminal_width < 80)
 	{
 		if (config->show_warnings)
