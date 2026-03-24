@@ -15,12 +15,35 @@
 #include "window_internal.h"
 #include "hud.h"
 #include "keyguide.h"
+#include "texture.h"
+#include <stdlib.h>
 
 /**
- * @brief Handle key press events and trigger actions.
+ * @brief Handle window close event and shut down cleanly.
  *
- * Routes keyboard input to HUD controls, object selection, camera movement,
- * and transform operations while updating render flags as needed.
+ * Frees render and scene resources, then exits the process.
+ *
+ * @param param Pointer to the render context.
+ * @return int Always returns 0 for MLX event handling.
+ */
+int	close_window(void *param)
+{
+	t_render	*render;
+	t_scene		*scene;
+
+	render = (t_render *)param;
+	scene = render->scene;
+	cleanup_all_bump_maps(scene, render->mlx.mlx);
+	render_destroy(render);
+	scene_destroy(scene);
+	exit(0);
+}
+
+/**
+ * @brief Handle key press events via dispatch table lookup.
+ *
+ * Looks up the keycode in the key bind table and calls the matched handler.
+ * Unbound keys are ignored with no function calls.
  *
  * @param keycode Key code of the pressed key.
  * @param param Pointer to the render context.
@@ -29,13 +52,18 @@
 int	handle_key(int keycode, void *param)
 {
 	t_render	*render;
+	int			i;
 
 	render = (t_render *)param;
 	if (keycode == KEY_ESC)
 		close_window(param);
-	handle_hud_keys(render, keycode);
-	handle_camera_keys(render, keycode);
-	handle_transform_keys(render, keycode);
+	i = 0;
+	while (i < render->key_binds.count)
+	{
+		if (render->key_binds.entries[i].keycode == keycode)
+			return (render->key_binds.entries[i].handler(render, keycode), 0);
+		i++;
+	}
 	return (0);
 }
 

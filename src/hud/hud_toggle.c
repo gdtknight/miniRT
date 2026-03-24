@@ -26,9 +26,6 @@ void	hud_toggle(t_render *render)
 	render->keyguide.visible = render->hud.visible;
 	render->hud.dirty = 1;
 	render->keyguide.dirty = 1;
-	if (render->hud.visible)
-		mlx_put_image_to_window(render->mlx.mlx, render->mlx.win,
-			render->mlx.img.img, 0, 0);
-	else
-		render_set_flag(render, RENDER_DIRTY);
+	mlx_put_image_to_window(render->mlx.mlx, render->mlx.win,
+		render->mlx.img.img, 0, 0);
 }

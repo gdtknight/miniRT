@@ -102,6 +102,12 @@
 #  error "Unsupported platform: define key codes for your OS"
 # endif
 
+/* Key bind initialization */
+void	init_hud_binds(t_key_binds *binds);
+void	init_camera_binds(t_key_binds *binds);
+void	init_transform_move_binds(t_key_binds *binds);
+void	init_transform_edit_binds(t_key_binds *binds);
+
 /* Camera control functions */
 void	handle_camera_move(t_render *render, int keycode);
 void	handle_camera_pitch(t_render *render, int keycode);

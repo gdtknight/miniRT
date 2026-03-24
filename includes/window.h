@@ -57,8 +57,26 @@ typedef struct s_keyguide_state
 	int		dirty;
 }	t_keyguide_state;
 
-/* Render context (refactored with legacy compatibility) */
-typedef struct s_render
+/* Key dispatch table */
+# define KEY_BIND_COUNT 38
+
+typedef struct s_render	t_render;
+typedef void			(*t_key_handler)(t_render *, int);
+
+typedef struct s_key_bind
+{
+	int				keycode;
+	t_key_handler	handler;
+}	t_key_bind;
+
+typedef struct s_key_binds
+{
+	t_key_bind	entries[KEY_BIND_COUNT];
+	int			count;
+}	t_key_binds;
+
+/* Render context */
+struct s_render
 {
 	t_mlx_context		mlx;
 	t_scene				*scene;
@@ -67,7 +85,8 @@ typedef struct s_render
 	t_hud_state			hud;
 	t_keyguide_state	keyguide;
 	t_debounce_state	debounce;
-}	t_render;
+	t_key_binds			key_binds;
+};
 
 /* Render lifecycle */
 t_render	*render_create(t_scene *scene);

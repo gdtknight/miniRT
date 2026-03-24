@@ -86,6 +86,7 @@ static void	format_bounds_str(t_aabb bounds, char *buf, size_t size, int comp)
 t_node_info	format_node_info(t_bvh_node *node)
 {
 	t_node_info	info;
+
 	info.depth = node->depth;
 	if (is_leaf_node(node))
 		ft_strlcpy(info.type, "Leaf", sizeof(info.type));

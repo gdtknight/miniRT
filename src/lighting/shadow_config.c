@@ -66,4 +66,3 @@ t_shadow_config	init_shadow_config(void)
 		config.samples = 1;
 	return (config);
 }
-
