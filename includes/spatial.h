@@ -57,7 +57,6 @@ typedef struct s_bvh
 {
 	t_bvh_node		*root;
 	int				enabled;
-	int				max_depth;
 	int				visualize;
 	t_plane_refs	plane_refs;
 }	t_bvh;
@@ -104,7 +103,6 @@ t_aabb		aabb_create(t_vec3 min, t_vec3 max);
 t_aabb		aabb_merge(t_aabb a, t_aabb b);
 t_aabb		aabb_for_object(t_object *obj);
 int			aabb_intersect(t_aabb box, t_ray ray, double *t_min, double *t_max);
-double		aabb_surface_area(t_aabb box);
 
 /* BVH construction */
 t_bvh		*bvh_create(void);

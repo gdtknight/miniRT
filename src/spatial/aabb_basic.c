@@ -89,21 +89,3 @@ t_aabb	aabb_merge(t_aabb a, t_aabb b)
 	result.max.z = max_double(a.max.z, b.max.z);
 	return (result);
 }
-
-/**
- * @brief Compute the surface area of an AABB.
- *
- * @param box AABB to measure.
- * @return double Surface area.
- */
-double	aabb_surface_area(t_aabb box)
-{
-	double	dx;
-	double	dy;
-	double	dz;
-
-	dx = box.max.x - box.min.x;
-	dy = box.max.y - box.min.y;
-	dz = box.max.z - box.min.z;
-	return (2.0 * (dx * dy + dy * dz + dz * dx));
-}
