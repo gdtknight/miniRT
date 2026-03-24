@@ -112,7 +112,10 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/utils/format_helpers.c \
 			  $(SRC_DIR)/utils/timer.c \
 			  $(SRC_DIR)/render/render_init.c \
-			  $(SRC_DIR)/window/window_events.c \
+			  $(SRC_DIR)/display/display_events.c \
+			  $(SRC_DIR)/display/display_init.c \
+			  $(SRC_DIR)/display/display_destroy.c \
+			  $(SRC_DIR)/display/display_pixel.c \
 			  $(SRC_DIR)/render/render_loop.c \
 			  $(SRC_DIR)/input/input_dispatch.c \
 			  $(SRC_DIR)/input/input_camera.c \
@@ -121,10 +124,6 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/input/input_rotate.c \
 			  $(SRC_DIR)/input/input_key_binds.c \
 			  $(SRC_DIR)/input/input_key_binds_extra.c \
-			  $(SRC_DIR)/window/mlx_context.c \
-			  $(SRC_DIR)/window/mlx_context_destroy.c \
-			  $(SRC_DIR)/window/mlx_pixel_codec.c \
-			  $(SRC_DIR)/window/mlx_pixel.c \
 			  $(SRC_DIR)/render/render_flags_set.c \
 			  $(SRC_DIR)/texture/checkerboard.c \
 			  $(SRC_DIR)/texture/bump_map_load.c \
