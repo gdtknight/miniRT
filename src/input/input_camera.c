@@ -92,9 +92,9 @@ void	handle_camera_yaw(t_render *render, int keycode)
 	double	step;
 
 	step = 5.0 * M_PI / 180.0;
-	if (keycode == KEY_1)
+	if (keycode == KEY_3)
 		step = -step;
-	else if (keycode != KEY_3)
+	else if (keycode != KEY_1)
 		return ;
 	render->scene->camera.yaw += step;
 	camera_rebuild_dir(&render->scene->camera);
