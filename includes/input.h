@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   window_internal.h                                  :+:      :+:    :+:   */
+/*   input.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef WINDOW_INTERNAL_H
-# define WINDOW_INTERNAL_H
+#ifndef INPUT_H
+# define INPUT_H
 
-# include "window.h"
+# include "render.h"
 
 /* Platform-specific key code definitions */
 # ifdef __APPLE__
