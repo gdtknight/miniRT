@@ -45,7 +45,7 @@ typedef struct s_shadow_query
 typedef struct s_shadow_sample
 {
 	t_scene			*scene;
-	t_vec3			point;
+	t_shadow_query	query;
 	t_vec3			light_pos;
 	t_shadow_config	*config;
 	double			bias;
@@ -111,7 +111,7 @@ double			calculate_shadow_factor(t_scene *scene, t_shadow_query query,
  * @param bias Shadow bias offset
  * @return 1 if in shadow, 0 if lit
  */
-int				is_in_shadow(t_scene *scene, t_vec3 point,
+int				is_in_shadow(t_scene *scene, t_shadow_query query,
 					t_vec3 light_pos, double bias);
 
 #endif

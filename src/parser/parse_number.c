@@ -26,21 +26,23 @@ t_parse_result	parse_double(const char *str, double *value, const char **end)
 {
 	double	sign;
 	double	result;
+	double	frac;
 	int		has_digits;
 
 	if (!str || !value || !end)
 		return (PARSE_ERR_NUMBER_FORMAT);
 	sign = 1.0;
 	has_digits = 0;
+	if (*str == '-')
+		sign = -1.0;
 	if (*str == '-' || *str == '+')
-	{
-		if (*str == '-')
-			sign = -1.0;
 		str++;
-	}
 	result = parse_int_part(&str, &has_digits);
-	result += parse_frac_part(&str, &has_digits);
-	if (!has_digits || isinf(result))
+	if (!has_digits && *str == '.')
+		return (PARSE_ERR_NUMBER_FORMAT);
+	frac = parse_frac_part(&str, &has_digits);
+	result += frac;
+	if (!has_digits || frac < 0.0 || isinf(result))
 		return (PARSE_ERR_NUMBER_FORMAT);
 	if (*str == '.' || *str == 'e' || *str == 'E')
 		return (PARSE_ERR_NUMBER_FORMAT);

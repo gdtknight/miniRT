@@ -10,10 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "window.h"
+#include "render.h"
 #include "hud.h"
-#include "hud_text.h"
-#include "hud_obj_render.h"
+#include "hud_internal.h"
 
 /**
  * @brief Render the object list header with page info.

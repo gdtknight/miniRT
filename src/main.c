@@ -12,7 +12,7 @@
 
 #include "minirt.h"
 #include "parser.h"
-#include "window.h"
+#include "render.h"
 #include "spatial.h"
 #include "bvh_vis.h"
 #include "texture.h"

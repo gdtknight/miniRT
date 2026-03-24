@@ -45,6 +45,9 @@ static t_parse_result	parse_cone_vectors(const char **token, t_object *obj)
 	result = parse_vector_strict(*token, &obj->data.cone.center, token);
 	if (result != PARSE_OK)
 		return (result);
+	result = validate_coordinate_range(&obj->data.cone.center);
+	if (result != PARSE_OK)
+		return (result);
 	*token = skip_whitespace(*token);
 	result = parse_vector_strict(*token, &obj->data.cone.axis, token);
 	if (result != PARSE_OK)

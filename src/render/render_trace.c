@@ -11,7 +11,8 @@
 /* ************************************************************************** */
 
 #include "minirt.h"
-#include "ray.h"
+#include "shading.h"
+#include "intersect.h"
 #include "spatial.h"
 #include "metrics.h"
 #include <math.h>

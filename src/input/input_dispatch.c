@@ -11,10 +11,10 @@
 /* ************************************************************************** */
 
 #include "minirt.h"
-#include "window.h"
-#include "window_internal.h"
+#include "render.h"
+#include "input.h"
 #include "hud.h"
-#include "hud_text.h"
+#include "hud_internal.h"
 
 /**
  * @brief Handle camera-related keys and trigger re-rendering.

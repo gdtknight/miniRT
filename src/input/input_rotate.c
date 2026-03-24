@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "minirt.h"
-#include "window.h"
-#include "window_internal.h"
+#include "render.h"
+#include "input.h"
 #include <math.h>
 
 /**

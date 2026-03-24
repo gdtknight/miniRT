@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "minirt.h"
-#include "window.h"
-#include "window_internal.h"
+#include "render.h"
+#include "input.h"
 #include "hud.h"
 #include "keyguide.h"
 #include <stdlib.h>

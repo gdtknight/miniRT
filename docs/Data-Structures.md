@@ -298,7 +298,6 @@ typedef struct s_bvh
 {
     t_bvh_node      *root;         // 트리 루트
     int             enabled;       // 활성화 여부
-    int             max_depth;     // 최대 깊이
     int             visualize;     // 시각화 플래그
     t_plane_refs    plane_refs;    // 분리된 plane 인덱스
 }   t_bvh;
@@ -422,7 +421,7 @@ Shadow 샘플링 파라미터.
 typedef struct s_shadow_sample
 {
     t_scene          *scene;
-    t_vec3           point;
+    t_shadow_query   query;      // 표면 위치 + 법선
     t_vec3           light_pos;
     t_shadow_config  *config;
     double           bias;
@@ -509,7 +508,7 @@ typedef struct s_mlx_context
 }   t_mlx_context;
 ```
 
-### `t_selection` (includes/window.h)
+### `t_selection` (includes/render.h)
 
 ```c
 typedef struct s_selection
@@ -519,7 +518,7 @@ typedef struct s_selection
 }   t_selection;
 ```
 
-### `t_keyguide_state` (includes/window.h)
+### `t_keyguide_state` (includes/render.h)
 
 ```c
 typedef struct s_keyguide_state
@@ -580,7 +579,7 @@ typedef struct s_debounce_state
 }   t_debounce_state;
 ```
 
-### `t_render` (includes/window.h)
+### `t_render` (includes/render.h)
 
 ```c
 typedef struct s_render
@@ -591,8 +590,8 @@ typedef struct s_render
     int                 state_flags;    // 렌더 상태 비트 플래그
     t_hud_state         hud;            // HUD 상태
     t_keyguide_state    keyguide;       // 키가이드 상태
-    t_pixel_timing      pixel_timing;   // 픽셀 타이밍
     t_debounce_state    debounce;       // 디바운스 상태
+    t_key_binds         key_binds;      // 키 디스패치 테이블
 }   t_render;
 ```
 

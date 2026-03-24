@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "render_debounce.h"
-#include "window.h"
+#include "render.h"
 
 void	debounce_init(t_debounce_state *state)
 {

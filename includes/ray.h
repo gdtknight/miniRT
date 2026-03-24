@@ -51,11 +51,4 @@ typedef struct s_cyl_calc
 	double	m2;
 }	t_cyl_calc;
 
-/* Intersection with unified object */
-int		intersect_object_new(t_ray *ray, t_object *obj, t_hit *hit);
-int		intersect_cylinder_new(t_ray *ray, t_cylinder_data *c, t_color color,
-			t_hit *hit);
-int		intersect_cone_new(t_ray *ray, t_object *obj, t_hit *hit);
-int		intersect_cone_body(t_ray *ray, t_cone_data *c, t_hit *hit);
-
 #endif

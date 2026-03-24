@@ -12,7 +12,7 @@
 
 #include "minirt.h"
 #include "ray.h"
-#include "window.h"
+#include "render.h"
 #include "metrics.h"
 
 /**

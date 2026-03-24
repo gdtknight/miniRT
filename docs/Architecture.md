@@ -38,7 +38,7 @@ main()
       ┌─────────┼─────────┐
       v         v         v
  ┌────────┐ ┌───────┐ ┌────────┐
- │ parser │ │ scene │ │ window │
+ │ parser │ │ scene │ │display │
  └───┬────┘ └───┬───┘ └───┬────┘
      │          │         │
      v          v         v
@@ -48,15 +48,15 @@ main()
  └──────┬──────────┬──────────┘
         │          │
    ┌────v───┐  ┌───v─────┐
-   │ spatial │  │lighting │
-   │  (BVH)  │  │(shadow) │
+   │ spatial │  │ shading │
+   │  (BVH)  │  │+ shadow │
    └────┬────┘  └────┬────┘
         │            │
         v            v
-   ┌─────────┐  ┌────────┐
-   │   ray   │  │  math  │
-   │(intersect)│ │(vector)│
-   └─────────┘  └────────┘
+   ┌──────────┐ ┌────────┐
+   │intersect │ │  math  │
+   │          │ │(vector)│
+   └──────────┘ └────────┘
 ```
 
 ---
@@ -113,12 +113,13 @@ trace_ray(scene, ray)
 | parser/ | 16 | .rt 파일 파싱 (bonus options, cone 포함) |
 | render/ | 7 | 렌더 루프, 카메라, 디바운스 |
 | spatial/ | 10 | BVH 구축/순회, AABB |
-| lighting/ | 5 | Phong 조명, 그림자 (다중 광원) |
+| shading/ | 2 | Phong 조명 (다중 광원, specular) |
+| shadow/ | 3 | 소프트 섀도우, shadow offset LUT |
 | hud/ | 11 | HUD 오버레이 |
 | keyguide/ | 3 | 키가이드 |
 | input/ | 5 | 키 입력 디스패치, 카메라/오브젝트/광원 조작 |
-| window/ | 6 | 윈도우, 이벤트 |
-| ray/ | 4 | 교차 판정 (sphere, plane, cylinder, cone) |
+| display/ | 6 | 윈도우, 이벤트 |
+| intersect/ | 4 | 교차 판정 (sphere, plane, cylinder, cone) |
 | math/ | 2 | 벡터 연산 |
 | texture/ | 4 | 체커보드, 범프맵 |
 | bvh_vis/ | 7 | BVH 시각화 |

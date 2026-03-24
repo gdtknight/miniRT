@@ -54,14 +54,6 @@ typedef struct s_camera_cache
 	int		valid;
 }	t_camera_cache;
 
-/* Floating point color for intermediate calculations (0.0 - 1.0+) */
-typedef struct s_color_f
-{
-	double	r;
-	double	g;
-	double	b;
-}	t_color_f;
-
 /* Ambient lighting that illuminates all objects uniformly */
 typedef struct s_ambient
 {
@@ -131,12 +123,7 @@ void	scene_clear_flag(t_scene *scene, int flag);
 
 /* Rendering */
 void	render_scene_to_buffer(t_scene *scene, t_render *render);
-t_color	apply_lighting(t_scene *scene, t_hit *hit);
 t_ray	create_camera_ray(t_camera *camera, double x, double y);
 t_color	trace_ray(t_scene *scene, t_ray *ray);
-
-/* Lighting utilities */
-void	clamp_color(t_color *result);
-double	fast_pow32(double x);
 
 #endif

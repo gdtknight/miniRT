@@ -12,7 +12,7 @@
 
 #include "spatial.h"
 #include "minirt.h"
-#include "ray.h"
+#include "intersect.h"
 #include "metrics.h"
 
 int	ray_goes_positive(t_vec3 dir, int axis)

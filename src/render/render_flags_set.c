@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "window.h"
+#include "render.h"
 
 /**
  * @brief Check whether a render state flag is set.

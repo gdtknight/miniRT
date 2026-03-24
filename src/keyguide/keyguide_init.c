@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "keyguide.h"
-#include "window.h"
+#include "render.h"
 
 /**
  * @brief Initialize the key guide overlay state.
