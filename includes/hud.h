@@ -13,7 +13,7 @@
 #ifndef HUD_H
 # define HUD_H
 
-# include "window.h"
+# include "render.h"
 
 /* HUD display dimensions and layout constants */
 # define HUD_WIDTH 400

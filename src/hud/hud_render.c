@@ -10,11 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "window.h"
+#include "render.h"
 #include "hud.h"
-#include "hud_text.h"
-#include "hud_scene.h"
-#include "hud_objects.h"
+#include "hud_internal.h"
 
 /**
  * @brief Render all HUD sections in order.

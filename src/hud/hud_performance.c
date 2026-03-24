@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "hud.h"
-#include "hud_text.h"
+#include "hud_internal.h"
 #include "metrics.h"
 
 static void	render_perf_basic(t_render *render, int *y)

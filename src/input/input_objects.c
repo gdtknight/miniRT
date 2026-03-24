@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "minirt.h"
-#include "window.h"
-#include "window_internal.h"
+#include "render.h"
+#include "input.h"
 
 /**
  * @brief Move the currently selected object by a delta vector.

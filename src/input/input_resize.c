@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "minirt.h"
-#include "window.h"
-#include "window_internal.h"
+#include "render.h"
+#include "input.h"
 
 static int	resize_sphere(t_object *obj, int keycode)
 {

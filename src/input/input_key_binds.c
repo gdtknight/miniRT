@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "window.h"
-#include "window_internal.h"
+#include "render.h"
+#include "input.h"
 
 static void	bind_key(t_key_binds *binds, int keycode, t_key_handler handler)
 {

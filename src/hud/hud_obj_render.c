@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "window.h"
+#include "render.h"
 #include "hud.h"
-#include "hud_text.h"
+#include "hud_internal.h"
 
 /**
  * @brief Get the position of an object for HUD display.

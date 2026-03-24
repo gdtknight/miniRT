@@ -13,7 +13,7 @@
 #ifndef KEYGUIDE_H
 # define KEYGUIDE_H
 
-# include "window.h"
+# include "render.h"
 
 /* Key guide dimensions (maximum allowed per FR-008) */
 # define KEYGUIDE_WIDTH 300
