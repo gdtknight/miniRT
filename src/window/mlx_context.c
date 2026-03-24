@@ -13,9 +13,6 @@
 #include "mlx_context.h"
 #include "mlx.h"
 #include "libft.h"
-#ifdef __linux__
-# include <stdlib.h>
-#endif
 
 /**
  * @brief Initialize an MLX image buffer and metadata.
@@ -90,29 +87,4 @@ int	mlx_context_init(t_mlx_context *ctx, int width, int height, char *title)
 	if (!mlx_img_init(&ctx->img, ctx->mlx, width, height))
 		return (mlx_context_destroy(ctx), 0);
 	return (1);
-}
-
-/**
- * @brief Destroy MLX resources in the context.
- *
- * Releases the image buffer and window if they exist and clears pointers.
- *
- * @param ctx Context structure to destroy.
- */
-void	mlx_context_destroy(t_mlx_context *ctx)
-{
-	if (!ctx)
-		return ;
-	mlx_img_destroy(&ctx->img, ctx->mlx);
-	if (ctx->win && ctx->mlx)
-		mlx_destroy_window(ctx->mlx, ctx->win);
-#ifdef __linux__
-	if (ctx->mlx)
-	{
-		mlx_destroy_display(ctx->mlx);
-		free(ctx->mlx);
-	}
-#endif
-	ctx->mlx = NULL;
-	ctx->win = NULL;
 }
