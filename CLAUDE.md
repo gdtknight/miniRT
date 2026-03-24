@@ -72,8 +72,9 @@ main.c → parse .rt file → build BVH → mlx_loop()
 |-----------|---------|
 | `src/render/` | Render loop, camera ray generation, ray tracing dispatcher, debounce FSM |
 | `src/spatial/` | BVH construction (midpoint split, depth limit 20), traversal, any-hit shadow optimization, AABB ops |
-| `src/lighting/` | Phong model, soft shadows (stratified sampling), shadow offset LUT, `fast_pow32()` specular |
-| `src/ray/` | Ray-object intersection: sphere (quadratic), plane (linear), cylinder, cone (body + caps) |
+| `src/shading/` | Phong model, multi-light, `fast_pow32()` specular |
+| `src/shadow/` | Soft shadows (stratified sampling), shadow offset LUT, BVH any-hit |
+| `src/intersect/` | Ray-object intersection: sphere (quadratic), plane (linear), cylinder, cone (body + caps) |
 | `src/parser/` | `.rt` file parsing with strict validation, bonus options (checker, bump map) |
 | `src/input/` | Keyboard input dispatch, camera/object/light manipulation handlers |
 | `src/display/` | MiniLibX initialization, cleanup, event handling, pixel buffer operations |
@@ -99,7 +100,7 @@ main.c → parse .rt file → build BVH → mlx_loop()
 - `includes/objects.h` — `t_object` with type-discriminated union (`u_object_data`)
 - `includes/ray.h` — `t_ray` (with precomputed `inv_dir`), `t_hit`
 - `includes/spatial.h` — BVH node, AABB, traversal context
-- `includes/window.h` — `t_render` context (MLX, scene ref, HUD state, selection, debounce)
+- `includes/render.h` — `t_render` context (MLX, scene ref, HUD state, selection, debounce)
 - `includes/shadow.h` — Shadow config, offset LUT
 
 ### Norm-Capacity Warnings
@@ -128,6 +129,6 @@ macOS (OpenGL + AppKit) and Linux (X11 + Xext). OS detection is automatic in the
 
 ### Key Platform-Specific Code
 
-- Key codes: `includes/window_internal.h` — dual `#ifdef __APPLE__` / `__linux__` sections
+- Key codes: `includes/input.h` — dual `#ifdef __APPLE__` / `__linux__` sections
 - MLX cleanup: Linux requires `mlx_destroy_display()` (not available on macOS)
 - Makefile auto-detects OS via `uname -s` for link flags
