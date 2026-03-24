@@ -23,7 +23,7 @@
  * @param type Object type to count.
  * @return int Number of objects of the given type.
  */
-static int	get_type_count(t_scene *scene, t_object_type type)
+int	get_type_count(t_scene *scene, t_object_type type)
 {
 	int	i;
 	int	count;
