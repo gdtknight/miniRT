@@ -1,24 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hud_scene.h                                        :+:      :+:    :+:   */
+/*   hud_internal.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/04 00:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/01/04 00:00:00 by yoshin           ###   ########.fr       */
+/*   Created: 2026/03/24 00:00:00 by yoshin            #+#    #+#             */
+/*   Updated: 2026/03/24 00:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HUD_SCENE_H
-# define HUD_SCENE_H
+#ifndef HUD_INTERNAL_H
+# define HUD_INTERNAL_H
 
 # include "minirt.h"
 
+/* HUD text utilities */
+void	hud_mark_dirty(t_render *render);
+void	hud_print_line(t_render *r, int *y, int color, char *text);
+void	format_and_print_vec3(t_render *render, int *y,
+			char *label, t_vec3 vec);
+int		hud_append(char *dst, const char *src, int max);
+
+/* HUD scene info sections */
 void	hud_render_camera(t_render *render, int *y);
 void	render_camera_fov(t_render *render, int *y);
 void	hud_render_ambient(t_render *render, int *y);
 void	hud_render_light(t_render *render, int *y);
 void	render_light_bright(t_render *render, int *y);
+
+/* HUD object list */
+void	hud_render_objects(t_render *render, int *y);
+void	render_object_entry(t_render *render, int idx, int *y, int color);
 
 #endif
