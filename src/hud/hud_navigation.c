@@ -56,7 +56,6 @@ void	hud_select_next(t_render *render)
 	render->hud.dirty = 1;
 }
 
-
 /**
  * @brief Change HUD object list page.
  *
