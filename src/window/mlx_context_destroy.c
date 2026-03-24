@@ -12,9 +12,7 @@
 
 #include "mlx_context.h"
 #include "mlx.h"
-#ifdef __linux__
-# include <stdlib.h>
-#endif
+#include <stdlib.h>
 
 #ifdef __linux__
 
