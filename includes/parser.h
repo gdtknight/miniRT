@@ -161,6 +161,7 @@ t_parse_result	parse_light(char *line, t_scene *scene);
  * @param scene Scene structure
  * @return t_parse_result PARSE_OK on success, error code on failure
  */
+int				get_type_count(t_scene *scene, t_object_type type);
 t_parse_result	parse_sphere(char *line, t_scene *scene);
 
 /**

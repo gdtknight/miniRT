@@ -16,22 +16,6 @@
 #include "utils.h"
 #include <stdlib.h>
 
-static int	get_cone_count(t_scene *scene)
-{
-	int	i;
-	int	count;
-
-	count = 0;
-	i = 0;
-	while (i < scene->objects.count)
-	{
-		if (scene->objects.items[i].type == OBJ_CONE)
-			count++;
-		i++;
-	}
-	return (count);
-}
-
 static t_parse_result	parse_cone_dims(const char **token, t_object *obj)
 {
 	double			diameter;
@@ -97,7 +81,7 @@ t_parse_result	parse_cone(char *line, t_scene *scene)
 	result = parse_bonus_options(&token, &obj);
 	if (result != PARSE_OK)
 		return (result);
-	format_id(obj.id, 16, "co-", get_cone_count(scene) + 1);
+	format_id(obj.id, 16, "co-", get_type_count(scene, OBJ_CONE) + 1);
 	if (object_list_add(&scene->objects, &obj))
 		return (PARSE_OK);
 	free(obj.bump_path);

@@ -17,28 +17,6 @@
 #include <stdlib.h>
 
 /**
- * @brief Count existing cylinder objects in the scene.
- *
- * @param scene Scene containing object list.
- * @return int Number of cylinders currently in the scene.
- */
-static int	get_cylinder_count(t_scene *scene)
-{
-	int	i;
-	int	count;
-
-	count = 0;
-	i = 0;
-	while (i < scene->objects.count)
-	{
-		if (scene->objects.items[i].type == OBJ_CYLINDER)
-			count++;
-		i++;
-	}
-	return (count);
-}
-
-/**
  * @brief Parse cylinder diameter and height from tokens.
  *
  * Validates positive dimensions and updates radius, radius_sq, and half_height.
@@ -129,7 +107,7 @@ t_parse_result	parse_cylinder(char *line, t_scene *scene)
 	result = parse_bonus_options(&token, &obj);
 	if (result != PARSE_OK)
 		return (result);
-	format_id(obj.id, 16, "cy-", get_cylinder_count(scene) + 1);
+	format_id(obj.id, 16, "cy-", get_type_count(scene, OBJ_CYLINDER) + 1);
 	if (object_list_add(&scene->objects, &obj))
 		return (PARSE_OK);
 	free(obj.bump_path);

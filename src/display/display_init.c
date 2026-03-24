@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mlx_context.c                                      :+:      :+:    :+:   */
+/*   display_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -39,26 +39,6 @@ int	mlx_img_init(t_mlx_img *img, void *mlx, int width, int height)
 	img->width = width;
 	img->height = height;
 	return (1);
-}
-
-/**
- * @brief Destroy an MLX image and reset image fields.
- *
- * Frees the MLX image resource if present and clears cached pointers.
- *
- * @param img Image structure to destroy.
- * @param mlx MLX connection pointer.
- */
-void	mlx_img_destroy(t_mlx_img *img, void *mlx)
-{
-	if (!img || !mlx)
-		return ;
-	if (img->img)
-	{
-		mlx_destroy_image(mlx, img->img);
-		img->img = NULL;
-	}
-	img->data = NULL;
 }
 
 /**

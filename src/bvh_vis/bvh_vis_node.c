@@ -96,15 +96,3 @@ t_node_info	format_node_info(t_bvh_node *node)
 	info.objects[0] = '\0';
 	return (info);
 }
-
-/**
- * @brief Format a bounding box string for display.
- *
- * @param bounds AABB to format.
- * @param buffer Destination buffer.
- * @param compact Non-zero for compact format.
- */
-void	format_bounding_box(t_aabb bounds, char *buffer, int compact)
-{
-	format_bounds_str(bounds, buffer, 128, compact);
-}

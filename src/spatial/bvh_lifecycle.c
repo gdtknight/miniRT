@@ -28,7 +28,6 @@ t_bvh	*bvh_create(void)
 		return (NULL);
 	bvh->root = NULL;
 	bvh->enabled = 1;
-	bvh->max_depth = 0;
 	bvh->visualize = 0;
 	bvh->plane_refs.indices = NULL;
 	bvh->plane_refs.count = 0;
