@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lighting.c                                         :+:      :+:    :+:   */
+/*   shading.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,9 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "shading.h"
 #include "vec3.h"
-#include "ray.h"
 #include "shadow.h"
 #include "texture.h"
 #include <math.h>

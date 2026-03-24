@@ -13,7 +13,7 @@
 #include "shadow.h"
 #include "minirt.h"
 #include "vec3.h"
-#include "ray.h"
+#include "intersect.h"
 #include "metrics.h"
 #include "spatial.h"
 
@@ -76,38 +76,45 @@ static int	check_plane_shadow(t_scene *scene, t_ray *ray, double mag)
 	return (0);
 }
 
+static void	init_shadow_ray(t_ray *ray, t_shadow_query *query,
+	t_vec3 light_dir, double bias)
+{
+	ray->origin = vec3_add(query->point, vec3_add(
+				vec3_multiply(query->normal, bias),
+				vec3_multiply(light_dir, bias)));
+	ray->direction = light_dir;
+	ray->inv_dir.x = 1.0 / (light_dir.x + (light_dir.x == 0) * 1e-15);
+	ray->inv_dir.y = 1.0 / (light_dir.y + (light_dir.y == 0) * 1e-15);
+	ray->inv_dir.z = 1.0 / (light_dir.z + (light_dir.z == 0) * 1e-15);
+}
+
 /**
  * @brief Determine whether a point is shadowed from a light.
  *
- * Builds a shadow ray toward the light, applies a bias to avoid self-shadow,
- * and tests for occlusion. Uses BVH for bounded objects plus separate plane
- * testing when BVH is enabled.
+ * Builds a shadow ray toward the light, applies a bias along both the
+ * surface normal and light direction to avoid self-shadowing.
  *
  * @param scene Scene containing objects for occlusion tests.
- * @param point Shaded point in world space.
+ * @param query Surface point and normal.
  * @param light_pos Light position in world space.
  * @param bias Bias distance to offset the shadow ray origin.
  * @return int 1 if the point is in shadow, 0 otherwise.
  */
-int	is_in_shadow(t_scene *scene, t_vec3 point, t_vec3 light_pos, double bias)
+int	is_in_shadow(t_scene *scene, t_shadow_query query, t_vec3 light_pos,
+	double bias)
 {
 	t_ray	shadow_ray;
 	t_hit	shadow_hit;
 	t_vec3	to_light;
-	t_vec3	light_dir;
 	double	mag;
 
-	to_light = vec3_subtract(light_pos, point);
+	to_light = vec3_subtract(light_pos, query.point);
 	mag = vec3_magnitude(to_light);
 	if (mag < COEFF_EPSILON)
 		return (0);
 	shadow_hit.distance = mag;
-	light_dir = vec3_multiply(to_light, 1.0 / mag);
-	shadow_ray.origin = vec3_add(point, vec3_multiply(light_dir, bias));
-	shadow_ray.direction = light_dir;
-	shadow_ray.inv_dir.x = 1.0 / (light_dir.x + (light_dir.x == 0) * 1e-15);
-	shadow_ray.inv_dir.y = 1.0 / (light_dir.y + (light_dir.y == 0) * 1e-15);
-	shadow_ray.inv_dir.z = 1.0 / (light_dir.z + (light_dir.z == 0) * 1e-15);
+	init_shadow_ray(&shadow_ray, &query,
+		vec3_multiply(to_light, 1.0 / mag), bias);
 	if (scene->bvh && scene->bvh->enabled && scene->bvh->root
 		&& scene->objects.count > SHADOW_BVH_THRESHOLD)
 	{

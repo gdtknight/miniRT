@@ -40,11 +40,6 @@ double	calculate_shadow_bias(t_vec3 normal, t_vec3 light_dir,
 	return (bias);
 }
 
-/*
-** Generate offset vector for soft shadow sampling.
-** Uses stratified sampling in circular pattern around light.
-** Returns zero vector if only one sample requested.
-*/
 /**
  * @brief Generate a stratified offset for soft shadow sampling.
  *
@@ -77,9 +72,6 @@ t_vec3	generate_shadow_sample_offset(double radius, int sample_index,
 	return (offset);
 }
 
-/*
-** Cast single shadow ray with offset.
-*/
 /**
  * @brief Cast a single shadow ray with soft shadow offset.
  *
@@ -105,20 +97,17 @@ static int	sample_shadow_ray(t_shadow_sample *params, int index)
 		offset = generate_shadow_sample_offset(radius, index,
 				params->config->samples);
 	light_dir = vec3_normalize(vec3_subtract(params->light_pos,
-				params->point));
+				params->query.point));
 	if (fabs(light_dir.y) < 0.9)
 		tang = vec3_normalize(vec3_cross(light_dir, (t_vec3){0, 1, 0}));
 	else
 		tang = vec3_normalize(vec3_cross(light_dir, (t_vec3){1, 0, 0}));
 	bitang = vec3_cross(light_dir, tang);
-	return (is_in_shadow(params->scene, params->point, vec3_add(
+	return (is_in_shadow(params->scene, params->query, vec3_add(
 				params->light_pos, vec3_add(vec3_multiply(tang, offset.x),
 					vec3_multiply(bitang, offset.y))), params->bias));
 }
 
-/*
-** Calculate shadow samples by casting rays to light positions.
-*/
 /**
  * @brief Count shadowed samples for soft shadows.
  *
@@ -142,7 +131,7 @@ static double	calc_shadow_samples(t_scene *scene, t_shadow_query query,
 	shadow_count = 0.0;
 	light_dir = vec3_normalize(vec3_subtract(light_pos, query.point));
 	params.scene = scene;
-	params.point = query.point;
+	params.query = query;
 	params.light_pos = light_pos;
 	params.config = config;
 	params.bias = calculate_shadow_bias(query.normal, light_dir, 0.001);
@@ -156,11 +145,6 @@ static double	calc_shadow_samples(t_scene *scene, t_shadow_query query,
 	return (shadow_count);
 }
 
-/*
-** Calculate shadow factor using multiple shadow rays.
-** Casts multiple rays to determine partial occlusion.
-** Returns 0.0 (fully lit) to 1.0 (fully shadowed).
-*/
 /**
  * @brief Compute shadow factor as the ratio of occluded samples.
  *

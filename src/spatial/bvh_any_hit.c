@@ -12,7 +12,7 @@
 
 #include "spatial.h"
 #include "minirt.h"
-#include "ray.h"
+#include "intersect.h"
 #include "metrics.h"
 
 static void	get_near_far(t_bvh_node *node, t_ray ray,

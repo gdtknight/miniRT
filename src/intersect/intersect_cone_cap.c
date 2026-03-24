@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ray.h"
+#include "intersect.h"
 #include "vec3.h"
 #include "minirt.h"
 #include <math.h>
