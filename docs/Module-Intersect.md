@@ -1,6 +1,6 @@
-# Module: Ray
+# Module: Intersect
 
-광선-오브젝트 교차 판정 알고리즘을 담당하는 모듈입니다.
+광선-오브젝트 교차 판정 알고리즘을 담당하는 모듈입니다 (`src/intersect/`).
 
 ---
 

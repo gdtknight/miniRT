@@ -1,21 +1,19 @@
-# Module: Window
+# Module: Display & Input
 
-MiniLibX 윈도우 초기화, 이벤트 핸들링, 키 바인딩을 담당하는 모듈입니다.
+MiniLibX 디스플레이 관리, 이벤트 핸들링, 키 바인딩을 담당하는 모듈입니다.
 
 ---
 
 ## 소스 파일
 
-### Window (`src/window/`)
+### Display (`src/display/`)
 
 | 파일 | 역할 |
 |------|------|
-| `window_init.c` | 윈도우/이미지/UI 초기화, 훅 등록 |
-| `window_lifecycle.c` | `close_window` — 리소스 정리 및 종료 |
-| `window_events.c` | `handle_key` — 키 이벤트 분기 |
-| `mlx_context.c` | MiniLibX 초기화 (`mlx_init`, `mlx_new_window`) |
-| `mlx_pixel.c` | 픽셀 쓰기 (`put_pixel_to_buffer`) |
-| `mlx_pixel_codec.c` | 픽셀 형식 변환 |
+| `display_events.c` | `close_window`, `handle_key`, `handle_expose` — MLX 이벤트 콜백 |
+| `display_init.c` | MiniLibX 초기화 (`mlx_context_init`, `mlx_img_init`) |
+| `display_destroy.c` | MiniLibX 리소스 해제 (`mlx_context_destroy`, `mlx_img_destroy`) |
+| `display_pixel.c` | 픽셀 쓰기 (`mlx_img_put_pixel`) — BGRA little-endian |
 
 ### Input (`src/input/`)
 
