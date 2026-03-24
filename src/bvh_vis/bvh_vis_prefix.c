@@ -11,10 +11,8 @@
 /* ************************************************************************** */
 
 #include "bvh_vis.h"
-#include "utils.h"
 #include "libft.h"
 #include <stdlib.h>
-#include <limits.h>
 #include <stdio.h>
 
 /**
@@ -41,45 +39,6 @@ t_prefix_state	prefix_init(void)
 	state.level = 0;
 	state.buffer[0] = '\0';
 	return (state);
-}
-
-/**
- * @brief Append a new prefix segment for a child node.
- *
- * Expands the buffer if needed and writes either a branch or space segment.
- *
- * @param state Prefix state to update.
- * @param is_last Non-zero if the current node is the last sibling.
- * @return int 1 on success, 0 on allocation failure.
- */
-int	prefix_push(t_prefix_state *state, int is_last)
-{
-	const char	*prefix;
-	int			new_len;
-	char		*new_buffer;
-
-	if (is_last)
-		prefix = "      ";
-	else
-		prefix = "│   ";
-	new_len = state->length + PREFIX_SEGMENT_LEN;
-	if (new_len >= state->capacity)
-	{
-		if (state->capacity > INT_MAX / 2)
-			return (0);
-		new_buffer = malloc(state->capacity * 2);
-		if (!new_buffer)
-			return (0);
-		ft_memcpy(new_buffer, state->buffer, state->length);
-		free(state->buffer);
-		state->buffer = new_buffer;
-		state->capacity *= 2;
-	}
-	ft_memcpy(state->buffer + state->length, prefix, PREFIX_SEGMENT_LEN);
-	state->length = new_len;
-	state->buffer[state->length] = '\0';
-	state->level++;
-	return (1);
 }
 
 /**
