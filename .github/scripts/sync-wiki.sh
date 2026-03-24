@@ -29,7 +29,7 @@ Environment Variables:
   GITHUB_REPOSITORY         Repository name (e.g., user/repo) (required)
 
 Examples:
-  # Sync docs to wiki for v1.0.0
+  # Sync wiki/ to GitHub Wiki for v1.0.0
   ./sync-wiki.sh v1.0.0
 
   # Dry run to preview changes
@@ -64,8 +64,8 @@ check_prerequisites() {
         exit 1
     fi
     
-    if [ ! -d "docs" ]; then
-        echo "::error::docs/ directory not found"
+    if [ ! -d "wiki" ]; then
+        echo "::error::wiki/ directory not found"
         exit 1
     fi
     
@@ -78,33 +78,6 @@ check_prerequisites() {
     else
         echo "::warning::gh CLI not found, skipping wiki enabled check"
     fi
-}
-
-convert_to_wiki_name() {
-    local path="$1"
-    local name="${path%.md}"
-    
-    name="${name//\//-}"
-    
-    if [[ "$name" == *"-README" ]]; then
-        name="${name%-README}"
-    fi
-    
-    echo "${name}.md"
-}
-
-add_version_footer() {
-    local file="$1"
-    local version="$2"
-    
-    cat >> "$file" << EOF
-
----
-
-**Version**: ${version}  
-**Last Updated**: $(date +"%Y-%m-%d")  
-**Auto-generated from**: [docs/](https://github.com/${GITHUB_REPOSITORY}/tree/${version}/docs)
-EOF
 }
 
 clone_wiki() {
@@ -129,23 +102,25 @@ process_docs() {
     local wiki_dir="$1"
     local version="$2"
     local count=0
-    
-    echo "Processing documentation files..."
-    
+
+    echo "Processing wiki files..."
+
+    # Remove existing files in wiki dir (except .git)
+    find "$wiki_dir" -maxdepth 1 -name "*.md" -type f -delete
+
+    # Copy wiki/ source files directly (filenames are already wiki page names)
     while IFS= read -r -d '' file; do
-        local relative_path="${file#docs/}"
-        local wiki_name=$(convert_to_wiki_name "$relative_path")
-        local wiki_path="${wiki_dir}/${wiki_name}"
-        
-        echo "  Processing: $file → $wiki_name"
-        
+        local basename=$(basename "$file")
+        local wiki_path="${wiki_dir}/${basename}"
+
+        echo "  Copying: $file → $basename"
+
         cp "$file" "$wiki_path"
-        add_version_footer "$wiki_path" "$version"
-        
+
         count=$((count + 1))
-    done < <(find docs -maxdepth 1 -name "*.md" -type f -print0)
-    
-    echo "Processed $count documentation files"
+    done < <(find wiki -maxdepth 1 -name "*.md" -type f -print0)
+
+    echo "Processed $count wiki files"
 }
 
 commit_and_push() {
@@ -161,9 +136,9 @@ commit_and_push() {
     
     if ! git diff --staged --quiet; then
         echo "Committing changes..."
-        git commit -m "docs: sync documentation for ${version}
+        git commit -m "wiki: sync for ${version}
 
-- Auto-generated from docs/ directory
+- Synced from wiki/ directory
 - Version: ${version}
 - Updated: $(date +"%Y-%m-%d %H:%M:%S")"
         
