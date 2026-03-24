@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   window_init.c                                      :+:      :+:    :+:   */
+/*   render_init.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -33,6 +33,11 @@ static void	init_render_state(t_render *render, t_scene *scene)
 	render->selection.index = -1;
 	render->state_flags = RENDER_DIRTY | RENDER_ENABLE_METRICS_PRINT;
 	debounce_init(&render->debounce);
+	render->key_binds.count = 0;
+	init_hud_binds(&render->key_binds);
+	init_camera_binds(&render->key_binds);
+	init_transform_move_binds(&render->key_binds);
+	init_transform_edit_binds(&render->key_binds);
 }
 
 /**
