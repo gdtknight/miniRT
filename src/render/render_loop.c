@@ -81,10 +81,9 @@ int	render_loop(void *param)
 	rebuild_bvh_if_dirty(render);
 	if (render_has_flag(render, RENDER_DIRTY))
 		rendered = execute_render_pass(render);
-	if (rendered)
-		render->keyguide.dirty = 1;
 	if (render->hud.visible && (render->hud.dirty || rendered))
 	{
+		render->keyguide.dirty = 1;
 		if (!rendered)
 			mlx_put_image_to_window(render->mlx.mlx, render->mlx.win,
 				render->mlx.img.img, 0, 0);
