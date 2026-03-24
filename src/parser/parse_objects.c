@@ -86,6 +86,9 @@ t_parse_result	parse_sphere(char *line, t_scene *scene)
 	result = parse_vector_strict(token, &obj.data.sphere.center, &token);
 	if (result != PARSE_OK)
 		return (result);
+	result = validate_coordinate_range(&obj.data.sphere.center);
+	if (result != PARSE_OK)
+		return (result);
 	token = skip_whitespace(token);
 	result = parse_sphere_data(&token, &obj);
 	if (result != PARSE_OK)
@@ -146,6 +149,9 @@ t_parse_result	parse_plane(char *line, t_scene *scene)
 	obj.type = OBJ_PLANE;
 	token = skip_whitespace(line + 3);
 	result = parse_vector_strict(token, &obj.data.plane.point, &token);
+	if (result != PARSE_OK)
+		return (result);
+	result = validate_coordinate_range(&obj.data.plane.point);
 	if (result != PARSE_OK)
 		return (result);
 	token = skip_whitespace(token);

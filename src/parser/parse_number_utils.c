@@ -68,9 +68,11 @@ double	parse_frac_part(const char **str, int *has_digits)
 			result += (**str - '0') / divisor;
 			divisor *= 10.0;
 			(*str)++;
-			*has_digits = 1;
 			digits++;
 		}
+		if (digits == 0)
+			return (-1.0);
+		*has_digits = 1;
 	}
 	return (result);
 }

@@ -64,6 +64,9 @@ static t_parse_result	parse_camera_vecs(const char **token, t_scene *scene)
 	result = parse_vector_strict(*token, &scene->camera.position, token);
 	if (result != PARSE_OK)
 		return (result);
+	result = validate_coordinate_range(&scene->camera.position);
+	if (result != PARSE_OK)
+		return (result);
 	*token = skip_whitespace(*token);
 	result = parse_vector_strict(*token, &scene->camera.direction, token);
 	if (result != PARSE_OK)
@@ -143,22 +146,22 @@ t_parse_result	parse_light(char *line, t_scene *scene)
 	if (scene->light_count >= MAX_LIGHTS)
 		return (PARSE_ERR_OVERFLOW);
 	light = &scene->lights[scene->light_count];
-	token = skip_whitespace(line + 2);
-	result = parse_vector_strict(token, &light->position, &token);
+	result = parse_vector_strict(skip_whitespace(line + 2),
+			&light->position, &token);
+	if (result == PARSE_OK)
+		result = validate_coordinate_range(&light->position);
+	if (result == PARSE_OK)
+		result = parse_double(skip_whitespace(token),
+				&light->brightness, &token);
+	if (result == PARSE_OK && !in_range(light->brightness, 0.0, 1.0))
+		result = PARSE_ERR_RANGE;
 	if (result != PARSE_OK)
 		return (result);
-	token = skip_whitespace(token);
-	result = parse_double(token, &light->brightness, &token);
-	if (result != PARSE_OK)
-		return (result);
-	if (!in_range(light->brightness, 0.0, 1.0))
-		return (PARSE_ERR_RANGE);
-	token = skip_whitespace(token);
-	result = parse_color_strict(token, &light->color, &token);
-	if (result != PARSE_OK)
-		return (result);
-	if (!at_line_end(token))
-		return (PARSE_ERR_TRAILING_TOKEN);
-	scene->light_count++;
-	return (PARSE_OK);
+	result = parse_color_strict(skip_whitespace(token), &light->color,
+			&token);
+	if (result == PARSE_OK && !at_line_end(token))
+		result = PARSE_ERR_TRAILING_TOKEN;
+	if (result == PARSE_OK)
+		scene->light_count++;
+	return (result);
 }

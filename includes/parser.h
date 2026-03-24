@@ -19,6 +19,7 @@
 
 # define LINE_READER_BUFFER_SIZE 4096
 # define MAX_LINE_LENGTH 4096
+# define COORD_MAX 10000.0
 
 /*
  * Parse Result Codes
@@ -115,6 +116,7 @@ t_parse_result	parse_color_strict(const char *str, t_color *color,
 					const char **end);
 t_parse_result	validate_vector_range(const t_vec3 *vec);
 t_parse_result	validate_direction_vector(t_vec3 *vec);
+t_parse_result	validate_coordinate_range(const t_vec3 *vec);
 
 /*
  * Original Parser API
