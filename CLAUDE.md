@@ -76,7 +76,7 @@ main.c → parse .rt file → build BVH → mlx_loop()
 | `src/ray/` | Ray-object intersection: sphere (quadratic), plane (linear), cylinder, cone (body + caps) |
 | `src/parser/` | `.rt` file parsing with strict validation, bonus options (checker, bump map) |
 | `src/input/` | Keyboard input dispatch, camera/object/light manipulation handlers |
-| `src/window/` | MiniLibX window setup, lifecycle, event registration, pixel buffer operations |
+| `src/display/` | MiniLibX initialization, cleanup, event handling, pixel buffer operations |
 | `src/hud/` | HUD overlay (scene info, FPS, object list) with pagination |
 | `src/keyguide/` | On-screen keyboard shortcut guide rendering |
 | `src/metrics/` | Frame timing, shadow/intersection counters, performance calculation |
