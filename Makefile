@@ -171,6 +171,26 @@ bonus: all
 norm:
 	@norminette $(SRC_DIR) $(INC_DIR)
 
+# Unit test sources
+TEST_CFLAGS	= -Wall -Wextra -Werror -I$(INC_DIR) -I$(LIBFT_DIR)/includes
+TEST_MATH	= $(SRC_DIR)/math/vec3.c $(SRC_DIR)/math/vec3_ops.c
+TEST_ISECT	= $(TEST_MATH) \
+			  $(SRC_DIR)/intersect/intersect_object.c \
+			  $(SRC_DIR)/intersect/intersect_cylinder.c \
+			  $(SRC_DIR)/intersect/intersect_cone_body.c \
+			  $(SRC_DIR)/intersect/intersect_cone_cap.c
+
+test: $(LIBFT)
+	@echo "$(GREEN)Building unit tests...$(RESET)"
+	@$(CC) $(TEST_CFLAGS) tests/test_vec3.c $(TEST_MATH) \
+		-lm -o tests/test_vec3_bin
+	@$(CC) $(TEST_CFLAGS) tests/test_intersect.c $(TEST_ISECT) \
+		-L$(LIBFT_DIR) -lft -lm -o tests/test_intersect_bin
+	@echo "$(GREEN)Running unit tests...$(RESET)"
+	@./tests/test_vec3_bin
+	@./tests/test_intersect_bin
+	@echo "$(GREEN)✓ All unit tests passed!$(RESET)"
+
 -include $(OBJS:.o=.d)
 
-.PHONY: all clean fclean re norm bonus
+.PHONY: all clean fclean re norm bonus test
