@@ -100,11 +100,11 @@ void	hud_render_light(t_render *render, int *y)
 		return ;
 	i = 0;
 	buf[i++] = 'L';
-	ft_itoa_buf(buf + i, render->scene->selected_light + 1);
+	hud_itoa_buf(buf + i, render->scene->selected_light + 1);
 	while (buf[i])
 		i++;
 	buf[i++] = '/';
-	ft_itoa_buf(buf + i, render->scene->light_count);
+	hud_itoa_buf(buf + i, render->scene->light_count);
 	while (buf[i])
 		i++;
 	buf[i++] = ':';

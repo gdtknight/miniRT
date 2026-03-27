@@ -22,7 +22,7 @@
  * @param dst Destination buffer.
  * @param src Source string.
  */
-void	ft_strcpy(char *dst, const char *src)
+void	hud_strcpy(char *dst, const char *src)
 {
 	ft_strlcpy(dst, src, ft_strlen(src) + 1);
 }
@@ -35,7 +35,7 @@ void	ft_strcpy(char *dst, const char *src)
  * @param buf Destination buffer.
  * @param n Integer to format.
  */
-void	ft_itoa_buf(char *buf, int n)
+void	hud_itoa_buf(char *buf, int n)
 {
 	char	*str;
 

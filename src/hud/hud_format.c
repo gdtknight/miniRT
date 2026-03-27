@@ -11,12 +11,13 @@
 /* ************************************************************************** */
 
 #include "hud.h"
+#include "hud_internal.h"
 
 static int	hud_float_start(char *buffer, double *value)
 {
 	if (*value != *value || *value > 1e15 || *value < -1e15)
 	{
-		ft_strcpy(buffer, "---");
+		hud_strcpy(buffer, "---");
 		return (-1);
 	}
 	if (*value < 0)
@@ -49,13 +50,13 @@ void	hud_format_float(char *buffer, double value)
 		value = 999999.0;
 	int_part = (int)value;
 	frac_part = (int)((value - int_part) * 100 + 0.5);
-	ft_itoa_buf(buffer + i, int_part);
+	hud_itoa_buf(buffer + i, int_part);
 	while (buffer[i])
 		i++;
 	buffer[i++] = '.';
 	if (frac_part < 10)
 		buffer[i++] = '0';
-	ft_itoa_buf(buffer + i, frac_part);
+	hud_itoa_buf(buffer + i, frac_part);
 }
 
 /**
@@ -73,12 +74,12 @@ void	hud_format_vec3(char *buffer, t_vec3 vec)
 	hud_format_float(buffer + i, vec.x);
 	while (buffer[i])
 		i++;
-	ft_strcpy(buffer + i, ", ");
+	hud_strcpy(buffer + i, ", ");
 	i += 2;
 	hud_format_float(buffer + i, vec.y);
 	while (buffer[i])
 		i++;
-	ft_strcpy(buffer + i, ", ");
+	hud_strcpy(buffer + i, ", ");
 	i += 2;
 	hud_format_float(buffer + i, vec.z);
 	while (buffer[i])
@@ -97,17 +98,17 @@ void	hud_format_color(char *buffer, t_color color)
 {
 	int	i;
 
-	ft_strcpy(buffer, "R:");
+	hud_strcpy(buffer, "R:");
 	i = 2;
-	ft_itoa_buf(buffer + i, color.r);
+	hud_itoa_buf(buffer + i, color.r);
 	while (buffer[i])
 		i++;
-	ft_strcpy(buffer + i, " G:");
+	hud_strcpy(buffer + i, " G:");
 	i += 3;
-	ft_itoa_buf(buffer + i, color.g);
+	hud_itoa_buf(buffer + i, color.g);
 	while (buffer[i])
 		i++;
-	ft_strcpy(buffer + i, " B:");
+	hud_strcpy(buffer + i, " B:");
 	i += 3;
-	ft_itoa_buf(buffer + i, color.b);
+	hud_itoa_buf(buffer + i, color.b);
 }

@@ -31,11 +31,11 @@ static void	render_object_header(t_render *render, int *y)
 	buf[len++] = '-';
 	buf[len++] = ' ';
 	len += hud_append(buf + len, "Objects (Page ", 64 - len);
-	ft_itoa_buf(buf + len, render->hud.current_page + 1);
+	hud_itoa_buf(buf + len, render->hud.current_page + 1);
 	while (buf[len])
 		len++;
 	buf[len++] = '/';
-	ft_itoa_buf(buf + len, render->hud.total_pages);
+	hud_itoa_buf(buf + len, render->hud.total_pages);
 	while (buf[len])
 		len++;
 	len += hud_append(buf + len, ") ---", 64 - len);

@@ -33,4 +33,8 @@ void	hud_render_light_bright(t_render *render, int *y);
 void	hud_render_objects(t_render *render, int *y);
 void	hud_render_object_entry(t_render *render, int idx, int *y, int color);
 
+/* HUD format helpers */
+void	hud_strcpy(char *dst, const char *src);
+void	hud_itoa_buf(char *buf, int n);
+
 #endif
