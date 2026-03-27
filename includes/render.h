@@ -15,7 +15,7 @@
 
 # include "scene.h"
 # include "mlx.h"
-# include "mlx_context.h"
+# include "display.h"
 # include "render_debounce.h"
 
 /* Window resolution constants */
