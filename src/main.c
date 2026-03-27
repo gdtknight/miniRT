@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "scene.h"
 #include "parser.h"
 #include "render.h"
 #include "spatial.h"

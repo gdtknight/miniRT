@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minirt.h                                           :+:      :+:    :+:   */
+/*   scene.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIRT_H
-# define MINIRT_H
+#ifndef SCENE_H
+# define SCENE_H
 
 # include <unistd.h>
 # include <fcntl.h>
@@ -113,6 +113,5 @@ void	scene_destroy(t_scene *scene);
 int		object_list_init(t_object_list *list, int capacity);
 void	object_list_destroy(t_object_list *list);
 int		object_list_add(t_object_list *list, t_object *obj);
-
 
 #endif

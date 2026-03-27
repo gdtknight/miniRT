@@ -13,7 +13,7 @@
 #ifndef SHADING_H
 # define SHADING_H
 
-# include "minirt.h"
+# include "scene.h"
 # include "ray.h"
 
 /* Floating point color for intermediate calculations (0.0 - 1.0+) */

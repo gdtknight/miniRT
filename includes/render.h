@@ -13,7 +13,7 @@
 #ifndef RENDER_H
 # define RENDER_H
 
-# include "minirt.h"
+# include "scene.h"
 # include "mlx.h"
 # include "mlx_context.h"
 # include "render_debounce.h"

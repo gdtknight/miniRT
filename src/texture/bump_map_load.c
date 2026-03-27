@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "texture.h"
-#include "minirt.h"
+#include "scene.h"
 #include "error.h"
 #include "mlx.h"
 #include <stdlib.h>

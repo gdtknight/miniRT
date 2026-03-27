@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "bvh_debug.h"
-#include "minirt.h"
+#include "scene.h"
 #include "utils.h"
 #include <stdlib.h>
 

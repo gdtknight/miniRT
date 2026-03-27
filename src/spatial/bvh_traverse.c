@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "spatial.h"
-#include "minirt.h"
+#include "scene.h"
 #include "intersect.h"
 #include "metrics.h"
 

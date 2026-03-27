@@ -13,7 +13,7 @@
 #ifndef HUD_INTERNAL_H
 # define HUD_INTERNAL_H
 
-# include "minirt.h"
+# include "scene.h"
 
 /* HUD text utilities */
 void	hud_mark_dirty(t_render *render);
