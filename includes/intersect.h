@@ -16,10 +16,10 @@
 # include "ray.h"
 
 /* Ray-object intersection functions */
-int		intersect_object_new(t_ray *ray, t_object *obj, t_hit *hit);
-int		intersect_cylinder_new(t_ray *ray, t_cylinder_data *c, t_color color,
+int		intersect_object(t_ray *ray, t_object *obj, t_hit *hit);
+int		intersect_cylinder(t_ray *ray, t_cylinder_data *c, t_color color,
 			t_hit *hit);
-int		intersect_cone_new(t_ray *ray, t_object *obj, t_hit *hit);
+int		intersect_cone(t_ray *ray, t_object *obj, t_hit *hit);
 int		intersect_cone_body(t_ray *ray, t_cone_data *c, t_hit *hit);
 
 #endif

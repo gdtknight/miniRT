@@ -14,6 +14,10 @@
 # define UTILS_H
 
 # include <stddef.h>
+# include <sys/time.h>
+
+/* Timer utilities */
+long	timer_elapsed_us(struct timeval *start);
 
 /* Format helpers for libft-compliant string formatting */
 int		format_id(char *buf, size_t size, const char *prefix, int n);

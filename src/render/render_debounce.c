@@ -12,6 +12,7 @@
 
 #include "render_debounce.h"
 #include "render.h"
+#include <sys/time.h>
 
 void	debounce_init(t_debounce_state *state)
 {
@@ -27,16 +28,18 @@ void	debounce_on_input(t_debounce_state *state, t_render *render)
 	if (state->state == DEBOUNCE_IDLE)
 	{
 		state->state = DEBOUNCE_ACTIVE;
-		debounce_timer_start(&state->timer);
+		gettimeofday(&state->timer.last_input_time, NULL);
+		state->timer.is_active = 1;
 	}
 	else if (state->state == DEBOUNCE_ACTIVE)
-		debounce_timer_reset(&state->timer);
+		gettimeofday(&state->timer.last_input_time, NULL);
 	else if (state->state == DEBOUNCE_FINAL
 		|| state->state == DEBOUNCE_COOLDOWN)
 	{
 		state->state = DEBOUNCE_ACTIVE;
 		state->timer.delay_ms = DEBOUNCE_DEFAULT_DELAY_MS;
-		debounce_timer_start(&state->timer);
+		gettimeofday(&state->timer.last_input_time, NULL);
+		state->timer.is_active = 1;
 	}
 	if (debounce_check_preview_throttle(state))
 	{
@@ -52,7 +55,7 @@ static void	debounce_handle_active(t_debounce_state *state, t_render *render)
 	state->state = DEBOUNCE_FINAL;
 	render_clear_flag(render, RENDER_LOW_QUALITY);
 	render_set_flag(render, RENDER_DIRTY);
-	debounce_timer_stop(&state->timer);
+	state->timer.is_active = 0;
 }
 
 static void	debounce_handle_cooldown(t_debounce_state *state)
@@ -60,7 +63,7 @@ static void	debounce_handle_cooldown(t_debounce_state *state)
 	if (!debounce_timer_expired(&state->timer))
 		return ;
 	state->state = DEBOUNCE_IDLE;
-	debounce_timer_stop(&state->timer);
+	state->timer.is_active = 0;
 }
 
 void	debounce_update(t_debounce_state *state, t_render *render)
@@ -72,7 +75,8 @@ void	debounce_update(t_debounce_state *state, t_render *render)
 	{
 		state->state = DEBOUNCE_COOLDOWN;
 		state->timer.delay_ms = DEBOUNCE_COOLDOWN_MS;
-		debounce_timer_start(&state->timer);
+		gettimeofday(&state->timer.last_input_time, NULL);
+		state->timer.is_active = 1;
 	}
 	else if (state->state == DEBOUNCE_COOLDOWN)
 		debounce_handle_cooldown(state);

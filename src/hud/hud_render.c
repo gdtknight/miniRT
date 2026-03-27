@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "render.h"
 #include "hud.h"
 #include "hud_internal.h"
 
@@ -27,12 +26,12 @@ void	hud_render_content(t_render *render)
 
 	y = HUD_MARGIN_Y + 20;
 	hud_render_camera(render, &y);
-	render_camera_fov(render, &y);
+	hud_render_camera_fov(render, &y);
 	y += HUD_LINE_HEIGHT / 2;
 	hud_render_ambient(render, &y);
 	y += HUD_LINE_HEIGHT / 2;
 	hud_render_light(render, &y);
-	render_light_bright(render, &y);
+	hud_render_light_bright(render, &y);
 	y += HUD_LINE_HEIGHT;
 	hud_render_objects(render, &y);
 	y += HUD_LINE_HEIGHT;

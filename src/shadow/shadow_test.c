@@ -11,8 +11,7 @@
 /* ************************************************************************** */
 
 #include "shadow.h"
-#include "minirt.h"
-#include "vec3.h"
+#include "scene.h"
 #include "intersect.h"
 #include "metrics.h"
 #include "spatial.h"
@@ -38,7 +37,7 @@ static int	check_object_shadow(t_scene *scene, t_ray *ray, t_hit *hit)
 	{
 		obj = &scene->objects.items[i];
 		metrics_add_shadow_intersect(&scene->metrics);
-		if (intersect_object_new(ray, obj, hit))
+		if (intersect_object(ray, obj, hit))
 			return (1);
 		i++;
 	}
@@ -69,7 +68,7 @@ static int	check_plane_shadow(t_scene *scene, t_ray *ray, double mag)
 		obj = &scene->objects.items[scene->bvh->plane_refs.indices[i]];
 		hit.distance = mag;
 		metrics_add_shadow_intersect(&scene->metrics);
-		if (intersect_object_new(ray, obj, &hit))
+		if (intersect_object(ray, obj, &hit))
 			return (1);
 		i++;
 	}
@@ -100,7 +99,7 @@ static void	init_shadow_ray(t_ray *ray, t_shadow_query *query,
  * @param bias Bias distance to offset the shadow ray origin.
  * @return int 1 if the point is in shadow, 0 otherwise.
  */
-int	is_in_shadow(t_scene *scene, t_shadow_query query, t_vec3 light_pos,
+int	shadow_is_occluded(t_scene *scene, t_shadow_query query, t_vec3 light_pos,
 	double bias)
 {
 	t_ray	shadow_ray;

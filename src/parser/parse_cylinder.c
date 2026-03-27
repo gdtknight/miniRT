@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
 #include "parser.h"
-#include "vec3.h"
 #include "utils.h"
 #include <stdlib.h>
+#include "libft.h"
+#include "error.h"
 
 /**
  * @brief Parse cylinder diameter and height from tokens.
@@ -114,5 +114,5 @@ t_parse_result	parse_cylinder(char *line, t_scene *scene)
 	if (object_list_add(&scene->objects, &obj))
 		return (PARSE_OK);
 	free(obj.bump_path);
-	return (PARSE_ERR_FORMAT);
+	return (PARSE_ERR_OVERFLOW);
 }

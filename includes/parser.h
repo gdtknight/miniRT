@@ -13,7 +13,7 @@
 #ifndef PARSER_H
 # define PARSER_H
 
-# include "minirt.h"
+# include "scene.h"
 
 /* Constants */
 
@@ -55,7 +55,7 @@ typedef struct s_line_reader
 	int		buf_len;
 	int		line_num;
 	int		line_too_long;
-	int		io_error;
+	int		error;
 }	t_line_reader;
 
 /*
@@ -73,7 +73,7 @@ typedef struct s_error_context
  * Line Reader API
  */
 
-int				line_reader_init(t_line_reader *reader, int fd);
+void			line_reader_init(t_line_reader *reader, int fd);
 char			*line_reader_next(t_line_reader *reader);
 int				line_reader_get_line_num(t_line_reader *reader);
 
@@ -83,7 +83,6 @@ int				line_reader_get_line_num(t_line_reader *reader);
 
 t_parse_result	parse_double(const char *str, double *value, const char **end);
 t_parse_result	parse_int(const char *str, int *value, const char **end);
-int				parse_is_digit(char c);
 double			parse_int_part(const char **str, int *has_digits);
 double			parse_frac_part(const char **str, int *has_digits);
 
@@ -99,9 +98,6 @@ int				at_line_end(const char *str);
  */
 
 void			error_context_init(t_error_context *ctx);
-void			error_context_set_line(t_error_context *ctx, int line);
-void			error_context_set_element(t_error_context *ctx,
-					const char *type);
 void			error_context_print(t_error_context *ctx);
 void			error_write_int(int n);
 const char		*get_error_message(t_parse_result code);
@@ -129,7 +125,7 @@ t_parse_result	validate_coordinate_range(const t_vec3 *vec);
  * @return 1 on success, 0 on error
  */
 int				parse_scene(const char *filename, t_scene *scene);
-t_parse_result	dispatch_element(char *line, t_scene *scene,
+t_parse_result	dispatch_line(char *line, t_scene *scene,
 					t_error_context *ctx);
 int				validate_extension(const char *filename);
 

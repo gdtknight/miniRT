@@ -128,6 +128,6 @@ t_aabb		get_object_bounds(t_object_ref ref, void *scene);
 t_vec3		get_object_center(t_object_ref ref, void *scene);
 
 /* Scene BVH initialization */
-void		scene_build_bvh(t_scene *scene);
+void		build_scene_bvh(t_scene *scene);
 
 #endif

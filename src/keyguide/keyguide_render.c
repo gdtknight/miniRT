@@ -12,7 +12,6 @@
 
 #include "keyguide.h"
 #include "hud.h"
-#include "render.h"
 
 /**
  * @brief Render the camera controls section in the key guide.
@@ -75,7 +74,7 @@ void	keyguide_render_content(t_render *render)
  * @param render Render context containing key guide position.
  * @param y Current y position (in/out) for text rendering.
  */
-void	keyguide_render_content2(t_render *render, int *y)
+static void	keyguide_render_objects_section(t_render *render, int *y)
 {
 	*y += KEYGUIDE_SECTION_GAP + KEYGUIDE_LINE_HEIGHT;
 	mlx_string_put(render->mlx.mlx, render->mlx.win,
@@ -111,7 +110,7 @@ void	keyguide_render(t_render *render)
 	y = render->keyguide.y + 20 + 30
 		+ KEYGUIDE_LINE_HEIGHT * KEYGUIDE_CONTENT1_LINES
 		+ KEYGUIDE_SECTION_GAP + KEYGUIDE_LINE_HEIGHT * 3;
-	keyguide_render_content2(render, &y);
+	keyguide_render_objects_section(render, &y);
 	keyguide_render_extra(render, &y);
 	render->keyguide.dirty = 0;
 }

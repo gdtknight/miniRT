@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "render.h"
 #include "hud.h"
 
 void	hud_mark_dirty(t_render *render)
@@ -25,7 +24,7 @@ void	hud_print_line(t_render *r, int *y, int color, char *text)
 	*y += HUD_LINE_HEIGHT;
 }
 
-void	format_and_print_vec3(t_render *render, int *y,
+void	hud_print_vec3(t_render *render, int *y,
 		char *label, t_vec3 vec)
 {
 	char	buf[128];

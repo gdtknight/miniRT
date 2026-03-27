@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bvh_vis_init.c                                     :+:      :+:    :+:   */
+/*   bvhd_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bvh_vis.h"
+#include "bvh_debug.h"
 #include <sys/ioctl.h>
 #include <unistd.h>
 
@@ -21,13 +21,13 @@
  *
  * @return t_vis_config Default visualization configuration.
  */
-t_vis_config	bvh_vis_default_config(void)
+t_vis_config	bvhd_default_config(void)
 {
 	t_vis_config	config;
 
 	config.max_depth_display = -1;
 	config.compact_mode = 0;
-	config.terminal_width = bvh_vis_get_terminal_width();
+	config.terminal_width = bvhd_get_terminal_width();
 	config.show_warnings = 1;
 	return (config);
 }
@@ -39,7 +39,7 @@ t_vis_config	bvh_vis_default_config(void)
  *
  * @return int Terminal width in columns.
  */
-int	bvh_vis_get_terminal_width(void)
+int	bvhd_get_terminal_width(void)
 {
 	struct winsize	ws;
 
@@ -58,14 +58,14 @@ int	bvh_vis_get_terminal_width(void)
  * @param bvh BVH to visualize.
  * @param config Visualization configuration.
  */
-void	check_edge_cases(t_bvh *bvh, t_vis_config *config)
+void	bvhd_check_edges(t_bvh *bvh, t_vis_config *config)
 {
 	if (!bvh || !bvh->root || !config)
 		return ;
 	if (config->terminal_width < 80)
 	{
 		if (config->show_warnings)
-			print_warning_message("Terminal width < 80 chars, output may wrap");
+			bvhd_warn("Terminal width < 80 chars, output may wrap");
 	}
 }
 
@@ -79,7 +79,7 @@ void	check_edge_cases(t_bvh *bvh, t_vis_config *config)
  * @param config Visualization configuration (optional).
  * @param scene Pointer to the scene used for object labels.
  */
-void	bvh_visualize(t_bvh *bvh, t_vis_config *config, void *scene)
+void	bvhd_run(t_bvh *bvh, t_vis_config *config, void *scene)
 {
 	t_prefix_state	prefix;
 	t_bvh_stats		stats;
@@ -90,20 +90,20 @@ void	bvh_visualize(t_bvh *bvh, t_vis_config *config, void *scene)
 		return ;
 	if (!config)
 	{
-		default_config = bvh_vis_default_config();
+		default_config = bvhd_default_config();
 		config = &default_config;
 	}
-	check_edge_cases(bvh, config);
+	bvhd_check_edges(bvh, config);
 	stats.total_nodes = 0;
 	stats.leaf_count = 0;
 	stats.internal_count = 0;
 	stats.max_depth = 0;
 	stats.total_objects = 0;
 	stats.avg_objects_per_leaf = 0.0;
-	prefix = prefix_init();
+	prefix = bvhd_prefix_init();
 	ctx.prefix = &prefix;
 	ctx.config = config;
 	ctx.scene = scene;
-	bvh_visualize_tree(bvh->root, &ctx, &stats);
-	prefix_destroy(&prefix);
+	bvhd_print_tree(bvh->root, &ctx, &stats);
+	bvhd_prefix_destroy(&prefix);
 }

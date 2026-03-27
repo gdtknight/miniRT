@@ -10,9 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "scene.h"
 #include "intersect.h"
-#include "vec3.h"
 #include <math.h>
 
 /**
@@ -152,7 +151,7 @@ static void	apply_cyl_hit(t_hit *hit, t_hit *temp, t_color color, int *found)
  * @param hit Hit record to update.
  * @return int 1 if any intersection is found, 0 otherwise.
  */
-int	intersect_cylinder_new(t_ray *ray, t_cylinder_data *c, t_color color,
+int	intersect_cylinder(t_ray *ray, t_cylinder_data *c, t_color color,
 		t_hit *hit)
 {
 	int		found;

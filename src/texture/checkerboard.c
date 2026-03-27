@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "texture.h"
-#include "vec3.h"
 #include <math.h>
 
 static t_color	checker_plane(t_object *obj, t_hit *hit)

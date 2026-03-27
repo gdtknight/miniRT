@@ -11,8 +11,7 @@
 /* ************************************************************************** */
 
 #include "intersect.h"
-#include "vec3.h"
-#include "minirt.h"
+#include "scene.h"
 #include <math.h>
 
 static int	intersect_cone_cap(t_ray *ray, t_cone_data *c, t_hit *hit)
@@ -49,7 +48,7 @@ static void	apply_cone_hit(t_hit *hit, t_hit *temp, t_color color, int *found)
 	*found = 1;
 }
 
-int	intersect_cone_new(t_ray *ray, t_object *obj, t_hit *hit)
+int	intersect_cone(t_ray *ray, t_object *obj, t_hit *hit)
 {
 	int		found;
 	t_hit	temp;

@@ -58,9 +58,6 @@ void	debounce_on_input(t_debounce_state *state, t_render *render);
 void	debounce_update(t_debounce_state *state, t_render *render);
 
 /* Timer utilities */
-void	debounce_timer_start(t_debounce_timer *timer);
-void	debounce_timer_reset(t_debounce_timer *timer);
-void	debounce_timer_stop(t_debounce_timer *timer);
 int		debounce_timer_expired(t_debounce_timer *timer);
 int		debounce_check_preview_throttle(t_debounce_state *state);
 

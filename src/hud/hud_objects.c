@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "render.h"
 #include "hud.h"
 #include "hud_internal.h"
 
@@ -31,11 +30,11 @@ static void	render_object_header(t_render *render, int *y)
 	buf[len++] = '-';
 	buf[len++] = ' ';
 	len += hud_append(buf + len, "Objects (Page ", 64 - len);
-	ft_itoa_buf(buf + len, render->hud.current_page + 1);
+	hud_itoa_buf(buf + len, render->hud.current_page + 1);
 	while (buf[len])
 		len++;
 	buf[len++] = '/';
-	ft_itoa_buf(buf + len, render->hud.total_pages);
+	hud_itoa_buf(buf + len, render->hud.total_pages);
 	while (buf[len])
 		len++;
 	len += hud_append(buf + len, ") ---", 64 - len);
@@ -62,7 +61,7 @@ static void	render_object_by_index(t_render *render, int g_idx, int *y)
 	if (sel.index == render->selection.index
 		&& sel.type == render->selection.type)
 		color = HUD_COLOR_HIGHLIGHT;
-	render_object_entry(render, g_idx, y, color);
+	hud_render_object_entry(render, g_idx, y, color);
 }
 
 /**

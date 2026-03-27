@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mlx_context.h"
-#include "mlx.h"
+#include "display.h"
 #include "libft.h"
 
 /**

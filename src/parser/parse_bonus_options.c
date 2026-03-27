@@ -12,6 +12,8 @@
 
 #include "parser.h"
 #include <stdlib.h>
+#include "libft.h"
+#include "error.h"
 
 static int	starts_with(const char *str, const char *prefix)
 {
@@ -54,7 +56,7 @@ static t_parse_result	parse_bump_opt(const char *str, t_object *obj,
 	free(obj->bump_path);
 	obj->bump_path = ft_substr(start, 0, len);
 	if (!obj->bump_path)
-		return (PARSE_ERR_FORMAT);
+		return (PARSE_ERR_OVERFLOW);
 	*end = start + len;
 	return (PARSE_OK);
 }

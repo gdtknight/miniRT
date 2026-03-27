@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mlx_context.h                                      :+:      :+:    :+:   */
+/*   display.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,8 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MLX_CONTEXT_H
-# define MLX_CONTEXT_H
+#ifndef DISPLAY_H
+# define DISPLAY_H
+
+# include "mlx.h"
 
 /**
  * @brief MLX image data structure
@@ -50,5 +52,10 @@ void	mlx_img_destroy(t_mlx_img *img, void *mlx);
 
 /* Pixel operations */
 void	mlx_img_put_pixel(t_mlx_img *img, int x, int y, int color);
+
+/* MLX event callbacks (src/display/) */
+int		close_window(void *param);
+int		handle_key(int keycode, void *param);
+int		handle_expose(void *param);
 
 #endif

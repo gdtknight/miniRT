@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
-#include "render.h"
 #include "input.h"
 #include "hud.h"
 #include "keyguide.h"

@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "shading.h"
-#include "vec3.h"
 #include "shadow.h"
 #include "texture.h"
 #include <math.h>

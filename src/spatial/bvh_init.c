@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "spatial.h"
-#include "minirt.h"
+#include "scene.h"
 #include <stdlib.h>
 
 /**
@@ -130,7 +130,7 @@ static int	alloc_bvh_refs(t_scene *scene, t_object_ref **refs, int pc, int bc)
  *
  * @param scene Scene containing objects and BVH state.
  */
-void	scene_build_bvh(t_scene *scene)
+void	build_scene_bvh(t_scene *scene)
 {
 	t_object_ref	*refs;
 	int				pc;

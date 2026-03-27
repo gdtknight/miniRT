@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
 #include "parser.h"
+#include "error.h"
 
 /**
  * @brief Check if line matches element prefix.
@@ -43,7 +43,7 @@ static int	matches_prefix(char *line, const char *prefix, int len)
  * @param ctx Error context.
  * @return t_parse_result Result code.
  */
-static t_parse_result	dispatch_objects(char *line, t_scene *scene,
+static t_parse_result	dispatch_object(char *line, t_scene *scene,
 	t_error_context *ctx)
 {
 	if (matches_prefix(line, "sp", 2))
@@ -77,7 +77,8 @@ static t_parse_result	dispatch_objects(char *line, t_scene *scene,
  * @param ctx Error context.
  * @return t_parse_result Result code or -1 for objects.
  */
-static int	dispatch_elements(char *line, t_scene *scene, t_error_context *ctx)
+static int	dispatch_scene_element(char *line, t_scene *scene,
+	t_error_context *ctx)
 {
 	if (matches_prefix(line, "A", 1))
 	{
@@ -105,7 +106,7 @@ static int	dispatch_elements(char *line, t_scene *scene, t_error_context *ctx)
  * @param ctx Error context for reporting.
  * @return t_parse_result PARSE_OK or error code.
  */
-t_parse_result	dispatch_element(char *line, t_scene *scene,
+t_parse_result	dispatch_line(char *line, t_scene *scene,
 	t_error_context *ctx)
 {
 	int	result;
@@ -113,8 +114,8 @@ t_parse_result	dispatch_element(char *line, t_scene *scene,
 	line = (char *)skip_whitespace(line);
 	if (*line == '\0' || *line == '\n' || *line == '#')
 		return (PARSE_OK);
-	result = dispatch_elements(line, scene, ctx);
+	result = dispatch_scene_element(line, scene, ctx);
 	if (result >= 0)
 		return ((t_parse_result)result);
-	return (dispatch_objects(line, scene, ctx));
+	return (dispatch_object(line, scene, ctx));
 }

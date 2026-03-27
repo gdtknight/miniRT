@@ -12,6 +12,54 @@
 
 #include "parser.h"
 #include "error.h"
+#include <unistd.h>
+
+static void	write_uint(unsigned int n)
+{
+	char	c;
+
+	if (n >= 10)
+		write_uint(n / 10);
+	c = '0' + (n % 10);
+	write(2, &c, 1);
+}
+
+void	error_write_int(int n)
+{
+	unsigned int	u;
+
+	if (n < 0)
+	{
+		write(2, "-", 1);
+		u = -(unsigned int)n;
+	}
+	else
+		u = (unsigned int)n;
+	write_uint(u);
+}
+
+const char	*get_error_message(t_parse_result code)
+{
+	static const char	*msgs[] = {
+		"",
+		"Invalid format",
+		"Value out of range",
+		"Vector requires exactly 3 components",
+		"Duplicate declaration",
+		"Line too long (max 4096 characters)",
+		"Direction vector cannot be zero",
+		"Unexpected token at end of line",
+		"Unknown element identifier",
+		"Invalid number format",
+		"Missing required element",
+		"I/O error while reading file",
+		"Maximum element count exceeded"
+	};
+
+	if (code >= 0 && code < PARSE_ERR_COUNT)
+		return (msgs[code]);
+	return ("Unknown error");
+}
 
 /**
  * @brief Initialize error context with default values.
@@ -20,37 +68,9 @@
  */
 void	error_context_init(t_error_context *ctx)
 {
-	if (!ctx)
-		return ;
 	ctx->line_num = 0;
 	ctx->element_type = NULL;
 	ctx->error_code = PARSE_OK;
-}
-
-/**
- * @brief Set the line number in error context.
- *
- * @param ctx Error context to update.
- * @param line Line number (1-based).
- */
-void	error_context_set_line(t_error_context *ctx, int line)
-{
-	if (!ctx)
-		return ;
-	ctx->line_num = line;
-}
-
-/**
- * @brief Set the element type in error context.
- *
- * @param ctx Error context to update.
- * @param type Element type string or NULL.
- */
-void	error_context_set_element(t_error_context *ctx, const char *type)
-{
-	if (!ctx)
-		return ;
-	ctx->element_type = type;
 }
 
 /**

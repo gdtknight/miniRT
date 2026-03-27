@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "scene.h"
 
 /**
  * @brief Clamp RGB color components into the valid 0–255 range.

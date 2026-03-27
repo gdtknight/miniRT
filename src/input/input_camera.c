@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
 #include "render.h"
 #include "input.h"
 #include <math.h>

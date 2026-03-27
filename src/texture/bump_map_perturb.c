@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "texture.h"
-#include "vec3.h"
 #include <math.h>
 
 static double	sample_height(t_bump_map *bmap, int px, int py)

@@ -10,14 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
 #include "render.h"
 #include "input.h"
 #include "hud.h"
 #include "keyguide.h"
 #include "metrics.h"
 #include "spatial.h"
-#include "bvh_vis.h"
+#include "bvh_debug.h"
 
 /**
  * @brief Rebuild the BVH if the dirty flag is set.
@@ -30,9 +29,9 @@ static void	rebuild_bvh_if_dirty(t_render *render)
 {
 	if (render_has_flag(render, RENDER_BVH_DIRTY))
 	{
-		scene_build_bvh(render->scene);
+		build_scene_bvh(render->scene);
 		render_clear_flag(render, RENDER_BVH_DIRTY);
-		bvh_visualize(render->scene->bvh, NULL, render->scene);
+		bvhd_run(render->scene->bvh, NULL, render->scene);
 	}
 }
 

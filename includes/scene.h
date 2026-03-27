@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minirt.h                                           :+:      :+:    :+:   */
+/*   scene.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,17 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIRT_H
-# define MINIRT_H
+#ifndef SCENE_H
+# define SCENE_H
 
-# include <unistd.h>
-# include <fcntl.h>
-# include <stdbool.h>
-# include "libft.h"
-# include "error.h"
 # include "vec3.h"
 # include "objects.h"
-# include "ray.h"
 # include "shadow.h"
 # include "metrics.h"
 
@@ -113,17 +107,5 @@ void	scene_destroy(t_scene *scene);
 int		object_list_init(t_object_list *list, int capacity);
 void	object_list_destroy(t_object_list *list);
 int		object_list_add(t_object_list *list, t_object *obj);
-int		object_list_grow(t_object_list *list);
-
-/* Scene flag helpers */
-int		scene_has_ambient(t_scene *scene);
-int		scene_has_camera(t_scene *scene);
-void	scene_set_flag(t_scene *scene, int flag);
-void	scene_clear_flag(t_scene *scene, int flag);
-
-/* Rendering */
-void	render_scene_to_buffer(t_scene *scene, t_render *render);
-t_ray	create_camera_ray(t_camera *camera, double x, double y);
-t_color	trace_ray(t_scene *scene, t_ray *ray);
 
 #endif

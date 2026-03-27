@@ -130,7 +130,4 @@ void	handle_object_rotate(t_render *render, int keycode);
 /* Rodrigues rotation */
 t_vec3	rodrigues_rotate(t_vec3 v, t_vec3 k, double angle);
 
-/* Window expose handler */
-int		handle_expose(void *param);
-
 #endif

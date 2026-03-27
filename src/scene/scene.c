@@ -10,9 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "scene.h"
 #include "spatial.h"
 #include <stdlib.h>
+#include "libft.h"
 
 /**
  * @brief Free shadow offset LUT memory.

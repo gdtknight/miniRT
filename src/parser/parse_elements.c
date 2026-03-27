@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
 #include "parser.h"
-#include "vec3.h"
 #include "error.h"
 #include <math.h>
 
@@ -31,7 +29,7 @@ t_parse_result	parse_ambient(char *line, t_scene *scene)
 	double			ratio;
 	t_parse_result	result;
 
-	if (scene_has_ambient(scene))
+	if ((scene->flags & SCENE_HAS_AMBIENT))
 		return (PARSE_ERR_DUPLICATE);
 	token = skip_whitespace(line + 2);
 	result = parse_double(token, &ratio, &token);
@@ -46,7 +44,7 @@ t_parse_result	parse_ambient(char *line, t_scene *scene)
 		return (result);
 	if (!at_line_end(token))
 		return (PARSE_ERR_TRAILING_TOKEN);
-	scene_set_flag(scene, SCENE_HAS_AMBIENT);
+	scene->flags |= SCENE_HAS_AMBIENT;
 	return (PARSE_OK);
 }
 
@@ -107,7 +105,7 @@ t_parse_result	parse_camera(char *line, t_scene *scene)
 	t_parse_result	result;
 	int				fov;
 
-	if (scene_has_camera(scene))
+	if ((scene->flags & SCENE_HAS_CAMERA))
 		return (PARSE_ERR_DUPLICATE);
 	token = skip_whitespace(line + 2);
 	result = parse_camera_vecs(&token, scene);
@@ -123,7 +121,7 @@ t_parse_result	parse_camera(char *line, t_scene *scene)
 	if (!at_line_end(token))
 		return (PARSE_ERR_TRAILING_TOKEN);
 	init_camera_state(scene);
-	scene_set_flag(scene, SCENE_HAS_CAMERA);
+	scene->flags |= SCENE_HAS_CAMERA;
 	return (PARSE_OK);
 }
 

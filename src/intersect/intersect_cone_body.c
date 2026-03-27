@@ -11,8 +11,7 @@
 /* ************************************************************************** */
 
 #include "intersect.h"
-#include "vec3.h"
-#include "minirt.h"
+#include "scene.h"
 #include <math.h>
 
 static int	calc_cone_intersect(t_ray *ray, t_cone_data *c, t_cyl_calc *calc)

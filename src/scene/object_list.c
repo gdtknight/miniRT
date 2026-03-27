@@ -10,9 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "scene.h"
 #include <stdlib.h>
 #include <limits.h>
+#include "libft.h"
 
 /**
  * @brief Initialize an object list with a given capacity.
@@ -66,7 +67,7 @@ void	object_list_destroy(t_object_list *list)
  * @param list Object list to grow.
  * @return int 1 on success, 0 on failure.
  */
-int	object_list_grow(t_object_list *list)
+static int	object_list_grow(t_object_list *list)
 {
 	t_object	*new_items;
 	int			new_capacity;

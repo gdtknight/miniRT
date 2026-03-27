@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
 #include "shading.h"
 #include "intersect.h"
 #include "spatial.h"
@@ -42,7 +41,7 @@ static int	check_all_objects(t_scene *scene, t_ray *ray, t_hit *hit)
 		obj = &scene->objects.items[i];
 		temp.distance = hit->distance;
 		metrics_add_intersect_test(&scene->metrics);
-		if (intersect_object_new(ray, obj, &temp))
+		if (intersect_object(ray, obj, &temp))
 		{
 			*hit = temp;
 			found = 1;
@@ -77,7 +76,7 @@ static int	intersect_planes(t_scene *scene, t_ray *ray, t_hit *hit)
 		obj = &scene->objects.items[scene->bvh->plane_refs.indices[i]];
 		temp.distance = hit->distance;
 		metrics_add_intersect_test(&scene->metrics);
-		if (intersect_object_new(ray, obj, &temp))
+		if (intersect_object(ray, obj, &temp))
 		{
 			*hit = temp;
 			found = 1;

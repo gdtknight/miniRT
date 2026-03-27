@@ -176,12 +176,6 @@ void	hud_get_selection_from_global(t_selection *sel, int idx,
 void	hud_format_float(char *buffer, double value);
 
 /*
-** Internal helper functions for formatting (implemented using libft)
-*/
-void	ft_strcpy(char *dst, const char *src);
-void	ft_itoa_buf(char *buf, int n);
-
-/*
 ** Format vec3 to string "(x, y, z)" with 2 decimal places.
 ** Example: {1.5, 2.3, 3.7} -> "(1.50, 2.30, 3.70)"
 ** Buffer must be at least 64 bytes.

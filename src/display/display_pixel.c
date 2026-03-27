@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mlx_context.h"
+#include "display.h"
 
 static void	encode_pixel_bytes(char *dst, int color)
 {
