@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bvh_vis_format.c                                   :+:      :+:    :+:   */
+/*   bvhd_format.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bvh_vis.h"
+#include "bvh_debug.h"
 #include "minirt.h"
 #include <stdlib.h>
 
@@ -22,7 +22,7 @@
  * @param buffer Destination buffer (assumed large enough).
  * @param scene_ptr Pointer to the scene for ID lookup.
  */
-void	format_object_list(t_object_ref *objects, int count, char *buffer,
+void	bvhd_format_objects(t_object_ref *objects, int count, char *buffer,
 			void *scene_ptr)
 {
 	int			i;

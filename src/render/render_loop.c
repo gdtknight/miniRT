@@ -17,7 +17,7 @@
 #include "keyguide.h"
 #include "metrics.h"
 #include "spatial.h"
-#include "bvh_vis.h"
+#include "bvh_debug.h"
 
 /**
  * @brief Rebuild the BVH if the dirty flag is set.
@@ -32,7 +32,7 @@ static void	rebuild_bvh_if_dirty(t_render *render)
 	{
 		scene_build_bvh(render->scene);
 		render_clear_flag(render, RENDER_BVH_DIRTY);
-		bvh_visualize(render->scene->bvh, NULL, render->scene);
+		bvhd_run(render->scene->bvh, NULL, render->scene);
 	}
 }
 

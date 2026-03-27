@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bvh_vis_prefix_push.c                              :+:      :+:    :+:   */
+/*   bvhd_prefix_push.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bvh_vis.h"
+#include "bvh_debug.h"
 #include "libft.h"
 #include <stdlib.h>
 #include <limits.h>
@@ -46,7 +46,7 @@ static int	prefix_grow(t_prefix_state *state)
  * @param is_last Non-zero if the current node is the last sibling.
  * @return int 1 on success, 0 on allocation failure.
  */
-int	prefix_push(t_prefix_state *state, int is_last)
+int	bvhd_prefix_push(t_prefix_state *state, int is_last)
 {
 	const char	*prefix;
 	int			new_len;

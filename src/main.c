@@ -14,7 +14,7 @@
 #include "parser.h"
 #include "render.h"
 #include "spatial.h"
-#include "bvh_vis.h"
+#include "bvh_debug.h"
 #include "texture.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -142,7 +142,7 @@ int	main(int argc, char **argv)
 	scene_build_bvh(scene);
 	if (bvh_vis && scene->bvh)
 		scene->bvh->visualize = 1;
-	bvh_visualize(scene->bvh, NULL, scene);
+	bvhd_run(scene->bvh, NULL, scene);
 	if (!init_render(scene, &render))
 		return (1);
 	if (!load_textures(scene, render))

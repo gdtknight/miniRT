@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bvh_vis_stats.c                                    :+:      :+:    :+:   */
+/*   bvhd_stats.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bvh_vis.h"
+#include "bvh_debug.h"
 #include <stdio.h>
 
 /**
@@ -22,7 +22,7 @@
  * @param stats Stats structure to update.
  * @param depth Current traversal depth.
  */
-void	collect_stats_recursive(t_bvh_node *node, t_bvh_stats *stats,
+void	bvhd_collect_recursive(t_bvh_node *node, t_bvh_stats *stats,
 			int depth)
 {
 	if (!node || !stats)
@@ -30,7 +30,7 @@ void	collect_stats_recursive(t_bvh_node *node, t_bvh_stats *stats,
 	stats->total_nodes++;
 	if (depth > stats->max_depth)
 		stats->max_depth = depth;
-	if (is_leaf_node(node))
+	if (bvhd_is_leaf(node))
 	{
 		stats->leaf_count++;
 		stats->total_objects += node->object_count;
@@ -38,9 +38,9 @@ void	collect_stats_recursive(t_bvh_node *node, t_bvh_stats *stats,
 	else
 	{
 		if (node->left)
-			collect_stats_recursive(node->left, stats, depth + 1);
+			bvhd_collect_recursive(node->left, stats, depth + 1);
 		if (node->right)
-			collect_stats_recursive(node->right, stats, depth + 1);
+			bvhd_collect_recursive(node->right, stats, depth + 1);
 	}
 }
 
@@ -50,7 +50,7 @@ void	collect_stats_recursive(t_bvh_node *node, t_bvh_stats *stats,
  * @param node Root node of the BVH.
  * @param stats Stats structure to populate.
  */
-void	bvh_collect_statistics(t_bvh_node *node, t_bvh_stats *stats)
+void	bvhd_collect_stats(t_bvh_node *node, t_bvh_stats *stats)
 {
 	if (!stats)
 		return ;
@@ -60,7 +60,7 @@ void	bvh_collect_statistics(t_bvh_node *node, t_bvh_stats *stats)
 	stats->max_depth = 0;
 	stats->total_objects = 0;
 	stats->avg_objects_per_leaf = 0.0;
-	collect_stats_recursive(node, stats, 0);
+	bvhd_collect_recursive(node, stats, 0);
 	stats->internal_count = stats->total_nodes - stats->leaf_count;
 	if (stats->leaf_count > 0)
 		stats->avg_objects_per_leaf = (double)stats->total_objects
@@ -72,7 +72,7 @@ void	bvh_collect_statistics(t_bvh_node *node, t_bvh_stats *stats)
  *
  * @param stats Stats structure to print.
  */
-void	print_statistics_summary(t_bvh_stats *stats)
+void	bvhd_print_stats(t_bvh_stats *stats)
 {
 	if (!stats)
 		return ;

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bvh_vis_tree.c                                     :+:      :+:    :+:   */
+/*   bvhd_tree.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,16 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bvh_vis.h"
+#include "bvh_debug.h"
 #include <stdio.h>
 
 static void	handle_node_display(t_bvh_node *node, t_traverse_ctx *ctx,
 				t_node_info *info, int is_last)
 {
-	if (is_leaf_node(node))
-		format_object_list(node->objects, node->object_count, info->objects,
+	if (bvhd_is_leaf(node))
+		bvhd_format_objects(node->objects, node->object_count, info->objects,
 			ctx->scene);
-	print_node_line(ctx->prefix, info, is_last);
+	bvhd_print_node(ctx->prefix, info, is_last);
 }
 
 /**
@@ -39,23 +39,23 @@ static void	traverse_recursive(t_bvh_node *node, t_traverse_ctx *ctx,
 
 	if (!node)
 		return ;
-	info = format_node_info(node);
+	info = bvhd_format_node(node);
 	handle_node_display(node, ctx, &info, is_last);
-	if (!is_leaf_node(node))
+	if (!bvhd_is_leaf(node))
 	{
 		if (node->left)
 		{
-			if (!prefix_push(ctx->prefix, is_last))
+			if (!bvhd_prefix_push(ctx->prefix, is_last))
 				return ;
 			traverse_recursive(node->left, ctx, !node->right);
-			prefix_pop(ctx->prefix);
+			bvhd_prefix_pop(ctx->prefix);
 		}
 		if (node->right)
 		{
-			if (!prefix_push(ctx->prefix, is_last))
+			if (!bvhd_prefix_push(ctx->prefix, is_last))
 				return ;
 			traverse_recursive(node->right, ctx, 1);
-			prefix_pop(ctx->prefix);
+			bvhd_prefix_pop(ctx->prefix);
 		}
 	}
 }
@@ -67,7 +67,7 @@ static void	traverse_recursive(t_bvh_node *node, t_traverse_ctx *ctx,
  * @param ctx Traversal context for formatting.
  * @param stats Optional statistics structure to fill and print.
  */
-void	bvh_visualize_tree(t_bvh_node *node, t_traverse_ctx *ctx,
+void	bvhd_print_tree(t_bvh_node *node, t_traverse_ctx *ctx,
 			t_bvh_stats *stats)
 {
 	if (!node)
@@ -76,8 +76,8 @@ void	bvh_visualize_tree(t_bvh_node *node, t_traverse_ctx *ctx,
 	traverse_recursive(node, ctx, 1);
 	if (stats)
 	{
-		bvh_collect_statistics(node, stats);
+		bvhd_collect_stats(node, stats);
 		printf("\n");
-		print_statistics_summary(stats);
+		bvhd_print_stats(stats);
 	}
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bvh_vis_node.c                                     :+:      :+:    :+:   */
+/*   bvhd_node.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bvh_vis.h"
+#include "bvh_debug.h"
 #include "minirt.h"
 #include "utils.h"
 #include <stdlib.h>
@@ -21,7 +21,7 @@
  * @param node BVH node to test.
  * @return int 1 if leaf, 0 otherwise.
  */
-int	is_leaf_node(t_bvh_node *node)
+int	bvhd_is_leaf(t_bvh_node *node)
 {
 	return (node->left == NULL && node->right == NULL);
 }
@@ -83,12 +83,12 @@ static void	format_bounds_str(t_aabb bounds, char *buf, size_t size, int comp)
  * @param node BVH node to format.
  * @return t_node_info Populated node info struct.
  */
-t_node_info	format_node_info(t_bvh_node *node)
+t_node_info	bvhd_format_node(t_bvh_node *node)
 {
 	t_node_info	info;
 
 	info.depth = node->depth;
-	if (is_leaf_node(node))
+	if (bvhd_is_leaf(node))
 		ft_strlcpy(info.type, "Leaf", sizeof(info.type));
 	else
 		ft_strlcpy(info.type, "Internal", sizeof(info.type));

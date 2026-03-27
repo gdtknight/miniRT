@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bvh_vis_prefix.c                                   :+:      :+:    :+:   */
+/*   bvhd_prefix.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bvh_vis.h"
+#include "bvh_debug.h"
 #include "libft.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -22,7 +22,7 @@
  *
  * @return t_prefix_state Initialized prefix state.
  */
-t_prefix_state	prefix_init(void)
+t_prefix_state	bvhd_prefix_init(void)
 {
 	t_prefix_state	state;
 
@@ -46,7 +46,7 @@ t_prefix_state	prefix_init(void)
  *
  * @param state Prefix state to update.
  */
-void	prefix_pop(t_prefix_state *state)
+void	bvhd_prefix_pop(t_prefix_state *state)
 {
 	if (state->length >= PREFIX_SEGMENT_LEN)
 	{
@@ -62,7 +62,7 @@ void	prefix_pop(t_prefix_state *state)
  *
  * @param state Prefix state to print.
  */
-void	prefix_print(t_prefix_state *state)
+void	bvhd_prefix_print(t_prefix_state *state)
 {
 	if (state && state->buffer && state->length > 0)
 		printf("%s", state->buffer);
@@ -73,7 +73,7 @@ void	prefix_print(t_prefix_state *state)
  *
  * @param state Prefix state to destroy.
  */
-void	prefix_destroy(t_prefix_state *state)
+void	bvhd_prefix_destroy(t_prefix_state *state)
 {
 	if (!state)
 		return ;

@@ -118,14 +118,14 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/texture/texture_utils.c \
 			  $(SRC_DIR)/math/vec3.c \
 			  $(SRC_DIR)/math/vec3_ops.c \
-			  $(SRC_DIR)/bvh_vis/bvh_vis_init.c \
-			  $(SRC_DIR)/bvh_vis/bvh_vis_tree.c \
-			  $(SRC_DIR)/bvh_vis/bvh_vis_node.c \
-			  $(SRC_DIR)/bvh_vis/bvh_vis_format.c \
-			  $(SRC_DIR)/bvh_vis/bvh_vis_stats.c \
-			  $(SRC_DIR)/bvh_vis/bvh_vis_prefix.c \
-			  $(SRC_DIR)/bvh_vis/bvh_vis_prefix_push.c \
-			  $(SRC_DIR)/bvh_vis/bvh_vis_print.c \
+			  $(SRC_DIR)/bvh_debug/bvhd_init.c \
+			  $(SRC_DIR)/bvh_debug/bvhd_tree.c \
+			  $(SRC_DIR)/bvh_debug/bvhd_node.c \
+			  $(SRC_DIR)/bvh_debug/bvhd_format.c \
+			  $(SRC_DIR)/bvh_debug/bvhd_stats.c \
+			  $(SRC_DIR)/bvh_debug/bvhd_prefix.c \
+			  $(SRC_DIR)/bvh_debug/bvhd_prefix_push.c \
+			  $(SRC_DIR)/bvh_debug/bvhd_print.c \
 			  $(SRC_DIR)/utils/error.c \
 			  $(SRC_DIR)/utils/format_helpers.c \
 			  $(SRC_DIR)/utils/timer.c
