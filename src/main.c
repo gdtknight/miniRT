@@ -139,7 +139,7 @@ int	main(int argc, char **argv)
 		return (printf("Usage: %s <scene.rt> [--bvh-vis]\n", argv[0]), 1);
 	if (!init_scene(filename, &scene))
 		return (1);
-	scene_build_bvh(scene);
+	build_scene_bvh(scene);
 	if (bvh_vis && scene->bvh)
 		scene->bvh->visualize = 1;
 	bvhd_run(scene->bvh, NULL, scene);
