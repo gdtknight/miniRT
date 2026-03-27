@@ -37,13 +37,14 @@ static void	camera_rebuild_dir(t_camera *cam)
 void	handle_camera_move(t_render *render, int keycode)
 {
 	t_vec3	right;
+	t_vec3	up;
 	t_vec3	move;
 	double	step;
 
 	step = 1.0;
-	right.x = -cos(render->scene->camera.yaw);
-	right.y = 0;
-	right.z = sin(render->scene->camera.yaw);
+	right = (t_vec3){-cos(render->scene->camera.yaw), 0,
+		sin(render->scene->camera.yaw)};
+	up = vec3_normalize(vec3_cross(right, render->scene->camera.direction));
 	if (keycode == KEY_W)
 		move = vec3_multiply(render->scene->camera.direction, step);
 	else if (keycode == KEY_X)
@@ -53,9 +54,9 @@ void	handle_camera_move(t_render *render, int keycode)
 	else if (keycode == KEY_D)
 		move = vec3_multiply(right, step);
 	else if (keycode == KEY_Q)
-		move = (t_vec3){0, step, 0};
+		move = vec3_multiply(up, step);
 	else if (keycode == KEY_Z)
-		move = (t_vec3){0, -step, 0};
+		move = vec3_multiply(up, -step);
 	else
 		return ;
 	render->scene->camera.position = vec3_add(render->scene->camera.position,
