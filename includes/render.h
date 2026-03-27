@@ -97,9 +97,10 @@ int			render_has_flag(t_render *render, int flag);
 void		render_set_flag(t_render *render, int flag);
 void		render_clear_flag(t_render *render, int flag);
 
-/* Window event handlers */
-int			close_window(void *param);
-int			handle_key(int keycode, void *param);
+/* Render pipeline */
+void		render_scene_to_buffer(t_scene *scene, t_render *render);
+t_ray		create_camera_ray(t_camera *camera, double x, double y);
+t_color		trace_ray(t_scene *scene, t_ray *ray);
 int			render_loop(void *param);
 
 #endif

@@ -114,9 +114,5 @@ int		object_list_init(t_object_list *list, int capacity);
 void	object_list_destroy(t_object_list *list);
 int		object_list_add(t_object_list *list, t_object *obj);
 
-/* Rendering */
-void	render_scene_to_buffer(t_scene *scene, t_render *render);
-t_ray	create_camera_ray(t_camera *camera, double x, double y);
-t_color	trace_ray(t_scene *scene, t_ray *ray);
 
 #endif

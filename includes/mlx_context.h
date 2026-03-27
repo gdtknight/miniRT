@@ -51,4 +51,9 @@ void	mlx_img_destroy(t_mlx_img *img, void *mlx);
 /* Pixel operations */
 void	mlx_img_put_pixel(t_mlx_img *img, int x, int y, int color);
 
+/* MLX event callbacks (src/display/) */
+int		close_window(void *param);
+int		handle_key(int keycode, void *param);
+int		handle_expose(void *param);
+
 #endif
