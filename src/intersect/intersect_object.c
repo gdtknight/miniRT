@@ -101,7 +101,7 @@ static int	intersect_plane_new(t_ray *ray, t_plane_data *p, t_color color,
  * @param hit Hit record to update.
  * @return int 1 if an intersection is found, 0 otherwise.
  */
-int	intersect_object_new(t_ray *ray, t_object *obj, t_hit_record *hit)
+int	intersect_object(t_ray *ray, t_object *obj, t_hit_record *hit)
 {
 	int	result;
 
@@ -111,10 +111,10 @@ int	intersect_object_new(t_ray *ray, t_object *obj, t_hit_record *hit)
 	else if (obj->type == OBJ_PLANE)
 		result = intersect_plane_new(ray, &obj->data.plane, obj->color, hit);
 	else if (obj->type == OBJ_CYLINDER)
-		result = intersect_cylinder_new(ray, &obj->data.cylinder, obj->color,
+		result = intersect_cylinder(ray, &obj->data.cylinder, obj->color,
 				hit);
 	else if (obj->type == OBJ_CONE)
-		result = intersect_cone_new(ray, obj, hit);
+		result = intersect_cone(ray, obj, hit);
 	if (result)
 		hit->obj = obj;
 	return (result);

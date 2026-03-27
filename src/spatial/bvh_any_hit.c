@@ -51,7 +51,7 @@ static int	leaf_any_hit(t_bvh_node *node, t_ray ray, double max_dist,
 	{
 		metrics_add_shadow_intersect(&((t_scene *)scene)->metrics);
 		obj = &((t_scene *)scene)->objects.items[node->objects[i].index];
-		if (intersect_object_new(&ray, obj, &temp_hit))
+		if (intersect_object(&ray, obj, &temp_hit))
 			return (1);
 		i++;
 	}

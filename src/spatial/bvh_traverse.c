@@ -51,7 +51,7 @@ static int	bvh_leaf_intersect(t_bvh_node *node, t_ray ray, t_hit_record *hit,
 	{
 		metrics_add_intersect_test(&((t_scene *)scene)->metrics);
 		obj = &((t_scene *)scene)->objects.items[node->objects[i].index];
-		if (intersect_object_new(&ray, obj, &temp_hit))
+		if (intersect_object(&ray, obj, &temp_hit))
 		{
 			if (!hit_anything || temp_hit.distance < hit->distance)
 			{
