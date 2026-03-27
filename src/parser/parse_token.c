@@ -31,8 +31,6 @@ static int	is_whitespace(char c)
  */
 const char	*skip_whitespace(const char *str)
 {
-	if (!str)
-		return (NULL);
 	while (is_whitespace(*str))
 		str++;
 	return (str);
@@ -49,8 +47,6 @@ const char	*skip_whitespace(const char *str)
  */
 int	at_line_end(const char *str)
 {
-	if (!str)
-		return (1);
 	str = skip_whitespace(str);
 	return (*str == '\0' || *str == '\n' || *str == '#');
 }

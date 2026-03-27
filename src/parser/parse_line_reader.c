@@ -27,7 +27,7 @@ static int	refill_buffer(t_line_reader *reader)
 	reader->buf_pos = 0;
 	if (reader->buf_len < 0)
 	{
-		reader->io_error = 1;
+		reader->error = PARSE_ERR_IO;
 		reader->buf_len = 0;
 	}
 	return (reader->buf_len);
@@ -101,7 +101,7 @@ static char	*finalize_line(char *line, int len, t_line_reader *reader)
 	result = malloc(len + 1);
 	if (!result)
 	{
-		reader->io_error = 1;
+		reader->error = PARSE_ERR_OVERFLOW;
 		return (NULL);
 	}
 	ft_strlcpy(result, line, len + 1);
@@ -120,8 +120,6 @@ char	*line_reader_next(t_line_reader *reader)
 	int		pos;
 	int		status;
 
-	if (!reader)
-		return (NULL);
 	reader->line_num++;
 	reader->line_too_long = 0;
 	pos = 0;

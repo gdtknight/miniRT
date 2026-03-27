@@ -100,7 +100,7 @@ t_parse_result	parse_sphere(char *line, t_scene *scene)
 	if (object_list_add(&scene->objects, &obj))
 		return (PARSE_OK);
 	free(obj.bump_path);
-	return (PARSE_ERR_FORMAT);
+	return (PARSE_ERR_OVERFLOW);
 }
 
 /**
@@ -165,5 +165,5 @@ t_parse_result	parse_plane(char *line, t_scene *scene)
 	if (object_list_add(&scene->objects, &obj))
 		return (PARSE_OK);
 	free(obj.bump_path);
-	return (PARSE_ERR_FORMAT);
+	return (PARSE_ERR_OVERFLOW);
 }

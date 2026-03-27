@@ -33,7 +33,7 @@ static int	parse_line(char *line, t_scene *scene, t_error_context *ctx)
 	t_parse_result	result;
 
 	ctx->element_type = NULL;
-	result = dispatch_element(line, scene, ctx);
+	result = dispatch_line(line, scene, ctx);
 	if (result != PARSE_OK)
 	{
 		ctx->error_code = result;
@@ -75,7 +75,7 @@ static int	check_line_too_long(t_line_reader *reader, t_error_context *ctx)
 {
 	if (reader->line_too_long)
 	{
-		error_context_set_line(ctx, reader->line_num);
+		ctx->line_num = reader->line_num;
 		ctx->error_code = PARSE_ERR_LINE_TOO_LONG;
 		error_context_print(ctx);
 		return (1);
@@ -105,15 +105,15 @@ static int	process_lines(t_line_reader *reader, t_scene *scene,
 			return (0);
 		if (line == NULL)
 			break ;
-		error_context_set_line(ctx, reader->line_num);
+		ctx->line_num = reader->line_num;
 		success = parse_line(line, scene, ctx);
 		free(line);
 		line = line_reader_next(reader);
 	}
 	free(line);
-	if (reader->io_error)
+	if (reader->error)
 	{
-		ctx->error_code = PARSE_ERR_IO;
+		ctx->error_code = reader->error;
 		error_context_print(ctx);
 		return (0);
 	}
@@ -145,11 +145,7 @@ int	parse_scene(const char *filename, t_scene *scene)
 	if (fd < 0)
 		return (error_print(ERR_FILE_OPEN), 0);
 	error_context_init(&ctx);
-	if (!line_reader_init(&reader, fd))
-	{
-		close(fd);
-		return (error_print(ERR_MALLOC), 0);
-	}
+	line_reader_init(&reader, fd);
 	success = process_lines(&reader, scene, &ctx);
 	close(fd);
 	if (success)

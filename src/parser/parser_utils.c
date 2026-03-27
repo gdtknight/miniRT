@@ -20,17 +20,14 @@
  * @param fd File descriptor to read from.
  * @return int 1 on success, 0 on failure.
  */
-int	line_reader_init(t_line_reader *reader, int fd)
+void	line_reader_init(t_line_reader *reader, int fd)
 {
-	if (!reader || fd < 0)
-		return (0);
 	reader->fd = fd;
 	reader->buf_pos = 0;
 	reader->buf_len = 0;
 	reader->line_num = 0;
 	reader->line_too_long = 0;
-	reader->io_error = 0;
-	return (1);
+	reader->error = 0;
 }
 
 /**
