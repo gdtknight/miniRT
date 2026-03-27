@@ -53,9 +53,9 @@ static int	parse_line(char *line, t_scene *scene, t_error_context *ctx)
  */
 int	validate_scene(t_scene *scene)
 {
-	if (!scene_has_ambient(scene))
+	if (!(scene->flags & SCENE_HAS_AMBIENT))
 		return (error_print_ctx("Missing element: ", "ambient light (A)"), 0);
-	if (!scene_has_camera(scene))
+	if (!(scene->flags & SCENE_HAS_CAMERA))
 		return (error_print_ctx("Missing element: ", "camera (C)"), 0);
 	if (scene->light_count == 0)
 		return (error_print_ctx("Missing element: ", "light (L)"), 0);

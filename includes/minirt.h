@@ -113,13 +113,6 @@ void	scene_destroy(t_scene *scene);
 int		object_list_init(t_object_list *list, int capacity);
 void	object_list_destroy(t_object_list *list);
 int		object_list_add(t_object_list *list, t_object *obj);
-int		object_list_grow(t_object_list *list);
-
-/* Scene flag helpers */
-int		scene_has_ambient(t_scene *scene);
-int		scene_has_camera(t_scene *scene);
-void	scene_set_flag(t_scene *scene, int flag);
-void	scene_clear_flag(t_scene *scene, int flag);
 
 /* Rendering */
 void	render_scene_to_buffer(t_scene *scene, t_render *render);

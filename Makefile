@@ -38,7 +38,6 @@ endif
 
 SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/scene/scene.c \
-			  $(SRC_DIR)/scene/scene_flags.c \
 			  $(SRC_DIR)/scene/object_list.c \
 			  $(SRC_DIR)/parser/parser.c \
 			  $(SRC_DIR)/parser/parser_dispatch.c \
