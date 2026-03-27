@@ -83,7 +83,6 @@ int				line_reader_get_line_num(t_line_reader *reader);
 
 t_parse_result	parse_double(const char *str, double *value, const char **end);
 t_parse_result	parse_int(const char *str, int *value, const char **end);
-int				parse_is_digit(char c);
 double			parse_int_part(const char **str, int *has_digits);
 double			parse_frac_part(const char **str, int *has_digits);
 

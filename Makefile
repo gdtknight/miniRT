@@ -49,11 +49,8 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/parser/parse_cone.c \
 			  $(SRC_DIR)/parser/parse_bonus_options.c \
 			  $(SRC_DIR)/parser/parse_number.c \
-			  $(SRC_DIR)/parser/parse_number_utils.c \
-			  $(SRC_DIR)/parser/parse_token.c \
 			  $(SRC_DIR)/parser/parse_line_reader.c \
 			  $(SRC_DIR)/parser/parse_error.c \
-			  $(SRC_DIR)/parser/parse_error_msg.c \
 			  $(SRC_DIR)/parser/parse_validation_strict.c \
 			  $(SRC_DIR)/parser/parse_vector_validation.c \
 			  $(SRC_DIR)/spatial/aabb.c \

@@ -11,8 +11,49 @@
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "libft.h"
 #include <limits.h>
 #include <math.h>
+
+double	parse_int_part(const char **str, int *has_digits)
+{
+	double	result;
+
+	result = 0.0;
+	while (ft_isdigit(**str))
+	{
+		result = result * 10.0 + (**str - '0');
+		(*str)++;
+		*has_digits = 1;
+	}
+	return (result);
+}
+
+double	parse_frac_part(const char **str, int *has_digits)
+{
+	double	result;
+	double	divisor;
+	int		digits;
+
+	result = 0.0;
+	divisor = 10.0;
+	digits = 0;
+	if (**str == '.')
+	{
+		(*str)++;
+		while (ft_isdigit(**str) && digits < 15)
+		{
+			result += (**str - '0') / divisor;
+			divisor *= 10.0;
+			(*str)++;
+			digits++;
+		}
+		if (digits == 0)
+			return (-1.0);
+		*has_digits = 1;
+	}
+	return (result);
+}
 
 /**
  * @brief Parse double value with format validation.
@@ -62,7 +103,7 @@ static int	parse_int_digits(const char **str, int *result, int *has_digits)
 {
 	int	digit;
 
-	while (parse_is_digit(**str))
+	while (ft_isdigit(**str))
 	{
 		digit = **str - '0';
 		if (*result > (INT_MAX - digit) / 10)

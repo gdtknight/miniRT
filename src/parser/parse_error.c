@@ -12,6 +12,54 @@
 
 #include "parser.h"
 #include "error.h"
+#include <unistd.h>
+
+static void	write_uint(unsigned int n)
+{
+	char	c;
+
+	if (n >= 10)
+		write_uint(n / 10);
+	c = '0' + (n % 10);
+	write(2, &c, 1);
+}
+
+void	error_write_int(int n)
+{
+	unsigned int	u;
+
+	if (n < 0)
+	{
+		write(2, "-", 1);
+		u = -(unsigned int)n;
+	}
+	else
+		u = (unsigned int)n;
+	write_uint(u);
+}
+
+const char	*get_error_message(t_parse_result code)
+{
+	static const char	*msgs[] = {
+		"",
+		"Invalid format",
+		"Value out of range",
+		"Vector requires exactly 3 components",
+		"Duplicate declaration",
+		"Line too long (max 4096 characters)",
+		"Direction vector cannot be zero",
+		"Unexpected token at end of line",
+		"Unknown element identifier",
+		"Invalid number format",
+		"Missing required element",
+		"I/O error while reading file",
+		"Maximum element count exceeded"
+	};
+
+	if (code >= 0 && code < PARSE_ERR_COUNT)
+		return (msgs[code]);
+	return ("Unknown error");
+}
 
 /**
  * @brief Initialize error context with default values.

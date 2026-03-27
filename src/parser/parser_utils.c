@@ -13,6 +13,19 @@
 #include "minirt.h"
 #include "parser.h"
 
+const char	*skip_whitespace(const char *str)
+{
+	while (*str == ' ' || *str == '\t')
+		str++;
+	return (str);
+}
+
+int	at_line_end(const char *str)
+{
+	str = skip_whitespace(str);
+	return (*str == '\0' || *str == '\n' || *str == '#');
+}
+
 /**
  * @brief Initialize line reader with file descriptor.
  *
