@@ -65,7 +65,7 @@ static void	fill_obj_id(char *buf, int *i, t_object *obj)
  * @param y Current y position (in/out).
  * @param color Text color for the entry.
  */
-void	render_object_entry(t_render *render, int idx, int *y, int color)
+void	hud_render_object_entry(t_render *render, int idx, int *y, int color)
 {
 	char		buf[128];
 	int			i;

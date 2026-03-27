@@ -25,8 +25,8 @@
 void	hud_render_camera(t_render *render, int *y)
 {
 	hud_print_line(render, y, HUD_COLOR_TEXT, "Camera:");
-	format_and_print_vec3(render, y, "pos", render->scene->camera.position);
-	format_and_print_vec3(render, y, "dir", render->scene->camera.direction);
+	hud_print_vec3(render, y, "pos", render->scene->camera.position);
+	hud_print_vec3(render, y, "dir", render->scene->camera.direction);
 }
 
 /**
@@ -35,7 +35,7 @@ void	hud_render_camera(t_render *render, int *y)
  * @param render Render context containing scene.
  * @param y Current y position (in/out).
  */
-void	render_camera_fov(t_render *render, int *y)
+void	hud_render_camera_fov(t_render *render, int *y)
 {
 	char	buf[64];
 	int		i;
@@ -110,7 +110,7 @@ void	hud_render_light(t_render *render, int *y)
 	buf[i++] = ':';
 	buf[i] = '\0';
 	hud_print_line(render, y, HUD_COLOR_TEXT, buf);
-	format_and_print_vec3(render, y, "pos",
+	hud_print_vec3(render, y, "pos",
 		render->scene->lights[render->scene->selected_light].position);
 }
 
@@ -120,7 +120,7 @@ void	hud_render_light(t_render *render, int *y)
  * @param render Render context containing scene.
  * @param y Current y position (in/out).
  */
-void	render_light_bright(t_render *render, int *y)
+void	hud_render_light_bright(t_render *render, int *y)
 {
 	char	buf[128];
 	int		i;

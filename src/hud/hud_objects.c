@@ -62,7 +62,7 @@ static void	render_object_by_index(t_render *render, int g_idx, int *y)
 	if (sel.index == render->selection.index
 		&& sel.type == render->selection.type)
 		color = HUD_COLOR_HIGHLIGHT;
-	render_object_entry(render, g_idx, y, color);
+	hud_render_object_entry(render, g_idx, y, color);
 }
 
 /**
