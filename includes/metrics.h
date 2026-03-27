@@ -52,11 +52,6 @@ typedef struct s_metrics
 	t_bvh_metrics	bvh;
 }	t_metrics;
 
-/* Timer utilities */
-void	timer_start(struct timeval *tv);
-long	timer_elapsed_us(struct timeval *start);
-double	timer_elapsed_ms(struct timeval *start);
-
 /* Metrics operations */
 void	metrics_init(t_metrics *metrics);
 void	metrics_start_frame(t_metrics *metrics);
