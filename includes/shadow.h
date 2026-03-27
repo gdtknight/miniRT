@@ -111,7 +111,7 @@ double			calculate_shadow_factor(t_scene *scene, t_shadow_query query,
  * @param bias Shadow bias offset
  * @return 1 if in shadow, 0 if lit
  */
-int				is_in_shadow(t_scene *scene, t_shadow_query query,
+int				shadow_is_occluded(t_scene *scene, t_shadow_query query,
 					t_vec3 light_pos, double bias);
 
 #endif

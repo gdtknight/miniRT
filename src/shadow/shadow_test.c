@@ -100,7 +100,7 @@ static void	init_shadow_ray(t_ray *ray, t_shadow_query *query,
  * @param bias Bias distance to offset the shadow ray origin.
  * @return int 1 if the point is in shadow, 0 otherwise.
  */
-int	is_in_shadow(t_scene *scene, t_shadow_query query, t_vec3 light_pos,
+int	shadow_is_occluded(t_scene *scene, t_shadow_query query, t_vec3 light_pos,
 	double bias)
 {
 	t_ray	shadow_ray;

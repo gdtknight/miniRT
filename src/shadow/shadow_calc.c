@@ -103,7 +103,7 @@ static int	sample_shadow_ray(t_shadow_sample *params, int index)
 	else
 		tang = vec3_normalize(vec3_cross(light_dir, (t_vec3){1, 0, 0}));
 	bitang = vec3_cross(light_dir, tang);
-	return (is_in_shadow(params->scene, params->query, vec3_add(
+	return (shadow_is_occluded(params->scene, params->query, vec3_add(
 				params->light_pos, vec3_add(vec3_multiply(tang, offset.x),
 					vec3_multiply(bitang, offset.y))), params->bias));
 }
