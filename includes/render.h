@@ -14,7 +14,7 @@
 # define RENDER_H
 
 # include "scene.h"
-# include "mlx.h"
+# include "ray.h"
 # include "display.h"
 # include "render_debounce.h"
 

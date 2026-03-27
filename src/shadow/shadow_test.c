@@ -12,7 +12,6 @@
 
 #include "shadow.h"
 #include "scene.h"
-#include "vec3.h"
 #include "intersect.h"
 #include "metrics.h"
 #include "spatial.h"

@@ -10,9 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
 #include "parser.h"
-#include "vec3.h"
+#include "error.h"
 
 int	in_range(double value, double min, double max)
 {

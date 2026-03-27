@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "render.h"
 #include "hud.h"
 #include "hud_internal.h"
+#include "libft.h"
 
 /**
  * @brief Render camera section in the HUD.

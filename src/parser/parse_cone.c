@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
 #include "parser.h"
-#include "vec3.h"
 #include "utils.h"
 #include <stdlib.h>
+#include "libft.h"
+#include "error.h"
 
 static t_parse_result	parse_cone_dims(const char **token, t_object *obj)
 {

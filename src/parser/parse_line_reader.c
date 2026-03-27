@@ -13,6 +13,8 @@
 #include "parser.h"
 #include <unistd.h>
 #include <stdlib.h>
+#include "libft.h"
+#include "error.h"
 
 /**
  * @brief Refill the read buffer from file.

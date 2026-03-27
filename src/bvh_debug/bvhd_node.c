@@ -14,6 +14,7 @@
 #include "scene.h"
 #include "utils.h"
 #include <stdlib.h>
+#include "libft.h"
 
 /**
  * @brief Check whether a BVH node is a leaf.

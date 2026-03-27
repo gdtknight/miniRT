@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
 #include "parser.h"
+#include "error.h"
 
 /**
  * @brief Validate vector components are in range [-1,1].

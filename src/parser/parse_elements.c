@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
 #include "parser.h"
-#include "vec3.h"
 #include "error.h"
 #include <math.h>
 

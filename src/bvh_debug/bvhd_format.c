@@ -13,6 +13,7 @@
 #include "bvh_debug.h"
 #include "scene.h"
 #include <stdlib.h>
+#include "libft.h"
 
 /**
  * @brief Format a list of object IDs into a buffer.

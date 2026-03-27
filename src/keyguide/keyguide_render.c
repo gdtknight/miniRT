@@ -12,7 +12,6 @@
 
 #include "keyguide.h"
 #include "hud.h"
-#include "render.h"
 
 /**
  * @brief Render the camera controls section in the key guide.

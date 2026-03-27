@@ -13,6 +13,8 @@
 #ifndef DISPLAY_H
 # define DISPLAY_H
 
+# include "mlx.h"
+
 /**
  * @brief MLX image data structure
  *

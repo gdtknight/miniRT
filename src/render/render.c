@@ -10,10 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
-#include "ray.h"
 #include "render.h"
 #include "metrics.h"
+#include "ray.h"
 
 /**
  * @brief Write a single pixel color into the MLX image buffer.

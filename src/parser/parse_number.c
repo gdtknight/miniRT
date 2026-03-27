@@ -14,6 +14,7 @@
 #include "libft.h"
 #include <limits.h>
 #include <math.h>
+#include "error.h"
 
 double	parse_int_part(const char **str, int *has_digits)
 {

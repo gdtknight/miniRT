@@ -13,7 +13,9 @@
 #ifndef HUD_INTERNAL_H
 # define HUD_INTERNAL_H
 
-# include "scene.h"
+# include "vec3.h"
+
+typedef struct s_render	t_render;
 
 /* HUD text utilities */
 void	hud_mark_dirty(t_render *render);

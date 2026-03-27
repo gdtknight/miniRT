@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
 #include "parser.h"
+#include "error.h"
 
 /**
  * @brief Check if line matches element prefix.

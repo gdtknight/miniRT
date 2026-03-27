@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "intersect.h"
-#include "vec3.h"
 #include "scene.h"
 #include <math.h>
 

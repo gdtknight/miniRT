@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
 #include "render.h"
 #include "input.h"
 #include "hud.h"

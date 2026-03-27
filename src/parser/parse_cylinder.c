@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
 #include "parser.h"
-#include "vec3.h"
 #include "utils.h"
 #include <stdlib.h>
+#include "libft.h"
+#include "error.h"
 
 /**
  * @brief Parse cylinder diameter and height from tokens.

@@ -13,14 +13,8 @@
 #ifndef SCENE_H
 # define SCENE_H
 
-# include <unistd.h>
-# include <fcntl.h>
-# include <stdbool.h>
-# include "libft.h"
-# include "error.h"
 # include "vec3.h"
 # include "objects.h"
-# include "ray.h"
 # include "shadow.h"
 # include "metrics.h"
 

@@ -13,6 +13,7 @@
 #include "scene.h"
 #include <stdlib.h>
 #include <limits.h>
+#include "libft.h"
 
 /**
  * @brief Initialize an object list with a given capacity.

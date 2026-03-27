@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
 #include "shading.h"
 #include "intersect.h"
 #include "spatial.h"

@@ -12,6 +12,8 @@
 
 #include "parser.h"
 #include <stdlib.h>
+#include "libft.h"
+#include "error.h"
 
 static int	starts_with(const char *str, const char *prefix)
 {
