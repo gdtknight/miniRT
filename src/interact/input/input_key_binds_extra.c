@@ -14,6 +14,10 @@
 
 /**
  * @brief Register a single key binding entry.
+ *
+ * @param binds Key bindings table to append to.
+ * @param keycode Key code to bind.
+ * @param handler Handler function for the key.
  */
 static void	bind_key(t_key_binds *binds, int keycode, t_key_handler handler)
 {

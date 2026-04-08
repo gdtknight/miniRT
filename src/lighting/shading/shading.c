@@ -16,6 +16,11 @@
 
 /**
  * @brief Compute the Phong specular intensity.
+ *
+ * @param light_dir Normalized direction toward the light.
+ * @param normal Surface normal at the hit point.
+ * @param view_dir Normalized direction toward the camera.
+ * @return double Specular intensity factor.
  */
 static double	calculate_specular(t_vec3 light_dir, t_vec3 normal,
 		t_vec3 view_dir)
@@ -37,6 +42,12 @@ static double	calculate_specular(t_vec3 light_dir, t_vec3 normal,
 /**
  * @brief Compute combined diffuse, specular, and shadow factor
  *        for a single light source.
+ *
+ * @param scene Scene containing shadow and BVH config.
+ * @param hit Hit record with surface point and normal.
+ * @param light Light source to evaluate.
+ * @param view_dir Normalized direction toward the camera.
+ * @return double Combined lighting factor for this light.
  */
 static double	calc_lighting_factor(t_scene *scene, t_hit *hit,
 		t_light *light, t_vec3 view_dir)
@@ -60,6 +71,11 @@ static double	calc_lighting_factor(t_scene *scene, t_hit *hit,
 
 /**
  * @brief Sum lighting contributions from all lights in the scene.
+ *
+ * @param scene Scene containing lights and BVH.
+ * @param hit Hit record with surface point and normal.
+ * @param view_dir Normalized direction toward the camera.
+ * @param acc Accumulated RGB lighting output.
  */
 static void	accumulate_lights(t_scene *scene, t_hit *hit,
 		t_vec3 view_dir, t_color_f *acc)

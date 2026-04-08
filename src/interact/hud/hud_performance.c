@@ -17,6 +17,9 @@
 
 /**
  * @brief Render FPS, frame time, and BVH status lines.
+ *
+ * @param render Render context with metrics and MLX state.
+ * @param y Pointer to current vertical draw position.
  */
 static void	render_perf_basic(t_render *render, int *y)
 {

@@ -15,6 +15,11 @@
 
 /**
  * @brief Sample the grayscale height at a pixel coordinate.
+ *
+ * @param bmap Bump map image data.
+ * @param px Pixel x coordinate.
+ * @param py Pixel y coordinate.
+ * @return double Normalized height value in [0.0, 1.0].
  */
 static double	sample_height(t_bump_map *bmap, int px, int py)
 {
@@ -28,6 +33,10 @@ static double	sample_height(t_bump_map *bmap, int px, int py)
 
 /**
  * @brief Compute UV coordinates for a hit point on an object.
+ *
+ * @param obj Object whose geometry determines the mapping.
+ * @param hit Hit record with the surface point.
+ * @param uv Output array of two doubles (u, v).
  */
 static void	get_surface_uv(t_object *obj, t_hit *hit, double *uv)
 {
@@ -55,6 +64,10 @@ static void	get_surface_uv(t_object *obj, t_hit *hit, double *uv)
 
 /**
  * @brief Compute the height gradient at a UV position.
+ *
+ * @param bmap Bump map image data.
+ * @param uv Input UV coordinates (two doubles).
+ * @param grad Output gradient array (du, dv differences).
  */
 static void	compute_gradient(t_bump_map *bmap, double *uv, double *grad)
 {

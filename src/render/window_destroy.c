@@ -37,6 +37,8 @@ void	mlx_img_destroy(t_mlx_img *img, void *mlx)
 
 /**
  * @brief Free the MLX display connection on Linux.
+ *
+ * @param mlx MLX connection pointer to release.
  */
 static void	mlx_free_display(void *mlx)
 {
@@ -50,6 +52,8 @@ static void	mlx_free_display(void *mlx)
 
 /**
  * @brief No-op display cleanup on non-Linux platforms.
+ *
+ * @param mlx MLX connection pointer (unused).
  */
 static void	mlx_free_display(void *mlx)
 {

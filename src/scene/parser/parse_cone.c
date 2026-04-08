@@ -17,6 +17,10 @@
 
 /**
  * @brief Parse cone diameter and height, compute derived fields.
+ *
+ * @param token Current parse position (updated on return).
+ * @param obj Cone object to populate dimensions.
+ * @return t_parse_result PARSE_OK or error code.
  */
 static t_parse_result	parse_cone_dims(const char **token, t_object *obj)
 {
@@ -42,6 +46,10 @@ static t_parse_result	parse_cone_dims(const char **token, t_object *obj)
 
 /**
  * @brief Parse and validate cone center position and axis vector.
+ *
+ * @param token Current parse position (updated on return).
+ * @param obj Cone object to populate vectors.
+ * @return t_parse_result PARSE_OK or error code.
  */
 static t_parse_result	parse_cone_vectors(const char **token, t_object *obj)
 {

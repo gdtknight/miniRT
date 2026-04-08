@@ -86,6 +86,7 @@ static t_vec3	get_rotation_axis(int keycode, double *angle)
  * @param obj Object to rotate (cylinder or plane).
  * @param axis Rotation axis.
  * @param angle Rotation angle in radians.
+ * @return 1 if rotation was applied, 0 otherwise.
  */
 static int	apply_rotation(t_object *obj, t_vec3 axis, double angle)
 {

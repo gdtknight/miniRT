@@ -17,6 +17,11 @@
 
 /**
  * @brief Order child nodes by ray direction along split axis.
+ *
+ * @param node Parent node with left and right children.
+ * @param ray Ray used to determine traversal order.
+ * @param near Output pointer to the nearer child.
+ * @param far Output pointer to the farther child.
  */
 static void	get_near_far(t_bvh_node *node, t_ray ray,
 		t_bvh_node **near, t_bvh_node **far)

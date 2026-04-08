@@ -16,6 +16,8 @@
 
 /**
  * @brief Recursively write unsigned integer digits to stderr.
+ *
+ * @param n Unsigned integer value to write.
  */
 static void	write_uint(unsigned int n)
 {

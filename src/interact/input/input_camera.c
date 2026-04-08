@@ -16,6 +16,8 @@
 
 /**
  * @brief Rebuild camera direction from pitch and yaw.
+ *
+ * @param cam Camera whose direction vector is rebuilt.
  */
 static void	camera_rebuild_dir(t_camera *cam)
 {

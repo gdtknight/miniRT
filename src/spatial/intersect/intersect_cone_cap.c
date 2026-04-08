@@ -15,6 +15,11 @@
 
 /**
  * @brief Test ray intersection with the cone base cap disc.
+ *
+ * @param ray Incoming ray.
+ * @param c Cone geometric data.
+ * @param hit Output hit record (updated if closer hit found).
+ * @return int 1 if cap intersection found, 0 otherwise.
  */
 static int	intersect_cone_cap(t_ray *ray, t_cone_data *c, t_hit *hit)
 {
@@ -45,6 +50,10 @@ static int	intersect_cone_cap(t_ray *ray, t_cone_data *c, t_hit *hit)
 
 /**
  * @brief Copy temporary hit into output and set object color.
+ *
+ * @param hit Output hit record to update.
+ * @param temp Temporary hit record to copy from.
+ * @param color Object color to assign.
  */
 static void	apply_cone_hit(t_hit *hit, t_hit *temp, t_color color, int *found)
 {

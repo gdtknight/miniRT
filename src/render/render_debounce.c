@@ -65,6 +65,9 @@ void	debounce_on_input(t_debounce_state *state, t_render *render)
 
 /**
  * @brief Transition ACTIVE to FINAL when the timer expires.
+ *
+ * @param state Debounce state to evaluate and update.
+ * @param render Render context for setting quality flags.
  */
 static void	debounce_handle_active(t_debounce_state *state, t_render *render)
 {
@@ -78,6 +81,8 @@ static void	debounce_handle_active(t_debounce_state *state, t_render *render)
 
 /**
  * @brief Transition COOLDOWN to IDLE when the timer expires.
+ *
+ * @param state Debounce state to evaluate and update.
  */
 static void	debounce_handle_cooldown(t_debounce_state *state)
 {

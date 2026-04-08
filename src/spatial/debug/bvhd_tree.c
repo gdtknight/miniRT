@@ -15,6 +15,11 @@
 
 /**
  * @brief Format leaf objects if applicable and print a node.
+ *
+ * @param node BVH node to display.
+ * @param ctx Traversal context for formatting.
+ * @param info Node display information to populate.
+ * @param is_last Non-zero if this is the last sibling.
  */
 static void	handle_node_display(t_bvh_node *node, t_traverse_ctx *ctx,
 				t_node_info *info, int is_last)

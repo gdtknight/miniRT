@@ -15,6 +15,10 @@
 
 /**
  * @brief Adjust sphere radius by one unit.
+ *
+ * @param obj Sphere object to resize.
+ * @param keycode Key that determines resize direction.
+ * @return 1 if resized, 0 if no change applied.
  */
 static int	resize_sphere(t_object *obj, int keycode)
 {
@@ -35,6 +39,10 @@ static int	resize_sphere(t_object *obj, int keycode)
 
 /**
  * @brief Adjust cylinder radius or half-height by one unit.
+ *
+ * @param obj Cylinder object to resize.
+ * @param keycode Key that determines resize direction.
+ * @return 1 if resized, 0 if no change applied.
  */
 static int	resize_cylinder(t_object *obj, int keycode)
 {
@@ -62,6 +70,10 @@ static int	resize_cylinder(t_object *obj, int keycode)
 
 /**
  * @brief Adjust cone radius or half-height by one unit.
+ *
+ * @param obj Cone object to resize.
+ * @param keycode Key that determines resize direction.
+ * @return 1 if resized, 0 if no change applied.
  */
 static int	resize_cone(t_object *obj, int keycode)
 {

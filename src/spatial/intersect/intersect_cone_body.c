@@ -54,6 +54,12 @@ static int	calc_cone_intersect(t_ray *ray, t_cone_data *c, t_cyl_calc *calc)
 
 /**
  * @brief Compute hit point and outward-facing normal for a cone.
+ *
+ * @param ray Incoming ray.
+ * @param c Cone geometric data.
+ * @param hit Output hit record to populate.
+ * @param calc Intersection parameters with t and m values.
+ * @return int 1 if valid hit computed, 0 otherwise.
  */
 static int	set_cone_hit(t_ray *ray, t_cone_data *c,
 				t_hit *hit, t_cyl_calc *calc)
@@ -80,6 +86,12 @@ static int	set_cone_hit(t_ray *ray, t_cone_data *c,
 
 /**
  * @brief Try the second root when the first is invalid.
+ *
+ * @param ray Incoming ray.
+ * @param c Cone geometric data.
+ * @param hit Output hit record to populate.
+ * @param calc Intersection parameters with t2 and m2 values.
+ * @return int 1 if second root yields valid hit, 0 otherwise.
  */
 static int	validate_cone_hit(t_ray *ray, t_cone_data *c,
 				t_hit *hit, t_cyl_calc *calc)

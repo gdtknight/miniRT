@@ -15,6 +15,10 @@
 
 /**
  * @brief Handle sign and NaN/overflow for float formatting.
+ *
+ * @param buffer Output buffer for the formatted string.
+ * @param value Pointer to the float value to format.
+ * @return Starting index in buffer, or -1 on NaN/overflow.
  */
 static int	hud_float_start(char *buffer, double *value)
 {

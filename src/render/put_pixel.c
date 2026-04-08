@@ -14,6 +14,9 @@
 
 /**
  * @brief Encode a color integer into BGRA byte order.
+ *
+ * @param dst Destination buffer (at least 4 bytes).
+ * @param color Packed color value (0xRRGGBB).
  */
 static void	encode_pixel_bytes(char *dst, int color)
 {

@@ -77,6 +77,11 @@ static int	check_plane_shadow(t_scene *scene, t_ray *ray, double mag)
 
 /**
  * @brief Build a shadow ray biased along normal and light dir.
+ *
+ * @param ray Output shadow ray to initialize.
+ * @param query Surface point and normal for origin bias.
+ * @param light_dir Normalized direction toward the light.
+ * @param bias Offset distance to prevent self-shadowing.
  */
 static void	init_shadow_ray(t_ray *ray, t_shadow_query *query,
 	t_vec3 light_dir, double bias)

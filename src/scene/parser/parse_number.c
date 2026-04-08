@@ -115,6 +115,7 @@ t_parse_result	parse_double(const char *str, double *value, const char **end)
  * @param str String pointer.
  * @param result Output result.
  * @param has_digits Set to 1 if digits found.
+ * @return int 1 on success, 0 on overflow.
  */
 static int	parse_int_digits(const char **str, int *result, int *has_digits)
 {

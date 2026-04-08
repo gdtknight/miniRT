@@ -16,6 +16,10 @@
 
 /**
  * @brief Check if a string starts with the given prefix.
+ *
+ * @param str String to check.
+ * @param prefix Prefix to match against.
+ * @return int 1 if str starts with prefix, 0 otherwise.
  */
 static int	starts_with(const char *str, const char *prefix)
 {
@@ -31,6 +35,10 @@ static int	starts_with(const char *str, const char *prefix)
 
 /**
  * @brief Parse checker bonus option and apply to object.
+ *
+ * @param str Token string starting with "checker:".
+ * @param obj Object to receive checker option.
+ * @return t_parse_result PARSE_OK or error code.
  */
 static t_parse_result	parse_checker_opt(const char *str, t_object *obj,
 		const char **end)
@@ -47,6 +55,10 @@ static t_parse_result	parse_checker_opt(const char *str, t_object *obj,
 
 /**
  * @brief Parse bump map path option and apply to object.
+ *
+ * @param str Token string starting with "bump:".
+ * @param obj Object to receive bump map path.
+ * @return t_parse_result PARSE_OK or error code.
  */
 static t_parse_result	parse_bump_opt(const char *str, t_object *obj,
 		const char **end)

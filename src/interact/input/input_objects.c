@@ -21,6 +21,7 @@
  *
  * @param render Render context containing selection and scene.
  * @param move Translation vector to apply.
+ * @return 1 if the object was moved, 0 otherwise.
  */
 static int	move_selected_object(t_render *render, t_vec3 move)
 {

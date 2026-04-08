@@ -15,6 +15,10 @@
 
 /**
  * @brief Compute checkerboard color for a plane surface.
+ *
+ * @param obj Plane object with checker colors.
+ * @param hit Hit record with the surface point.
+ * @return t_color Base or checker color based on pattern.
  */
 static t_color	checker_plane(t_object *obj, t_hit *hit)
 {
@@ -33,6 +37,10 @@ static t_color	checker_plane(t_object *obj, t_hit *hit)
 
 /**
  * @brief Compute checkerboard color for a sphere surface.
+ *
+ * @param obj Sphere object with checker colors.
+ * @param hit Hit record with the surface point.
+ * @return t_color Base or checker color based on pattern.
  */
 static t_color	checker_sphere(t_object *obj, t_hit *hit)
 {
@@ -53,6 +61,9 @@ static t_color	checker_sphere(t_object *obj, t_hit *hit)
 
 /**
  * @brief Return the radius for a cylinder or cone object.
+ *
+ * @param obj Cylinder or cone object.
+ * @return double Radius of the object body.
  */
 static double	get_body_radius(t_object *obj)
 {
@@ -63,6 +74,10 @@ static double	get_body_radius(t_object *obj)
 
 /**
  * @brief Compute checkerboard color for a cylinder or cone body.
+ *
+ * @param obj Cylinder or cone object with checker colors.
+ * @param hit Hit record with the surface point.
+ * @return t_color Base or checker color based on pattern.
  */
 static t_color	checker_body(t_object *obj, t_hit *hit)
 {

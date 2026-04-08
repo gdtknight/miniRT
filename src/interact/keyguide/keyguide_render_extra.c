@@ -81,6 +81,9 @@ static void	keyguide_render_light(t_render *render, int *y)
 
 /**
  * @brief Render HUD page navigation controls section.
+ *
+ * @param render Render context with MLX and keyguide state.
+ * @param y Pointer to current vertical draw position.
  */
 static void	keyguide_render_hud_page(t_render *render, int *y)
 {
