@@ -24,14 +24,14 @@
  * @param scene_ptr Pointer to the scene for ID lookup.
  */
 void	bvhd_format_objects(t_object_ref *objects, int count, char *buffer,
-			void *scene_ptr)
+			t_scene *scene_ptr)
 {
 	int			i;
 	char		*id;
 	t_scene		*scene;
 	t_object	*obj;
 
-	scene = (t_scene *)scene_ptr;
+	scene = scene_ptr;
 	ft_strlcpy(buffer, "Objects: [", 64);
 	i = 0;
 	while (i < count)

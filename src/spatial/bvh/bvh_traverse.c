@@ -37,7 +37,7 @@ int	ray_goes_positive(t_vec3 dir, int axis)
  * @return int 1 if any hit is found, 0 otherwise.
  */
 static int	bvh_leaf_intersect(t_bvh_node *node, t_ray ray, t_hit *hit,
-		void *scene)
+		t_scene *scene)
 {
 	int			i;
 	int			hit_anything;
@@ -49,8 +49,8 @@ static int	bvh_leaf_intersect(t_bvh_node *node, t_ray ray, t_hit *hit,
 	i = 0;
 	while (i < node->object_count)
 	{
-		metrics_add_intersect_test(&((t_scene *)scene)->metrics);
-		obj = &((t_scene *)scene)->objects.items[node->objects[i].index];
+		metrics_add_intersect_test(&(scene)->metrics);
+		obj = &(scene)->objects.items[node->objects[i].index];
 		if (intersect_object(&ray, obj, &temp_hit))
 		{
 			if (!hit_anything || temp_hit.distance < hit->distance)
@@ -76,7 +76,7 @@ static int	bvh_leaf_intersect(t_bvh_node *node, t_ray ray, t_hit *hit,
  * @return int 1 if any child hit is found, 0 otherwise.
  */
 static int	traverse_children(t_bvh_node *node, t_ray ray, t_hit *hit,
-		void *scene)
+		t_scene *scene)
 {
 	t_bvh_node	*near;
 	t_bvh_node	*far;
@@ -115,19 +115,19 @@ static int	traverse_children(t_bvh_node *node, t_ray ray, t_hit *hit,
  * @return int 1 if any hit is found, 0 otherwise.
  */
 int	bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit *hit,
-		void *scene)
+		t_scene *scene)
 {
 	double	t_min;
 	double	t_max;
 
 	if (!node)
 		return (0);
-	metrics_add_bvh_node_visit(&((t_scene *)scene)->metrics);
+	metrics_add_bvh_node_visit(&(scene)->metrics);
 	t_min = RAY_T_MIN;
 	t_max = hit->distance;
 	if (!aabb_intersect(node->bounds, ray, &t_min, &t_max))
 	{
-		metrics_add_bvh_skip(&((t_scene *)scene)->metrics);
+		metrics_add_bvh_skip(&(scene)->metrics);
 		return (0);
 	}
 	if (node->object_count > 0)
@@ -144,7 +144,7 @@ int	bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit *hit,
  * @param scene Pointer to the scene.
  * @return int 1 if any hit is found, 0 otherwise.
  */
-int	bvh_intersect(t_bvh *bvh, t_ray ray, t_hit *hit, void *scene)
+int	bvh_intersect(t_bvh *bvh, t_ray ray, t_hit *hit, t_scene *scene)
 {
 	if (!bvh || !bvh->root || !bvh->enabled)
 		return (0);

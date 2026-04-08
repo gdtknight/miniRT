@@ -97,12 +97,12 @@ t_aabb	aabb_for_object(t_object *obj)
  * @param scene_ptr Pointer to the scene.
  * @return t_aabb Bounding box for the referenced object.
  */
-t_aabb	get_object_bounds(t_object_ref ref, void *scene_ptr)
+t_aabb	get_object_bounds(t_object_ref ref, t_scene *scene_ptr)
 {
 	t_scene		*scene;
 	t_object	*obj;
 
-	scene = (t_scene *)scene_ptr;
+	scene = scene_ptr;
 	obj = &scene->objects.items[ref.index];
 	return (aabb_for_object(obj));
 }

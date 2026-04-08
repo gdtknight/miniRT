@@ -17,6 +17,7 @@
 # include "common/ray.h"
 # include "render/window.h"
 # include "render/render_debounce.h"
+# include "render/render_types.h"
 
 /* Window resolution constants */
 # define WINDOW_WIDTH 1440
@@ -31,49 +32,6 @@
 /* 0x08 and 0x10 reserved for future use */
 # define RENDER_BVH_DIRTY  0x20
 # define RENDER_ENABLE_METRICS_PRINT 0x80
-
-/* Selected object information */
-typedef struct s_selection
-{
-	t_object_type	type;
-	int				index;
-}	t_selection;
-
-/* HUD state structure */
-typedef struct s_hud_state
-{
-	int		visible;
-	int		current_page;
-	int		total_pages;
-	int		dirty;
-}	t_hud_state;
-
-/* Key guide state structure */
-typedef struct s_keyguide_state
-{
-	int		visible;
-	int		x;
-	int		y;
-	int		dirty;
-}	t_keyguide_state;
-
-/* Key dispatch table */
-# define KEY_BIND_COUNT 38
-
-typedef struct s_render	t_render;
-typedef void			(*t_key_handler)(t_render *, int);
-
-typedef struct s_key_bind
-{
-	int				keycode;
-	t_key_handler	handler;
-}	t_key_bind;
-
-typedef struct s_key_binds
-{
-	t_key_bind	entries[KEY_BIND_COUNT];
-	int			count;
-}	t_key_binds;
 
 /* Render context */
 struct s_render

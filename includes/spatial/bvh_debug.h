@@ -65,7 +65,7 @@ typedef struct s_traverse_ctx
 }	t_traverse_ctx;
 
 /* Public API */
-void			bvhd_run(t_bvh *bvh, t_vis_config *config, void *scene);
+void			bvhd_run(t_bvh *bvh, t_vis_config *config, t_scene *scene);
 t_vis_config	bvhd_default_config(void);
 
 /* Initialization and configuration */
@@ -80,7 +80,7 @@ void			bvhd_print_tree(t_bvh_node *node, t_traverse_ctx *ctx,
 t_node_info		bvhd_format_node(t_bvh_node *node);
 int				bvhd_is_leaf(t_bvh_node *node);
 void			bvhd_format_objects(t_object_ref *objects, int count,
-					char *buffer, void *scene);
+					char *buffer, t_scene *scene);
 
 /* Statistics */
 void			bvhd_collect_stats(t_bvh_node *node, t_bvh_stats *stats);

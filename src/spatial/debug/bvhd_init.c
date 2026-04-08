@@ -79,7 +79,7 @@ void	bvhd_check_edges(t_bvh *bvh, t_vis_config *config)
  * @param config Visualization configuration (optional).
  * @param scene Pointer to the scene used for object labels.
  */
-void	bvhd_run(t_bvh *bvh, t_vis_config *config, void *scene)
+void	bvhd_run(t_bvh *bvh, t_vis_config *config, t_scene *scene)
 {
 	t_prefix_state	prefix;
 	t_bvh_stats		stats;

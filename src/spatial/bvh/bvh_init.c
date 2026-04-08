@@ -21,12 +21,12 @@
  * @param scene_ptr Pointer to the scene.
  * @return t_vec3 Center point of the object.
  */
-t_vec3	get_object_center(t_object_ref ref, void *scene_ptr)
+t_vec3	get_object_center(t_object_ref ref, t_scene *scene_ptr)
 {
 	t_scene		*scene;
 	t_object	*obj;
 
-	scene = (t_scene *)scene_ptr;
+	scene = scene_ptr;
 	obj = &scene->objects.items[ref.index];
 	if (obj->type == OBJ_SPHERE)
 		return (obj->data.sphere.center);

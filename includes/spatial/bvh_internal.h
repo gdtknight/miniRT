@@ -19,7 +19,7 @@
 void		bvh_node_destroy(t_bvh_node *node);
 
 /* Internal BVH build partition functions */
-t_aabb		compute_bounds(t_object_ref *objects, int count, void *scene);
+t_aabb		compute_bounds(t_object_ref *objects, int count, t_scene *scene);
 int			partition_objects(t_partition_params *params);
 
 /* Internal BVH build split functions */
@@ -28,6 +28,6 @@ double		calculate_split_position(t_aabb bounds, int axis);
 t_bvh_node	*create_split_node(t_split_params *sp);
 
 /* Internal BVH build core functions */
-t_bvh_node	*create_leaf_node(t_object_ref *objects, int count, void *scene);
+t_bvh_node	*create_leaf_node(t_object_ref *objects, int count, t_scene *scene);
 
 #endif

@@ -13,7 +13,7 @@
 #ifndef INPUT_H
 # define INPUT_H
 
-# include "render/render.h"
+# include "render/render_types.h"
 
 /* Platform-specific key code definitions */
 # ifdef __APPLE__

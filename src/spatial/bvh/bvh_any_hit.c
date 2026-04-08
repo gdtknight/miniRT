@@ -39,7 +39,7 @@ static void	get_near_far(t_bvh_node *node, t_ray ray,
  * @return int 1 if any hit found, 0 otherwise.
  */
 static int	leaf_any_hit(t_bvh_node *node, t_ray ray, double max_dist,
-		void *scene)
+		t_scene *scene)
 {
 	int			i;
 	t_hit		temp_hit;
@@ -49,8 +49,8 @@ static int	leaf_any_hit(t_bvh_node *node, t_ray ray, double max_dist,
 	i = 0;
 	while (i < node->object_count)
 	{
-		metrics_add_shadow_intersect(&((t_scene *)scene)->metrics);
-		obj = &((t_scene *)scene)->objects.items[node->objects[i].index];
+		metrics_add_shadow_intersect(&(scene)->metrics);
+		obj = &(scene)->objects.items[node->objects[i].index];
 		if (intersect_object(&ray, obj, &temp_hit))
 			return (1);
 		i++;
@@ -70,7 +70,7 @@ static int	leaf_any_hit(t_bvh_node *node, t_ray ray, double max_dist,
  * @return int 1 if any hit found, 0 otherwise.
  */
 static int	node_any_hit(t_bvh_node *node, t_ray ray, double max_dist,
-		void *scene)
+		t_scene *scene)
 {
 	double		t_min;
 	double		t_max;
@@ -79,12 +79,12 @@ static int	node_any_hit(t_bvh_node *node, t_ray ray, double max_dist,
 
 	if (!node)
 		return (0);
-	metrics_add_bvh_node_visit(&((t_scene *)scene)->metrics);
+	metrics_add_bvh_node_visit(&(scene)->metrics);
 	t_min = RAY_T_MIN;
 	t_max = max_dist;
 	if (!aabb_intersect(node->bounds, ray, &t_min, &t_max))
 	{
-		metrics_add_bvh_skip(&((t_scene *)scene)->metrics);
+		metrics_add_bvh_skip(&(scene)->metrics);
 		return (0);
 	}
 	if (node->object_count > 0)
@@ -107,7 +107,7 @@ static int	node_any_hit(t_bvh_node *node, t_ray ray, double max_dist,
  * @param scene Pointer to the scene.
  * @return int 1 if any intersection found, 0 if clear.
  */
-int	bvh_intersect_any(t_bvh *bvh, t_ray ray, double max_dist, void *scene)
+int	bvh_intersect_any(t_bvh *bvh, t_ray ray, double max_dist, t_scene *scene)
 {
 	if (!bvh || !bvh->root || !bvh->enabled)
 		return (0);

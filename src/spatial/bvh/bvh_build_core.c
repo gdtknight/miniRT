@@ -24,7 +24,7 @@
  * @param scene Pointer to the scene for bounds computation.
  * @return t_bvh_node* Newly allocated leaf node or NULL on failure.
  */
-t_bvh_node	*create_leaf_node(t_object_ref *objects, int count, void *scene)
+t_bvh_node	*create_leaf_node(t_object_ref *objects, int count, t_scene *scene)
 {
 	t_bvh_node	*node;
 	int			i;
@@ -65,7 +65,7 @@ t_bvh_node	*create_leaf_node(t_object_ref *objects, int count, void *scene)
  * @return t_bvh_node* Root node of the constructed subtree.
  */
 t_bvh_node	*bvh_build_recursive(t_object_ref *objects, int count,
-		void *scene, int depth)
+		t_scene *scene, int depth)
 {
 	t_aabb				bounds;
 	int					axis;
@@ -101,7 +101,7 @@ t_bvh_node	*bvh_build_recursive(t_object_ref *objects, int count,
  * @param count Number of objects.
  * @param scene Pointer to the scene for bounds computation.
  */
-void	bvh_build(t_bvh *bvh, t_object_ref *objects, int count, void *scene)
+void	bvh_build(t_bvh *bvh, t_object_ref *objects, int count, t_scene *scene)
 {
 	if (!bvh || count == 0)
 		return ;

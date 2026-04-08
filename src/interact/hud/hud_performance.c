@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "render/render.h"
 #include "interact/hud.h"
 #include "interact/hud_internal.h"
 #include "metrics.h"

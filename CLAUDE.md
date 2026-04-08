@@ -154,6 +154,7 @@ The parser (`src/scene/parser/`) guarantees these invariants before rendering be
 - `includes/common/ray.h` — `t_ray` (with precomputed `inv_dir`), `t_hit`
 - `includes/spatial/spatial.h` — BVH node, AABB, traversal context
 - `includes/render/render.h` — `t_render` context (MLX, scene ref, HUD state, selection, debounce)
+- `includes/render/render_types.h` — UI types (`t_selection`, `t_hud_state`, `t_keyguide_state`, `t_key_binds`) — interact headers depend on this, not render.h
 - `includes/render/window.h` — `t_mlx_img`, `t_mlx_context`, pixel operations
 - `includes/lighting/shadow.h` — Shadow config, offset LUT
 - `includes/interact/input.h` — Key codes with `#ifdef __APPLE__` / `__linux__` sections

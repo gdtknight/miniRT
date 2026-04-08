@@ -15,12 +15,19 @@
 
 # include "common/vec3.h"
 # include "common/objects.h"
-# include "lighting/shadow.h"
 # include "metrics.h"
 
 /* Forward declarations */
 typedef struct s_render	t_render;
 typedef struct s_bvh	t_bvh;
+
+/* Shadow configuration (owned by scene, used by lighting) */
+typedef struct s_shadow_config
+{
+	int		samples;
+	double	softness;
+	t_vec3	*offset_lut;
+}	t_shadow_config;
 
 /* Scene flags (bit flags) */
 # define SCENE_HAS_AMBIENT  0x01

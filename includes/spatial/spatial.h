@@ -108,24 +108,24 @@ int			aabb_intersect(t_aabb box, t_ray ray, double *t_min, double *t_max);
 t_bvh		*bvh_create(void);
 void		bvh_destroy(t_bvh *bvh);
 void		bvh_build(t_bvh *bvh, t_object_ref *objects, int count,
-				void *scene);
+				t_scene *scene);
 t_bvh_node	*bvh_build_recursive(t_object_ref *objects, int count,
-				void *scene, int depth);
+				t_scene *scene, int depth);
 
 /* BVH traversal */
 int			bvh_intersect(t_bvh *bvh, t_ray ray, t_hit *hit,
-				void *scene);
+				t_scene *scene);
 int			bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit *hit,
-				void *scene);
+				t_scene *scene);
 int			bvh_intersect_any(t_bvh *bvh, t_ray ray, double max_dist,
-				void *scene);
+				t_scene *scene);
 
 /* Ray direction helper */
 int			ray_goes_positive(t_vec3 dir, int axis);
 
 /* Object bounds calculation */
-t_aabb		get_object_bounds(t_object_ref ref, void *scene);
-t_vec3		get_object_center(t_object_ref ref, void *scene);
+t_aabb		get_object_bounds(t_object_ref ref, t_scene *scene);
+t_vec3		get_object_center(t_object_ref ref, t_scene *scene);
 
 /* Scene BVH initialization */
 void		build_scene_bvh(t_scene *scene);

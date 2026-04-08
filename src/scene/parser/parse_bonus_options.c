@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_bonus_options.c                             :+:      :+:    :+:   */
+/*   parse_bonus_options.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 12:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/02/10 12:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/04/08 22:39:58 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scene/parser.h"
 #include <stdlib.h>
 #include "libft.h"
-#include "common/error.h"
 
 static int	starts_with(const char *str, const char *prefix)
 {

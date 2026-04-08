@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 12:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/30 12:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/04/08 22:40:12 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "common/utils.h"
 #include <stdlib.h>
 #include "libft.h"
-#include "common/error.h"
 
 /**
  * @brief Parse cylinder diameter and height from tokens.

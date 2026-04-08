@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "render/render.h"
 #include "interact/hud.h"
 
 void	hud_mark_dirty(t_render *render)

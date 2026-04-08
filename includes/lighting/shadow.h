@@ -13,26 +13,9 @@
 #ifndef SHADOW_H
 # define SHADOW_H
 
-# include "common/vec3.h"
+# include "scene/scene.h"
 
 # define SHADOW_BVH_THRESHOLD 5
-
-/* Forward declaration */
-typedef struct s_scene	t_scene;
-
-/**
- * @brief Shadow configuration structure
- *
- * Controls shadow rendering quality and appearance.
- * samples: Number of shadow rays (1 = hard shadows, >1 = soft shadows)
- * softness: Shadow edge softness factor (0.0-1.0)
- */
-typedef struct s_shadow_config
-{
-	int		samples;
-	double	softness;
-	t_vec3	*offset_lut;
-}	t_shadow_config;
 
 /* Shadow query: surface point + normal for bias calculation */
 typedef struct s_shadow_query

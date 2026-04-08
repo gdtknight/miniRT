@@ -23,7 +23,7 @@
  * @param scene Pointer to the scene for bounds lookup.
  * @return t_aabb Combined bounds for the set.
  */
-t_aabb	compute_bounds(t_object_ref *objects, int count, void *scene)
+t_aabb	compute_bounds(t_object_ref *objects, int count, t_scene *scene)
 {
 	t_aabb	bounds;
 	t_aabb	obj_bounds;
