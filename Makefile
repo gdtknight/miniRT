@@ -37,31 +37,48 @@ else
 endif
 
 SRCS		= $(SRC_DIR)/main.c \
+			  $(SRC_DIR)/common/vec3.c \
+			  $(SRC_DIR)/common/vec3_ops.c \
+			  $(SRC_DIR)/common/error.c \
+			  $(SRC_DIR)/common/format_helpers.c \
+			  $(SRC_DIR)/common/timer.c \
 			  $(SRC_DIR)/scene/scene.c \
 			  $(SRC_DIR)/scene/object_list.c \
-			  $(SRC_DIR)/parser/parser.c \
-			  $(SRC_DIR)/parser/parser_dispatch.c \
-			  $(SRC_DIR)/parser/parser_utils.c \
-			  $(SRC_DIR)/parser/parse_elements.c \
-			  $(SRC_DIR)/parser/parse_objects.c \
-			  $(SRC_DIR)/parser/parse_cylinder.c \
-			  $(SRC_DIR)/parser/parse_cone.c \
-			  $(SRC_DIR)/parser/parse_bonus_options.c \
-			  $(SRC_DIR)/parser/parse_number.c \
-			  $(SRC_DIR)/parser/parse_line_reader.c \
-			  $(SRC_DIR)/parser/parse_error.c \
-			  $(SRC_DIR)/parser/parse_validation_strict.c \
-			  $(SRC_DIR)/parser/parse_vector_validation.c \
-			  $(SRC_DIR)/spatial/aabb.c \
-			  $(SRC_DIR)/spatial/aabb_basic.c \
-			  $(SRC_DIR)/spatial/aabb_bounds.c \
-			  $(SRC_DIR)/spatial/bvh_lifecycle.c \
-			  $(SRC_DIR)/spatial/bvh_build_partition.c \
-			  $(SRC_DIR)/spatial/bvh_build_split.c \
-			  $(SRC_DIR)/spatial/bvh_build_core.c \
-			  $(SRC_DIR)/spatial/bvh_init.c \
-			  $(SRC_DIR)/spatial/bvh_traverse.c \
-			  $(SRC_DIR)/spatial/bvh_any_hit.c \
+			  $(SRC_DIR)/scene/parser/parser.c \
+			  $(SRC_DIR)/scene/parser/parser_dispatch.c \
+			  $(SRC_DIR)/scene/parser/parser_utils.c \
+			  $(SRC_DIR)/scene/parser/parse_elements.c \
+			  $(SRC_DIR)/scene/parser/parse_objects.c \
+			  $(SRC_DIR)/scene/parser/parse_cylinder.c \
+			  $(SRC_DIR)/scene/parser/parse_cone.c \
+			  $(SRC_DIR)/scene/parser/parse_bonus_options.c \
+			  $(SRC_DIR)/scene/parser/parse_number.c \
+			  $(SRC_DIR)/scene/parser/parse_line_reader.c \
+			  $(SRC_DIR)/scene/parser/parse_error.c \
+			  $(SRC_DIR)/scene/parser/parse_validation_strict.c \
+			  $(SRC_DIR)/scene/parser/parse_vector_validation.c \
+			  $(SRC_DIR)/spatial/aabb/aabb.c \
+			  $(SRC_DIR)/spatial/aabb/aabb_basic.c \
+			  $(SRC_DIR)/spatial/aabb/aabb_bounds.c \
+			  $(SRC_DIR)/spatial/bvh/bvh_lifecycle.c \
+			  $(SRC_DIR)/spatial/bvh/bvh_build_partition.c \
+			  $(SRC_DIR)/spatial/bvh/bvh_build_split.c \
+			  $(SRC_DIR)/spatial/bvh/bvh_build_core.c \
+			  $(SRC_DIR)/spatial/bvh/bvh_init.c \
+			  $(SRC_DIR)/spatial/bvh/bvh_traverse.c \
+			  $(SRC_DIR)/spatial/bvh/bvh_any_hit.c \
+			  $(SRC_DIR)/spatial/intersect/intersect_object.c \
+			  $(SRC_DIR)/spatial/intersect/intersect_cylinder.c \
+			  $(SRC_DIR)/spatial/intersect/intersect_cone_body.c \
+			  $(SRC_DIR)/spatial/intersect/intersect_cone_cap.c \
+			  $(SRC_DIR)/spatial/debug/bvhd_init.c \
+			  $(SRC_DIR)/spatial/debug/bvhd_tree.c \
+			  $(SRC_DIR)/spatial/debug/bvhd_node.c \
+			  $(SRC_DIR)/spatial/debug/bvhd_format.c \
+			  $(SRC_DIR)/spatial/debug/bvhd_stats.c \
+			  $(SRC_DIR)/spatial/debug/bvhd_prefix.c \
+			  $(SRC_DIR)/spatial/debug/bvhd_prefix_push.c \
+			  $(SRC_DIR)/spatial/debug/bvhd_print.c \
 			  $(SRC_DIR)/render/render.c \
 			  $(SRC_DIR)/render/render_init.c \
 			  $(SRC_DIR)/render/render_loop.c \
@@ -70,61 +87,44 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/render/render_flags_set.c \
 			  $(SRC_DIR)/render/render_debounce.c \
 			  $(SRC_DIR)/render/render_debounce_timer.c \
-			  $(SRC_DIR)/intersect/intersect_object.c \
-			  $(SRC_DIR)/intersect/intersect_cylinder.c \
-			  $(SRC_DIR)/intersect/intersect_cone_body.c \
-			  $(SRC_DIR)/intersect/intersect_cone_cap.c \
-			  $(SRC_DIR)/shading/shading.c \
-			  $(SRC_DIR)/shading/shading_utils.c \
-			  $(SRC_DIR)/shadow/shadow_calc.c \
-			  $(SRC_DIR)/shadow/shadow_config.c \
-			  $(SRC_DIR)/shadow/shadow_test.c \
-			  $(SRC_DIR)/display/display_events.c \
-			  $(SRC_DIR)/display/display_init.c \
-			  $(SRC_DIR)/display/display_destroy.c \
-			  $(SRC_DIR)/display/display_pixel.c \
-			  $(SRC_DIR)/input/input_dispatch.c \
-			  $(SRC_DIR)/input/input_camera.c \
-			  $(SRC_DIR)/input/input_objects.c \
-			  $(SRC_DIR)/input/input_resize.c \
-			  $(SRC_DIR)/input/input_rotate.c \
-			  $(SRC_DIR)/input/input_key_binds.c \
-			  $(SRC_DIR)/input/input_key_binds_extra.c \
+			  $(SRC_DIR)/render/window_init.c \
+			  $(SRC_DIR)/render/window_destroy.c \
+			  $(SRC_DIR)/render/put_pixel.c \
+			  $(SRC_DIR)/lighting/shading.c \
+			  $(SRC_DIR)/lighting/shading_utils.c \
+			  $(SRC_DIR)/lighting/shadow_calc.c \
+			  $(SRC_DIR)/lighting/shadow_config.c \
+			  $(SRC_DIR)/lighting/shadow_occlusion.c \
+			  $(SRC_DIR)/lighting/checkerboard.c \
+			  $(SRC_DIR)/lighting/bump_map_load.c \
+			  $(SRC_DIR)/lighting/bump_map_perturb.c \
+			  $(SRC_DIR)/lighting/texture_utils.c \
+			  $(SRC_DIR)/interact/event_dispatch.c \
+			  $(SRC_DIR)/interact/input/input_dispatch.c \
+			  $(SRC_DIR)/interact/input/input_camera.c \
+			  $(SRC_DIR)/interact/input/input_objects.c \
+			  $(SRC_DIR)/interact/input/input_resize.c \
+			  $(SRC_DIR)/interact/input/input_rotate.c \
+			  $(SRC_DIR)/interact/input/input_key_binds.c \
+			  $(SRC_DIR)/interact/input/input_key_binds_extra.c \
+			  $(SRC_DIR)/interact/hud/hud_format.c \
+			  $(SRC_DIR)/interact/hud/hud_format_helpers.c \
+			  $(SRC_DIR)/interact/hud/hud_init.c \
+			  $(SRC_DIR)/interact/hud/hud_navigation.c \
+			  $(SRC_DIR)/interact/hud/hud_performance.c \
+			  $(SRC_DIR)/interact/hud/hud_render.c \
+			  $(SRC_DIR)/interact/hud/hud_text.c \
+			  $(SRC_DIR)/interact/hud/hud_scene.c \
+			  $(SRC_DIR)/interact/hud/hud_objects.c \
+			  $(SRC_DIR)/interact/hud/hud_obj_render.c \
+			  $(SRC_DIR)/interact/hud/hud_toggle.c \
+			  $(SRC_DIR)/interact/keyguide/keyguide_init.c \
+			  $(SRC_DIR)/interact/keyguide/keyguide_render.c \
+			  $(SRC_DIR)/interact/keyguide/keyguide_render_extra.c \
 			  $(SRC_DIR)/metrics/metrics_frame.c \
 			  $(SRC_DIR)/metrics/metrics_counters.c \
 			  $(SRC_DIR)/metrics/metrics_calc.c \
-			  $(SRC_DIR)/metrics/metrics_shadow.c \
-			  $(SRC_DIR)/hud/hud_format.c \
-			  $(SRC_DIR)/hud/hud_format_helpers.c \
-			  $(SRC_DIR)/hud/hud_init.c \
-			  $(SRC_DIR)/hud/hud_navigation.c \
-			  $(SRC_DIR)/hud/hud_performance.c \
-			  $(SRC_DIR)/hud/hud_render.c \
-			  $(SRC_DIR)/hud/hud_text.c \
-			  $(SRC_DIR)/hud/hud_scene.c \
-			  $(SRC_DIR)/hud/hud_objects.c \
-			  $(SRC_DIR)/hud/hud_obj_render.c \
-			  $(SRC_DIR)/hud/hud_toggle.c \
-			  $(SRC_DIR)/keyguide/keyguide_init.c \
-			  $(SRC_DIR)/keyguide/keyguide_render.c \
-			  $(SRC_DIR)/keyguide/keyguide_render_extra.c \
-			  $(SRC_DIR)/texture/checkerboard.c \
-			  $(SRC_DIR)/texture/bump_map_load.c \
-			  $(SRC_DIR)/texture/bump_map_perturb.c \
-			  $(SRC_DIR)/texture/texture_utils.c \
-			  $(SRC_DIR)/math/vec3.c \
-			  $(SRC_DIR)/math/vec3_ops.c \
-			  $(SRC_DIR)/bvh_debug/bvhd_init.c \
-			  $(SRC_DIR)/bvh_debug/bvhd_tree.c \
-			  $(SRC_DIR)/bvh_debug/bvhd_node.c \
-			  $(SRC_DIR)/bvh_debug/bvhd_format.c \
-			  $(SRC_DIR)/bvh_debug/bvhd_stats.c \
-			  $(SRC_DIR)/bvh_debug/bvhd_prefix.c \
-			  $(SRC_DIR)/bvh_debug/bvhd_prefix_push.c \
-			  $(SRC_DIR)/bvh_debug/bvhd_print.c \
-			  $(SRC_DIR)/utils/error.c \
-			  $(SRC_DIR)/utils/format_helpers.c \
-			  $(SRC_DIR)/utils/timer.c
+			  $(SRC_DIR)/metrics/metrics_shadow.c
 
 OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

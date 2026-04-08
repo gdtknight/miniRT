@@ -10,16 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
-#include "parser.h"
-#include "render.h"
-#include "spatial.h"
-#include "bvh_debug.h"
-#include "texture.h"
+#include "scene/scene.h"
+#include "scene/parser.h"
+#include "render/render.h"
+#include "spatial/spatial.h"
+#include "spatial/bvh_debug.h"
+#include "lighting/texture.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "error.h"
+#include "common/error.h"
 
 /**
  * @brief Parse CLI arguments and extract options/scene filename.

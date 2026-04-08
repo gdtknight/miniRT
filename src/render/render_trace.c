@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "shading.h"
-#include "intersect.h"
-#include "spatial.h"
+#include "lighting/shading.h"
+#include "spatial/intersect.h"
+#include "spatial/spatial.h"
 #include "metrics.h"
 #include <math.h>
 

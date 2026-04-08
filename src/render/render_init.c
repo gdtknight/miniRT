@@ -10,10 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "render.h"
-#include "input.h"
-#include "hud.h"
-#include "keyguide.h"
+#include "render/render.h"
+#include "interact/event.h"
+#include "interact/input.h"
+#include "interact/hud.h"
+#include "interact/keyguide.h"
 #include <stdlib.h>
 
 /**

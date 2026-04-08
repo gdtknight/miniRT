@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "render_debounce.h"
-#include "utils.h"
+#include "render/render_debounce.h"
+#include "common/utils.h"
 
 int	debounce_check_preview_throttle(t_debounce_state *state)
 {

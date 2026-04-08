@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "render.h"
-#include "input.h"
-#include "hud.h"
-#include "keyguide.h"
+#include "render/render.h"
+#include "interact/input.h"
+#include "interact/hud.h"
+#include "interact/keyguide.h"
 #include "metrics.h"
-#include "spatial.h"
-#include "bvh_debug.h"
+#include "spatial/spatial.h"
+#include "spatial/bvh_debug.h"
 
 /**
  * @brief Rebuild the BVH if the dirty flag is set.

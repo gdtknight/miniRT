@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
-#include "spatial.h"
+#include "scene/scene.h"
+#include "spatial/spatial.h"
 #include <stdlib.h>
 #include "libft.h"
 

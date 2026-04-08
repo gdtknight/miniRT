@@ -1,0 +1,106 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/18 15:18:50 by yoshin            #+#    #+#             */
+/*   Updated: 2026/01/27 12:00:00 by yoshin           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef RENDER_H
+# define RENDER_H
+
+# include "scene/scene.h"
+# include "common/ray.h"
+# include "render/window.h"
+# include "render/render_debounce.h"
+
+/* Window resolution constants */
+# define WINDOW_WIDTH 1440
+# define WINDOW_HEIGHT 900
+# define ASPECT_RATIO_NUM 1440.0
+# define ASPECT_RATIO_DEN 900.0
+
+/* Render state flags (bit flags) */
+# define RENDER_DIRTY       0x01
+# define RENDER_RENDERING   0x02
+# define RENDER_LOW_QUALITY 0x04
+/* 0x08 and 0x10 reserved for future use */
+# define RENDER_BVH_DIRTY  0x20
+# define RENDER_ENABLE_METRICS_PRINT 0x80
+
+/* Selected object information */
+typedef struct s_selection
+{
+	t_object_type	type;
+	int				index;
+}	t_selection;
+
+/* HUD state structure */
+typedef struct s_hud_state
+{
+	int		visible;
+	int		current_page;
+	int		total_pages;
+	int		dirty;
+}	t_hud_state;
+
+/* Key guide state structure */
+typedef struct s_keyguide_state
+{
+	int		visible;
+	int		x;
+	int		y;
+	int		dirty;
+}	t_keyguide_state;
+
+/* Key dispatch table */
+# define KEY_BIND_COUNT 38
+
+typedef struct s_render	t_render;
+typedef void			(*t_key_handler)(t_render *, int);
+
+typedef struct s_key_bind
+{
+	int				keycode;
+	t_key_handler	handler;
+}	t_key_bind;
+
+typedef struct s_key_binds
+{
+	t_key_bind	entries[KEY_BIND_COUNT];
+	int			count;
+}	t_key_binds;
+
+/* Render context */
+struct s_render
+{
+	t_mlx_context		mlx;
+	t_scene				*scene;
+	t_selection			selection;
+	int					state_flags;
+	t_hud_state			hud;
+	t_keyguide_state	keyguide;
+	t_debounce_state	debounce;
+	t_key_binds			key_binds;
+};
+
+/* Render lifecycle */
+t_render	*render_create(t_scene *scene);
+void		render_destroy(t_render *render);
+
+/* Render state flag helpers */
+int			render_has_flag(t_render *render, int flag);
+void		render_set_flag(t_render *render, int flag);
+void		render_clear_flag(t_render *render, int flag);
+
+/* Render pipeline */
+void		render_scene_to_buffer(t_scene *scene, t_render *render);
+t_ray		create_camera_ray(t_camera *camera, double x, double y);
+t_color		trace_ray(t_scene *scene, t_ray *ray);
+int			render_loop(void *param);
+
+#endif

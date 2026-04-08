@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "render_debounce.h"
-#include "render.h"
+#include "render/render_debounce.h"
+#include "render/render.h"
 #include <sys/time.h>
 
 void	debounce_init(t_debounce_state *state)

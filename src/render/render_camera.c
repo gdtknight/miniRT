@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "render.h"
+#include "render/render.h"
 #include <math.h>
-#include "ray.h"
+#include "common/ray.h"
 
 /**
  * @brief Update camera basis cache if invalid.
