@@ -6,12 +6,11 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 12:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/30 11:46:16 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/04/09 00:42:34 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "spatial/intersect.h"
-#include "scene/scene.h"
 #include <math.h>
 
 /**

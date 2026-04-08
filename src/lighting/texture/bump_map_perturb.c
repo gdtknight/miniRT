@@ -13,6 +13,9 @@
 #include "lighting/texture.h"
 #include <math.h>
 
+/**
+ * @brief Sample the grayscale height at a pixel coordinate.
+ */
 static double	sample_height(t_bump_map *bmap, int px, int py)
 {
 	int		offset;
@@ -23,6 +26,9 @@ static double	sample_height(t_bump_map *bmap, int px, int py)
 	return ((unsigned char)pixel[0] / 255.0);
 }
 
+/**
+ * @brief Compute UV coordinates for a hit point on an object.
+ */
 static void	get_surface_uv(t_object *obj, t_hit *hit, double *uv)
 {
 	t_vec3	local;
@@ -47,6 +53,9 @@ static void	get_surface_uv(t_object *obj, t_hit *hit, double *uv)
 			vec3_cross(hit->normal, tangent)) * 0.5;
 }
 
+/**
+ * @brief Compute the height gradient at a UV position.
+ */
 static void	compute_gradient(t_bump_map *bmap, double *uv, double *grad)
 {
 	int		px;
@@ -64,6 +73,16 @@ static void	compute_gradient(t_bump_map *bmap, double *uv, double *grad)
 	grad[1] = sample_height(bmap, px, (py + 1) % bmap->height) - h;
 }
 
+/**
+ * @brief Perturb the surface normal using a bump map.
+ *
+ * Samples the bump map gradient at the hit point UV and offsets
+ * the normal along the tangent and bitangent directions.
+ *
+ * @param obj Object with an attached bump map.
+ * @param hit Hit record whose normal will be perturbed.
+ * @return t_vec3 Perturbed and normalized surface normal.
+ */
 t_vec3	bump_perturb_normal(t_object *obj, t_hit *hit)
 {
 	double	uv[2];

@@ -14,6 +14,11 @@
 #include "render/render.h"
 #include <sys/time.h>
 
+/**
+ * @brief Initialize debounce state to idle.
+ *
+ * @param state Debounce state to initialize.
+ */
 void	debounce_init(t_debounce_state *state)
 {
 	state->state = DEBOUNCE_IDLE;
@@ -23,6 +28,16 @@ void	debounce_init(t_debounce_state *state)
 	state->last_preview_time.tv_usec = 0;
 }
 
+/**
+ * @brief Handle user input by advancing or resetting the FSM.
+ *
+ * Transitions IDLE to ACTIVE, refreshes the timer on repeated
+ * input, and triggers a low-quality preview render when the
+ * throttle interval has elapsed.
+ *
+ * @param state Current debounce state.
+ * @param render Render context for setting quality flags.
+ */
 void	debounce_on_input(t_debounce_state *state, t_render *render)
 {
 	if (state->state == DEBOUNCE_IDLE)
@@ -48,6 +63,9 @@ void	debounce_on_input(t_debounce_state *state, t_render *render)
 	}
 }
 
+/**
+ * @brief Transition ACTIVE to FINAL when the timer expires.
+ */
 static void	debounce_handle_active(t_debounce_state *state, t_render *render)
 {
 	if (!debounce_timer_expired(&state->timer))
@@ -58,6 +76,9 @@ static void	debounce_handle_active(t_debounce_state *state, t_render *render)
 	state->timer.is_active = 0;
 }
 
+/**
+ * @brief Transition COOLDOWN to IDLE when the timer expires.
+ */
 static void	debounce_handle_cooldown(t_debounce_state *state)
 {
 	if (!debounce_timer_expired(&state->timer))
@@ -66,6 +87,16 @@ static void	debounce_handle_cooldown(t_debounce_state *state)
 	state->timer.is_active = 0;
 }
 
+/**
+ * @brief Tick the debounce FSM each frame.
+ *
+ * Drives state transitions: ACTIVE to FINAL (full-quality
+ * render), FINAL to COOLDOWN (after render completes), and
+ * COOLDOWN to IDLE.
+ *
+ * @param state Current debounce state.
+ * @param render Render context for checking and setting flags.
+ */
 void	debounce_update(t_debounce_state *state, t_render *render)
 {
 	if (state->state == DEBOUNCE_ACTIVE)

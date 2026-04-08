@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_number.c                                    :+:      :+:    :+:   */
+/*   parse_number.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 12:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/30 12:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/04/09 00:43:35 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,14 @@
 #include "libft.h"
 #include <limits.h>
 #include <math.h>
-#include "common/error.h"
 
+/**
+ * @brief Parse integer digit sequence into a double.
+ *
+ * @param str Input string pointer (advanced past digits).
+ * @param has_digits Set to 1 if any digits are consumed.
+ * @return double Accumulated integer value.
+ */
 double	parse_int_part(const char **str, int *has_digits)
 {
 	double	result;
@@ -30,6 +36,16 @@ double	parse_int_part(const char **str, int *has_digits)
 	return (result);
 }
 
+/**
+ * @brief Parse fractional part after decimal point.
+ *
+ * Reads up to 15 digits after '.'. Returns -1.0 if '.' is
+ * present but no digits follow.
+ *
+ * @param str Input string pointer (advanced past digits).
+ * @param has_digits Set to 1 if any digits are consumed.
+ * @return double Fractional value, or -1.0 on format error.
+ */
 double	parse_frac_part(const char **str, int *has_digits)
 {
 	double	result;

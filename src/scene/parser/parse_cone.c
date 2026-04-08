@@ -15,6 +15,9 @@
 #include <stdlib.h>
 #include "libft.h"
 
+/**
+ * @brief Parse cone diameter and height, compute derived fields.
+ */
 static t_parse_result	parse_cone_dims(const char **token, t_object *obj)
 {
 	double			diameter;
@@ -37,6 +40,9 @@ static t_parse_result	parse_cone_dims(const char **token, t_object *obj)
 	return (PARSE_OK);
 }
 
+/**
+ * @brief Parse and validate cone center position and axis vector.
+ */
 static t_parse_result	parse_cone_vectors(const char **token, t_object *obj)
 {
 	t_parse_result	result;
@@ -61,6 +67,16 @@ static t_parse_result	parse_cone_vectors(const char **token, t_object *obj)
 	return (PARSE_OK);
 }
 
+/**
+ * @brief Parse a cone definition line and add it to the scene.
+ *
+ * Extracts center, axis, diameter, height, color, and bonus
+ * options, then appends the cone object to the scene list.
+ *
+ * @param line Raw line from the scene file.
+ * @param scene Scene to update.
+ * @return t_parse_result PARSE_OK or error code.
+ */
 t_parse_result	parse_cone(char *line, t_scene *scene)
 {
 	const char		*token;

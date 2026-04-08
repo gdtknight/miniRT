@@ -6,12 +6,11 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:40:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/30 11:35:49 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/04/09 00:44:08 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "render/render.h"
-#include "interact/input.h"
 #include "interact/hud.h"
 #include "interact/keyguide.h"
 #include "metrics.h"

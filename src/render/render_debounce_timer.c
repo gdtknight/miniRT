@@ -13,6 +13,12 @@
 #include "render/render_debounce.h"
 #include "common/utils.h"
 
+/**
+ * @brief Check if enough time has passed for a preview render.
+ *
+ * @param state Debounce state holding the last preview timestamp.
+ * @return int 1 if the minimum preview interval has elapsed.
+ */
 int	debounce_check_preview_throttle(t_debounce_state *state)
 {
 	long	elapsed_ms;
@@ -21,6 +27,12 @@ int	debounce_check_preview_throttle(t_debounce_state *state)
 	return (elapsed_ms >= DEBOUNCE_PREVIEW_MIN_INTERVAL_MS);
 }
 
+/**
+ * @brief Check whether the debounce timer has expired.
+ *
+ * @param timer Timer to check.
+ * @return int 1 if elapsed time exceeds the configured delay.
+ */
 int	debounce_timer_expired(t_debounce_timer *timer)
 {
 	long	elapsed_ms;

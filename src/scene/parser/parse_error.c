@@ -14,6 +14,9 @@
 #include "common/error.h"
 #include <unistd.h>
 
+/**
+ * @brief Recursively write unsigned integer digits to stderr.
+ */
 static void	write_uint(unsigned int n)
 {
 	char	c;
@@ -24,6 +27,11 @@ static void	write_uint(unsigned int n)
 	write(2, &c, 1);
 }
 
+/**
+ * @brief Write a signed integer to stderr.
+ *
+ * @param n Integer value to write.
+ */
 void	error_write_int(int n)
 {
 	unsigned int	u;
@@ -38,6 +46,12 @@ void	error_write_int(int n)
 	write_uint(u);
 }
 
+/**
+ * @brief Look up human-readable message for a parse error code.
+ *
+ * @param code Parse result code.
+ * @return Pointer to static error message string.
+ */
 const char	*get_error_message(t_parse_result code)
 {
 	static const char	*msgs[] = {

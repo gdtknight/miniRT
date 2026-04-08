@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:19:34 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/30 12:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/04/09 00:43:38 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "common/utils.h"
 #include <stdlib.h>
 #include "libft.h"
-#include "common/error.h"
 
 /**
  * @brief Count objects of a specific type in the scene.

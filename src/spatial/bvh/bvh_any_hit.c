@@ -15,6 +15,9 @@
 #include "spatial/intersect.h"
 #include "metrics.h"
 
+/**
+ * @brief Order child nodes by ray direction along split axis.
+ */
 static void	get_near_far(t_bvh_node *node, t_ray ray,
 		t_bvh_node **near, t_bvh_node **far)
 {

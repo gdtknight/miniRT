@@ -6,11 +6,11 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 12:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/02/10 12:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/04/09 00:44:45 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene/scene.h"
+#include "common/objects.h"
 
 /**
  * @brief Clamp RGB color components into the valid 0–255 range.

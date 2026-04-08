@@ -13,6 +13,9 @@
 #include "spatial/bvh_debug.h"
 #include <stdio.h>
 
+/**
+ * @brief Format leaf objects if applicable and print a node.
+ */
 static void	handle_node_display(t_bvh_node *node, t_traverse_ctx *ctx,
 				t_node_info *info, int is_last)
 {

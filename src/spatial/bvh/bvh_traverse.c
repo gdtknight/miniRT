@@ -15,6 +15,13 @@
 #include "spatial/intersect.h"
 #include "metrics.h"
 
+/**
+ * @brief Check if ray direction is positive along a given axis.
+ *
+ * @param dir Ray direction vector.
+ * @param axis Axis index (0=x, 1=y, 2=z).
+ * @return int 1 if positive, 0 otherwise.
+ */
 int	ray_goes_positive(t_vec3 dir, int axis)
 {
 	if (axis == 0)

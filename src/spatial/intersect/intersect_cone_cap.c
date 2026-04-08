@@ -6,14 +6,16 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 12:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/03/22 16:23:18 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/04/09 00:42:41 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "spatial/intersect.h"
-#include "scene/scene.h"
 #include <math.h>
 
+/**
+ * @brief Test ray intersection with the cone base cap disc.
+ */
 static int	intersect_cone_cap(t_ray *ray, t_cone_data *c, t_hit *hit)
 {
 	t_vec3	cap_center;
@@ -41,6 +43,9 @@ static int	intersect_cone_cap(t_ray *ray, t_cone_data *c, t_hit *hit)
 	return (1);
 }
 
+/**
+ * @brief Copy temporary hit into output and set object color.
+ */
 static void	apply_cone_hit(t_hit *hit, t_hit *temp, t_color color, int *found)
 {
 	temp->color = color;
@@ -48,6 +53,17 @@ static void	apply_cone_hit(t_hit *hit, t_hit *temp, t_color color, int *found)
 	*found = 1;
 }
 
+/**
+ * @brief Test ray intersection with a complete cone (body + cap).
+ *
+ * Tests both the lateral surface and base cap, keeping the
+ * nearest hit.
+ *
+ * @param ray Incoming ray.
+ * @param obj Cone object.
+ * @param hit Output hit record (updated if closer hit found).
+ * @return int 1 if any intersection found, 0 otherwise.
+ */
 int	intersect_cone(t_ray *ray, t_object *obj, t_hit *hit)
 {
 	int		found;

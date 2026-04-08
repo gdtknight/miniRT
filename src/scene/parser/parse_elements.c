@@ -98,6 +98,16 @@ static void	init_camera_state(t_scene *scene)
 	scene->camera.cache.valid = 0;
 }
 
+/**
+ * @brief Parse camera definition from a scene file line.
+ *
+ * Extracts position, direction, and FOV. Stores initial state
+ * for camera reset operations.
+ *
+ * @param line Raw line from the scene file.
+ * @param scene Scene to update.
+ * @return t_parse_result PARSE_OK or error code.
+ */
 t_parse_result	parse_camera(char *line, t_scene *scene)
 {
 	const char		*token;

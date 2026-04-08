@@ -14,6 +14,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+/**
+ * @brief Write a string to stderr.
+ *
+ * @param str Null-terminated string to write.
+ */
 void	error_write_str(const char *str)
 {
 	int	len;
@@ -24,6 +29,12 @@ void	error_write_str(const char *str)
 	write(2, str, len);
 }
 
+/**
+ * @brief Look up human-readable message for an error code.
+ *
+ * @param code Error code to look up.
+ * @return Pointer to static error message string.
+ */
 const char	*error_get_message(t_error_code code)
 {
 	static const char	*error_messages[ERR_COUNT] = {
@@ -52,6 +63,12 @@ const char	*error_get_message(t_error_code code)
 	return ("Unknown error");
 }
 
+/**
+ * @brief Print error prefix and message to stderr.
+ *
+ * @param code Error code to print.
+ * @return int Always returns 1 (for error propagation).
+ */
 int	error_print(t_error_code code)
 {
 	const char	*msg;
@@ -66,12 +83,23 @@ int	error_print(t_error_code code)
 	return (1);
 }
 
+/**
+ * @brief Print error message and terminate the program.
+ *
+ * @param code Error code to print before exiting.
+ */
 void	error_exit(t_error_code code)
 {
 	error_print(code);
 	exit(EXIT_FAILURE);
 }
 
+/**
+ * @brief Print contextual error with prefix and detail.
+ *
+ * @param prefix Error category or source label.
+ * @param detail Specific error description.
+ */
 void	error_print_ctx(const char *prefix, const char *detail)
 {
 	error_write_str("Error\n");

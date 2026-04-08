@@ -12,6 +12,9 @@
 
 #include "interact/input.h"
 
+/**
+ * @brief Register a single key binding entry.
+ */
 static void	bind_key(t_key_binds *binds, int keycode, t_key_handler handler)
 {
 	if (binds->count >= KEY_BIND_COUNT)
@@ -21,6 +24,11 @@ static void	bind_key(t_key_binds *binds, int keycode, t_key_handler handler)
 	binds->count++;
 }
 
+/**
+ * @brief Register HUD toggle and navigation key bindings.
+ *
+ * @param binds Key binding table to populate.
+ */
 void	init_hud_binds(t_key_binds *binds)
 {
 	bind_key(binds, KEY_H, handle_hud_keys);
@@ -30,6 +38,11 @@ void	init_hud_binds(t_key_binds *binds)
 	bind_key(binds, KEY_EQUAL, handle_hud_keys);
 }
 
+/**
+ * @brief Register camera movement and rotation key bindings.
+ *
+ * @param binds Key binding table to populate.
+ */
 void	init_camera_binds(t_key_binds *binds)
 {
 	bind_key(binds, KEY_W, handle_camera_keys);
@@ -45,6 +58,11 @@ void	init_camera_binds(t_key_binds *binds)
 	bind_key(binds, KEY_3, handle_camera_keys);
 }
 
+/**
+ * @brief Register object and light movement key bindings.
+ *
+ * @param binds Key binding table to populate.
+ */
 void	init_transform_move_binds(t_key_binds *binds)
 {
 	bind_key(binds, KEY_R, handle_transform_keys);

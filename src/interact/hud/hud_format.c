@@ -13,6 +13,9 @@
 #include "interact/hud.h"
 #include "interact/hud_internal.h"
 
+/**
+ * @brief Handle sign and NaN/overflow for float formatting.
+ */
 static int	hud_float_start(char *buffer, double *value)
 {
 	if (*value != *value || *value > 1e15 || *value < -1e15)

@@ -6,14 +6,23 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 12:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/02/10 12:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/04/09 00:42:45 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "spatial/intersect.h"
-#include "scene/scene.h"
 #include <math.h>
 
+/**
+ * @brief Solve quadratic for ray-cone body intersection.
+ *
+ * Computes discriminant, t values, and projection heights.
+ *
+ * @param ray Incoming ray.
+ * @param c Cone geometric data.
+ * @param calc Output intersection parameters.
+ * @return int 1 if real solutions exist, 0 otherwise.
+ */
 static int	calc_cone_intersect(t_ray *ray, t_cone_data *c, t_cyl_calc *calc)
 {
 	t_vec3	d;
@@ -43,6 +52,9 @@ static int	calc_cone_intersect(t_ray *ray, t_cone_data *c, t_cyl_calc *calc)
 	return (1);
 }
 
+/**
+ * @brief Compute hit point and outward-facing normal for a cone.
+ */
 static int	set_cone_hit(t_ray *ray, t_cone_data *c,
 				t_hit *hit, t_cyl_calc *calc)
 {
@@ -66,6 +78,9 @@ static int	set_cone_hit(t_ray *ray, t_cone_data *c,
 	return (1);
 }
 
+/**
+ * @brief Try the second root when the first is invalid.
+ */
 static int	validate_cone_hit(t_ray *ray, t_cone_data *c,
 				t_hit *hit, t_cyl_calc *calc)
 {
@@ -80,6 +95,17 @@ static int	validate_cone_hit(t_ray *ray, t_cone_data *c,
 	return (set_cone_hit(ray, c, hit, calc));
 }
 
+/**
+ * @brief Test ray intersection with the cone lateral surface.
+ *
+ * Solves the quadratic, validates height bounds, and selects
+ * the nearest valid hit.
+ *
+ * @param ray Incoming ray.
+ * @param c Cone geometric data.
+ * @param hit Output hit record (updated if closer hit found).
+ * @return int 1 if intersection found, 0 otherwise.
+ */
 int	intersect_cone_body(t_ray *ray, t_cone_data *c, t_hit *hit)
 {
 	t_cyl_calc	calc;

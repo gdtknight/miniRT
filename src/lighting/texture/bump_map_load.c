@@ -16,6 +16,16 @@
 #include "mlx.h"
 #include <stdlib.h>
 
+/**
+ * @brief Load an XPM file as a bump map.
+ *
+ * Allocates a bump map, loads the XPM image via MLX, and
+ * retrieves the pixel data address. Returns NULL on failure.
+ *
+ * @param mlx MLX connection pointer.
+ * @param filepath Path to the XPM file.
+ * @return t_bump_map* Loaded bump map, or NULL on error.
+ */
 t_bump_map	*bump_map_load(void *mlx, char *filepath)
 {
 	t_bump_map	*bmap;
@@ -41,6 +51,12 @@ t_bump_map	*bump_map_load(void *mlx, char *filepath)
 	return (bmap);
 }
 
+/**
+ * @brief Destroy a bump map and free its resources.
+ *
+ * @param mlx MLX connection pointer.
+ * @param bmap Bump map to destroy (may be NULL).
+ */
 void	bump_map_destroy(void *mlx, t_bump_map *bmap)
 {
 	if (!bmap)
@@ -50,6 +66,13 @@ void	bump_map_destroy(void *mlx, t_bump_map *bmap)
 	free(bmap);
 }
 
+/**
+ * @brief Load bump maps for all objects that have a bump path.
+ *
+ * @param scene_ptr Opaque pointer to the scene.
+ * @param mlx MLX connection pointer.
+ * @return int 1 on success, 0 if any bump map fails to load.
+ */
 int	load_all_bump_maps(void *scene_ptr, void *mlx)
 {
 	t_scene		*scene;
@@ -75,6 +98,12 @@ int	load_all_bump_maps(void *scene_ptr, void *mlx)
 	return (1);
 }
 
+/**
+ * @brief Destroy and free all bump maps and their file paths.
+ *
+ * @param scene_ptr Opaque pointer to the scene.
+ * @param mlx MLX connection pointer.
+ */
 void	cleanup_all_bump_maps(void *scene_ptr, void *mlx)
 {
 	t_scene		*scene;

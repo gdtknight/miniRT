@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bvhd_node.c                                     :+:      :+:    :+:   */
+/*   bvhd_node.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 15:11:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/30 11:58:19 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/04/09 00:42:57 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "spatial/bvh_debug.h"
-#include "scene/scene.h"
 #include "common/utils.h"
 #include <stdlib.h>
 #include "libft.h"

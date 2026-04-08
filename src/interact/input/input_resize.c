@@ -13,6 +13,9 @@
 #include "render/render.h"
 #include "interact/input.h"
 
+/**
+ * @brief Adjust sphere radius by one unit.
+ */
 static int	resize_sphere(t_object *obj, int keycode)
 {
 	double	step;
@@ -30,6 +33,9 @@ static int	resize_sphere(t_object *obj, int keycode)
 	return (1);
 }
 
+/**
+ * @brief Adjust cylinder radius or half-height by one unit.
+ */
 static int	resize_cylinder(t_object *obj, int keycode)
 {
 	double	step;
@@ -54,6 +60,9 @@ static int	resize_cylinder(t_object *obj, int keycode)
 	return (1);
 }
 
+/**
+ * @brief Adjust cone radius or half-height by one unit.
+ */
 static int	resize_cone(t_object *obj, int keycode)
 {
 	double	step;
@@ -78,6 +87,12 @@ static int	resize_cone(t_object *obj, int keycode)
 	return (1);
 }
 
+/**
+ * @brief Resize the currently selected object and rebuild BVH.
+ *
+ * @param render Render context with selection state.
+ * @param keycode Key identifying the resize action.
+ */
 void	handle_object_resize(t_render *render, int keycode)
 {
 	t_object	*obj;

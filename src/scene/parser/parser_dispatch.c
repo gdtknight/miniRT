@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_dispatch.c                                 :+:      :+:    :+:   */
+/*   parser_dispatch.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 12:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/30 12:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/04/09 00:43:49 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scene/parser.h"
-#include "common/error.h"
 
 /**
  * @brief Check if line matches element prefix.

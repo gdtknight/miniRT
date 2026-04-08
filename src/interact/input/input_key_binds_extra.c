@@ -12,6 +12,9 @@
 
 #include "interact/input.h"
 
+/**
+ * @brief Register a single key binding entry.
+ */
 static void	bind_key(t_key_binds *binds, int keycode, t_key_handler handler)
 {
 	if (binds->count >= KEY_BIND_COUNT)
@@ -21,6 +24,11 @@ static void	bind_key(t_key_binds *binds, int keycode, t_key_handler handler)
 	binds->count++;
 }
 
+/**
+ * @brief Register resize and rotation key bindings.
+ *
+ * @param binds Key binding table to populate.
+ */
 void	init_transform_edit_binds(t_key_binds *binds)
 {
 	bind_key(binds, KEY_Y, handle_transform_keys);

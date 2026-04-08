@@ -35,6 +35,9 @@ void	mlx_img_destroy(t_mlx_img *img, void *mlx)
 
 #ifdef __linux__
 
+/**
+ * @brief Free the MLX display connection on Linux.
+ */
 static void	mlx_free_display(void *mlx)
 {
 	if (!mlx)
@@ -45,6 +48,9 @@ static void	mlx_free_display(void *mlx)
 
 #else
 
+/**
+ * @brief No-op display cleanup on non-Linux platforms.
+ */
 static void	mlx_free_display(void *mlx)
 {
 	(void)mlx;

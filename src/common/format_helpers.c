@@ -95,6 +95,17 @@ static int	handle_negative(char *buf, size_t size, double *value)
 	return (1);
 }
 
+/**
+ * @brief Prepare buffer and validate inputs for float formatting.
+ *
+ * Handles NaN/infinity, negative sign, and precision clamping.
+ *
+ * @param buf Destination buffer.
+ * @param size Buffer size.
+ * @param val Value to prepare (may be negated in place).
+ * @param prec Precision to clamp to [1, 2].
+ * @return int 1 to continue, 0 if placeholder written, -1 on error.
+ */
 static int	prep_float_str(char *buf, size_t size, double *val, int *prec)
 {
 	if (size == 0)

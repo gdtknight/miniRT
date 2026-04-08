@@ -75,6 +75,14 @@ static t_aabb	bounds_for_cone(t_cone_data *c)
 	return (aabb_create(min, max));
 }
 
+/**
+ * @brief Compute AABB for any object by type dispatch.
+ *
+ * Returns a large fallback box for unsupported types (planes).
+ *
+ * @param obj Object to compute bounds for.
+ * @return t_aabb Bounding box of the object.
+ */
 t_aabb	aabb_for_object(t_object *obj)
 {
 	double	large;

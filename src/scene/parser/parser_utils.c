@@ -12,6 +12,12 @@
 
 #include "scene/parser.h"
 
+/**
+ * @brief Advance past spaces and tabs.
+ *
+ * @param str Input string.
+ * @return Pointer to first non-whitespace character.
+ */
 const char	*skip_whitespace(const char *str)
 {
 	while (*str == ' ' || *str == '\t')
@@ -19,6 +25,15 @@ const char	*skip_whitespace(const char *str)
 	return (str);
 }
 
+/**
+ * @brief Check if position is at end of meaningful content.
+ *
+ * Skips whitespace, then returns true for null, newline,
+ * or comment character.
+ *
+ * @param str Input string.
+ * @return int 1 if at line end, 0 otherwise.
+ */
 int	at_line_end(const char *str)
 {
 	str = skip_whitespace(str);

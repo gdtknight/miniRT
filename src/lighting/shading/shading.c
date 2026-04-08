@@ -6,15 +6,17 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:18:59 by yoshin            #+#    #+#             */
-/*   Updated: 2026/02/10 12:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/04/09 00:44:23 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lighting/shading.h"
 #include "lighting/shadow.h"
 #include "lighting/texture.h"
-#include <math.h>
 
+/**
+ * @brief Compute the Phong specular intensity.
+ */
 static double	calculate_specular(t_vec3 light_dir, t_vec3 normal,
 		t_vec3 view_dir)
 {
@@ -32,6 +34,10 @@ static double	calculate_specular(t_vec3 light_dir, t_vec3 normal,
 	return (spec);
 }
 
+/**
+ * @brief Compute combined diffuse, specular, and shadow factor
+ *        for a single light source.
+ */
 static double	calc_lighting_factor(t_scene *scene, t_hit *hit,
 		t_light *light, t_vec3 view_dir)
 {
@@ -52,6 +58,9 @@ static double	calc_lighting_factor(t_scene *scene, t_hit *hit,
 	return ((diffuse + specular) * (1.0 - shadow_factor));
 }
 
+/**
+ * @brief Sum lighting contributions from all lights in the scene.
+ */
 static void	accumulate_lights(t_scene *scene, t_hit *hit,
 		t_vec3 view_dir, t_color_f *acc)
 {
@@ -71,6 +80,17 @@ static void	accumulate_lights(t_scene *scene, t_hit *hit,
 	}
 }
 
+/**
+ * @brief Compute the final pixel color using Phong shading.
+ *
+ * Applies checkerboard and bump map textures when present,
+ * accumulates per-light contributions, and combines them with
+ * ambient light to produce a clamped RGB color.
+ *
+ * @param scene Scene containing lights and ambient settings.
+ * @param hit Hit record with surface point, normal, and color.
+ * @return t_color Final clamped RGB color.
+ */
 t_color	apply_lighting(t_scene *scene, t_hit *hit)
 {
 	t_vec3		view_dir;

@@ -14,6 +14,9 @@
 #include "interact/input.h"
 #include <math.h>
 
+/**
+ * @brief Rebuild camera direction from pitch and yaw.
+ */
 static void	camera_rebuild_dir(t_camera *cam)
 {
 	double	cos_p;
@@ -28,6 +31,12 @@ static void	camera_rebuild_dir(t_camera *cam)
 	cam->cache.valid = 0;
 }
 
+/**
+ * @brief Translate the camera along its local axes.
+ *
+ * @param render Render context owning the camera.
+ * @param keycode Key identifying the movement direction.
+ */
 void	handle_camera_move(t_render *render, int keycode)
 {
 	t_vec3	right;
@@ -57,6 +66,12 @@ void	handle_camera_move(t_render *render, int keycode)
 			move);
 }
 
+/**
+ * @brief Adjust camera pitch by a fixed step.
+ *
+ * @param render Render context owning the camera.
+ * @param keycode KEY_E for pitch up, KEY_C for down.
+ */
 void	handle_camera_pitch(t_render *render, int keycode)
 {
 	double	step;
@@ -70,6 +85,11 @@ void	handle_camera_pitch(t_render *render, int keycode)
 	camera_rebuild_dir(&render->scene->camera);
 }
 
+/**
+ * @brief Reset camera to its initial position and direction.
+ *
+ * @param render Render context owning the camera.
+ */
 void	handle_camera_reset(t_render *render)
 {
 	t_camera	*cam;
@@ -82,6 +102,12 @@ void	handle_camera_reset(t_render *render)
 	cam->cache.valid = 0;
 }
 
+/**
+ * @brief Adjust camera yaw by a fixed step.
+ *
+ * @param render Render context owning the camera.
+ * @param keycode KEY_1 for yaw right, KEY_3 for left.
+ */
 void	handle_camera_yaw(t_render *render, int keycode)
 {
 	double	step;

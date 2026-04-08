@@ -12,6 +12,9 @@
 
 #include "render/window.h"
 
+/**
+ * @brief Encode a color integer into BGRA byte order.
+ */
 static void	encode_pixel_bytes(char *dst, int color)
 {
 	dst[0] = (char)(color & 0xFF);

@@ -1,19 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_validation_strict.c                         :+:      :+:    :+:   */
+/*   parse_validation_strict.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 12:00:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/30 12:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/04/09 00:43:41 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "scene/parser.h"
 #include "common/ray.h"
-#include "common/error.h"
 
+/**
+ * @brief Check if a value falls within an inclusive range.
+ *
+ * @param value Value to test.
+ * @param min Lower bound (inclusive).
+ * @param max Upper bound (inclusive).
+ * @return int 1 if in range, 0 otherwise.
+ */
 int	in_range(double value, double min, double max)
 {
 	return (value >= min && value <= max);

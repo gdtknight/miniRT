@@ -14,6 +14,9 @@
 #include <stdlib.h>
 #include "libft.h"
 
+/**
+ * @brief Check if a string starts with the given prefix.
+ */
 static int	starts_with(const char *str, const char *prefix)
 {
 	while (*prefix)
@@ -26,6 +29,9 @@ static int	starts_with(const char *str, const char *prefix)
 	return (1);
 }
 
+/**
+ * @brief Parse checker bonus option and apply to object.
+ */
 static t_parse_result	parse_checker_opt(const char *str, t_object *obj,
 		const char **end)
 {
@@ -39,6 +45,9 @@ static t_parse_result	parse_checker_opt(const char *str, t_object *obj,
 	return (PARSE_OK);
 }
 
+/**
+ * @brief Parse bump map path option and apply to object.
+ */
 static t_parse_result	parse_bump_opt(const char *str, t_object *obj,
 		const char **end)
 {
@@ -60,6 +69,16 @@ static t_parse_result	parse_bump_opt(const char *str, t_object *obj,
 	return (PARSE_OK);
 }
 
+/**
+ * @brief Parse optional bonus tokens (checker, bump) after color.
+ *
+ * Consumes remaining tokens on the line. Resets bonus fields
+ * before parsing and cleans up on failure.
+ *
+ * @param token Current parse position (updated on return).
+ * @param obj Object to receive bonus options.
+ * @return t_parse_result PARSE_OK or error code.
+ */
 t_parse_result	parse_bonus_options(const char **token, t_object *obj)
 {
 	t_parse_result	result;

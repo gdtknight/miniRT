@@ -75,6 +75,9 @@ static int	check_plane_shadow(t_scene *scene, t_ray *ray, double mag)
 	return (0);
 }
 
+/**
+ * @brief Build a shadow ray biased along normal and light dir.
+ */
 static void	init_shadow_ray(t_ray *ray, t_shadow_query *query,
 	t_vec3 light_dir, double bias)
 {

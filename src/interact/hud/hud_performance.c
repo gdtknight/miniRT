@@ -15,6 +15,9 @@
 #include "interact/hud_internal.h"
 #include "metrics.h"
 
+/**
+ * @brief Render FPS, frame time, and BVH status lines.
+ */
 static void	render_perf_basic(t_render *render, int *y)
 {
 	t_metrics	*m;
@@ -43,6 +46,12 @@ static void	render_perf_basic(t_render *render, int *y)
 	hud_print_line(render, y, HUD_COLOR_TEXT, line);
 }
 
+/**
+ * @brief Render the performance section of the HUD.
+ *
+ * @param render Render context for text output.
+ * @param y Current y position (in/out) for line placement.
+ */
 void	hud_render_performance(t_render *render, int *y)
 {
 	hud_print_line(render, y, HUD_COLOR_HIGHLIGHT, "=== Performance ===");

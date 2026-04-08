@@ -13,6 +13,9 @@
 #include "lighting/texture.h"
 #include <math.h>
 
+/**
+ * @brief Compute checkerboard color for a plane surface.
+ */
 static t_color	checker_plane(t_object *obj, t_hit *hit)
 {
 	t_vec3	tangent;
@@ -28,6 +31,9 @@ static t_color	checker_plane(t_object *obj, t_hit *hit)
 	return (obj->color);
 }
 
+/**
+ * @brief Compute checkerboard color for a sphere surface.
+ */
 static t_color	checker_sphere(t_object *obj, t_hit *hit)
 {
 	t_vec3	local;
@@ -45,6 +51,9 @@ static t_color	checker_sphere(t_object *obj, t_hit *hit)
 	return (obj->color);
 }
 
+/**
+ * @brief Return the radius for a cylinder or cone object.
+ */
 static double	get_body_radius(t_object *obj)
 {
 	if (obj->type == OBJ_CYLINDER)
@@ -52,6 +61,9 @@ static double	get_body_radius(t_object *obj)
 	return (obj->data.cone.radius);
 }
 
+/**
+ * @brief Compute checkerboard color for a cylinder or cone body.
+ */
 static t_color	checker_body(t_object *obj, t_hit *hit)
 {
 	t_vec3	axis;
@@ -79,6 +91,16 @@ static t_color	checker_body(t_object *obj, t_hit *hit)
 	return (obj->color);
 }
 
+/**
+ * @brief Return the checkerboard-modulated color for an object.
+ *
+ * Dispatches to the appropriate checker function based on the
+ * object type. Falls back to the base color for unknown types.
+ *
+ * @param obj Object with checkerboard enabled.
+ * @param hit Hit record with the surface point.
+ * @return t_color Checkerboard-patterned color.
+ */
 t_color	checkerboard_color(t_object *obj, t_hit *hit)
 {
 	if (obj->type == OBJ_PLANE)
