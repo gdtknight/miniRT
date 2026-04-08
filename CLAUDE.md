@@ -119,7 +119,9 @@ main.c → parse .rt file → build BVH → mlx_loop()
 | | `src/spatial/bvh/` | BVH construction (midpoint split, depth limit 20), traversal, any-hit |
 | | `src/spatial/debug/` | Console BVH tree dump (`--bvh-vis` flag) |
 | **render** | `src/render/` | Render loop, camera ray, trace dispatcher, debounce FSM, MLX window/pixel |
-| **lighting** | `src/lighting/` | Phong shading, soft shadows, checkerboard/bump map textures |
+| **lighting** | `src/lighting/shading/` | Phong model, multi-light, `fast_pow32()` specular |
+| | `src/lighting/shadow/` | Soft shadows (stratified sampling), shadow offset LUT, occlusion test |
+| | `src/lighting/texture/` | Checkerboard patterns, XPM bump map loading and normal perturbation |
 | **interact** | `src/interact/` | Event dispatch (window close, key, expose) |
 | | `src/interact/input/` | Keyboard handlers for camera/object/light manipulation |
 | | `src/interact/hud/` | HUD overlay (scene info, FPS, object list) with pagination |
@@ -154,13 +156,14 @@ The parser (`src/scene/parser/`) guarantees these invariants before rendering be
 - `includes/common/ray.h` — `t_ray` (with precomputed `inv_dir`), `t_hit`
 - `includes/spatial/spatial.h` — BVH node, AABB, traversal context
 - `includes/render/render.h` — `t_render` context (MLX, scene ref, HUD state, selection, debounce)
-- `includes/render/render_types.h` — UI types (`t_selection`, `t_hud_state`, `t_keyguide_state`, `t_key_binds`) — interact headers depend on this, not render.h
+- `includes/interact/ui_types.h` — UI state types (`t_selection`, `t_hud_state`, `t_keyguide_state`)
+- `includes/interact/key_binds.h` — Key dispatch types (`t_key_handler`, `t_key_bind`, `t_key_binds`)
 - `includes/render/window.h` — `t_mlx_img`, `t_mlx_context`, pixel operations
 - `includes/lighting/shadow.h` — Shadow config, offset LUT
 - `includes/interact/input.h` — Key codes with `#ifdef __APPLE__` / `__linux__` sections
 - `includes/interact/event.h` — MLX event callbacks (close, key, expose)
 
-Core numeric tolerances live in `includes/scene/scene.h`: `EPSILON` (0.0001, general float comparison) and `RAY_T_MIN` (0.001, self-intersection guard — shadow acne threshold). Tune these here if altering intersection precision.
+Core numeric tolerances live in `includes/common/ray.h`: `EPSILON` (0.0001, general float comparison) and `RAY_T_MIN` (0.001, self-intersection guard — shadow acne threshold). Window resolution constants live in `includes/render/window.h`.
 
 ### Norm-Capacity Warnings
 

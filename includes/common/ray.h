@@ -18,6 +18,11 @@
 # include "common/vec3.h"
 # include "common/objects.h"
 
+/* Intersection tolerance constants */
+# define EPSILON 0.0001
+# define RAY_T_MIN 0.001
+# define COEFF_EPSILON 0.0001
+
 /* Ray with origin point and normalized direction vector */
 typedef struct s_ray
 {

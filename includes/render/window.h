@@ -15,6 +15,12 @@
 
 # include "mlx.h"
 
+/* Window resolution constants */
+# define WINDOW_WIDTH 1440
+# define WINDOW_HEIGHT 900
+# define ASPECT_RATIO_NUM 1440.0
+# define ASPECT_RATIO_DEN 900.0
+
 typedef struct s_mlx_img
 {
 	void	*img;

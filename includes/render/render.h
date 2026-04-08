@@ -17,13 +17,8 @@
 # include "common/ray.h"
 # include "render/window.h"
 # include "render/render_debounce.h"
-# include "render/render_types.h"
-
-/* Window resolution constants */
-# define WINDOW_WIDTH 1440
-# define WINDOW_HEIGHT 900
-# define ASPECT_RATIO_NUM 1440.0
-# define ASPECT_RATIO_DEN 900.0
+# include "interact/ui_types.h"
+# include "interact/key_binds.h"
 
 /* Render state flags (bit flags) */
 # define RENDER_DIRTY       0x01

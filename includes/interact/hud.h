@@ -13,7 +13,7 @@
 #ifndef HUD_H
 # define HUD_H
 
-# include "render/render_types.h"
+# include "interact/ui_types.h"
 # include "scene/scene.h"
 
 /* HUD display dimensions and layout constants */

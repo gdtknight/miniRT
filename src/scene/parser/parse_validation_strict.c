@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "scene/parser.h"
+#include "common/ray.h"
 #include "common/error.h"
 
 int	in_range(double value, double min, double max)

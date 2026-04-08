@@ -90,15 +90,15 @@ SRCS		= $(SRC_DIR)/main.c \
 			  $(SRC_DIR)/render/window_init.c \
 			  $(SRC_DIR)/render/window_destroy.c \
 			  $(SRC_DIR)/render/put_pixel.c \
-			  $(SRC_DIR)/lighting/shading.c \
-			  $(SRC_DIR)/lighting/shading_utils.c \
-			  $(SRC_DIR)/lighting/shadow_calc.c \
-			  $(SRC_DIR)/lighting/shadow_config.c \
-			  $(SRC_DIR)/lighting/shadow_occlusion.c \
-			  $(SRC_DIR)/lighting/checkerboard.c \
-			  $(SRC_DIR)/lighting/bump_map_load.c \
-			  $(SRC_DIR)/lighting/bump_map_perturb.c \
-			  $(SRC_DIR)/lighting/texture_utils.c \
+			  $(SRC_DIR)/lighting/shading/shading.c \
+			  $(SRC_DIR)/lighting/shading/shading_utils.c \
+			  $(SRC_DIR)/lighting/shadow/shadow_calc.c \
+			  $(SRC_DIR)/lighting/shadow/shadow_config.c \
+			  $(SRC_DIR)/lighting/shadow/shadow_occlusion.c \
+			  $(SRC_DIR)/lighting/texture/checkerboard.c \
+			  $(SRC_DIR)/lighting/texture/bump_map_load.c \
+			  $(SRC_DIR)/lighting/texture/bump_map_perturb.c \
+			  $(SRC_DIR)/lighting/texture/texture_utils.c \
 			  $(SRC_DIR)/interact/event_dispatch.c \
 			  $(SRC_DIR)/interact/input/input_dispatch.c \
 			  $(SRC_DIR)/interact/input/input_camera.c \

@@ -40,11 +40,6 @@ typedef struct s_shadow_config
 /* Maximum number of light sources */
 # define MAX_LIGHTS 16
 
-/* Epsilon value for floating point comparison */
-# define EPSILON 0.0001
-# define RAY_T_MIN     0.001
-# define COEFF_EPSILON 0.0001
-
 /* Camera basis cache with dirty flag for per-frame caching */
 typedef struct s_camera_cache
 {
