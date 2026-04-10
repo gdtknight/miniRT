@@ -60,8 +60,7 @@ typedef struct s_node_info
 typedef struct s_traverse_ctx
 {
 	t_prefix_state	*prefix;
-	t_vis_config	*config;
-	void			*scene;
+	t_scene			*scene;
 }	t_traverse_ctx;
 
 /* Public API */

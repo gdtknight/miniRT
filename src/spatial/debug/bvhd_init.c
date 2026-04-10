@@ -102,7 +102,6 @@ void	bvhd_run(t_bvh *bvh, t_vis_config *config, t_scene *scene)
 	stats.avg_objects_per_leaf = 0.0;
 	prefix = bvhd_prefix_init();
 	ctx.prefix = &prefix;
-	ctx.config = config;
 	ctx.scene = scene;
 	bvhd_print_tree(bvh->root, &ctx, &stats);
 	bvhd_prefix_destroy(&prefix);
