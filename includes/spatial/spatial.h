@@ -95,39 +95,185 @@ typedef struct s_split_params
 }	t_split_params;
 
 /* Helper functions */
+/**
+ * @brief Return the smaller of two doubles (NaN-safe).
+ *
+ * @param a First value.
+ * @param b Second value.
+ * @return Minimum of a and b.
+ */
 double		min_double(double a, double b);
+
+/**
+ * @brief Return the larger of two doubles (NaN-safe).
+ *
+ * @param a First value.
+ * @param b Second value.
+ * @return Maximum of a and b.
+ */
 double		max_double(double a, double b);
 
 /* AABB operations */
+/**
+ * @brief Create an AABB from min and max corners.
+ *
+ * @param min Minimum corner.
+ * @param max Maximum corner.
+ * @return Constructed bounding box.
+ */
 t_aabb		aabb_create(t_vec3 min, t_vec3 max);
+
+/**
+ * @brief Merge two AABBs into a bounding box containing both.
+ *
+ * @param a First AABB.
+ * @param b Second AABB.
+ * @return Merged bounding box.
+ */
 t_aabb		aabb_merge(t_aabb a, t_aabb b);
+
+/**
+ * @brief Compute AABB for any object by type dispatch.
+ *
+ * Returns a large fallback box for unsupported types (planes).
+ *
+ * @param obj Object to compute bounds for.
+ * @return Bounding box of the object.
+ */
 t_aabb		aabb_for_object(t_object *obj);
+
+/**
+ * @brief Test a ray for intersection with an axis-aligned bounding box.
+ *
+ * Uses the slab method and updates t_min/t_max to the overlap range.
+ *
+ * @param box AABB to test.
+ * @param ray Ray to test.
+ * @param t_min Input/output minimum t value.
+ * @param t_max Input/output maximum t value.
+ * @return 1 if the ray intersects the box, 0 otherwise.
+ */
 int			aabb_intersect(t_aabb box, t_ray ray, double *t_min, double *t_max);
 
 /* BVH construction */
+/**
+ * @brief Allocate and initialize a BVH structure.
+ *
+ * @return Newly allocated BVH or NULL on failure.
+ */
 t_bvh		*bvh_create(void);
+
+/**
+ * @brief Destroy a BVH and free all resources.
+ *
+ * @param bvh BVH to destroy.
+ */
 void		bvh_destroy(t_bvh *bvh);
+
+/**
+ * @brief Build or rebuild the BVH from object references.
+ *
+ * Destroys any existing BVH tree and constructs a new one.
+ *
+ * @param bvh BVH structure to populate.
+ * @param objects Array of object references.
+ * @param count Number of objects.
+ * @param scene Pointer to the scene for bounds computation.
+ */
 void		bvh_build(t_bvh *bvh, t_object_ref *objects, int count,
 				t_scene *scene);
+
+/**
+ * @brief Recursively build a BVH subtree.
+ *
+ * @param objects Array of object references.
+ * @param count Number of objects in the current subset.
+ * @param scene Pointer to the scene for bounds computation.
+ * @param depth Current recursion depth.
+ * @return Root node of the constructed subtree.
+ */
 t_bvh_node	*bvh_build_recursive(t_object_ref *objects, int count,
 				t_scene *scene, int depth);
 
 /* BVH traversal */
+/**
+ * @brief Intersect a ray against the BVH root if enabled.
+ *
+ * @param bvh BVH structure.
+ * @param ray Ray to test.
+ * @param hit Output hit record.
+ * @param scene Pointer to the scene.
+ * @return 1 if any hit is found, 0 otherwise.
+ */
 int			bvh_intersect(t_bvh *bvh, t_ray ray, t_hit *hit,
 				t_scene *scene);
+
+/**
+ * @brief Traverse a BVH node to test for ray intersections.
+ *
+ * Performs AABB test, descends into children, and selects the closest hit.
+ *
+ * @param node BVH node to test.
+ * @param ray Ray to test.
+ * @param hit Output hit record.
+ * @param scene Pointer to the scene.
+ * @return 1 if any hit is found, 0 otherwise.
+ */
 int			bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit *hit,
 				t_scene *scene);
+
+/**
+ * @brief Test if any object intersects the ray within max_dist.
+ *
+ * Optimized for shadow rays: returns immediately on first hit.
+ *
+ * @param bvh BVH structure.
+ * @param ray Ray to test.
+ * @param max_dist Maximum distance (typically distance to light).
+ * @param scene Pointer to the scene.
+ * @return 1 if any intersection found, 0 if clear.
+ */
 int			bvh_intersect_any(t_bvh *bvh, t_ray ray, double max_dist,
 				t_scene *scene);
 
 /* Ray direction helper */
+/**
+ * @brief Check if ray direction is positive along a given axis.
+ *
+ * @param dir Ray direction vector.
+ * @param axis Axis index (0=x, 1=y, 2=z).
+ * @return 1 if positive, 0 otherwise.
+ */
 int			ray_goes_positive(t_vec3 dir, int axis);
 
 /* Object bounds calculation */
+/**
+ * @brief Retrieve bounds for an object referenced by index.
+ *
+ * @param ref Object reference containing index.
+ * @param scene Pointer to the scene.
+ * @return Bounding box for the referenced object.
+ */
 t_aabb		get_object_bounds(t_object_ref ref, t_scene *scene);
+
+/**
+ * @brief Get the geometric center of an object referenced by index.
+ *
+ * @param ref Object reference containing index.
+ * @param scene Pointer to the scene.
+ * @return Center point of the object.
+ */
 t_vec3		get_object_center(t_object_ref ref, t_scene *scene);
 
 /* Scene BVH initialization */
+/**
+ * @brief Build or rebuild the BVH for the scene with plane separation.
+ *
+ * Separates planes from bounded objects, builds BVH with bounded
+ * objects only, and stores plane indices for separate intersection.
+ *
+ * @param scene Scene containing objects and BVH state.
+ */
 void		build_scene_bvh(t_scene *scene);
 
 #endif

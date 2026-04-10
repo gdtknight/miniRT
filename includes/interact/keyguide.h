@@ -38,9 +38,40 @@
 
 /* Key guide state structure defined in window.h */
 
+/**
+ * @brief Initialize the key guide overlay state.
+ *
+ * Computes the on-screen position and sets initial visibility.
+ *
+ * @param keyguide Key guide state to initialize.
+ * @return 0 on success.
+ */
 int		keyguide_init(t_keyguide_state *keyguide);
+
+/**
+ * @brief Render the full key guide overlay.
+ *
+ * Draws all sections if the key guide is visible and dirty.
+ *
+ * @param render Render context containing key guide state.
+ */
 void	keyguide_render(t_render *render);
+
+/**
+ * @brief Render the main key guide content (navigation + camera).
+ *
+ * @param render Render context containing key guide position.
+ */
 void	keyguide_render_content(t_render *render);
+
+/**
+ * @brief Render extra key guide sections (resize, rotation, etc.).
+ *
+ * Displays resize, rotation, light, and HUD page controls.
+ *
+ * @param render Render context containing key guide state.
+ * @param y Current y position (in/out) for text rendering.
+ */
 void	keyguide_render_extra(t_render *render, int *y);
 
 #endif

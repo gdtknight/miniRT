@@ -21,19 +21,67 @@ typedef struct s_vec3
 	double	z;
 }	t_vec3;
 
-/* Add two vectors component-wise */
+/**
+ * @brief Add two vectors component-wise.
+ *
+ * @param a First vector.
+ * @param b Second vector.
+ * @return Sum vector.
+ */
 t_vec3	vec3_add(t_vec3 a, t_vec3 b);
-/* Subtract vector b from vector a component-wise */
+
+/**
+ * @brief Subtract two vectors component-wise.
+ *
+ * @param a Minuend vector.
+ * @param b Subtrahend vector.
+ * @return Difference vector.
+ */
 t_vec3	vec3_subtract(t_vec3 a, t_vec3 b);
-/* Multiply vector by scalar value */
+
+/**
+ * @brief Multiply a vector by a scalar.
+ *
+ * @param v Input vector.
+ * @param scalar Scalar multiplier.
+ * @return Scaled vector.
+ */
 t_vec3	vec3_multiply(t_vec3 v, double scalar);
-/* Calculate dot product of two vectors */
+
+/**
+ * @brief Compute dot product of two vectors.
+ *
+ * @param a First vector.
+ * @param b Second vector.
+ * @return Dot product value.
+ */
 double	vec3_dot(t_vec3 a, t_vec3 b);
-/* Calculate cross product of two vectors */
+
+/**
+ * @brief Compute cross product of two vectors.
+ *
+ * @param a First vector.
+ * @param b Second vector.
+ * @return Vector perpendicular to both inputs.
+ */
 t_vec3	vec3_cross(t_vec3 a, t_vec3 b);
-/* Calculate magnitude (length) of vector */
+
+/**
+ * @brief Compute vector magnitude (length).
+ *
+ * @param v Input vector.
+ * @return Magnitude of the vector.
+ */
 double	vec3_magnitude(t_vec3 v);
-/* Return normalized vector (length = 1) */
+
+/**
+ * @brief Normalize a vector to unit length.
+ *
+ * Returns a zero vector if the input length is zero.
+ *
+ * @param v Input vector.
+ * @return Normalized vector.
+ */
 t_vec3	vec3_normalize(t_vec3 v);
 
 #endif

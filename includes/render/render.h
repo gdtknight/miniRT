@@ -42,18 +42,96 @@ struct s_render
 };
 
 /* Render lifecycle */
+
+/**
+ * @brief Create and initialize a render context.
+ *
+ * Allocates the render context, sets up the MLX window and buffers,
+ * initializes render state and UI components, and registers event hooks.
+ *
+ * @param scene Scene to render.
+ * @return Newly created render context, or NULL on failure.
+ */
 t_render	*render_create(t_scene *scene);
+
+/**
+ * @brief Destroy a render context and release all resources.
+ *
+ * @param render Render context to destroy.
+ */
 void		render_destroy(t_render *render);
 
 /* Render state flag helpers */
+
+/**
+ * @brief Check whether a render state flag is set.
+ *
+ * @param render Render context to query.
+ * @param flag Flag bit to test.
+ * @return 1 if the flag is set, 0 otherwise.
+ */
 int			render_has_flag(t_render *render, int flag);
+
+/**
+ * @brief Set a render state flag.
+ *
+ * @param render Render context to update.
+ * @param flag Flag bit to set.
+ */
 void		render_set_flag(t_render *render, int flag);
+
+/**
+ * @brief Clear a render state flag.
+ *
+ * @param render Render context to update.
+ * @param flag Flag bit to clear.
+ */
 void		render_clear_flag(t_render *render, int flag);
 
 /* Render pipeline */
+
+/**
+ * @brief Render the full scene into the image buffer.
+ *
+ * Chooses low-quality or full-quality rendering based on render flags
+ * and iterates over all pixels.
+ *
+ * @param scene Scene to render.
+ * @param render Render context containing output buffer and state.
+ */
 void		render_scene_to_buffer(t_scene *scene, t_render *render);
+
+/**
+ * @brief Create a camera ray for normalized device coordinates.
+ *
+ * @param camera Camera describing the view.
+ * @param x Normalized horizontal coordinate in [-1, 1].
+ * @param y Normalized vertical coordinate in [-1, 1].
+ * @return Ray originating at the camera and passing through (x, y).
+ */
 t_ray		create_camera_ray(t_camera *camera, double x, double y);
+
+/**
+ * @brief Trace a ray through the scene and compute its color.
+ *
+ * Uses BVH traversal when available, otherwise falls back to a
+ * brute-force scan over all objects.
+ *
+ * @param scene Scene containing geometry and lighting.
+ * @param ray Ray to trace.
+ * @return Resulting color (black if no hit).
+ */
 t_color		trace_ray(t_scene *scene, t_ray *ray);
+
+/**
+ * @brief MLX loop hook for continuous rendering updates.
+ *
+ * Updates debounce state, rebuilds BVH if needed, renders when dirty,
+ * and draws HUD overlays when requested.
+ *
+ * @param param Pointer to the render context.
+ * @return Always 0 (as required by the MLX loop hook signature).
+ */
 int			render_loop(void *param);
 
 #endif

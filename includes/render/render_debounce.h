@@ -49,16 +49,56 @@ typedef struct s_debounce_state
 }	t_debounce_state;
 
 /* Initialization and cleanup */
+
+/**
+ * @brief Initialize debounce state to idle.
+ *
+ * @param state Debounce state to initialize.
+ */
 void	debounce_init(t_debounce_state *state);
 
 /* Input handling */
+
+/**
+ * @brief Handle user input by advancing or resetting the FSM.
+ *
+ * Transitions IDLE to ACTIVE, refreshes the timer on repeated input,
+ * and triggers a low-quality preview render when throttled.
+ *
+ * @param state Current debounce state.
+ * @param render Render context for setting quality flags.
+ */
 void	debounce_on_input(t_debounce_state *state, t_render *render);
 
 /* State machine update */
+
+/**
+ * @brief Tick the debounce FSM each frame.
+ *
+ * Drives state transitions: ACTIVE to FINAL, FINAL to COOLDOWN,
+ * and COOLDOWN to IDLE.
+ *
+ * @param state Current debounce state.
+ * @param render Render context for checking and setting flags.
+ */
 void	debounce_update(t_debounce_state *state, t_render *render);
 
 /* Timer utilities */
+
+/**
+ * @brief Check whether the debounce timer has expired.
+ *
+ * @param timer Timer to check.
+ * @return 1 if elapsed time exceeds the configured delay.
+ */
 int		debounce_timer_expired(t_debounce_timer *timer);
+
+/**
+ * @brief Check if enough time has passed for a preview render.
+ *
+ * @param state Debounce state holding the last preview timestamp.
+ * @return 1 if the minimum preview interval has elapsed.
+ */
 int		debounce_check_preview_throttle(t_debounce_state *state);
 
 #endif

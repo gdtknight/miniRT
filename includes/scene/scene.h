@@ -102,12 +102,50 @@ typedef struct s_scene
 }	t_scene;
 
 /* Scene lifecycle */
+
+/**
+ * @brief Allocate and initialize a new scene.
+ *
+ * Initializes object list capacity and default settings.
+ *
+ * @return Newly created scene, or NULL on failure.
+ */
 t_scene	*scene_create(void);
+
+/**
+ * @brief Destroy a scene and free all associated resources.
+ *
+ * Releases object list storage, BVH data, and the scene structure.
+ *
+ * @param scene Scene to destroy.
+ */
 void	scene_destroy(t_scene *scene);
 
 /* Object list operations */
+
+/**
+ * @brief Initialize an object list with a given capacity.
+ *
+ * @param list Object list to initialize.
+ * @param capacity Initial capacity (must be > 0).
+ * @return 1 on success, 0 on failure.
+ */
 int		object_list_init(t_object_list *list, int capacity);
+
+/**
+ * @brief Free object list storage and reset counters.
+ *
+ * @param list Object list to destroy.
+ */
 void	object_list_destroy(t_object_list *list);
+
+/**
+ * @brief Append an object to the list, growing storage if needed.
+ *
+ * @param list Object list to update.
+ * @param obj Object to append.
+ * @return 1 on success, 0 on failure.
+ */
 int		object_list_add(t_object_list *list, t_object *obj);
 
 #endif

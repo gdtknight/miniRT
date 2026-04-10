@@ -104,31 +104,157 @@
 # endif
 
 /* Key bind initialization */
+
+/**
+ * @brief Register HUD toggle and navigation key bindings.
+ *
+ * @param binds Key binding table to populate.
+ */
 void	init_hud_binds(t_key_binds *binds);
+
+/**
+ * @brief Register camera movement and rotation key bindings.
+ *
+ * @param binds Key binding table to populate.
+ */
 void	init_camera_binds(t_key_binds *binds);
+
+/**
+ * @brief Register object and light movement key bindings.
+ *
+ * @param binds Key binding table to populate.
+ */
 void	init_transform_move_binds(t_key_binds *binds);
+
+/**
+ * @brief Register resize and rotation key bindings.
+ *
+ * @param binds Key binding table to populate.
+ */
 void	init_transform_edit_binds(t_key_binds *binds);
 
 /* Camera control functions */
+
+/**
+ * @brief Translate the camera along its local axes.
+ *
+ * @param render Render context owning the camera.
+ * @param keycode Key identifying the movement direction.
+ */
 void	handle_camera_move(t_render *render, int keycode);
+
+/**
+ * @brief Adjust camera pitch by a fixed step.
+ *
+ * @param render Render context owning the camera.
+ * @param keycode KEY_E for pitch up, KEY_C for down.
+ */
 void	handle_camera_pitch(t_render *render, int keycode);
+
+/**
+ * @brief Reset camera to its initial position and direction.
+ *
+ * @param render Render context owning the camera.
+ */
 void	handle_camera_reset(t_render *render);
+
+/**
+ * @brief Adjust camera yaw by a fixed step.
+ *
+ * @param render Render context owning the camera.
+ * @param keycode KEY_1 for yaw right, KEY_3 for left.
+ */
 void	handle_camera_yaw(t_render *render, int keycode);
 
 /* Object control functions */
+
+/**
+ * @brief Handle object movement keys for the selected object.
+ *
+ * Converts key input into axis-aligned movement and marks the
+ * BVH as dirty to trigger rebuild.
+ *
+ * @param render Render context containing selection and flags.
+ * @param keycode Key code identifying movement direction.
+ */
 void	handle_object_move(t_render *render, int keycode);
+
+/**
+ * @brief Handle light movement keys.
+ *
+ * Translates the selected light position along X/Y/Z axes.
+ *
+ * @param render Render context containing scene lighting.
+ * @param keycode Key code identifying movement direction.
+ */
 void	handle_light_move(t_render *render, int keycode);
 
 /* Key handler functions */
+
+/**
+ * @brief Handle HUD interaction keys.
+ *
+ * Toggles HUD visibility, changes selection, and switches pages
+ * based on navigation keys.
+ *
+ * @param render Render context containing HUD state.
+ * @param keycode Key code to interpret.
+ */
 void	handle_hud_keys(t_render *render, int keycode);
+
+/**
+ * @brief Handle camera-related keys and trigger re-rendering.
+ *
+ * Dispatches movement, pitch, yaw, and reset operations and marks
+ * the render state dirty via the debounce system.
+ *
+ * @param render Render context containing scene and debounce state.
+ * @param keycode Key code to interpret.
+ */
 void	handle_camera_keys(t_render *render, int keycode);
+
+/**
+ * @brief Handle object and light transformation keys.
+ *
+ * Moves objects, moves lights, or delegates to resize/rotate
+ * handlers while triggering debounce and HUD refresh.
+ *
+ * @param render Render context containing scene and selection.
+ * @param keycode Key code to interpret.
+ */
 void	handle_transform_keys(t_render *render, int keycode);
 
 /* Object resize and rotation */
+
+/**
+ * @brief Resize the currently selected object and rebuild BVH.
+ *
+ * @param render Render context with selection state.
+ * @param keycode Key identifying the resize action.
+ */
 void	handle_object_resize(t_render *render, int keycode);
+
+/**
+ * @brief Handle object rotation keys for the selected object.
+ *
+ * Applies axis rotations to planes, cylinders, and cones, marks
+ * BVH dirty, and triggers debounce for re-rendering.
+ *
+ * @param render Render context containing selection and scene.
+ * @param keycode Key code indicating rotation direction.
+ */
 void	handle_object_rotate(t_render *render, int keycode);
 
 /* Rodrigues rotation */
+
+/**
+ * @brief Rotate a vector around an axis using Rodrigues' formula.
+ *
+ * @param v Vector to rotate.
+ * @param k Rotation axis (should be normalized).
+ * @param angle Rotation angle in radians.
+ * @return Rotated vector.
+ */
 t_vec3	rodrigues_rotate(t_vec3 v, t_vec3 k, double angle);
 
 #endif
