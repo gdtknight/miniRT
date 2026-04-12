@@ -16,6 +16,9 @@
 # include "interact/ui_types.h"
 # include "scene/scene.h"
 
+/* Forward declaration */
+typedef struct s_render	t_render;
+
 /* HUD display dimensions and layout constants */
 # define HUD_WIDTH 400
 # define HUD_HEIGHT 600

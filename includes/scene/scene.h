@@ -17,8 +17,7 @@
 # include "common/objects.h"
 # include "metrics.h"
 
-/* Forward declarations */
-typedef struct s_render	t_render;
+/* Forward declaration */
 typedef struct s_bvh	t_bvh;
 
 /* Shadow configuration (owned by scene, used by lighting) */
