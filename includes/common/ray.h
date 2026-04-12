@@ -13,8 +13,6 @@
 #ifndef RAY_H
 # define RAY_H
 
-# include <stdbool.h>
-# include <stddef.h>
 # include "common/vec3.h"
 # include "common/objects.h"
 

@@ -14,6 +14,7 @@
 # define INTERSECT_H
 
 # include "common/ray.h"
+# include "common/objects.h"
 
 /* Ray-object intersection functions */
 /**
