@@ -30,7 +30,7 @@ static void	rebuild_bvh_if_dirty(t_render *render)
 	{
 		build_scene_bvh(render->scene);
 		render_clear_flag(render, RENDER_BVH_DIRTY);
-		bvhd_run(render->scene->bvh, NULL, render->scene);
+		bvhd_run(render->scene->bvh, render->scene);
 	}
 }
 

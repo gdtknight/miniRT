@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "spatial/bvh_debug.h"
+#include "bvhd_internal.h"
 #include <stdio.h>
 
 /**
@@ -25,8 +25,7 @@ static void	handle_node_display(t_bvh_node *node, t_traverse_ctx *ctx,
 				t_node_info *info, int is_last)
 {
 	if (bvhd_is_leaf(node))
-		bvhd_format_objects(node->objects, node->object_count, info->objects,
-			ctx->scene);
+		bvhd_format_objects(node, info, ctx->scene);
 	bvhd_print_node(ctx->prefix, info, is_last);
 }
 

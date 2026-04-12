@@ -10,36 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "spatial/bvh_debug.h"
+#include "bvhd_internal.h"
 #include <sys/ioctl.h>
 #include <unistd.h>
 
 /**
- * @brief Build a default configuration for BVH visualization.
- *
- * Initializes display options and captures current terminal width.
- *
- * @return t_vis_config Default visualization configuration.
- */
-t_vis_config	bvhd_default_config(void)
-{
-	t_vis_config	config;
-
-	config.max_depth_display = -1;
-	config.compact_mode = 0;
-	config.terminal_width = bvhd_get_terminal_width();
-	config.show_warnings = 1;
-	return (config);
-}
-
-/**
  * @brief Get the current terminal width in characters.
  *
- * Falls back to 80 columns if the query fails.
- *
- * @return int Terminal width in columns.
+ * @return Terminal width in columns, defaults to 80.
  */
-int	bvhd_get_terminal_width(void)
+static int	get_terminal_width(void)
 {
 	struct winsize	ws;
 
@@ -51,56 +31,52 @@ int	bvhd_get_terminal_width(void)
 }
 
 /**
- * @brief Check visualization edge cases and emit warnings.
+ * @brief Build a default visualization configuration.
  *
- * Warns about deep trees or narrow terminals when enabled.
+ * @return Default configuration with current terminal width.
+ */
+static t_vis_config	init_default_config(void)
+{
+	t_vis_config	config;
+
+	config.max_depth_display = -1;
+	config.compact_mode = 0;
+	config.terminal_width = get_terminal_width();
+	config.show_warnings = 1;
+	return (config);
+}
+
+/**
+ * @brief Warn about narrow terminal if applicable.
  *
- * @param bvh BVH to visualize.
  * @param config Visualization configuration.
  */
-void	bvhd_check_edges(t_bvh *bvh, t_vis_config *config)
+static void	check_edges(t_vis_config *config)
 {
-	if (!bvh || !bvh->root || !config)
-		return ;
-	if (config->terminal_width < 80)
-	{
-		if (config->show_warnings)
-			bvhd_warn("Terminal width < 80 chars, output may wrap");
-	}
+	if (config->terminal_width < 80 && config->show_warnings)
+		bvhd_warn("Terminal width < 80 chars, output may wrap");
 }
 
 /**
  * @brief Visualize the BVH tree in the terminal.
  *
- * Applies defaults when configuration is NULL and prints the tree plus
- * statistics if enabled.
- *
  * @param bvh BVH to visualize.
- * @param config Visualization configuration (optional).
- * @param scene Pointer to the scene used for object labels.
+ * @param scene Scene for object label lookup.
  */
-void	bvhd_run(t_bvh *bvh, t_vis_config *config, t_scene *scene)
+void	bvhd_run(t_bvh *bvh, t_scene *scene)
 {
 	t_prefix_state	prefix;
 	t_bvh_stats		stats;
-	t_vis_config	default_config;
+	t_vis_config	config;
 	t_traverse_ctx	ctx;
 
 	if (!bvh || !bvh->root || !bvh->visualize)
 		return ;
-	if (!config)
-	{
-		default_config = bvhd_default_config();
-		config = &default_config;
-	}
-	bvhd_check_edges(bvh, config);
-	stats.total_nodes = 0;
-	stats.leaf_count = 0;
-	stats.internal_count = 0;
-	stats.max_depth = 0;
-	stats.total_objects = 0;
-	stats.avg_objects_per_leaf = 0.0;
+	config = init_default_config();
+	check_edges(&config);
 	prefix = bvhd_prefix_init();
+	if (!prefix.buffer)
+		return ;
 	ctx.prefix = &prefix;
 	ctx.scene = scene;
 	bvhd_print_tree(bvh->root, &ctx, &stats);

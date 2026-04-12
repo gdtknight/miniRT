@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "spatial/bvh_debug.h"
+#include "bvhd_internal.h"
 #include <stdio.h>
 
 /**
@@ -22,7 +22,7 @@
  * @param stats Stats structure to update.
  * @param depth Current traversal depth.
  */
-void	bvhd_collect_recursive(t_bvh_node *node, t_bvh_stats *stats,
+static void	collect_recursive(t_bvh_node *node, t_bvh_stats *stats,
 			int depth)
 {
 	if (!node || !stats)
@@ -38,9 +38,9 @@ void	bvhd_collect_recursive(t_bvh_node *node, t_bvh_stats *stats,
 	else
 	{
 		if (node->left)
-			bvhd_collect_recursive(node->left, stats, depth + 1);
+			collect_recursive(node->left, stats, depth + 1);
 		if (node->right)
-			bvhd_collect_recursive(node->right, stats, depth + 1);
+			collect_recursive(node->right, stats, depth + 1);
 	}
 }
 
@@ -60,7 +60,7 @@ void	bvhd_collect_stats(t_bvh_node *node, t_bvh_stats *stats)
 	stats->max_depth = 0;
 	stats->total_objects = 0;
 	stats->avg_objects_per_leaf = 0.0;
-	bvhd_collect_recursive(node, stats, 0);
+	collect_recursive(node, stats, 0);
 	stats->internal_count = stats->total_nodes - stats->leaf_count;
 	if (stats->leaf_count > 0)
 		stats->avg_objects_per_leaf = (double)stats->total_objects

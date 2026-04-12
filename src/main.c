@@ -143,7 +143,7 @@ int	main(int argc, char **argv)
 	build_scene_bvh(scene);
 	if (bvh_vis && scene->bvh)
 		scene->bvh->visualize = 1;
-	bvhd_run(scene->bvh, NULL, scene);
+	bvhd_run(scene->bvh, scene);
 	if (!init_render(scene, &render))
 		return (1);
 	if (!load_textures(scene, render))

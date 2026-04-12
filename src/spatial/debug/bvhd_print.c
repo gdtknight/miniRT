@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "spatial/bvh_debug.h"
+#include "bvhd_internal.h"
 #include "libft.h"
 #include <stdio.h>
 
