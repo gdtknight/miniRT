@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "spatial/spatial.h"
-#include "bvh_internal.h"
+#include "spatial/bvh_internal.h"
 
 /**
  * @brief Compute the bounding box for a set of object references.

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "bvhd_internal.h"
+#include "spatial/bvhd_internal.h"
 #include <sys/ioctl.h>
 #include <unistd.h>
 
