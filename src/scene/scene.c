@@ -13,6 +13,7 @@
 #include "scene/scene.h"
 #include "lighting/shadow.h"
 #include "spatial/spatial.h"
+#include "metrics.h"
 #include <stdlib.h>
 #include "libft.h"
 

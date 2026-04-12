@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "render/render.h"
+#include "common/objects.h"
 #include "common/ray.h"
 
 /**

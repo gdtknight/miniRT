@@ -10,6 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "scene/scene.h"
+#include "common/ray.h"
+#include "common/objects.h"
 #include "lighting/shading.h"
 #include "spatial/intersect.h"
 #include "spatial/spatial.h"

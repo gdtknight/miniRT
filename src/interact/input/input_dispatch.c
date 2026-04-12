@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "render/render.h"
+#include "render/render_debounce.h"
 #include "interact/input.h"
 #include "interact/hud.h"
 #include "interact/hud_internal.h"

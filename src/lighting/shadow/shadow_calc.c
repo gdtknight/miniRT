@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "lighting/shadow.h"
+#include "common/vec3.h"
 #include "scene/scene.h"
 #include <math.h>
 

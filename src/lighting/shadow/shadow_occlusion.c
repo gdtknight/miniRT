@@ -12,9 +12,11 @@
 
 #include "lighting/shadow.h"
 #include "scene/scene.h"
+#include "common/ray.h"
+#include "common/objects.h"
 #include "spatial/intersect.h"
-#include "metrics.h"
 #include "spatial/spatial.h"
+#include "metrics.h"
 
 /**
  * @brief Test shadow ray against all objects in the scene.

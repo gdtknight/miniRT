@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "render/render.h"
+#include "common/ray.h"
 #include "interact/input.h"
 #include <math.h>
 

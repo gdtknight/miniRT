@@ -11,6 +11,9 @@
 /* ************************************************************************** */
 
 #include "lighting/texture.h"
+#include "common/objects.h"
+#include "common/ray.h"
+#include "common/vec3.h"
 #include <math.h>
 
 /**

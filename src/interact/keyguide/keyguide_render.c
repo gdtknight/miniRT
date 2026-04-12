@@ -12,7 +12,6 @@
 
 #include "render/render.h"
 #include "interact/keyguide.h"
-#include "render/render.h"
 #include "interact/hud.h"
 
 /**

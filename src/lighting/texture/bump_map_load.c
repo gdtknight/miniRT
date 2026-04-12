@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "lighting/texture.h"
+#include "common/objects.h"
 #include "scene/scene.h"
 #include "common/error.h"
 #include "mlx.h"

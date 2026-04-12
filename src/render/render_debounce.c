@@ -13,6 +13,7 @@
 #include "render/render_debounce.h"
 #include "render/render.h"
 #include <sys/time.h>
+#include <sys/time.h>
 
 /**
  * @brief Initialize debounce state to idle.
