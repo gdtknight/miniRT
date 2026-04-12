@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "spatial/spatial.h"
-#include "spatial/bvh_internal.h"
+#include "bvh_internal.h"
 #include <stdlib.h>
 
 /**
