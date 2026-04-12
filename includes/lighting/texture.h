@@ -19,7 +19,7 @@
 # define CHECKER_SCALE 2.0
 
 /* Bump map texture data loaded from XPM */
-struct s_bump_map
+typedef struct s_bump_map
 {
 	void	*img;
 	char	*data;
@@ -28,7 +28,7 @@ struct s_bump_map
 	int		bpp;
 	int		size_line;
 	int		endian;
-};
+}	t_bump_map;
 
 /* Tangent vector utility for UV computation */
 /**

@@ -29,7 +29,7 @@
 # define RENDER_ENABLE_METRICS_PRINT 0x80
 
 /* Render context */
-struct s_render
+typedef struct s_render
 {
 	t_mlx_context		mlx;
 	t_scene				*scene;
@@ -39,7 +39,7 @@ struct s_render
 	t_keyguide_state	keyguide;
 	t_debounce_state	debounce;
 	t_key_binds			key_binds;
-};
+}	t_render;
 
 /* Render lifecycle */
 
