@@ -58,19 +58,6 @@ void	line_reader_init(t_line_reader *reader, int fd)
 }
 
 /**
- * @brief Get current line number.
- *
- * @param reader Line reader.
- * @return int Current line number (1-based) or 0 if not started.
- */
-int	line_reader_get_line_num(t_line_reader *reader)
-{
-	if (!reader)
-		return (0);
-	return (reader->line_num);
-}
-
-/**
  * @brief Validate that a file name ends with ".rt".
  *
  * @param filename Path to the scene file.

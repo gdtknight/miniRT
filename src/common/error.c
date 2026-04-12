@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "common/error.h"
-#include <stdlib.h>
 #include <unistd.h>
 
 /**
@@ -35,7 +34,7 @@ void	error_write_str(const char *str)
  * @param code Error code to look up.
  * @return Pointer to static error message string.
  */
-const char	*error_get_message(t_error_code code)
+static const char	*error_get_message(t_error_code code)
 {
 	static const char	*error_messages[ERR_COUNT] = {
 		"No error",
@@ -81,17 +80,6 @@ int	error_print(t_error_code code)
 		error_write_str("\n");
 	}
 	return (1);
-}
-
-/**
- * @brief Print error message and terminate the program.
- *
- * @param code Error code to print before exiting.
- */
-void	error_exit(t_error_code code)
-{
-	error_print(code);
-	exit(EXIT_FAILURE);
 }
 
 /**

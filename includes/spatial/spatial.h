@@ -133,16 +133,6 @@ t_aabb		aabb_create(t_vec3 min, t_vec3 max);
 t_aabb		aabb_merge(t_aabb a, t_aabb b);
 
 /**
- * @brief Compute AABB for any object by type dispatch.
- *
- * Returns a large fallback box for unsupported types (planes).
- *
- * @param obj Object to compute bounds for.
- * @return Bounding box of the object.
- */
-t_aabb		aabb_for_object(t_object *obj);
-
-/**
  * @brief Test a ray for intersection with an axis-aligned bounding box.
  *
  * Uses the slab method and updates t_min/t_max to the overlap range.
@@ -206,20 +196,6 @@ t_bvh_node	*bvh_build_recursive(t_object_ref *objects, int count,
  * @return 1 if any hit is found, 0 otherwise.
  */
 int			bvh_intersect(t_bvh *bvh, t_ray ray, t_hit *hit,
-				t_scene *scene);
-
-/**
- * @brief Traverse a BVH node to test for ray intersections.
- *
- * Performs AABB test, descends into children, and selects the closest hit.
- *
- * @param node BVH node to test.
- * @param ray Ray to test.
- * @param hit Output hit record.
- * @param scene Pointer to the scene.
- * @return 1 if any hit is found, 0 otherwise.
- */
-int			bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit *hit,
 				t_scene *scene);
 
 /**

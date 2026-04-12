@@ -22,7 +22,7 @@
  * @param has_digits Set to 1 if any digits are consumed.
  * @return double Accumulated integer value.
  */
-double	parse_int_part(const char **str, int *has_digits)
+static double	parse_int_part(const char **str, int *has_digits)
 {
 	double	result;
 
@@ -46,7 +46,7 @@ double	parse_int_part(const char **str, int *has_digits)
  * @param has_digits Set to 1 if any digits are consumed.
  * @return double Fractional value, or -1.0 on format error.
  */
-double	parse_frac_part(const char **str, int *has_digits)
+static double	parse_frac_part(const char **str, int *has_digits)
 {
 	double	result;
 	double	divisor;

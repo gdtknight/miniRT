@@ -89,14 +89,6 @@ void			line_reader_init(t_line_reader *reader, int fd);
  */
 char			*line_reader_next(t_line_reader *reader);
 
-/**
- * @brief Get the current line number.
- *
- * @param reader Line reader.
- * @return Current line number (1-based), or 0 if not started.
- */
-int				line_reader_get_line_num(t_line_reader *reader);
-
 /*
  * Number Parsing API
  */
@@ -120,26 +112,6 @@ t_parse_result	parse_double(const char *str, double *value, const char **end);
  * @return PARSE_OK or PARSE_ERR_NUMBER_FORMAT.
  */
 t_parse_result	parse_int(const char *str, int *value, const char **end);
-
-/**
- * @brief Parse integer digit sequence into a double.
- *
- * @param str Input string pointer (advanced past consumed digits).
- * @param has_digits Set to 1 if any digits are consumed.
- * @return Accumulated integer value.
- */
-double			parse_int_part(const char **str, int *has_digits);
-
-/**
- * @brief Parse the fractional part following a decimal point.
- *
- * Returns -1.0 if '.' is present but no digits follow.
- *
- * @param str Input string pointer (advanced past consumed digits).
- * @param has_digits Set to 1 if any digits are consumed.
- * @return Fractional value, or -1.0 on format error.
- */
-double			parse_frac_part(const char **str, int *has_digits);
 
 /*
  * Token Utilities API
@@ -180,21 +152,6 @@ void			error_context_init(t_error_context *ctx);
  * @param ctx Error context containing line, element, and error code.
  */
 void			error_context_print(t_error_context *ctx);
-
-/**
- * @brief Write a signed integer to stderr.
- *
- * @param n Integer value to write.
- */
-void			error_write_int(int n);
-
-/**
- * @brief Look up the human-readable message for a parse error code.
- *
- * @param code Parse result code.
- * @return Pointer to a static error message string.
- */
-const char		*get_error_message(t_parse_result code);
 
 /*
  * Validation API (Enhanced)
@@ -351,13 +308,6 @@ t_parse_result	parse_cone(char *line, t_scene *scene);
  * @return PARSE_OK on success, error code on failure.
  */
 t_parse_result	parse_bonus_options(const char **token, t_object *obj);
-
-/**
- * @brief Validate scene has required elements
- * @param scene Scene structure to validate
- * @return 1 if valid, 0 if invalid
- */
-int				validate_scene(t_scene *scene);
 
 /**
  * @brief Check if value is in range [min, max]

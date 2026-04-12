@@ -34,7 +34,7 @@ static void	write_uint(unsigned int n)
  *
  * @param n Integer value to write.
  */
-void	error_write_int(int n)
+static void	error_write_int(int n)
 {
 	unsigned int	u;
 
@@ -54,7 +54,7 @@ void	error_write_int(int n)
  * @param code Parse result code.
  * @return Pointer to static error message string.
  */
-const char	*get_error_message(t_parse_result code)
+static const char	*get_error_message(t_parse_result code)
 {
 	static const char	*msgs[] = {
 		"",

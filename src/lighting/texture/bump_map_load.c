@@ -26,7 +26,7 @@
  * @param filepath Path to the XPM file.
  * @return t_bump_map* Loaded bump map, or NULL on error.
  */
-t_bump_map	*bump_map_load(void *mlx, char *filepath)
+static t_bump_map	*bump_map_load(void *mlx, char *filepath)
 {
 	t_bump_map	*bmap;
 
@@ -57,7 +57,7 @@ t_bump_map	*bump_map_load(void *mlx, char *filepath)
  * @param mlx MLX connection pointer.
  * @param bmap Bump map to destroy (may be NULL).
  */
-void	bump_map_destroy(void *mlx, t_bump_map *bmap)
+static void	bump_map_destroy(void *mlx, t_bump_map *bmap)
 {
 	if (!bmap)
 		return ;

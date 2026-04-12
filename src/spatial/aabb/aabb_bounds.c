@@ -83,7 +83,7 @@ static t_aabb	bounds_for_cone(t_cone_data *c)
  * @param obj Object to compute bounds for.
  * @return t_aabb Bounding box of the object.
  */
-t_aabb	aabb_for_object(t_object *obj)
+static t_aabb	aabb_for_object(t_object *obj)
 {
 	double	large;
 

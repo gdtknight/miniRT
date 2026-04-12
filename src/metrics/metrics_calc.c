@@ -22,7 +22,7 @@
  * @param m Metrics structure containing BVH traversal counts.
  * @return double Skip rate percentage in [0, 100].
  */
-double	calculate_bvh_efficiency(t_metrics *m)
+static double	calculate_bvh_efficiency(t_metrics *m)
 {
 	if (m->bvh.nodes_visited == 0)
 		return (0.0);
@@ -35,25 +35,11 @@ double	calculate_bvh_efficiency(t_metrics *m)
  * @param m Metrics structure containing ray and intersect counts.
  * @return double Average tests per ray (0 if no rays).
  */
-double	calculate_avg_tests_per_ray(t_metrics *m)
+static double	calculate_avg_tests_per_ray(t_metrics *m)
 {
 	if (m->ray.rays_traced == 0)
 		return (0.0);
 	return ((double)m->ray.intersect_tests / m->ray.rays_traced);
-}
-
-/**
- * @brief Reset BVH-related metrics counters.
- *
- * @param bvh BVH metrics structure to reset.
- */
-void	metrics_reset_bvh(t_bvh_metrics *bvh)
-{
-	if (bvh)
-	{
-		bvh->nodes_visited = 0;
-		bvh->tests_skipped = 0;
-	}
 }
 
 /**

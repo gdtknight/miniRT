@@ -15,6 +15,9 @@
 #include "spatial/intersect.h"
 #include "metrics.h"
 
+static int	bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit *hit,
+				t_scene *scene);
+
 /**
  * @brief Check if ray direction is positive along a given axis.
  *
@@ -121,7 +124,7 @@ static int	traverse_children(t_bvh_node *node, t_ray ray, t_hit *hit,
  * @param scene Pointer to the scene.
  * @return int 1 if any hit is found, 0 otherwise.
  */
-int	bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit *hit,
+static int	bvh_node_intersect(t_bvh_node *node, t_ray ray, t_hit *hit,
 		t_scene *scene)
 {
 	double	t_min;

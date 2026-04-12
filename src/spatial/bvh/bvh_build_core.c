@@ -24,7 +24,8 @@
  * @param scene Pointer to the scene for bounds computation.
  * @return t_bvh_node* Newly allocated leaf node or NULL on failure.
  */
-t_bvh_node	*create_leaf_node(t_object_ref *objects, int count, t_scene *scene)
+static t_bvh_node	*create_leaf_node(t_object_ref *objects, int count,
+		t_scene *scene)
 {
 	t_bvh_node	*node;
 	int			i;

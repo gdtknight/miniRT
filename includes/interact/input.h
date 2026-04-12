@@ -245,16 +245,4 @@ void	handle_object_resize(t_render *render, int keycode);
  */
 void	handle_object_rotate(t_render *render, int keycode);
 
-/* Rodrigues rotation */
-
-/**
- * @brief Rotate a vector around an axis using Rodrigues' formula.
- *
- * @param v Vector to rotate.
- * @param k Rotation axis (should be normalized).
- * @param angle Rotation angle in radians.
- * @return Rotated vector.
- */
-t_vec3	rodrigues_rotate(t_vec3 v, t_vec3 k, double angle);
-
 #endif

@@ -144,15 +144,6 @@ void	hud_format_color(char *buffer, t_color color);
  */
 void	hud_render_performance(t_render *render, int *y);
 
-/**
- * @brief Render all HUD sections in order.
- *
- * Called internally by hud_render().
- *
- * @param render Render context containing HUD and scene.
- */
-void	hud_render_content(t_render *render);
-
 /* Scene and object rendering declared in hud_scene.h and hud_objects.h */
 
 /**

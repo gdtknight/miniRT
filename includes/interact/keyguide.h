@@ -58,13 +58,6 @@ int		keyguide_init(t_keyguide_state *keyguide);
 void	keyguide_render(t_render *render);
 
 /**
- * @brief Render the main key guide content (navigation + camera).
- *
- * @param render Render context containing key guide position.
- */
-void	keyguide_render_content(t_render *render);
-
-/**
  * @brief Render extra key guide sections (resize, rotation, etc.).
  *
  * Displays resize, rotation, light, and HUD page controls.

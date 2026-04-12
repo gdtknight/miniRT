@@ -24,7 +24,7 @@
  * @param base_bias Base bias value.
  * @return double Adjusted bias value.
  */
-double	calculate_shadow_bias(t_vec3 normal, t_vec3 light_dir,
+static double	calculate_shadow_bias(t_vec3 normal, t_vec3 light_dir,
 		double base_bias)
 {
 	double	dot_nl;
@@ -49,7 +49,7 @@ double	calculate_shadow_bias(t_vec3 normal, t_vec3 light_dir,
  * @param total_samples Total number of samples.
  * @return t_vec3 Offset vector for the sample.
  */
-t_vec3	generate_shadow_sample_offset(double radius, int sample_index,
+static t_vec3	generate_shadow_sample_offset(double radius, int sample_index,
 		int total_samples)
 {
 	t_vec3	offset;

@@ -50,7 +50,7 @@ static int	parse_line(char *line, t_scene *scene, t_error_context *ctx)
  * @param scene Scene to validate.
  * @return int 1 if valid, 0 otherwise.
  */
-int	validate_scene(t_scene *scene)
+static int	validate_scene(t_scene *scene)
 {
 	if (!(scene->flags & SCENE_HAS_AMBIENT))
 		return (error_print_ctx("Missing element: ", "ambient light (A)"), 0);

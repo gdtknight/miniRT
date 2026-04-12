@@ -57,21 +57,6 @@ void		error_write_str(const char *str);
 int			error_print(t_error_code code);
 
 /**
- * @brief Look up the human-readable message for an error code.
- *
- * @param code Error code to look up.
- * @return Pointer to a static error message string.
- */
-const char	*error_get_message(t_error_code code);
-
-/**
- * @brief Print an error message and terminate the program.
- *
- * @param code Error code to print before exiting.
- */
-void		error_exit(t_error_code code);
-
-/**
  * @brief Print a contextual error with prefix and detail.
  *
  * @param prefix Error category or source label.

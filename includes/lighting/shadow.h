@@ -42,34 +42,6 @@ typedef struct s_shadow_sample
 t_shadow_config	init_shadow_config(void);
 
 /**
- * @brief Calculate adaptive shadow bias
- * 
- * Computes shadow bias based on surface angle to prevent shadow acne
- * on grazing angles while maintaining shadow accuracy.
- * 
- * @param normal Surface normal vector
- * @param light_dir Direction to light source
- * @param base_bias Base bias value
- * @return Adjusted bias value
- */
-double			calculate_shadow_bias(t_vec3 normal, t_vec3 light_dir,
-					double base_bias);
-
-/**
- * @brief Generate shadow sample offset
- * 
- * Creates a random offset for shadow ray sampling to produce soft shadows.
- * Uses stratified sampling for better distribution.
- * 
- * @param radius Sampling radius
- * @param sample_index Current sample index
- * @param total_samples Total number of samples
- * @return Offset vector
- */
-t_vec3			generate_shadow_sample_offset(double radius,
-					int sample_index, int total_samples);
-
-/**
  * @brief Calculate shadow factor using multiple shadow rays
  * 
  * Casts multiple shadow rays to determine shadow intensity.

@@ -24,7 +24,7 @@
  * @param angle Rotation angle in radians.
  * @return t_vec3 Rotated vector.
  */
-t_vec3	rodrigues_rotate(t_vec3 v, t_vec3 k, double angle)
+static t_vec3	rodrigues_rotate(t_vec3 v, t_vec3 k, double angle)
 {
 	t_vec3	cross;
 	double	cos_a;

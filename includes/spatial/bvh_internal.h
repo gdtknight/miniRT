@@ -75,17 +75,4 @@ double		calculate_split_position(t_aabb bounds, int axis);
  */
 t_bvh_node	*create_split_node(t_split_params *sp);
 
-/* Internal BVH build core functions */
-/**
- * @brief Create a leaf BVH node containing object references.
- *
- * Allocates the node, computes bounds, and copies object references.
- *
- * @param objects Array of object references.
- * @param count Number of objects in the leaf.
- * @param scene Pointer to the scene for bounds computation.
- * @return Newly allocated leaf node or NULL on failure.
- */
-t_bvh_node	*create_leaf_node(t_object_ref *objects, int count, t_scene *scene);
-
 #endif

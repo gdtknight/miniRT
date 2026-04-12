@@ -21,7 +21,7 @@
  *
  * @param render Render context containing HUD and scene.
  */
-void	hud_render_content(t_render *render)
+static void	hud_render_content(t_render *render)
 {
 	int	y;
 

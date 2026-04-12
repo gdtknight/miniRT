@@ -120,34 +120,6 @@ void	metrics_add_bvh_node_visit(t_metrics *metrics);
 void	metrics_add_bvh_skip(t_metrics *metrics);
 
 /**
- * @brief Reset BVH-related metrics counters.
- *
- * @param bvh BVH metrics structure to reset.
- */
-void	metrics_reset_bvh(t_bvh_metrics *bvh);
-
-/* Metrics calculations */
-
-/**
- * @brief Calculate BVH skip rate as a percentage.
- *
- * Returns the ratio of skipped nodes to total visited nodes.
- * Higher values indicate more effective early-out.
- *
- * @param m Metrics structure containing BVH traversal counts.
- * @return Skip rate percentage in [0, 100].
- */
-double	calculate_bvh_efficiency(t_metrics *m);
-
-/**
- * @brief Calculate average intersection tests per traced ray.
- *
- * @param m Metrics structure containing ray and intersect counts.
- * @return Average tests per ray (0 if no rays).
- */
-double	calculate_avg_tests_per_ray(t_metrics *m);
-
-/**
  * @brief Print a summary of all render metrics to stdout.
  *
  * Outputs frame timing, ray counts, intersection stats, and BVH

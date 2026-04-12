@@ -55,27 +55,6 @@ t_vec3		get_tangent(t_vec3 n);
  */
 t_color		checkerboard_color(t_object *obj, t_hit *hit);
 
-/* Bump map loading and destruction */
-/**
- * @brief Load an XPM file as a bump map.
- *
- * Allocates a bump map, loads the XPM image via MLX, and retrieves
- * the pixel data address. Returns NULL on failure.
- *
- * @param mlx MLX connection pointer.
- * @param filepath Path to the XPM file.
- * @return Loaded bump map, or NULL on error.
- */
-t_bump_map	*bump_map_load(void *mlx, char *filepath);
-
-/**
- * @brief Destroy a bump map and free its resources.
- *
- * @param mlx MLX connection pointer.
- * @param bmap Bump map to destroy (may be NULL).
- */
-void		bump_map_destroy(void *mlx, t_bump_map *bmap);
-
 /* Bump map normal perturbation */
 /**
  * @brief Perturb the surface normal using a bump map.

@@ -50,7 +50,7 @@ static void	keyguide_render_camera_section(t_render *render, int *y)
  *
  * @param render Render context containing key guide position.
  */
-void	keyguide_render_content(t_render *render)
+static void	keyguide_render_content(t_render *render)
 {
 	int	y;
 
