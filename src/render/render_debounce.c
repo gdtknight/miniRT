@@ -12,6 +12,7 @@
 
 #include "render/render_debounce.h"
 #include "render/render.h"
+#include <stdlib.h>
 #include <sys/time.h>
 
 /**
