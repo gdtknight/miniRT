@@ -168,8 +168,24 @@ Core numeric tolerances live in `includes/common/ray.h`: `EPSILON` (0.0001, gene
 ### Norm-Capacity Warnings
 
 These files are at the 5-function Norm limit — adding functions requires splitting into a new file:
-- `src/render/render_debounce.c` + `src/render/render_debounce_timer.c`
-- `src/interact/keyguide/keyguide_render.c` + `src/interact/keyguide/keyguide_render_extra.c`
+- `src/main.c`
+- `src/common/format_helpers.c`
+- `src/interact/hud/hud_scene.c`
+- `src/interact/input/input_camera.c`
+- `src/interact/keyguide/keyguide_render_extra.c`
+- `src/lighting/shadow/shadow_calc.c`
+- `src/lighting/texture/checkerboard.c`
+- `src/metrics/metrics_frame.c`
+- `src/render/render.c`
+- `src/render/render_debounce.c`
+- `src/scene/parser/parse_elements.c`
+- `src/scene/parser/parse_number.c`
+- `src/scene/parser/parse_objects.c`
+- `src/scene/parser/parse_validation_strict.c`
+- `src/scene/parser/parser.c`
+- `src/spatial/aabb/aabb_bounds.c`
+- `src/spatial/bvh/bvh_init.c`
+- `src/spatial/intersect/intersect_cylinder.c`
 
 ### Scene File Format (`.rt`)
 
