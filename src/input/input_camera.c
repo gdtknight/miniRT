@@ -17,13 +17,8 @@
 static void	camera_rebuild_dir(t_camera *cam)
 {
 	double	cos_p;
-	double	limit;
 
-	limit = M_PI / 2.0 - 0.01;
-	if (cam->pitch > limit)
-		cam->pitch = limit;
-	if (cam->pitch < -limit)
-		cam->pitch = -limit;
+	cam->pitch = fmod(cam->pitch, 2.0 * M_PI);
 	cam->yaw = fmod(cam->yaw, 2.0 * M_PI);
 	cos_p = cos(cam->pitch);
 	cam->direction.x = cos_p * sin(cam->yaw);
