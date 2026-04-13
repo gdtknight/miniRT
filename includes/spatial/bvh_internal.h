@@ -15,6 +15,28 @@
 
 # include "spatial/spatial.h"
 
+/* BVH partition parameters (build-time helper) */
+typedef struct s_partition_params
+{
+	t_object_ref	*objects;
+	int				count;
+	int				axis;
+	double			split;
+	t_scene			*scene;
+}	t_partition_params;
+
+/* BVH split node parameters (build-time helper) */
+typedef struct s_split_params
+{
+	t_aabb			bounds;
+	t_object_ref	*objects;
+	int				mid;
+	int				count;
+	t_scene			*scene;
+	int				depth;
+	int				axis;
+}	t_split_params;
+
 /* Internal BVH lifecycle functions */
 /**
  * @brief Recursively destroy a BVH node and its children.

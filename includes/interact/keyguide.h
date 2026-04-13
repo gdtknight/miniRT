@@ -15,6 +15,9 @@
 
 # include "interact/ui_types.h"
 
+/* Forward declaration */
+typedef struct s_render	t_render;
+
 /* Key guide dimensions (maximum allowed per FR-008) */
 # define KEYGUIDE_WIDTH 300
 # define KEYGUIDE_HEIGHT 500

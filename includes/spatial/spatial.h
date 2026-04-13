@@ -72,28 +72,6 @@ typedef struct s_axis_check
 	double	*tmax;
 }	t_axis_check;
 
-/* BVH partition parameters */
-typedef struct s_partition_params
-{
-	t_object_ref	*objects;
-	int				count;
-	int				axis;
-	double			split;
-	void			*scene;
-}	t_partition_params;
-
-/* BVH split node parameters */
-typedef struct s_split_params
-{
-	t_aabb			bounds;
-	t_object_ref	*objects;
-	int				mid;
-	int				count;
-	void			*scene;
-	int				depth;
-	int				axis;
-}	t_split_params;
-
 /* Helper functions */
 /**
  * @brief Return the smaller of two doubles (NaN-safe).
