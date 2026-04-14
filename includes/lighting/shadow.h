@@ -43,12 +43,12 @@ t_shadow_config	init_shadow_config(void);
 
 /**
  * @brief Calculate shadow factor using multiple shadow rays
- * 
+ *
  * Casts multiple shadow rays to determine shadow intensity.
  * Returns 0.0 for no shadow, 1.0 for full shadow.
- * 
+ *
  * @param scene Scene data
- * @param point Point to test for shadows
+ * @param query Surface query (point and normal) for shadow testing
  * @param light_pos Light source position
  * @param config Shadow configuration
  * @return Shadow factor (0.0-1.0)
@@ -57,11 +57,11 @@ double			calculate_shadow_factor(t_scene *scene, t_shadow_query query,
 					t_vec3 light_pos, t_shadow_config *config);
 /**
  * @brief Test if point is in shadow (single ray)
- * 
+ *
  * Casts a single shadow ray to determine if point is occluded.
- * 
+ *
  * @param scene Scene data
- * @param point Point to test
+ * @param query Surface query (point and normal) for occlusion test
  * @param light_pos Light source position
  * @param bias Shadow bias offset
  * @return 1 if in shadow, 0 if lit
