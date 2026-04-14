@@ -92,6 +92,7 @@ static int	copy_line_content(t_line_reader *reader, char *line, int *pos)
  *
  * @param line Temporary line buffer.
  * @param len Length of line.
+ * @param reader Line reader for error flagging on allocation failure.
  * @return char* Allocated string or NULL on error.
  */
 static char	*finalize_line(char *line, int len, t_line_reader *reader)

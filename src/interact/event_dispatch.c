@@ -72,7 +72,7 @@ int	handle_key(int keycode, void *param)
  * Pushes the current image buffer to the window and draws HUD overlays
  * if they are enabled.
  *
- * @param render Render context containing image buffer and HUD state.
+ * @param param Pointer to the render context (cast internally).
  * @return int Always returns 0 for MLX event handling.
  */
 int	handle_expose(void *param)

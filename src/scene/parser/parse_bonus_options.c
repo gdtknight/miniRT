@@ -58,6 +58,7 @@ static t_parse_result	parse_checker_opt(const char *str, t_object *obj,
  *
  * @param str Token string starting with "bump:".
  * @param obj Object to receive bump map path.
+ * @param end Pointer set to character after the parsed path.
  * @return t_parse_result PARSE_OK or error code.
  */
 static t_parse_result	parse_bump_opt(const char *str, t_object *obj,
