@@ -25,7 +25,7 @@
  * @param hit Hit record to update.
  * @return int 1 if an intersection is found, 0 otherwise.
  */
-static int	intersect_sphere_new(t_ray *ray, t_sphere_data *s, t_color color,
+static int	intersect_sphere(t_ray *ray, t_sphere_data *s, t_color color,
 		t_hit *hit)
 {
 	t_vec3	oc;
@@ -66,7 +66,7 @@ static int	intersect_sphere_new(t_ray *ray, t_sphere_data *s, t_color color,
  * @param hit Hit record to update.
  * @return int 1 if an intersection is found, 0 otherwise.
  */
-static int	intersect_plane_new(t_ray *ray, t_plane_data *p, t_color color,
+static int	intersect_plane(t_ray *ray, t_plane_data *p, t_color color,
 		t_hit *hit)
 {
 	double	denom;
@@ -105,9 +105,9 @@ int	intersect_object(t_ray *ray, t_object *obj, t_hit *hit)
 
 	result = 0;
 	if (obj->type == OBJ_SPHERE)
-		result = intersect_sphere_new(ray, &obj->data.sphere, obj->color, hit);
+		result = intersect_sphere(ray, &obj->data.sphere, obj->color, hit);
 	else if (obj->type == OBJ_PLANE)
-		result = intersect_plane_new(ray, &obj->data.plane, obj->color, hit);
+		result = intersect_plane(ray, &obj->data.plane, obj->color, hit);
 	else if (obj->type == OBJ_CYLINDER)
 		result = intersect_cylinder(ray, &obj->data.cylinder, obj->color,
 				hit);

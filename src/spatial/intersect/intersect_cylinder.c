@@ -57,7 +57,7 @@ static int	calc_cyl_intersect(t_ray *ray, t_cylinder_data *c, t_cyl_calc *calc)
  * @param cap_m Offset along the axis for the cap center.
  * @return int 1 if a valid cap hit is found, 0 otherwise.
  */
-static int	intersect_cyl_cap_new(t_ray *ray, t_cylinder_data *c, t_hit *hit,
+static int	intersect_cyl_cap(t_ray *ray, t_cylinder_data *c, t_hit *hit,
 		double cap_m)
 {
 	t_vec3	cap_center;
@@ -95,7 +95,7 @@ static int	intersect_cyl_cap_new(t_ray *ray, t_cylinder_data *c, t_hit *hit,
  * @param hit Hit record to update.
  * @return int 1 if a valid body hit is found, 0 otherwise.
  */
-static int	intersect_cyl_body_new(t_ray *ray, t_cylinder_data *c, t_hit *hit)
+static int	intersect_cyl_body(t_ray *ray, t_cylinder_data *c, t_hit *hit)
 {
 	t_cyl_calc	calc;
 
@@ -158,13 +158,13 @@ int	intersect_cylinder(t_ray *ray, t_cylinder_data *c, t_color color,
 
 	found = 0;
 	temp.distance = hit->distance;
-	if (intersect_cyl_body_new(ray, c, &temp))
+	if (intersect_cyl_body(ray, c, &temp))
 		apply_cyl_hit(hit, &temp, color, &found);
 	temp.distance = hit->distance;
-	if (intersect_cyl_cap_new(ray, c, &temp, c->half_height))
+	if (intersect_cyl_cap(ray, c, &temp, c->half_height))
 		apply_cyl_hit(hit, &temp, color, &found);
 	temp.distance = hit->distance;
-	if (intersect_cyl_cap_new(ray, c, &temp, -c->half_height))
+	if (intersect_cyl_cap(ray, c, &temp, -c->half_height))
 		apply_cyl_hit(hit, &temp, color, &found);
 	return (found);
 }
