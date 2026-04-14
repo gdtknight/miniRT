@@ -121,7 +121,8 @@ t_aabb		aabb_merge(t_aabb a, t_aabb b);
  * @param t_max Input/output maximum t value.
  * @return 1 if the ray intersects the box, 0 otherwise.
  */
-int			aabb_intersect(t_aabb box, t_ray ray, double *t_min, double *t_max);
+int			aabb_intersect(t_aabb box, t_ray ray,
+				double *t_min, double *t_max);
 
 /* BVH construction */
 /**
