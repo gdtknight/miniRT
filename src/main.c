@@ -18,7 +18,7 @@
 #include "lighting/texture.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include "libft.h"
 #include "common/error.h"
 
 /**
@@ -41,7 +41,7 @@ static int	parse_args(int argc, char **argv, char **filename, int *bvh_vis)
 	i = 0;
 	while (++i < argc)
 	{
-		if (strcmp(argv[i], "--bvh-vis") == 0)
+		if (ft_strncmp(argv[i], "--bvh-vis", 10) == 0)
 			*bvh_vis = 1;
 		else if (argv[i][0] == '-')
 			return (printf("Unknown option: %s\n", argv[i]), 0);
