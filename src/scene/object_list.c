@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
+#include "scene/scene.h"
 #include <stdlib.h>
 #include <limits.h>
 #include "libft.h"

@@ -10,16 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "scene.h"
-#include "parser.h"
-#include "render.h"
-#include "spatial.h"
-#include "bvh_debug.h"
-#include "texture.h"
+#include "scene/scene.h"
+#include "scene/parser.h"
+#include "render/render.h"
+#include "spatial/spatial.h"
+#include "spatial/bvh_debug.h"
+#include "lighting/texture.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include "error.h"
+#include "libft.h"
+#include "common/error.h"
 
 /**
  * @brief Parse CLI arguments and extract options/scene filename.
@@ -41,7 +41,7 @@ static int	parse_args(int argc, char **argv, char **filename, int *bvh_vis)
 	i = 0;
 	while (++i < argc)
 	{
-		if (strcmp(argv[i], "--bvh-vis") == 0)
+		if (ft_strncmp(argv[i], "--bvh-vis", 10) == 0)
 			*bvh_vis = 1;
 		else if (argv[i][0] == '-')
 			return (printf("Unknown option: %s\n", argv[i]), 0);
@@ -143,7 +143,7 @@ int	main(int argc, char **argv)
 	build_scene_bvh(scene);
 	if (bvh_vis && scene->bvh)
 		scene->bvh->visualize = 1;
-	bvhd_run(scene->bvh, NULL, scene);
+	bvhd_run(scene->bvh, scene);
 	if (!init_render(scene, &render))
 		return (1);
 	if (!load_textures(scene, render))

@@ -6,13 +6,13 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/18 15:20:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/30 11:34:16 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/04/09 00:43:59 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "render.h"
-#include "metrics.h"
-#include "ray.h"
+#include "render/render.h"
+#include "common/objects.h"
+#include "common/ray.h"
 
 /**
  * @brief Write a single pixel color into the MLX image buffer.

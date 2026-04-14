@@ -6,17 +6,16 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:40:00 by yoshin            #+#    #+#             */
-/*   Updated: 2026/01/30 11:35:49 by yoshin           ###   ########.fr       */
+/*   Updated: 2026/04/09 00:44:08 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "render.h"
-#include "input.h"
-#include "hud.h"
-#include "keyguide.h"
+#include "render/render.h"
+#include "interact/hud.h"
+#include "interact/keyguide.h"
 #include "metrics.h"
-#include "spatial.h"
-#include "bvh_debug.h"
+#include "spatial/spatial.h"
+#include "spatial/bvh_debug.h"
 
 /**
  * @brief Rebuild the BVH if the dirty flag is set.
@@ -31,7 +30,7 @@ static void	rebuild_bvh_if_dirty(t_render *render)
 	{
 		build_scene_bvh(render->scene);
 		render_clear_flag(render, RENDER_BVH_DIRTY);
-		bvhd_run(render->scene->bvh, NULL, render->scene);
+		bvhd_run(render->scene->bvh, render->scene);
 	}
 }
 

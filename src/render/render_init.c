@@ -10,10 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "render.h"
-#include "input.h"
-#include "hud.h"
-#include "keyguide.h"
+#include "render/render.h"
+#include "interact/event.h"
+#include "interact/input.h"
+#include "interact/hud.h"
+#include "interact/keyguide.h"
 #include <stdlib.h>
 
 /**
@@ -43,21 +44,16 @@ static void	init_render_state(t_render *render, t_scene *scene)
  * @brief Initialize HUD and key guide UI components.
  *
  * Initializes HUD and key guide state and precomputes pagination based
- * on the scene. On failure, caller is responsible for cleaning up
- * already-initialized resources via render_destroy.
+ * on the scene.
  *
  * @param render Render context containing UI state.
  * @param scene Scene used to compute pagination info.
- * @return int 0 on success, -1 on failure.
  */
-static int	init_ui_components(t_render *render, t_scene *scene)
+static void	init_ui_components(t_render *render, t_scene *scene)
 {
-	if (hud_init(&render->hud) == -1)
-		return (-1);
-	if (keyguide_init(&render->keyguide) == -1)
-		return (-1);
+	hud_init(&render->hud);
+	keyguide_init(&render->keyguide);
 	render->hud.total_pages = hud_calculate_total_pages(scene);
-	return (0);
 }
 
 /**
@@ -97,11 +93,7 @@ t_render	*render_create(t_scene *scene)
 		return (NULL);
 	}
 	init_render_state(render, scene);
-	if (init_ui_components(render, scene) == -1)
-	{
-		render_destroy(render);
-		return (NULL);
-	}
+	init_ui_components(render, scene);
 	register_hooks(render);
 	return (render);
 }

@@ -53,21 +53,81 @@ typedef struct s_metrics
 }	t_metrics;
 
 /* Metrics operations */
+
+/**
+ * @brief Initialize all render metrics counters and timing.
+ *
+ * Resets timing history, ray and BVH counters.
+ *
+ * @param metrics Metrics structure to initialize.
+ */
 void	metrics_init(t_metrics *metrics);
+
+/**
+ * @brief Begin a new frame timing and reset per-frame counters.
+ *
+ * Resets ray/BVH counters and starts the frame timer.
+ *
+ * @param metrics Metrics structure to update.
+ */
 void	metrics_start_frame(t_metrics *metrics);
+
+/**
+ * @brief Finalize frame timing and update FPS.
+ *
+ * Records the elapsed frame time, advances the history index, and
+ * updates the FPS estimate.
+ *
+ * @param metrics Metrics structure to update.
+ */
 void	metrics_end_frame(t_metrics *metrics);
+
+/**
+ * @brief Increment the traced ray counter.
+ *
+ * @param metrics Metrics structure to update.
+ */
 void	metrics_add_ray(t_metrics *metrics);
+
+/**
+ * @brief Increment the intersection test counter.
+ *
+ * @param metrics Metrics structure to update.
+ */
 void	metrics_add_intersect_test(t_metrics *metrics);
+
+/**
+ * @brief Increment the shadow intersection test counter.
+ *
+ * @param metrics Metrics structure to update.
+ */
 void	metrics_add_shadow_intersect(t_metrics *metrics);
 
 /* BVH metrics operations */
-void	metrics_add_bvh_node_visit(t_metrics *metrics);
-void	metrics_add_bvh_skip(t_metrics *metrics);
-void	metrics_reset_bvh(t_bvh_metrics *bvh);
 
-/* Metrics calculations */
-double	calculate_bvh_efficiency(t_metrics *m);
-double	calculate_avg_tests_per_ray(t_metrics *m);
+/**
+ * @brief Increment the BVH node visit counter.
+ *
+ * @param metrics Metrics structure to update.
+ */
+void	metrics_add_bvh_node_visit(t_metrics *metrics);
+
+/**
+ * @brief Increment the BVH skip counter.
+ *
+ * @param metrics Metrics structure to update.
+ */
+void	metrics_add_bvh_skip(t_metrics *metrics);
+
+/**
+ * @brief Print a summary of all render metrics to stdout.
+ *
+ * Outputs frame timing, ray counts, intersection stats, and BVH
+ * counters for benchmarking and profiling purposes.
+ *
+ * @param m Metrics structure containing all counter data.
+ * @param object_count Number of objects in the scene.
+ */
 void	metrics_print_summary(t_metrics *m, int object_count);
 
 #endif
