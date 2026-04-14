@@ -47,9 +47,8 @@ typedef struct s_render	t_render;
  * Computes the on-screen position and sets initial visibility.
  *
  * @param keyguide Key guide state to initialize.
- * @return 0 on success.
  */
-int		keyguide_init(t_keyguide_state *keyguide);
+void	keyguide_init(t_keyguide_state *keyguide);
 
 /**
  * @brief Render the full key guide overlay.

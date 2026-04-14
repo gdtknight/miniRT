@@ -37,12 +37,10 @@ int	hud_calculate_total_pages(t_scene *scene)
  * Sets initial state values for visibility, pagination, and dirty flag.
  *
  * @param hud HUD state to initialize.
- * @return int 0 on success.
  */
-int	hud_init(t_hud_state *hud)
+void	hud_init(t_hud_state *hud)
 {
 	hud->visible = 1;
 	hud->current_page = 0;
 	hud->dirty = 1;
-	return (0);
 }

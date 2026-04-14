@@ -19,13 +19,11 @@
  * Computes the on-screen position and sets initial visibility.
  *
  * @param keyguide Key guide state to initialize.
- * @return int 0 on success.
  */
-int	keyguide_init(t_keyguide_state *keyguide)
+void	keyguide_init(t_keyguide_state *keyguide)
 {
 	keyguide->x = WINDOW_WIDTH - KEYGUIDE_WIDTH - KEYGUIDE_MARGIN_X;
 	keyguide->y = KEYGUIDE_MARGIN_Y;
 	keyguide->visible = 1;
 	keyguide->dirty = 1;
-	return (0);
 }

@@ -43,9 +43,8 @@ typedef struct s_render	t_render;
  * Sets visible=1, current_page=0, dirty=1.
  *
  * @param hud Pointer to HUD state structure to initialize.
- * @return 0 on success.
  */
-int		hud_init(t_hud_state *hud);
+void	hud_init(t_hud_state *hud);
 
 /**
  * @brief Render HUD overlay on top of rendered scene.
