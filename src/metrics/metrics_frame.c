@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "metrics.h"
-#include "utils.h"
+#include "common/utils.h"
 #include "libft.h"
 
 /**

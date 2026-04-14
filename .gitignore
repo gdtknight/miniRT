@@ -63,3 +63,6 @@ build/
 
 # Optimization test script
 test_optimizations.sh
+
+# Claude Code local settings
+.claude/settings.local.json
