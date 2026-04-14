@@ -39,7 +39,7 @@ typedef struct s_render	t_render;
 /* Transparency level (0.0=transparent, 1.0=opaque) */
 # define KEYGUIDE_BG_ALPHA 0.65
 
-/* Key guide state structure defined in window.h */
+/* Key guide state structure defined in interact/ui_types.h */
 
 /**
  * @brief Initialize the key guide overlay state.
