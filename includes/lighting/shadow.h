@@ -36,7 +36,7 @@ typedef struct s_shadow_sample
 
 /**
  * @brief Initialize shadow configuration with default values
- * 
+ *
  * @return Default shadow configuration
  */
 t_shadow_config	init_shadow_config(void);
