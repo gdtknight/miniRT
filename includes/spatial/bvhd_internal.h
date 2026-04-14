@@ -19,15 +19,6 @@
 /* Prefix segment length (bytes per tree-drawing indent level) */
 # define PREFIX_SEGMENT_LEN 6
 
-/* Visualization configuration */
-typedef struct s_vis_config
-{
-	int		max_depth_display;
-	int		compact_mode;
-	int		terminal_width;
-	int		show_warnings;
-}	t_vis_config;
-
 /* Prefix state for tree drawing */
 typedef struct s_prefix_state
 {
