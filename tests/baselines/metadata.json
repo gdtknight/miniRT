@@ -1,9 +1,0 @@
-{
-  "generated_at": "2026-01-14T11:35:15Z",
-  "commit_hash": "8428e3fddaf54acc72a6de13570a28a3a2afc45a",
-  "branch": "016-compliance-refactoring",
-  "miniRT_version": "1.0.0",
-  "scene_count": 43,
-  "note": "Baseline captured before compliance refactoring - miniRT is GUI-based, visual validation will be manual during implementation",
-  "validation_method": "Build success + norminette + memory checks + manual visual verification"
-}
