@@ -72,4 +72,4 @@ make
 
 ---
 
-**Version**: 2.4.0 | **Last Updated**: 2026-03
+**Version**: 2.5.0 | **Last Updated**: 2026-04
