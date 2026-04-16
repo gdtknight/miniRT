@@ -169,7 +169,6 @@ These files are at the 5-function Norm limit — adding functions requires split
 - `src/interact/hud/hud_scene.c`
 - `src/interact/input/input_camera.c`
 - `src/interact/keyguide/keyguide_render_extra.c`
-- `src/lighting/shadow/shadow_calc.c`
 - `src/lighting/texture/checkerboard.c`
 - `src/metrics/metrics_frame.c`
 - `src/render/render.c`
@@ -177,11 +176,10 @@ These files are at the 5-function Norm limit — adding functions requires split
 - `src/scene/parser/parse_elements.c`
 - `src/scene/parser/parse_number.c`
 - `src/scene/parser/parse_objects.c`
-- `src/scene/parser/parse_validation_strict.c`
-- `src/scene/parser/parser.c`
 - `src/spatial/aabb/aabb_bounds.c`
 - `src/spatial/bvh/bvh_init.c`
-- `src/spatial/intersect/intersect_cylinder.c`
+
+Verify before adding a function: `grep -cE '^[a-zA-Z_].*\(.*\)$' <file>` (rough heuristic; trust the actual file content).
 
 ### Scene File Format (`.rt`)
 
