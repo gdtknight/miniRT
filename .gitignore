@@ -4,10 +4,6 @@
 
 # Executables
 miniRT
-test_vector
-test_parser
-test_intersections
-test_lighting
 
 # Libraries
 *.a
@@ -21,9 +17,6 @@ test_lighting
 
 # Dependency files
 *.d
-
-# MinilibX test programs
-test_mlx
 
 # IDE and Editor files
 .vscode/
@@ -60,9 +53,6 @@ build/
 .codex/config.toml
 .codex/skills/
 .codex/tmp/
-
-# Optimization test script
-test_optimizations.sh
 
 # Claude Code local settings
 .claude/settings.local.json
