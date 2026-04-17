@@ -5,6 +5,112 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.1] - 2026-04-17
+
+### Removed
+- **`tests/` 전체 삭제**: `test_shadow_calc.c`는 `calculate_shadow_bias`가 static 전환 후 링크 불가, `test_shadow_config`는 소스 없는 고아 바이너리, `baselines/metadata.json`은 종료된 016-compliance-refactoring 스냅샷
+- **죽은 스크립트 15개 제거**: 아카이브된 spec 012/013 전용 검증 스크립트, BVH 통합 수정 1회용, Norm에 역행하는 `fix_whitespace.sh`, 존재하지 않는 경로를 참조하는 `fix_line_continuations.sh`, `.github/scripts/sync-wiki.sh`로 대체된 `create_wiki.sh`, 하드코딩된 macOS 절대경로가 있는 `scripts/test/test_progress.sh` 등
+- **.gitignore 정리**: 존재한 적 없는 테스트 바이너리 패턴(`test_vector`, `test_parser`, `test_mlx` 등) 및 삭제된 `test_optimizations.sh` 항목 제거
+
+순수 삭제 릴리스 (20개 파일, 977줄 삭제). 런타임/API/빌드 동작 변경 없음.
+
+## [2.8.0] - 2026-04-15
+
+### Refactored
+- **Feature-based packaging**: 16 flat modules → 7 packages (common, scene, spatial, render, lighting, interact, metrics)
+- **Circular dependency resolution**: render↔interact 순환을 타입 전용 헤더(`ui_types.h`, `key_binds.h`)로 분리
+- **Inverted dependency fix**: scene→lighting 역방향 의존 제거 (`t_shadow_config`를 `t_scene`에 임베드)
+- **Public API minimization**: bvh_debug 17→1 함수, 21개 헤더 선언 제거, 18개 함수 static 전환
+- **100% function documentation**: 310개 함수에 doxygen 스타일 문서 추가
+
+### Fixed
+- **Camera pitch rotation**: 360° 회전 복원 (이전에 클램프되던 버그)
+
+## [2.7.0] - 2026-03-27
+
+### Refactored
+- **Include dependency minimization**: 모듈 간 헤더 의존 최소화
+- **Prototype relocation**: 적절한 헤더로 함수 선언 재배치
+- **Debounce timer**: 래퍼 함수 인라인화
+- **Utils 이동**: `timer_elapsed_us`를 utils 모듈로 이동
+- **Scene helpers**: flag 헬퍼 인라인화, `object_list_grow` static 전환
+- **Parser consolidation**: 작은 파서 유틸 파일 통합, 에러 처리 단순화
+
+### Renamed
+- `mlx_context.h` → `display.h`
+- `minirt.h` → `scene.h`
+- `is_in_shadow` → `shadow_is_occluded`
+- `intersect_*_new` → `intersect_*` (`_new` 서픽스 제거)
+- `scene_build_bvh` → `build_scene_bvh`
+- `bvh_vis` 모듈 → `bvh_debug`
+- HUD 함수들에 `hud_` 프리픽스 통일 (`ft_strcpy` → `hud_strcpy`, `ft_itoa_buf` → `hud_itoa_buf`)
+
+## [2.6.2] - 2026-03-27
+
+### Fixed
+- **Input**: 수직 이동에 카메라 상대 up 벡터 사용 (월드 up 대신)
+
+## [2.6.1] - 2026-03-25
+
+### Changed
+- **lib/ 서브모듈 인라인**: libft, MiniLibX을 일반 소스 파일로 편입
+
+### Docs
+- v2.6.0 기반으로 README.md 갱신
+- Wiki 용어 및 설명 업데이트
+
+## [2.6.0] - 2026-03-25
+
+### Added
+- **Parser 강화**: 좌표 범위 검증, 숫자 파싱 강화
+- **테스트 씬**: invalid 파서 씬 34개, valid 씬 2개 추가
+
+### Refactored
+- **모듈 분할**: `ray/` 및 `lighting/`을 `intersect/`, `shading/`, `shadow/`로 분할
+- **HUD 헤더 통합**: 작은 헤더 4개를 `hud_internal.h`로 병합
+- **minirt.h 정리**: 이동된 타입과 프로토타입 제거
+
+### Renamed
+- `window.h` → `render.h`, `window_internal.h` → `input.h`
+- window → display
+
+### Docs
+- Architecture 문서 및 wiki를 v2.6.0 모듈 구조에 맞게 갱신
+- CLAUDE.md 재구조화 반영
+
+## [2.5.1] - 2026-03-24
+
+### Refactored
+- **Display 리네이밍**: `window/` MLX 파일을 `src/display/`로 이동, 픽셀 연산 단순화
+- **Parser**: 오브젝트 타입 카운팅을 `get_type_count`로 중복 제거
+
+### Removed
+- 미사용 `aabb_surface_area`, `bvh.max_depth` 제거
+- 미사용 bvh_vis 포맷 헬퍼 및 `max_depth` 경고 제거
+
+## [2.5.0] - 2026-03-24
+
+### Refactored
+- **Key dispatch**: 키 디스패치 체인을 바인드 테이블로 교체
+- **Render init 통합**: `window_init` + `window_lifecycle` → `render_init`
+- **파일 분할**: `mlx_context_destroy`, `bvh_vis prefix_push`를 별도 파일로 분리
+
+### Fixed
+- **macOS**: window에서 NULL 해석을 위해 `stdlib.h` 무조건 포함
+- **HUD**: `hud_toggle`을 항상 버퍼 리페인트하도록 단순화
+- **Input**: KEY_1/KEY_3 카메라 yaw 방향 교환
+
+### Style
+- 공백 및 norminette 이슈 수정
+
+## [2.4.1] - 2026-03-24
+
+### Fixed
+- **Render**: HUD가 보일 때만 keyguide를 dirty로 표시
+
+### Docs
+- 모든 docs/ 및 wiki/ 페이지를 v2.4.0 코드베이스에 맞게 갱신
+
 ## [2.4.0] - 2026-03
 
 ### Refactored
