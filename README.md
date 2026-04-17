@@ -132,31 +132,38 @@ co  0,5,0  0,1,0  4  8  255,128,0
 
 ## 프로젝트 구조
 
+v2.8.0 이후 7개의 feature 기반 패키지로 재조직되었습니다.
+
 ```
 miniRT/
 ├── src/
-│   ├── main.c              # 진입점
-│   ├── parser/             # .rt 파일 파싱 (16)
-│   ├── render/             # 렌더링 루프, 카메라, 디바운스 (8)
-│   ├── spatial/            # BVH 공간 가속 구조 (10)
-│   ├── intersect/          # 광선-오브젝트 교차 판정 (4)
-│   ├── shading/            # Phong 조명 (2)
-│   ├── shadow/             # 소프트 섀도우, offset LUT (3)
-│   ├── display/            # MiniLibX 초기화/이벤트 (4)
-│   ├── input/              # 키 입력 분기(dispatch) (7)
-│   ├── hud/                # HUD 오버레이 (11)
-│   ├── keyguide/           # 키가이드 렌더링 (3)
-│   ├── metrics/            # 성능 메트릭 수집 (4)
-│   ├── math/               # 벡터 연산 (2)
-│   ├── scene/              # 씬 관리 (3)
-│   ├── texture/            # 체커보드, 범프맵 (4)
-│   ├── bvh_vis/            # BVH 시각화 (8)
-│   └── utils/              # 에러, 타이머 (3)
-├── includes/               # 헤더 파일 (22)
-├── scenes/                 # 테스트 씬 파일
-├── lib/                    # libft, MiniLibX
+│   ├── main.c
+│   ├── common/             # vec3, 에러, 타이머, 포맷 헬퍼
+│   ├── scene/              # 씬 라이프사이클, 오브젝트 리스트
+│   │   └── parser/         # .rt 파싱 (엄격 검증 + 보너스 옵션)
+│   ├── spatial/
+│   │   ├── aabb/           # AABB 생성/병합/교차
+│   │   ├── bvh/            # BVH 구축/순회/any-hit
+│   │   ├── debug/          # BVH 트리 콘솔 덤프 (`--bvh-vis`)
+│   │   └── intersect/      # 광선-오브젝트 교차 (sp/pl/cy/co)
+│   ├── render/             # 렌더 루프, 카메라, 디바운스, MLX 윈도우
+│   ├── lighting/
+│   │   ├── shading/        # Phong 모델
+│   │   ├── shadow/         # 소프트 섀도우, offset LUT
+│   │   └── texture/        # 체커보드, XPM 범프맵
+│   ├── interact/           # 이벤트 디스패치 (close/key/expose)
+│   │   ├── input/          # 키보드 핸들러
+│   │   ├── hud/            # HUD 오버레이
+│   │   └── keyguide/       # 온스크린 키 가이드
+│   └── metrics/            # 프레임 타이밍, shadow/intersection 카운터
+├── includes/               # 모든 헤더 (src/ 구조 미러링)
+├── scenes/                 # 씬 파일 (valid/, invalid/, perf/)
+├── textures/               # XPM 범프맵 에셋
+├── lib/                    # libft, MiniLibX (서브모듈)
 ├── wiki/                   # Wiki 문서 소스
-├── docs/                   # 상세 모듈 레퍼런스
+├── docs/                   # 상세 모듈 레퍼런스, CHANGELOG
+├── specs/                  # Feature specs (speckit)
+├── scripts/                # norminette 검사, 벤치마크 스크립트
 └── Makefile
 ```
 
@@ -178,8 +185,15 @@ miniRT/
 
 | 버전 | 날짜 | 주요 변경 |
 |------|------|----------|
+| v2.8.1 | 2026-04 | 유지보수 아티팩트 정리 (`tests/`, 죽은 `scripts/` 15개, 낡은 `.gitignore` 항목) |
+| v2.8.0 | 2026-04 | 7-패키지 구조 재조직 (common/scene/spatial/render/lighting/interact/metrics), 카메라 pitch 360° 복원 |
+| v2.7.0 | 2026-03 | 헤더 의존성 최소화, 다량 심볼 리네이밍 (bvh_vis→bvh_debug, is_in_shadow→shadow_is_occluded 등) |
+| v2.6.2 | 2026-03 | 카메라 상대 up 벡터로 수직 이동 수정 |
+| v2.6.1 | 2026-03 | `lib/` 서브모듈 인라인, wiki 용어 갱신 |
 | v2.6.0 | 2026-03 | 모듈 재구조화 (ray→intersect, lighting→shading+shadow), 헤더 리네이밍, 파서 강화 |
-| v2.5.0 | 2026-03 | display 모듈 분리 (window→display), dead code 제거, wiki 개편 |
+| v2.5.1 | 2026-03 | display 리네이밍, dead code 제거 (`aabb_surface_area` 등) |
+| v2.5.0 | 2026-03 | 키 디스패치 바인드 테이블, `render_init` 통합, 다수 버그 수정 |
+| v2.4.1 | 2026-03 | keyguide dirty 플래그 조건 수정 |
 | v2.4.0 | 2026-03 | 모듈 리팩토링 (input/metrics 분리), 파일 리네이밍, 문서 전면 갱신 |
 | v2.3.0 | 2026-02 | 디바운스 FSM 재설계, 키맵 재배치 (리사이즈/회전/광원), dead code 제거 |
 | v2.2.0 | 2026-02 | Plane BVH 분리, shadow BVH any-hit, 4라운드 성능 최적화 (S4 77.7%↑) |
